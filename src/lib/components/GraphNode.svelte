@@ -4,6 +4,8 @@
    *
    * Displays a practice as a node in the dependency graph
    */
+  import { CATEGORY_COLORS } from '$lib/constants/categories.js';
+
   export let practice
   export let isRoot = false
   export let isSelected = false
@@ -11,15 +13,10 @@
   export let onClick = () => {}
   export let onExpand = null // Function to call when expanding dependencies
 
-  // Get category icon
-  const categoryIcons = {
-    practice: '🔄',
-    behavior: '👥',
-    culture: '🌟',
-    tooling: '🛠️',
-  }
-
-  const icon = categoryIcons[practice.category] || '📦'
+  // Use categories from dependencies if available, otherwise fall back to practice category
+  $: categories = practice.categories && practice.categories.length > 0
+    ? practice.categories
+    : (Array.isArray(practice.category) ? practice.category : [practice.category])
 
   // Border styling based on selection
   $: borderClass = isSelected
@@ -44,9 +41,15 @@
 >
   <!-- Title Section (always visible) -->
   <div class="flex items-center gap-2 mb-2">
-    <span class="text-2xl" aria-label="{practice.category} category"
-      >{icon}</span
-    >
+    <div class="category-dots" role="img" aria-label="Category: {categories.join(', ')}">
+      {#each categories as category}
+        <span
+          class="category-dot"
+          style="background-color: {CATEGORY_COLORS[category] || '#6b7280'}"
+          title={category}
+        ></span>
+      {/each}
+    </div>
     <h3 class="text-lg font-bold text-gray-900 leading-tight">
       {practice.name}
     </h3>
@@ -139,5 +142,18 @@
 
   .expand-btn.expanded:hover {
     background-color: #4b5563;
+  }
+
+  .category-dots {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  .category-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 </style>

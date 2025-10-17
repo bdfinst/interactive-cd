@@ -7,6 +7,33 @@ import { json } from '@sveltejs/kit';
 import { PostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js';
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js';
 
+/**
+ * Recursively get all transitive categories for a practice
+ */
+async function getTransitiveCategories(practiceId, repository, visited = new Set()) {
+	// Prevent infinite loops
+	if (visited.has(practiceId.toString())) {
+		return new Set();
+	}
+	visited.add(practiceId.toString());
+
+	const categories = new Set();
+	const prerequisites = await repository.findPracticePrerequisites(practiceId);
+
+	for (const { practice } of prerequisites) {
+		// Add this dependency's category
+		categories.add(practice.category.toString());
+
+		// Recursively get categories from this dependency's dependencies
+		const subCategories = await getTransitiveCategories(practice.id, repository, visited);
+		for (const cat of subCategories) {
+			categories.add(cat);
+		}
+	}
+
+	return categories;
+}
+
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
 	try {
@@ -27,11 +54,16 @@ export async function GET({ url }) {
 		// Get direct dependencies
 		const prerequisites = await repository.findPracticePrerequisites(rootId);
 
+		// Get all transitive categories (including sub-dependencies)
+		const transitiveCategories = await getTransitiveCategories(rootId, repository);
+		const dependencyCategories = [...transitiveCategories].sort();
+
 		// Format root practice for card display
 		const rootCard = {
 			id: rootPractice.id.toString(),
 			name: rootPractice.name,
 			category: rootPractice.category.toString(),
+			categories: dependencyCategories, // Transitive categories from all dependencies
 			description: rootPractice.description,
 			requirements: rootPractice.requirements || [],
 			benefits: rootPractice.benefits || [],
@@ -44,10 +76,16 @@ export async function GET({ url }) {
 		const dependencyCards = await Promise.all(
 			prerequisites.map(async ({ practice }) => {
 				const deps = await repository.findPracticePrerequisites(practice.id);
+
+				// Get all transitive categories for this practice
+				const practiceTransitiveCategories = await getTransitiveCategories(practice.id, repository);
+				const practiceDepCategories = [...practiceTransitiveCategories].sort();
+
 				return {
 					id: practice.id.toString(),
 					name: practice.name,
 					category: practice.category.toString(),
+					categories: practiceDepCategories, // Transitive categories from all dependencies
 					description: practice.description,
 					requirements: practice.requirements || [],
 					benefits: practice.benefits || [],

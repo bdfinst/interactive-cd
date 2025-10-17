@@ -1,6 +1,9 @@
 <script>
 	import PracticeGraph from '$lib/components/PracticeGraph.svelte';
+	import Legend from '$lib/components/Legend.svelte';
 </script>
+
+<Legend />
 
 <div class="container mx-auto px-4 py-8">
 	<div class="mb-6 text-center">
