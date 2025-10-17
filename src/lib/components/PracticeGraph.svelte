@@ -7,8 +7,6 @@
 	import { onMount, afterUpdate } from 'svelte';
 	import GraphNode from './GraphNode.svelte';
 
-	export let initialPractices = [];
-
 	let containerRef;
 	let parentRef;
 	let currentRef;
