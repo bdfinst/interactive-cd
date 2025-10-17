@@ -1,21 +1,21 @@
 # Netlify Configuration for CD Practices App
 
 [build]
-  command = "npm ci --include=dev && npm run build"
+  command = "npm run build"
   publish = "build"
 
-[build.environment]
-  NODE_VERSION = "18"
+  [build.environment]
+    NODE_VERSION = "24.8.0"
 
 # Security headers
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    Permissions-Policy     = "geolocation=(), microphone=(), camera=()"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
 
 # Cache static assets
 [[headers]]
@@ -31,13 +31,12 @@
 
 # Postgres addon configuration
 [functions]
-  external_node_modules = ["pg"]
+  external_node_modules = [
+    "pg"
+  ]
   node_bundler = "esbuild"
 
 # Environment-specific settings
-[context.production]
-  environment = { NODE_ENV = "production" }
-
 [context.deploy-preview]
   environment = { NODE_ENV = "development" }
 
