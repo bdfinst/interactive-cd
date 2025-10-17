@@ -7,6 +7,7 @@
   export let practice
   export let isRoot = false
   export let isSelected = false
+  export let isExpanded = false // Whether dependencies are currently expanded
   export let onClick = () => {}
   export let onExpand = null // Function to call when expanding dependencies
 
@@ -84,8 +85,9 @@
       <button
         on:click={handleExpand}
         class="expand-btn"
+        class:expanded={isExpanded}
       >
-        Expand Dependencies ({practice.dependencyCount})
+        {isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
       </button>
     {/if}
   {/if}
@@ -129,5 +131,13 @@
 
   .expand-btn:hover {
     background-color: #1d4ed8;
+  }
+
+  .expand-btn.expanded {
+    background-color: #6b7280;
+  }
+
+  .expand-btn.expanded:hover {
+    background-color: #4b5563;
   }
 </style>

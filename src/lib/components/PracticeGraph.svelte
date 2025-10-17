@@ -8,7 +8,7 @@
 	import GraphNode from './GraphNode.svelte';
 
 	let containerRef;
-	let parentRef;
+	let ancestorRefs = [];
 	let currentRef;
 	let dependencyRefs = [];
 	let connections = [];
@@ -16,7 +16,7 @@
 
 	// Navigation state
 	let navigationPath = ['continuous-delivery']; // Stack of practice IDs
-	let parentPractice = null;
+	let ancestorPractices = []; // All ancestors in the path
 	let currentPractice = null;
 	let dependencies = [];
 	let loading = false;
@@ -40,16 +40,18 @@
 				// Auto-select the current practice (root should always be selected)
 				selectedNodeId = currentPractice.id;
 
-				// Load parent if not at root
+				// Load ALL ancestors if not at root
+				ancestorPractices = [];
 				if (navigationPath.length > 1) {
-					const parentId = navigationPath[navigationPath.length - 2];
-					const parentResponse = await fetch(`/api/practices/cards?root=${parentId}`);
-					const parentResult = await parentResponse.json();
-					if (parentResult.success) {
-						parentPractice = parentResult.data[0];
+					// Load all ancestors except the current one
+					for (let i = 0; i < navigationPath.length - 1; i++) {
+						const ancestorId = navigationPath[i];
+						const ancestorResponse = await fetch(`/api/practices/cards?root=${ancestorId}`);
+						const ancestorResult = await ancestorResponse.json();
+						if (ancestorResult.success) {
+							ancestorPractices.push(ancestorResult.data[0]);
+						}
 					}
-				} else {
-					parentPractice = null;
 				}
 			}
 		} catch (error) {
@@ -60,15 +62,38 @@
 	}
 
 	async function expandPractice(practiceId) {
-		// Add to navigation path and load new view
-		navigationPath = [...navigationPath, practiceId];
-		selectedNodeId = null;
-		await loadCurrentView();
+		// Get the current practice ID
+		const currentId = navigationPath[navigationPath.length - 1];
+
+		if (practiceId === currentId) {
+			// Trying to collapse the current practice - navigate back
+			await navigateBack();
+		} else {
+			// Expand a dependency - add to navigation path and load new view
+			navigationPath = [...navigationPath, practiceId];
+			selectedNodeId = null;
+			await loadCurrentView();
+		}
+	}
+
+	function isPracticeExpanded(practiceId) {
+		// A practice is expanded if it's the current practice and we can navigate back
+		const currentId = navigationPath[navigationPath.length - 1];
+		return practiceId === currentId && navigationPath.length > 1;
 	}
 
 	async function navigateBack() {
 		if (navigationPath.length > 1) {
 			navigationPath = navigationPath.slice(0, -1);
+			selectedNodeId = null;
+			await loadCurrentView();
+		}
+	}
+
+	async function navigateToAncestor(ancestorIndex) {
+		// Navigate to a specific ancestor by trimming the path
+		if (ancestorIndex >= 0 && ancestorIndex < navigationPath.length - 1) {
+			navigationPath = navigationPath.slice(0, ancestorIndex + 1);
 			selectedNodeId = null;
 			await loadCurrentView();
 		}
@@ -89,26 +114,55 @@
 		const containerRect = containerRef.getBoundingClientRect();
 		connections = [];
 
-		// Connection from parent to current (solid line)
-		if (parentRef && currentRef) {
-			const parentRect = parentRef.getBoundingClientRect();
-			const currentRect = currentRef.getBoundingClientRect();
+		// Connections between all ancestors (solid lines)
+		if (ancestorRefs.length > 0) {
+			for (let i = 0; i < ancestorRefs.length - 1; i++) {
+				const currentAncestorRef = ancestorRefs[i];
+				const nextAncestorRef = ancestorRefs[i + 1];
 
-			const parentX = parentRect.left - containerRect.left + parentRect.width / 2;
-			const parentY = parentRect.bottom - containerRect.top;
-			const currentX = currentRect.left - containerRect.left + currentRect.width / 2;
-			const currentY = currentRect.top - containerRect.top;
+				if (currentAncestorRef && nextAncestorRef) {
+					const rect1 = currentAncestorRef.getBoundingClientRect();
+					const rect2 = nextAncestorRef.getBoundingClientRect();
 
-			connections.push({
-				x1: parentX,
-				y1: parentY,
-				x2: currentX,
-				y2: currentY,
-				type: 'parent' // Solid line
-			});
+					const x1 = rect1.left - containerRect.left + rect1.width / 2;
+					const y1 = rect1.bottom - containerRect.top;
+					const x2 = rect2.left - containerRect.left + rect2.width / 2;
+					const y2 = rect2.top - containerRect.top;
+
+					connections.push({
+						x1,
+						y1,
+						x2,
+						y2,
+						type: 'ancestor' // Solid line
+					});
+				}
+			}
 		}
 
-		// Connections from current to dependencies (dashed lines)
+		// Connection from last ancestor to current (solid line)
+		if (ancestorRefs.length > 0 && currentRef) {
+			const lastAncestorRef = ancestorRefs[ancestorRefs.length - 1];
+			if (lastAncestorRef) {
+				const ancestorRect = lastAncestorRef.getBoundingClientRect();
+				const currentRect = currentRef.getBoundingClientRect();
+
+				const ancestorX = ancestorRect.left - containerRect.left + ancestorRect.width / 2;
+				const ancestorY = ancestorRect.bottom - containerRect.top;
+				const currentX = currentRect.left - containerRect.left + currentRect.width / 2;
+				const currentY = currentRect.top - containerRect.top;
+
+				connections.push({
+					x1: ancestorX,
+					y1: ancestorY,
+					x2: currentX,
+					y2: currentY,
+					type: 'ancestor' // Solid line
+				});
+			}
+		}
+
+		// Connections from current to dependencies
 		if (currentRef && dependencyRefs.length > 0) {
 			const currentRect = currentRef.getBoundingClientRect();
 			const currentX = currentRect.left - containerRect.left + currentRect.width / 2;
@@ -116,17 +170,20 @@
 
 			dependencyRefs
 				.filter((ref) => ref !== null)
-				.forEach((ref) => {
+				.forEach((ref, index) => {
 					const rect = ref.getBoundingClientRect();
 					const depX = rect.left - containerRect.left + rect.width / 2;
 					const depY = rect.top - containerRect.top;
+
+					// Check if this dependency is selected
+					const isSelected = dependencies[index] && selectedNodeId === dependencies[index].id;
 
 					connections.push({
 						x1: currentX,
 						y1: currentY,
 						x2: depX,
 						y2: depY,
-						type: 'dependency' // Dashed line
+						type: isSelected ? 'selected' : 'dependency' // Solid if selected, dashed otherwise
 					});
 				});
 		}
@@ -144,18 +201,6 @@
 </script>
 
 <div class="practice-graph" bind:this={containerRef}>
-	<!-- Back Button -->
-	{#if navigationPath.length > 1}
-		<div class="mb-4">
-			<button
-				on:click={navigateBack}
-				class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition-colors flex items-center gap-2"
-			>
-				← Back to {parentPractice?.name || 'Parent'}
-			</button>
-		</div>
-	{/if}
-
 	{#if loading}
 		<div class="flex items-center justify-center py-12">
 			<div class="text-center">
@@ -174,8 +219,8 @@
 					y2={conn.y2}
 					stroke="#3b82f6"
 					stroke-width="2"
-					stroke-dasharray={conn.type === 'parent' ? '0' : '5,5'}
-					opacity={conn.type === 'parent' ? '1' : '0.6'}
+					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
+					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '1' : '0.6'}
 				/>
 				<circle cx={conn.x2} cy={conn.y2} r="4" fill="#3b82f6" />
 			{/each}
@@ -183,19 +228,21 @@
 
 		<!-- Content Layer -->
 		<div class="content-layer">
-			<!-- Parent Practice (if in drill-down mode) -->
-			{#if parentPractice}
-				<div class="parent-container">
-					<div bind:this={parentRef}>
-						<GraphNode
-							practice={parentPractice}
-							isRoot={false}
-							isSelected={false}
-							onClick={() => {}}
-							onExpand={null}
-						/>
+			<!-- Ancestor Practices (all ancestors in the path) -->
+			{#if ancestorPractices.length > 0}
+				{#each ancestorPractices as ancestor, i}
+					<div class="ancestor-container">
+						<div bind:this={ancestorRefs[i]}>
+							<GraphNode
+								practice={ancestor}
+								isRoot={i === 0}
+								isSelected={false}
+								onClick={() => navigateToAncestor(i)}
+								onExpand={() => navigateToAncestor(i)}
+							/>
+						</div>
 					</div>
-				</div>
+				{/each}
 			{/if}
 
 			<!-- Current Practice -->
@@ -206,6 +253,7 @@
 							practice={currentPractice}
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
+							isExpanded={isPracticeExpanded(currentPractice.id)}
 							onClick={() => selectNode(currentPractice.id)}
 							onExpand={() => expandPractice(currentPractice.id)}
 						/>
@@ -222,6 +270,7 @@
 								practice={dependency}
 								isRoot={false}
 								isSelected={selectedNodeId === dependency.id}
+								isExpanded={isPracticeExpanded(dependency.id)}
 								onClick={() => selectNode(dependency.id)}
 								onExpand={() => expandPractice(dependency.id)}
 							/>
@@ -258,14 +307,14 @@
 		z-index: 1;
 	}
 
-	.parent-container,
+	.ancestor-container,
 	.current-container {
 		display: flex;
 		justify-content: center;
 		margin-bottom: 4rem;
 	}
 
-	.parent-container > div,
+	.ancestor-container > div,
 	.current-container > div {
 		max-width: 400px;
 		width: 100%;
