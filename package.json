@@ -4,14 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
     "build": "vite build",
+    "dev": "vite dev",
     "preview": "vite preview",
+    "start": "vite dev",
     "test": "vitest --run",
-    "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch"
+  },
+  "dependencies": {
+    "@netlify/neon": "^0.1.0",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
@@ -25,9 +30,5 @@
     "tailwindcss": "^3.4.0",
     "vite": "^5.0.0",
     "vitest": "^1.0.0"
-  },
-  "dependencies": {
-    "@netlify/neon": "^0.1.0",
-    "pg": "^8.11.3"
   }
 }
