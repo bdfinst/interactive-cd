@@ -1,7 +1,7 @@
 # Netlify Configuration for CD Practices App
 
 [build]
-  command = "npm ci && npm run build"
+  command = "npm ci --include=dev && npm run build"
   publish = "build"
 
 [build.environment]
