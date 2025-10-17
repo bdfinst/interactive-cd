@@ -7,12 +7,6 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# SvelteKit handles routing, redirect all requests to the app
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Security headers
 [[headers]]
   for = "/*"

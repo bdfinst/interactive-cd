@@ -39,18 +39,18 @@ Follow the prompts:
 ### 4. Add PostgreSQL Database
 
 ```bash
-netlify addons:create postgres
+netlify db init --assume-no
 ```
 
-Choose the **free tier** (500MB, 1M rows).
+This creates a Netlify Postgres database for your site.
 
 ### 5. Get Database Credentials
 
 ```bash
-netlify addons:auth postgres
+netlify env:get DATABASE_URL
 ```
 
-Copy the `DATABASE_URL` from the output.
+This shows your database connection string.
 
 ### 6. Set Environment Variables
 
@@ -232,7 +232,7 @@ netlify dev
 
 **Summary**: 5 steps to deploy:
 1. `netlify init` → Initialize
-2. `netlify addons:create postgres` → Add DB
-3. `netlify env:set DATABASE_URL "..."` → Configure
+2. `netlify db init --assume-no` → Add DB
+3. `netlify env:get DATABASE_URL` → Get connection string
 4. `./db/deploy-initial.sh` → Deploy schema
 5. `netlify deploy --prod` → Go live! 🚀

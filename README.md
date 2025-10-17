@@ -105,8 +105,8 @@ npm run dev
 **Quick Deploy** (5 minutes):
 ```bash
 netlify init
-netlify addons:create postgres
-netlify env:set DATABASE_URL "postgresql://..."
+netlify db init --assume-no
+netlify env:get DATABASE_URL
 ./db/deploy-initial.sh
 netlify deploy --prod
 ```

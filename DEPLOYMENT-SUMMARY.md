@@ -72,9 +72,9 @@ All files and configurations needed to deploy the CD Practices app to Netlify.
 - [ ] Install Netlify CLI: `npm install -g netlify-cli`
 - [ ] Login: `netlify login`
 - [ ] Initialize site: `netlify init`
-- [ ] Add PostgreSQL: `netlify addons:create postgres`
+- [ ] Add PostgreSQL: `netlify db init --assume-no`
 - [ ] Set environment variables:
-  - [ ] `DATABASE_URL` (from postgres addon)
+  - [ ] `DATABASE_URL` (from `netlify env:get DATABASE_URL`)
   - [ ] `NODE_ENV=production`
 - [ ] Deploy database: `./db/deploy-initial.sh`
 - [ ] Deploy site: `netlify deploy --prod`
@@ -106,7 +106,7 @@ Required in Netlify (Site Settings → Environment Variables):
 
 | Variable | Description | Source |
 |----------|-------------|--------|
-| `DATABASE_URL` | PostgreSQL connection string | `netlify addons:auth postgres` |
+| `DATABASE_URL` | PostgreSQL connection string | `netlify env:get DATABASE_URL` |
 | `NODE_ENV` | Environment mode | Set to `production` |
 
 ## 🔗 Quick Links

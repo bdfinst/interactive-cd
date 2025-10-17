@@ -21,13 +21,12 @@ netlify login
 netlify init
 
 # 3. Create Netlify Postgres database
-netlify addons:create postgres
+netlify db init --assume-no
 
 # 4. Get database connection string
-netlify addons:auth postgres
+netlify env:get DATABASE_URL
 
-# 5. Set environment variables
-netlify env:set DATABASE_URL "postgresql://user:pass@host:port/database"
+# 5. Set environment variables (DATABASE_URL is auto-set by db init)
 netlify env:set NODE_ENV "production"
 
 # 6. Deploy database schema
@@ -103,14 +102,14 @@ Via UI:
 
 **Via CLI**:
 ```bash
-# Create addon
-netlify addons:create postgres
+# Create database
+netlify db init --assume-no
 
-# Get connection details
-netlify addons:auth postgres
+# Get connection string
+netlify env:get DATABASE_URL
 
 # This outputs:
-# DATABASE_URL=postgresql://...
+# postgresql://...
 ```
 
 **Via UI**:
@@ -195,8 +194,8 @@ export default config;
 
 3. **Add Netlify Postgres**
    ```bash
-   netlify addons:create postgres
-   netlify addons:auth postgres
+   netlify db init --assume-no
+   netlify env:get DATABASE_URL
    ```
 
 4. **Set Environment Variables**
@@ -426,7 +425,7 @@ netlify dev
 netlify functions:serve
 
 # Database connection string
-netlify addons:auth postgres
+netlify env:get DATABASE_URL
 ```
 
 ## Rollback Strategy
@@ -501,8 +500,8 @@ jobs:
 
 **Quick Start Summary**:
 1. `netlify init` - Initialize site
-2. `netlify addons:create postgres` - Add database
-3. `netlify env:set DATABASE_URL "..."` - Set connection
+2. `netlify db init --assume-no` - Add database
+3. `netlify env:get DATABASE_URL` - Get connection string
 4. `./db/deploy-initial.sh` - Deploy schema
 5. `netlify deploy --prod` - Deploy app
 

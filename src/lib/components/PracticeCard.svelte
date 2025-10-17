@@ -2,10 +2,9 @@
 	/**
 	 * PracticeCard Component
 	 *
-	 * Displays a single practice with its details
+	 * Displays a practice card with title, description, dependency count, and benefits
 	 */
 	export let practice;
-	export let level = 0;
 
 	// Get category icon
 	const categoryIcons = {
@@ -16,58 +15,51 @@
 	};
 
 	const icon = categoryIcons[practice.category] || '📦';
-
-	// Calculate indentation based on level
-	const indentClass = level === 0 ? '' : `ml-${level * 6}`;
 </script>
 
-<div class="practice-card {indentClass} mb-4 border-l-4 border-blue-500 pl-4" data-testid="practice-card">
-	<div class="flex items-start gap-3">
-		<span class="text-2xl" aria-label="Category icon">{icon}</span>
-		<div class="flex-1">
-			<svelte:element this={`h${Math.min(level + 2, 6)}`} class="text-xl font-bold text-gray-900">
-				{practice.name}
-			</svelte:element>
-			<p class="text-gray-600 text-sm mb-2">{practice.description}</p>
-
-			<div class="flex gap-4 text-sm text-gray-500">
-				<span data-testid="requirements-count">
-					Requirements: ({practice.requirementCount || 0})
-				</span>
-				<span data-testid="benefits-count">
-					Benefits: ({practice.benefitCount || 0})
-				</span>
-			</div>
-
-			{#if practice.requirements && practice.requirements.length > 0}
-				<details class="mt-2">
-					<summary class="cursor-pointer text-sm text-blue-600 hover:text-blue-800">
-						View Requirements
-					</summary>
-					<ul class="list-disc list-inside mt-2 text-sm text-gray-700">
-						{#each practice.requirements as req}
-							<li>{req}</li>
-						{/each}
-					</ul>
-				</details>
-			{/if}
-
-			{#if practice.benefits && practice.benefits.length > 0}
-				<details class="mt-2">
-					<summary class="cursor-pointer text-sm text-green-600 hover:text-green-800">
-						View Benefits
-					</summary>
-					<ul class="list-disc list-inside mt-2 text-sm text-gray-700">
-						{#each practice.benefits as benefit}
-							<li>{benefit}</li>
-						{/each}
-					</ul>
-				</details>
-			{/if}
-
-			{#if !practice.hasPrerequisites && practice.dependencies?.length === 0}
-				<p class="mt-2 text-sm text-gray-500 italic">No dependencies (Leaf)</p>
-			{/if}
+<div
+	class="practice-card bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow"
+	data-testid="practice-card"
+>
+	<!-- Title Section -->
+	<div class="mb-4">
+		<div class="flex items-start gap-3 mb-2">
+			<span class="text-3xl" aria-label="{practice.category} category">{icon}</span>
+			<h2 class="text-2xl font-bold text-gray-900">{practice.name}</h2>
 		</div>
 	</div>
+
+	<!-- Description -->
+	<p class="text-gray-700 mb-4 leading-relaxed">{practice.description}</p>
+
+	<!-- Dependency Count -->
+	{#if practice.dependencyCount !== undefined}
+		<div class="mb-4 flex items-center gap-2">
+			<span class="text-sm font-semibold text-gray-600">Dependencies:</span>
+			<span
+				class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full"
+				data-testid="dependency-count"
+			>
+				{practice.dependencyCount}
+			</span>
+		</div>
+	{/if}
+
+	<!-- Benefits -->
+	{#if practice.benefits && practice.benefits.length > 0}
+		<div>
+			<h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+				<span class="text-green-600">Benefits</span>
+				<span class="text-sm text-gray-500">({practice.benefitCount})</span>
+			</h3>
+			<ul class="space-y-2" data-testid="benefits-list">
+				{#each practice.benefits as benefit}
+					<li class="flex items-start gap-2">
+						<span class="text-green-600 mt-1">★</span>
+						<span class="text-gray-700">{benefit}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
 </div>

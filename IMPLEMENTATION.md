@@ -245,20 +245,60 @@ From `docs/features/outline-view.feature`:
 
 ## What's Next
 
-### Immediate Next Steps
+### Current Feature: Practice Cards View
 
-1. **Run Tests** - Verify unit tests pass
-2. **Deploy Database** - Run `./db/deploy-initial.sh` to populate database
-3. **Start Dev Server** - Test the UI locally
-4. **Write E2E Tests** - Convert Gherkin scenarios to Playwright tests
+**Feature File**: `features/practice-cards.feature`
 
-### Future Features (From BDD Feature File)
+#### Updated UX Requirements
 
-- **Journey Planning** - Help teams plan CD adoption paths
-- **Interactive Graph** - Visual dependency graph
+1. **Display Continuous Delivery practice as a card**
+   - Show practice name with category icon
+   - List all requirements (8 items)
+   - List all benefits (5 items)
+   - Show number of direct dependencies (3)
+
+2. **Display direct dependencies only** (not recursive tree)
+   - Continuous Integration
+   - Application Pipeline
+   - Immutable Artifact
+   - Each as a separate card with same details
+
+3. **Card Design**
+   - Name and category icon
+   - Description text
+   - Requirements section with count
+   - Benefits section with count
+   - Dependency count indicator
+   - Responsive grid layout
+
+#### Implementation Tasks
+
+- [x] Update API to return only direct dependencies (1 level deep)
+  - Created `/api/practices/cards` endpoint
+  - Returns CD + 6 direct dependencies as flat array
+  - Each practice includes: id, name, category, description, requirements, benefits, counts
+- [x] Updated `PracticeCard.svelte` component with:
+  - Requirements list display (expanded by default)
+  - Benefits list display (expanded by default)
+  - Dependency count badge in top-right corner
+  - Category icon and name with proper styling
+  - Clean card design with hover effects
+- [x] Updated `+page.svelte` to display cards in grid
+  - 2-column grid on desktop (lg breakpoint)
+  - Single column on mobile
+  - Uses new `/api/practices/cards` endpoint
+- [x] Loading state with spinner
+- [x] Error state with retry button
+- [ ] Write E2E tests from Gherkin scenarios (TODO)
+- [x] Accessibility: semantic HTML (h2 for card titles), ARIA labels on icons
+
+### Future Features
+
+- **Expandable Dependencies** - Click to show nested dependencies
 - **Search & Filter** - Find specific practices
-- **Assessment** - Evaluate team readiness
-- **Progress Tracking** - Track implementation over time
+- **Interactive Graph** - Visual dependency visualization
+- **Journey Planning** - Guided adoption paths
+- **Assessment** - Team readiness evaluation
 
 ## Alignment with BDD Feature File
 
@@ -358,6 +398,134 @@ Then visit: http://localhost:5173
 
 ---
 
-**Status**: ✅ Implementation Complete | ⏸️ Awaiting Database Setup
+## Graph-Based UX (Current Implementation)
+
+**Completed**: 2025-10-17
+
+### What Changed
+
+Evolved from card grid to interactive dependency graph with visual connections:
+
+**Evolution**:
+1. **v1**: Recursive tree (all 23 practices, nested indentation)
+2. **v2**: Card grid (7 practices, 2-column layout)
+3. **v3**: Dependency graph (7 practices, visual connections)
+
+**Current UX**:
+- Shows Continuous Delivery at top center (root node)
+- 6 direct dependencies arranged in grid below (3 columns on desktop)
+- Visual connecting lines from root to each dependency
+- Each node shows: title, description, dependency count, benefits
+- Responsive layout (3 cols → 2 cols → 1 col)
+
+### Components Created
+
+1. **GraphNode Component**: `src/lib/components/GraphNode.svelte`
+   - Compact card design for graph nodes
+   - Shows title with category icon
+   - Displays description (truncated to 2 lines)
+   - Shows dependency count badge
+   - Lists up to 3 benefits (with "+N more" indicator)
+   - Root node has blue border, dependencies have gray border
+
+2. **PracticeGraph Component**: `src/lib/components/PracticeGraph.svelte`
+   - Manages graph layout and positioning
+   - Calculates node positions dynamically
+   - Draws SVG connecting lines between nodes
+   - Lines use dashed style with arrow endpoints
+   - Responsive grid layout for dependencies
+   - Handles window resize to update connections
+
+3. **Updated Page**: `src/routes/+page.svelte`
+   - Uses PracticeGraph component
+   - Centered layout for graph visualization
+   - Loading and error states preserved
+
+4. **Feature File**: `features/practice-graph.feature`
+   - Complete Gherkin specifications for graph UX
+   - 15 scenarios covering layout, connections, nodes, and responsiveness
+
+### Technical Details
+
+**Graph Layout**:
+- Root node: centered, max-width 400px
+- Dependencies: CSS Grid (auto-fit, min 280px)
+- Breakpoints:
+  - Mobile (<768px): 1 column
+  - Tablet (768px+): 2 columns
+  - Desktop (1024px+): 3 columns
+
+**Visual Connections**:
+- SVG overlay with absolute positioning
+- Lines calculated dynamically using element bounding boxes
+- Connection points: root bottom-center → dependency top-center
+- Style: blue, 2px stroke, dashed (5,5), 60% opacity
+- Arrow indicators: 4px radius circles at dependency endpoints
+
+**Benefits Display**:
+- Root node: shows all benefits (5 items)
+- Dependency nodes: shows first 3 benefits + count of remaining
+- Each benefit has star (★) icon
+- Truncated text with ellipsis using CSS line-clamp
+
+### API Endpoint
+
+**Existing**: `src/routes/api/practices/cards/+server.js`
+- Returns flat array: CD + 6 dependencies
+- Each practice includes: id, name, category, description, requirements, benefits, counts
+- No changes needed for graph visualization
+
+### Current Status
+
+✅ **Local Development**: Working at http://localhost:5173
+✅ **Graph Visualization**: Connecting lines rendering
+✅ **Responsive Layout**: 3-column → 2-column → 1-column
+✅ **Database**: PostgreSQL with 23 practices
+✅ **API**: `/api/practices/cards` endpoint functional
+✅ **Tests**: 57/57 unit tests passing
+⏳ **E2E Tests**: Pending (Gherkin scenarios ready in features/practice-graph.feature)
+
+### Visual Features
+
+- ✅ Root node with distinct blue border
+- ✅ Dependency nodes with gray/black borders (selected: blue 4px, unselected: black 2px)
+- ✅ Connecting lines from root to all dependencies
+- ✅ Category icons (🔄 practice, 🛠️ tooling)
+- ✅ Dependency count badges
+- ✅ Benefits lists with star icons
+- ✅ Hover effects on nodes
+- ✅ Responsive line adjustments on window resize
+
+### Latest Updates (Drill-Down Navigation)
+
+**Completed**: 2025-10-17
+
+#### Selectable Cards
+- Cards default to collapsed (title only)
+- Click to select → Blue 4px border + full content
+- Click again to deselect → Black 2px border + title only
+- Root practice auto-selected on load
+
+#### Expand Button
+- Appears inside selected cards (below benefits)
+- Only shown when card has dependencies
+- Root practice never shows expand button (even when selected)
+- Clicking expand drills down into that practice's dependencies
+
+#### Drill-Down Navigation
+- Click "Expand Dependencies" to focus on one practice
+- All peer cards disappear
+- Parent remains at top (unselected, no expand button)
+- Solid line connects parent to current
+- Dashed lines connect current to dependencies
+- "Back to Parent" button to navigate up hierarchy
+
+#### Connection Line Styles
+- **Solid line** (100% opacity, no dashes): Parent → Current
+- **Dashed lines** (60% opacity, 5,5 dash): Current → Dependencies
+
+---
+
+**Status**: ✅ Interactive Graph with Drill-Down Complete
 **Last Updated**: 2025-10-17
-**Tests**: 57/57 passing
+**Tests**: 57/57 unit tests passing

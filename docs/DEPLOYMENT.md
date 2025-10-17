@@ -231,18 +231,18 @@ git push origin main
 ### View Connection Info
 
 ```bash
-netlify addons:list
-netlify addons:auth cd-practices-db
+# List databases
+netlify env:list
+
+# Get connection string
+netlify env:get DATABASE_URL
 ```
 
 ### Run Queries
 
 ```bash
 # Connect to database
-netlify addons:auth cd-practices-db --json | jq -r .connection_string | xargs psql
-
-# Or export and use psql
-export DATABASE_URL=$(netlify addons:auth cd-practices-db --json | jq -r .connection_string)
+export DATABASE_URL=$(netlify env:get DATABASE_URL)
 psql $DATABASE_URL
 ```
 
