@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdfinst/interactive-cd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bdfinst/interactive-cd/issues"
+  },
+  "homepage": "https://github.com/bdfinst/interactive-cd#readme",
   "scripts": {
     "build": "vite build",
     "dev": "vite dev",
