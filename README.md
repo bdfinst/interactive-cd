@@ -102,13 +102,19 @@ npm run dev
 
 ### 5. Deploy to Netlify
 
+**Quick Deploy** (5 minutes):
 ```bash
-# Deploy application
+netlify init
+netlify addons:create postgres
+netlify env:set DATABASE_URL "postgresql://..."
+./db/deploy-initial.sh
 netlify deploy --prod
-
-# Apply any new data migrations
-./db/deploy-updates.sh
 ```
+
+📖 **Deployment Guides**:
+- [Quick Deploy Guide](./QUICK-DEPLOY.md) - Get live in 5 minutes
+- [Complete Deployment Guide](./NETLIFY-DEPLOYMENT.md) - Full documentation
+- [GitHub Actions CI/CD](./.github/workflows/deploy.yml) - Auto-deploy setup
 
 ## 📊 Database Schema
 

@@ -1,1 +1,42 @@
+# Claude Code
 .claude-flow/
+
+# OS
+.DS_Store
+
+# Dependencies
+node_modules
+
+# Build
+/build
+/.svelte-kit
+/package
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Netlify
+.netlify
+/.netlify
+
+# Local database (if using SQLite for testing)
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea

@@ -14,7 +14,7 @@ INSERT INTO metadata (key, value) VALUES
   ('version', '"1.0.0"'),
   ('source', '"MinimumCD.org"'),
   ('lastUpdated', '"2025-10-17"'),
-  ('description', "\"Hierarchical data structure for Continuous Delivery practices and their dependencies\"")
+  ('description', '"Hierarchical data structure for Continuous Delivery practices and their dependencies"')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
 -- ============================================================================
