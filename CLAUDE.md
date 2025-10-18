@@ -30,6 +30,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 #### 1. BDD Expert (`.claude/agents/bdd-expert.md`)
 
 **Use for:**
+
 - Reviewing and improving Gherkin feature files
 - Ensuring scenarios are declarative (what, not how)
 - Removing implementation details and technical coupling
@@ -37,12 +38,14 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Validating ubiquitous language usage
 
 **When to use:**
+
 - After creating or updating feature files
 - When feature files feel too technical or imperative
 - Before converting scenarios to acceptance tests
 - When stakeholders struggle to understand scenarios
 
 **Example workflow:**
+
 ```
 1. Write initial feature file draft
 2. Run BDD Expert agent to review
@@ -54,6 +57,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 #### 2. DDD Expert (`.claude/agents/ddd-expert.md`)
 
 **Use for:**
+
 - Domain modeling and bounded context identification
 - Designing entities, value objects, and aggregates
 - Identifying ubiquitous language
@@ -61,6 +65,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Preventing anemic domain models and primitive obsession
 
 **When to use:**
+
 - During initial project planning and domain discovery
 - When designing new features with complex domain logic
 - When refactoring to extract domain concepts
@@ -68,6 +73,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Before implementing domain-heavy features
 
 **Example workflow:**
+
 ```
 1. Identify domain concepts from BDD scenarios
 2. Run DDD Expert agent for modeling guidance
@@ -79,6 +85,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 #### 3. Test Quality Reviewer (`.claude/agents/test-quality-reviewer.md`)
 
 **Use for:**
+
 - Reviewing unit, integration, and E2E tests
 - Ensuring tests focus on behavior, not implementation
 - Validating meaningful test coverage
@@ -86,6 +93,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Checking that tests would catch real bugs
 
 **When to use:**
+
 - After writing or updating test files
 - When tests keep breaking during refactoring
 - During code review process
@@ -93,6 +101,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Before considering tests "done"
 
 **Example workflow:**
+
 ```
 1. Write tests following TDD
 2. Run Test Quality Reviewer agent
@@ -104,6 +113,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 #### 4. Tailwind CSS Expert (`.claude/agents/tailwind-expert.md`)
 
 **Use for:**
+
 - Reviewing Tailwind CSS usage and layout patterns
 - Improving responsive design with mobile-first approach
 - Fixing CSS specificity conflicts
@@ -112,6 +122,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Ensuring accessibility in layouts
 
 **When to use:**
+
 - When inline styles are used instead of Tailwind utilities
 - When experiencing CSS specificity conflicts
 - When responsive layouts aren't working as expected
@@ -120,6 +131,7 @@ This project uses specialized expert agents to ensure quality at each stage of d
 - Before finalizing UI components
 
 **Example workflow:**
+
 ```
 1. Identify styling issues (inline styles, specificity conflicts)
 2. Run Tailwind Expert agent for recommendations
@@ -248,28 +260,27 @@ Feature: User Login
 **Step 2: Acceptance Test** (`tests/e2e/login.spec.js`)
 
 ```javascript
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('User Login', () => {
-  test('successful login redirects to dashboard', async ({ page }) => {
-    // Given I am on the login page
-    await page.goto('/login');
+	test('successful login redirects to dashboard', async ({ page }) => {
+		// Given I am on the login page
+		await page.goto('/login')
 
-    // When I enter valid credentials
-    await page.fill('[data-testid="email"]', 'user@example.com');
-    await page.fill('[data-testid="password"]', 'password123');
+		// When I enter valid credentials
+		await page.fill('[data-testid="email"]', 'user@example.com')
+		await page.fill('[data-testid="password"]', 'password123')
 
-    // And I click the login button
-    await page.click('[data-testid="login-button"]');
+		// And I click the login button
+		await page.click('[data-testid="login-button"]')
 
-    // Then I should be redirected to the dashboard
-    await expect(page).toHaveURL('/dashboard');
+		// Then I should be redirected to the dashboard
+		await expect(page).toHaveURL('/dashboard')
 
-    // And I should see a welcome message
-    await expect(page.locator('[data-testid="welcome"]'))
-      .toContainText('Welcome');
-  });
-});
+		// And I should see a welcome message
+		await expect(page.locator('[data-testid="welcome"]')).toContainText('Welcome')
+	})
+})
 ```
 
 **Step 3: Unit Tests** (following TDD)
@@ -277,10 +288,10 @@ test.describe('User Login', () => {
 ```javascript
 // lib/auth.test.js
 describe('validateCredentials', () => {
-  it('returns true for valid credentials', () => {
-    expect(validateCredentials('user@example.com', 'password123')).toBe(true);
-  });
-});
+	it('returns true for valid credentials', () => {
+		expect(validateCredentials('user@example.com', 'password123')).toBe(true)
+	})
+})
 ```
 
 **Step 4: Implementation**
@@ -304,73 +315,73 @@ npm install -D @playwright/test
 **vite.config.js**
 
 ```javascript
-import { defineConfig } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineConfig({
-  plugins: [svelte()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.js']
-  }
-});
+	plugins: [svelte()],
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: ['./src/test/setup.js']
+	}
+})
 ```
 
 **src/test/setup.js**
 
 ```javascript
-import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/svelte';
-import { afterEach } from 'vitest';
+import '@testing-library/jest-dom'
+import { cleanup } from '@testing-library/svelte'
+import { afterEach } from 'vitest'
 
 afterEach(() => {
-  cleanup();
-});
+	cleanup()
+})
 ```
 
 **playwright.config.js**
 
 ```javascript
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
-  testDir: './tests/e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  use: {
-    baseURL: 'http://localhost:5173',
-    trace: 'on-first-retry',
-  },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-  },
-});
+	testDir: './tests/e2e',
+	fullyParallel: true,
+	forbidOnly: !!process.env.CI,
+	retries: process.env.CI ? 2 : 0,
+	workers: process.env.CI ? 1 : undefined,
+	use: {
+		baseURL: 'http://localhost:5173',
+		trace: 'on-first-retry'
+	},
+	projects: [
+		{
+			name: 'chromium',
+			use: { ...devices['Desktop Chrome'] }
+		}
+	],
+	webServer: {
+		command: 'npm run dev',
+		url: 'http://localhost:5173',
+		reuseExistingServer: !process.env.CI
+	}
+})
 ```
 
 **package.json scripts**
 
 ```json
 {
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
-  }
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui"
+	}
 }
 ```
 
@@ -405,46 +416,44 @@ Translate Gherkin scenarios to Playwright E2E tests.
 
 ```javascript
 // tests/e2e/login.spec.js
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('User Login', () => {
-  // Scenario: Successful login
-  test('successful login redirects to dashboard', async ({ page }) => {
-    // Given I am on the login page
-    await page.goto('/login');
+	// Scenario: Successful login
+	test('successful login redirects to dashboard', async ({ page }) => {
+		// Given I am on the login page
+		await page.goto('/login')
 
-    // When I enter valid credentials
-    await page.fill('[data-testid="email-input"]', 'user@example.com');
-    await page.fill('[data-testid="password-input"]', 'password123');
+		// When I enter valid credentials
+		await page.fill('[data-testid="email-input"]', 'user@example.com')
+		await page.fill('[data-testid="password-input"]', 'password123')
 
-    // And I click the login button
-    await page.click('[data-testid="login-button"]');
+		// And I click the login button
+		await page.click('[data-testid="login-button"]')
 
-    // Then I should be redirected to the dashboard
-    await expect(page).toHaveURL('/dashboard');
+		// Then I should be redirected to the dashboard
+		await expect(page).toHaveURL('/dashboard')
 
-    // And I should see a welcome message
-    await expect(page.locator('[data-testid="welcome-message"]'))
-      .toContainText('Welcome back!');
-  });
+		// And I should see a welcome message
+		await expect(page.locator('[data-testid="welcome-message"]')).toContainText('Welcome back!')
+	})
 
-  // Scenario: Invalid credentials
-  test('invalid credentials show error message', async ({ page }) => {
-    // Given I am on the login page
-    await page.goto('/login');
+	// Scenario: Invalid credentials
+	test('invalid credentials show error message', async ({ page }) => {
+		// Given I am on the login page
+		await page.goto('/login')
 
-    // When I enter invalid credentials
-    await page.fill('[data-testid="email-input"]', 'wrong@example.com');
-    await page.fill('[data-testid="password-input"]', 'wrongpass');
+		// When I enter invalid credentials
+		await page.fill('[data-testid="email-input"]', 'wrong@example.com')
+		await page.fill('[data-testid="password-input"]', 'wrongpass')
 
-    // And I click the login button
-    await page.click('[data-testid="login-button"]');
+		// And I click the login button
+		await page.click('[data-testid="login-button"]')
 
-    // Then I should see an error message
-    await expect(page.locator('[data-testid="error-message"]'))
-      .toContainText('Invalid credentials');
-  });
-});
+		// Then I should see an error message
+		await expect(page.locator('[data-testid="error-message"]')).toContainText('Invalid credentials')
+	})
+})
 ```
 
 **Note:** Comments in tests reference the Gherkin steps to maintain traceability.
@@ -471,71 +480,71 @@ Functions that:
 
 ```javascript
 // utils/validators.js
-export const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+export const isValidEmail = email => {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	return emailRegex.test(email)
+}
 
-export const validateLoginForm = (formData) => {
-  const errors = {};
-  
-  if (!formData.email) {
-    errors.email = 'Email is required';
-  } else if (!isValidEmail(formData.email)) {
-    errors.email = 'Invalid email format';
-  }
-  
-  if (!formData.password) {
-    errors.password = 'Password is required';
-  } else if (formData.password.length < 8) {
-    errors.password = 'Password must be at least 8 characters';
-  }
-  
-  return {
-    isValid: Object.keys(errors).length === 0,
-    errors
-  };
-};
+export const validateLoginForm = formData => {
+	const errors = {}
+
+	if (!formData.email) {
+		errors.email = 'Email is required'
+	} else if (!isValidEmail(formData.email)) {
+		errors.email = 'Invalid email format'
+	}
+
+	if (!formData.password) {
+		errors.password = 'Password is required'
+	} else if (formData.password.length < 8) {
+		errors.password = 'Password must be at least 8 characters'
+	}
+
+	return {
+		isValid: Object.keys(errors).length === 0,
+		errors
+	}
+}
 ```
 
 **Test:**
 
 ```javascript
 // utils/validators.test.js
-import { describe, it, expect } from 'vitest';
-import { isValidEmail, validateLoginForm } from './validators';
+import { describe, it, expect } from 'vitest'
+import { isValidEmail, validateLoginForm } from './validators'
 
 describe('isValidEmail', () => {
-  it('returns true for valid email', () => {
-    expect(isValidEmail('user@example.com')).toBe(true);
-  });
+	it('returns true for valid email', () => {
+		expect(isValidEmail('user@example.com')).toBe(true)
+	})
 
-  it('returns false for invalid email', () => {
-    expect(isValidEmail('invalid-email')).toBe(false);
-  });
-});
+	it('returns false for invalid email', () => {
+		expect(isValidEmail('invalid-email')).toBe(false)
+	})
+})
 
 describe('validateLoginForm', () => {
-  it('returns valid for correct form data', () => {
-    const result = validateLoginForm({
-      email: 'user@example.com',
-      password: 'password123'
-    });
-    
-    expect(result.isValid).toBe(true);
-    expect(result.errors).toEqual({});
-  });
+	it('returns valid for correct form data', () => {
+		const result = validateLoginForm({
+			email: 'user@example.com',
+			password: 'password123'
+		})
 
-  it('returns errors for invalid email', () => {
-    const result = validateLoginForm({
-      email: 'invalid',
-      password: 'password123'
-    });
-    
-    expect(result.isValid).toBe(false);
-    expect(result.errors.email).toBe('Invalid email format');
-  });
-});
+		expect(result.isValid).toBe(true)
+		expect(result.errors).toEqual({})
+	})
+
+	it('returns errors for invalid email', () => {
+		const result = validateLoginForm({
+			email: 'invalid',
+			password: 'password123'
+		})
+
+		expect(result.isValid).toBe(false)
+		expect(result.errors.email).toBe('Invalid email format')
+	})
+})
 ```
 
 ### 2. Immutability
@@ -546,38 +555,39 @@ Always create new data structures instead of modifying existing ones.
 
 ```javascript
 // stores/userStore.js
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
 const createUserStore = () => {
-  const { subscribe, set, update } = writable({
-    users: [],
-    loading: false,
-    error: null
-  });
+	const { subscribe, set, update } = writable({
+		users: [],
+		loading: false,
+		error: null
+	})
 
-  return {
-    subscribe,
-    addUser: (user) => update(state => ({
-      ...state,
-      users: [...state.users, { ...user, id: crypto.randomUUID() }]
-    })),
-    removeUser: (userId) => update(state => ({
-      ...state,
-      users: state.users.filter(u => u.id !== userId)
-    })),
-    updateUser: (userId, updates) => update(state => ({
-      ...state,
-      users: state.users.map(u => 
-        u.id === userId ? { ...u, ...updates } : u
-      )
-    })),
-    setLoading: (loading) => update(state => ({ ...state, loading })),
-    setError: (error) => update(state => ({ ...state, error })),
-    reset: () => set({ users: [], loading: false, error: null })
-  };
-};
+	return {
+		subscribe,
+		addUser: user =>
+			update(state => ({
+				...state,
+				users: [...state.users, { ...user, id: crypto.randomUUID() }]
+			})),
+		removeUser: userId =>
+			update(state => ({
+				...state,
+				users: state.users.filter(u => u.id !== userId)
+			})),
+		updateUser: (userId, updates) =>
+			update(state => ({
+				...state,
+				users: state.users.map(u => (u.id === userId ? { ...u, ...updates } : u))
+			})),
+		setLoading: loading => update(state => ({ ...state, loading })),
+		setError: error => update(state => ({ ...state, error })),
+		reset: () => set({ users: [], loading: false, error: null })
+	}
+}
 
-export const userStore = createUserStore();
+export const userStore = createUserStore()
 ```
 
 ### 3. Function Composition
@@ -586,33 +596,33 @@ Build complex operations from simple functions.
 
 ```javascript
 // utils/compose.js
-export const compose = (...fns) => (x) => 
-  fns.reduceRight((acc, fn) => fn(acc), x);
+export const compose =
+	(...fns) =>
+	x =>
+		fns.reduceRight((acc, fn) => fn(acc), x)
 
-export const pipe = (...fns) => (x) => 
-  fns.reduce((acc, fn) => fn(acc), x);
+export const pipe =
+	(...fns) =>
+	x =>
+		fns.reduce((acc, fn) => fn(acc), x)
 
 // Example usage
 // utils/transformers.js
-export const trim = (str) => str.trim();
-export const toLowerCase = (str) => str.toLowerCase();
-export const removeSpaces = (str) => str.replace(/\s+/g, '');
+export const trim = str => str.trim()
+export const toLowerCase = str => str.toLowerCase()
+export const removeSpaces = str => str.replace(/\s+/g, '')
 
-export const normalizeEmail = pipe(
-  trim,
-  toLowerCase,
-  removeSpaces
-);
+export const normalizeEmail = pipe(trim, toLowerCase, removeSpaces)
 
 // Test
-import { describe, it, expect } from 'vitest';
-import { normalizeEmail } from './transformers';
+import { describe, it, expect } from 'vitest'
+import { normalizeEmail } from './transformers'
 
 describe('normalizeEmail', () => {
-  it('normalizes email address', () => {
-    expect(normalizeEmail('  User@Example.com  ')).toBe('user@example.com');
-  });
-});
+	it('normalizes email address', () => {
+		expect(normalizeEmail('  User@Example.com  ')).toBe('user@example.com')
+	})
+})
 ```
 
 ### 4. Higher-Order Functions
@@ -621,22 +631,18 @@ Functions that take or return other functions.
 
 ```javascript
 // utils/array.js
-export const map = (fn) => (array) => array.map(fn);
-export const filter = (predicate) => (array) => array.filter(predicate);
-export const reduce = (fn, initial) => (array) => array.reduce(fn, initial);
+export const map = fn => array => array.map(fn)
+export const filter = predicate => array => array.filter(predicate)
+export const reduce = (fn, initial) => array => array.reduce(fn, initial)
 
 // Usage
-const double = (x) => x * 2;
-const isEven = (x) => x % 2 === 0;
-const sum = (acc, x) => acc + x;
+const double = x => x * 2
+const isEven = x => x % 2 === 0
+const sum = (acc, x) => acc + x
 
-const processNumbers = pipe(
-  filter(isEven),
-  map(double),
-  reduce(sum, 0)
-);
+const processNumbers = pipe(filter(isEven), map(double), reduce(sum, 0))
 
-expect(processNumbers([1, 2, 3, 4, 5])).toBe(12); // (2 + 4) * 2 = 12
+expect(processNumbers([1, 2, 3, 4, 5])).toBe(12) // (2 + 4) * 2 = 12
 ```
 
 ## Component Testing Pattern
@@ -645,74 +651,74 @@ expect(processNumbers([1, 2, 3, 4, 5])).toBe(12); // (2 + 4) * 2 = 12
 
 ```javascript
 // lib/calculator.js
-export const add = (a, b) => a + b;
-export const subtract = (a, b) => a - b;
-export const multiply = (a, b) => a * b;
-export const divide = (a, b) => b !== 0 ? a / b : null;
+export const add = (a, b) => a + b
+export const subtract = (a, b) => a - b
+export const multiply = (a, b) => a * b
+export const divide = (a, b) => (b !== 0 ? a / b : null)
 
 // lib/calculator.test.js
-import { describe, it, expect } from 'vitest';
-import { add, subtract, multiply, divide } from './calculator';
+import { describe, it, expect } from 'vitest'
+import { add, subtract, multiply, divide } from './calculator'
 
 describe('Calculator', () => {
-  describe('add', () => {
-    it('adds two positive numbers', () => {
-      expect(add(2, 3)).toBe(5);
-    });
-    
-    it('adds negative numbers', () => {
-      expect(add(-2, -3)).toBe(-5);
-    });
-  });
+	describe('add', () => {
+		it('adds two positive numbers', () => {
+			expect(add(2, 3)).toBe(5)
+		})
 
-  describe('divide', () => {
-    it('divides two numbers', () => {
-      expect(divide(10, 2)).toBe(5);
-    });
-    
-    it('returns null when dividing by zero', () => {
-      expect(divide(10, 0)).toBe(null);
-    });
-  });
-});
+		it('adds negative numbers', () => {
+			expect(add(-2, -3)).toBe(-5)
+		})
+	})
+
+	describe('divide', () => {
+		it('divides two numbers', () => {
+			expect(divide(10, 2)).toBe(5)
+		})
+
+		it('returns null when dividing by zero', () => {
+			expect(divide(10, 0)).toBe(null)
+		})
+	})
+})
 ```
 
 ### Integration Test (Component)
 
 ```javascript
 // components/Calculator.test.js
-import { describe, it, expect } from 'vitest';
-import { render, fireEvent } from '@testing-library/svelte';
-import Calculator from './Calculator.svelte';
+import { describe, it, expect } from 'vitest'
+import { render, fireEvent } from '@testing-library/svelte'
+import Calculator from './Calculator.svelte'
 
 describe('Calculator Component', () => {
-  it('displays initial value of 0', () => {
-    const { getByTestId } = render(Calculator);
-    expect(getByTestId('display')).toHaveTextContent('0');
-  });
+	it('displays initial value of 0', () => {
+		const { getByTestId } = render(Calculator)
+		expect(getByTestId('display')).toHaveTextContent('0')
+	})
 
-  it('adds two numbers correctly', async () => {
-    const { getByTestId } = render(Calculator);
-    
-    await fireEvent.click(getByTestId('button-2'));
-    await fireEvent.click(getByTestId('button-add'));
-    await fireEvent.click(getByTestId('button-3'));
-    await fireEvent.click(getByTestId('button-equals'));
-    
-    expect(getByTestId('display')).toHaveTextContent('5');
-  });
+	it('adds two numbers correctly', async () => {
+		const { getByTestId } = render(Calculator)
 
-  it('handles division by zero', async () => {
-    const { getByTestId } = render(Calculator);
-    
-    await fireEvent.click(getByTestId('button-5'));
-    await fireEvent.click(getByTestId('button-divide'));
-    await fireEvent.click(getByTestId('button-0'));
-    await fireEvent.click(getByTestId('button-equals'));
-    
-    expect(getByTestId('display')).toHaveTextContent('Error');
-  });
-});
+		await fireEvent.click(getByTestId('button-2'))
+		await fireEvent.click(getByTestId('button-add'))
+		await fireEvent.click(getByTestId('button-3'))
+		await fireEvent.click(getByTestId('button-equals'))
+
+		expect(getByTestId('display')).toHaveTextContent('5')
+	})
+
+	it('handles division by zero', async () => {
+		const { getByTestId } = render(Calculator)
+
+		await fireEvent.click(getByTestId('button-5'))
+		await fireEvent.click(getByTestId('button-divide'))
+		await fireEvent.click(getByTestId('button-0'))
+		await fireEvent.click(getByTestId('button-equals'))
+
+		expect(getByTestId('display')).toHaveTextContent('Error')
+	})
+})
 ```
 
 ### Component Implementation
@@ -720,113 +726,110 @@ describe('Calculator Component', () => {
 ```svelte
 <!-- components/Calculator.svelte -->
 <script>
-  import { add, subtract, multiply, divide } from '../lib/calculator.js';
+	import { add, subtract, multiply, divide } from '../lib/calculator.js'
 
-  let display = '0';
-  let firstOperand = null;
-  let operator = null;
-  let waitingForSecond = false;
+	let display = '0'
+	let firstOperand = null
+	let operator = null
+	let waitingForSecond = false
 
-  const operations = {
-    '+': add,
-    '-': subtract,
-    '*': multiply,
-    '/': divide
-  };
+	const operations = {
+		'+': add,
+		'-': subtract,
+		'*': multiply,
+		'/': divide
+	}
 
-  const handleNumber = (num) => {
-    if (waitingForSecond || display === '0') {
-      display = String(num);
-      waitingForSecond = false;
-    } else {
-      display = display + num;
-    }
-  };
+	const handleNumber = num => {
+		if (waitingForSecond || display === '0') {
+			display = String(num)
+			waitingForSecond = false
+		} else {
+			display = display + num
+		}
+	}
 
-  const handleOperator = (op) => {
-    if (firstOperand === null) {
-      firstOperand = parseFloat(display);
-    } else if (operator) {
-      const result = calculate();
-      display = String(result);
-      firstOperand = result;
-    }
-    operator = op;
-    waitingForSecond = true;
-  };
+	const handleOperator = op => {
+		if (firstOperand === null) {
+			firstOperand = parseFloat(display)
+		} else if (operator) {
+			const result = calculate()
+			display = String(result)
+			firstOperand = result
+		}
+		operator = op
+		waitingForSecond = true
+	}
 
-  const calculate = () => {
-    const second = parseFloat(display);
-    const operation = operations[operator];
-    const result = operation(firstOperand, second);
-    return result === null ? 'Error' : result;
-  };
+	const calculate = () => {
+		const second = parseFloat(display)
+		const operation = operations[operator]
+		const result = operation(firstOperand, second)
+		return result === null ? 'Error' : result
+	}
 
-  const handleEquals = () => {
-    if (firstOperand !== null && operator) {
-      display = String(calculate());
-      firstOperand = null;
-      operator = null;
-      waitingForSecond = false;
-    }
-  };
+	const handleEquals = () => {
+		if (firstOperand !== null && operator) {
+			display = String(calculate())
+			firstOperand = null
+			operator = null
+			waitingForSecond = false
+		}
+	}
 
-  const handleClear = () => {
-    display = '0';
-    firstOperand = null;
-    operator = null;
-    waitingForSecond = false;
-  };
+	const handleClear = () => {
+		display = '0'
+		firstOperand = null
+		operator = null
+		waitingForSecond = false
+	}
 </script>
 
 <div class="calculator">
-  <div class="display" data-testid="display">{display}</div>
-  
-  <div class="buttons">
-    {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] as num}
-      <button 
-        data-testid="button-{num}"
-        on:click={() => handleNumber(num)}
-      >
-        {num}
-      </button>
-    {/each}
-    
-    <button data-testid="button-add" on:click={() => handleOperator('+')}>+</button>
-    <button data-testid="button-subtract" on:click={() => handleOperator('-')}>-</button>
-    <button data-testid="button-multiply" on:click={() => handleOperator('*')}>*</button>
-    <button data-testid="button-divide" on:click={() => handleOperator('/')}>/</button>
-    <button data-testid="button-equals" on:click={handleEquals}>=</button>
-    <button data-testid="button-clear" on:click={handleClear}>C</button>
-  </div>
+	<div class="display" data-testid="display">{display}</div>
+
+	<div class="buttons">
+		{#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] as num}
+			<button data-testid="button-{num}" on:click={() => handleNumber(num)}>
+				{num}
+			</button>
+		{/each}
+
+		<button data-testid="button-add" on:click={() => handleOperator('+')}>+</button>
+		<button data-testid="button-subtract" on:click={() => handleOperator('-')}>-</button>
+		<button data-testid="button-multiply" on:click={() => handleOperator('*')}>*</button>
+		<button data-testid="button-divide" on:click={() => handleOperator('/')}>/</button>
+		<button data-testid="button-equals" on:click={handleEquals}>=</button>
+		<button data-testid="button-clear" on:click={handleClear}>C</button>
+	</div>
 </div>
 
 <style>
-  .calculator {
-    max-width: 300px;
-    margin: 2rem auto;
-  }
-  
-  .display {
-    background: #333;
-    color: #fff;
-    padding: 1rem;
-    text-align: right;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-  }
-  
-  button {
-    padding: 1rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
+	.calculator {
+		max-width: 300px;
+		margin: 2rem auto;
+	}
+
+	.display {
+		background: #333;
+		color: #fff;
+		padding: 1rem;
+		text-align: right;
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.buttons {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.5rem;
+	}
+
+	button {
+		padding: 1rem;
+		font-size: 1.2rem;
+		cursor: pointer;
+	}
 </style>
 ```
 
@@ -834,125 +837,127 @@ describe('Calculator Component', () => {
 
 ```javascript
 // stores/counter.js
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
 export const createCounter = (initialValue = 0) => {
-  const { subscribe, update, set } = writable(initialValue);
+	const { subscribe, update, set } = writable(initialValue)
 
-  return {
-    subscribe,
-    increment: () => update(n => n + 1),
-    decrement: () => update(n => n - 1),
-    reset: () => set(initialValue),
-    add: (amount) => update(n => n + amount)
-  };
-};
+	return {
+		subscribe,
+		increment: () => update(n => n + 1),
+		decrement: () => update(n => n - 1),
+		reset: () => set(initialValue),
+		add: amount => update(n => n + amount)
+	}
+}
 
-export const counter = createCounter();
+export const counter = createCounter()
 
 // stores/counter.test.js
-import { describe, it, expect } from 'vitest';
-import { get } from 'svelte/store';
-import { createCounter } from './counter';
+import { describe, it, expect } from 'vitest'
+import { get } from 'svelte/store'
+import { createCounter } from './counter'
 
 describe('Counter Store', () => {
-  it('initializes with default value', () => {
-    const store = createCounter();
-    expect(get(store)).toBe(0);
-  });
+	it('initializes with default value', () => {
+		const store = createCounter()
+		expect(get(store)).toBe(0)
+	})
 
-  it('initializes with custom value', () => {
-    const store = createCounter(10);
-    expect(get(store)).toBe(10);
-  });
+	it('initializes with custom value', () => {
+		const store = createCounter(10)
+		expect(get(store)).toBe(10)
+	})
 
-  it('increments by 1', () => {
-    const store = createCounter(5);
-    store.increment();
-    expect(get(store)).toBe(6);
-  });
+	it('increments by 1', () => {
+		const store = createCounter(5)
+		store.increment()
+		expect(get(store)).toBe(6)
+	})
 
-  it('decrements by 1', () => {
-    const store = createCounter(5);
-    store.decrement();
-    expect(get(store)).toBe(4);
-  });
+	it('decrements by 1', () => {
+		const store = createCounter(5)
+		store.decrement()
+		expect(get(store)).toBe(4)
+	})
 
-  it('adds custom amount', () => {
-    const store = createCounter(0);
-    store.add(5);
-    expect(get(store)).toBe(5);
-  });
+	it('adds custom amount', () => {
+		const store = createCounter(0)
+		store.add(5)
+		expect(get(store)).toBe(5)
+	})
 
-  it('resets to initial value', () => {
-    const store = createCounter(10);
-    store.increment();
-    store.increment();
-    store.reset();
-    expect(get(store)).toBe(10);
-  });
-});
+	it('resets to initial value', () => {
+		const store = createCounter(10)
+		store.increment()
+		store.increment()
+		store.reset()
+		expect(get(store)).toBe(10)
+	})
+})
 ```
 
 ## Async Operations
 
 ```javascript
 // services/api.js
-export const fetchData = async (url) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    throw new Error(`Failed to fetch: ${error.message}`);
-  }
-};
+export const fetchData = async url => {
+	try {
+		const response = await fetch(url)
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+		return await response.json()
+	} catch (error) {
+		throw new Error(`Failed to fetch: ${error.message}`)
+	}
+}
 
 // services/api.test.js
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fetchData } from './api';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { fetchData } from './api'
 
 describe('fetchData', () => {
-  beforeEach(() => {
-    global.fetch = vi.fn();
-  });
+	beforeEach(() => {
+		global.fetch = vi.fn()
+	})
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+	afterEach(() => {
+		vi.restoreAllMocks()
+	})
 
-  it('fetches data successfully', async () => {
-    const mockData = { id: 1, name: 'Test' };
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockData
-    });
+	it('fetches data successfully', async () => {
+		const mockData = { id: 1, name: 'Test' }
+		global.fetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => mockData
+		})
 
-    const result = await fetchData('https://api.example.com/data');
-    
-    expect(result).toEqual(mockData);
-    expect(global.fetch).toHaveBeenCalledWith('https://api.example.com/data');
-  });
+		const result = await fetchData('https://api.example.com/data')
 
-  it('throws error on failed request', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: false,
-      status: 404
-    });
+		expect(result).toEqual(mockData)
+		expect(global.fetch).toHaveBeenCalledWith('https://api.example.com/data')
+	})
 
-    await expect(fetchData('https://api.example.com/data'))
-      .rejects.toThrow('HTTP error! status: 404');
-  });
+	it('throws error on failed request', async () => {
+		global.fetch.mockResolvedValueOnce({
+			ok: false,
+			status: 404
+		})
 
-  it('throws error on network failure', async () => {
-    global.fetch.mockRejectedValueOnce(new Error('Network error'));
+		await expect(fetchData('https://api.example.com/data')).rejects.toThrow(
+			'HTTP error! status: 404'
+		)
+	})
 
-    await expect(fetchData('https://api.example.com/data'))
-      .rejects.toThrow('Failed to fetch: Network error');
-  });
-});
+	it('throws error on network failure', async () => {
+		global.fetch.mockRejectedValueOnce(new Error('Network error'))
+
+		await expect(fetchData('https://api.example.com/data')).rejects.toThrow(
+			'Failed to fetch: Network error'
+		)
+	})
+})
 ```
 
 ## Best Practices
@@ -978,31 +983,31 @@ Each test should verify one specific behavior.
 ```javascript
 // test/builders/userBuilder.js
 export const buildUser = (overrides = {}) => ({
-  id: crypto.randomUUID(),
-  email: 'test@example.com',
-  name: 'Test User',
-  createdAt: new Date().toISOString(),
-  ...overrides
-});
+	id: crypto.randomUUID(),
+	email: 'test@example.com',
+	name: 'Test User',
+	createdAt: new Date().toISOString(),
+	...overrides
+})
 
 // Usage in tests
-const user = buildUser({ email: 'custom@example.com' });
+const user = buildUser({ email: 'custom@example.com' })
 ```
 
 ### 5. Test Helpers
 
 ```javascript
 // test/helpers/render.js
-import { render } from '@testing-library/svelte';
+import { render } from '@testing-library/svelte'
 
 export const renderWithProps = (Component, props = {}) => {
-  return render(Component, { props });
-};
+	return render(Component, { props })
+}
 
 export const renderWithStore = (Component, store, initialValue) => {
-  store.set(initialValue);
-  return render(Component);
-};
+	store.set(initialValue)
+	return render(Component)
+}
 ```
 
 ### 6. Avoid Implementation Details
@@ -1013,16 +1018,16 @@ Test behavior, not implementation:
 
 ```javascript
 it('calls handleClick when button is clicked', () => {
-  // Testing implementation detail
-});
+	// Testing implementation detail
+})
 ```
 
 **Good:**
 
 ```javascript
 it('increments counter when button is clicked', () => {
-  // Testing user-visible behavior
-});
+	// Testing user-visible behavior
+})
 ```
 
 ### 7. Keep Tests Isolated
@@ -1035,26 +1040,20 @@ Each test should be independent and not rely on others.
 
 ```svelte
 <script>
-  import { pipe } from '../utils/compose.js';
-  
-  let items = [];
-  let searchTerm = '';
-  let sortBy = 'name';
+	import { pipe } from '../utils/compose.js'
 
-  // Pure functions
-  const filterBySearch = (term) => (items) => 
-    items.filter(item => 
-      item.name.toLowerCase().includes(term.toLowerCase())
-    );
+	let items = []
+	let searchTerm = ''
+	let sortBy = 'name'
 
-  const sortByField = (field) => (items) =>
-    [...items].sort((a, b) => a[field].localeCompare(b[field]));
+	// Pure functions
+	const filterBySearch = term => items =>
+		items.filter(item => item.name.toLowerCase().includes(term.toLowerCase()))
 
-  // Reactive declaration using function composition
-  $: processedItems = pipe(
-    filterBySearch(searchTerm),
-    sortByField(sortBy)
-  )(items);
+	const sortByField = field => items => [...items].sort((a, b) => a[field].localeCompare(b[field]))
+
+	// Reactive declaration using function composition
+	$: processedItems = pipe(filterBySearch(searchTerm), sortByField(sortBy))(items)
 </script>
 ```
 
@@ -1062,43 +1061,37 @@ Each test should be independent and not rely on others.
 
 ```svelte
 <script>
-  import { createEventHandler } from '../utils/events.js';
+	import { createEventHandler } from '../utils/events.js'
 
-  let formData = { email: '', password: '' };
-  let errors = {};
+	let formData = { email: '', password: '' }
+	let errors = {}
 
-  const handleInputChange = (field) => (event) => {
-    formData = { ...formData, [field]: event.target.value };
-  };
+	const handleInputChange = field => event => {
+		formData = { ...formData, [field]: event.target.value }
+	}
 
-  const handleSubmit = (onSuccess) => async (event) => {
-    event.preventDefault();
-    
-    const validation = validateLoginForm(formData);
-    
-    if (!validation.isValid) {
-      errors = validation.errors;
-      return;
-    }
+	const handleSubmit = onSuccess => async event => {
+		event.preventDefault()
 
-    try {
-      await onSuccess(formData);
-    } catch (error) {
-      errors = { form: error.message };
-    }
-  };
+		const validation = validateLoginForm(formData)
+
+		if (!validation.isValid) {
+			errors = validation.errors
+			return
+		}
+
+		try {
+			await onSuccess(formData)
+		} catch (error) {
+			errors = { form: error.message }
+		}
+	}
 </script>
 
 <form on:submit={handleSubmit(loginUser)}>
-  <input 
-    value={formData.email}
-    on:input={handleInputChange('email')}
-  />
-  <input 
-    value={formData.password}
-    on:input={handleInputChange('password')}
-  />
-  <button type="submit">Login</button>
+	<input value={formData.email} on:input={handleInputChange('email')} />
+	<input value={formData.password} on:input={handleInputChange('password')} />
+	<button type="submit">Login</button>
 </form>
 ```
 
@@ -1141,6 +1134,7 @@ Each test should be independent and not rely on others.
 ### Feature Files Location
 
 All BDD feature files are stored in:
+
 ```
 docs/features/
 ├── outline-view.feature
@@ -1149,6 +1143,7 @@ docs/features/
 ```
 
 These serve as:
+
 - Living documentation
 - Specification for acceptance tests
 - Communication tool with stakeholders
@@ -1184,13 +1179,13 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-          
+
       - run: npm ci
       - run: npm test -- --coverage
       - run: npx playwright install --with-deps

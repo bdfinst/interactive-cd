@@ -77,20 +77,22 @@ netlify deploy --prod
 
 Set these in Netlify Dashboard → Site Settings → Environment Variables:
 
-| Variable | Value | Notes |
-|----------|-------|-------|
-| `DATABASE_URL` | `postgresql://...` | From Netlify Postgres addon |
-| `NODE_ENV` | `production` | For production optimizations |
+| Variable       | Value              | Notes                        |
+| -------------- | ------------------ | ---------------------------- |
+| `DATABASE_URL` | `postgresql://...` | From Netlify Postgres addon  |
+| `NODE_ENV`     | `production`       | For production optimizations |
 
 **How to Set**:
 
 Via CLI:
+
 ```bash
 netlify env:set DATABASE_URL "postgresql://user:pass@host:port/database"
 netlify env:set NODE_ENV "production"
 ```
 
 Via UI:
+
 1. Go to Site Settings → Environment Variables
 2. Click "Add a variable"
 3. Enter name and value
@@ -101,6 +103,7 @@ Via UI:
 #### Create Database Addon
 
 **Via CLI**:
+
 ```bash
 # Create database
 netlify db init --assume-no
@@ -113,6 +116,7 @@ netlify env:get DATABASE_URL
 ```
 
 **Via UI**:
+
 1. Go to Site Settings → Add-ons
 2. Click "Search for add-ons"
 3. Find "Netlify Postgres" and click "Install"
@@ -138,22 +142,22 @@ psql "$DATABASE_URL" -c "SELECT COUNT(*) FROM practices;"
 **File**: `svelte.config.js` (already configured)
 
 ```javascript
-import adapter from '@sveltejs/adapter-netlify';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import adapter from '@sveltejs/adapter-netlify'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 const config = {
-  preprocess: vitePreprocess(),
-  kit: {
-    adapter: adapter(),
-    alias: {
-      '$domain': './src/domain',
-      '$application': './src/application',
-      '$infrastructure': './src/infrastructure'
-    }
-  }
-};
+	preprocess: vitePreprocess(),
+	kit: {
+		adapter: adapter(),
+		alias: {
+			$domain: './src/domain',
+			$application: './src/application',
+			$infrastructure: './src/infrastructure'
+		}
+	}
+}
 
-export default config;
+export default config
 ```
 
 ### 5. Package.json Scripts
@@ -162,11 +166,11 @@ export default config;
 
 ```json
 {
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview"
-  }
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview"
+	}
 }
 ```
 
@@ -175,12 +179,14 @@ export default config;
 ### Initial Deployment
 
 1. **Install Netlify CLI**
+
    ```bash
    npm install -g netlify-cli
    netlify login
    ```
 
 2. **Initialize Netlify Site**
+
    ```bash
    netlify init
 
@@ -193,12 +199,14 @@ export default config;
    ```
 
 3. **Add Netlify Postgres**
+
    ```bash
    netlify db init --assume-no
    netlify env:get DATABASE_URL
    ```
 
 4. **Set Environment Variables**
+
    ```bash
    # Copy DATABASE_URL from addon auth output
    netlify env:set DATABASE_URL "postgresql://..."
@@ -206,12 +214,14 @@ export default config;
    ```
 
 5. **Deploy Database**
+
    ```bash
    export DATABASE_URL="postgresql://..."
    ./db/deploy-initial.sh
    ```
 
 6. **Deploy Site**
+
    ```bash
    # Draft deploy (test first)
    netlify deploy
@@ -223,6 +233,7 @@ export default config;
 ### Subsequent Deployments
 
 **Automatic (Git-based)**:
+
 ```bash
 git add .
 git commit -m "Update feature"
@@ -232,6 +243,7 @@ git push origin main
 ```
 
 **Manual (CLI)**:
+
 ```bash
 netlify deploy --prod
 ```
@@ -241,11 +253,13 @@ netlify deploy --prod
 ### Adding New Practices
 
 1. **Create Migration File**
+
    ```bash
    cp db/data/002_example_new_practice.sql db/data/003_my_new_practice.sql
    ```
 
 2. **Edit Migration**
+
    ```sql
    INSERT INTO practices (id, name, type, category, description, requirements, benefits)
    VALUES (
@@ -261,6 +275,7 @@ netlify deploy --prod
    ```
 
 3. **Deploy Migration**
+
    ```bash
    export DATABASE_URL="$(netlify env:get DATABASE_URL)"
    ./db/deploy-updates.sh
@@ -276,12 +291,14 @@ netlify deploy --prod
 ### View Logs
 
 **Via CLI**:
+
 ```bash
 netlify functions:log
 netlify dev:log
 ```
 
 **Via UI**:
+
 1. Go to Site Dashboard
 2. Click "Functions" or "Logs"
 3. View real-time logs
@@ -291,6 +308,7 @@ netlify dev:log
 #### Issue: Build Fails
 
 **Check**:
+
 ```bash
 # Test build locally
 npm run build
@@ -303,6 +321,7 @@ npm run build
 #### Issue: Database Connection Error
 
 **Check**:
+
 ```bash
 # Verify DATABASE_URL is set
 netlify env:get DATABASE_URL
@@ -312,6 +331,7 @@ psql "$(netlify env:get DATABASE_URL)" -c "SELECT 1;"
 ```
 
 **Fix**:
+
 - Ensure DATABASE_URL environment variable is set
 - Check Netlify Postgres addon is active
 - Verify IP allowlist (Netlify Postgres allows all by default)
@@ -319,10 +339,12 @@ psql "$(netlify env:get DATABASE_URL)" -c "SELECT 1;"
 #### Issue: API Routes Not Working
 
 **Check**:
+
 - Verify `netlify.toml` has API redirects
 - Check function logs: `netlify functions:log`
 
 **Fix**:
+
 ```bash
 # Ensure adapter is netlify
 npm list @sveltejs/adapter-netlify
@@ -339,6 +361,7 @@ netlify deploy --prod
 For faster API responses, move to Netlify Edge Functions:
 
 **File**: `netlify/edge-functions/practices-tree.js`
+
 ```javascript
 import { Context } from "@netlify/edge-functions";
 
@@ -353,6 +376,7 @@ export const config = { path: "/api/practices/tree" };
 ### Caching
 
 **File**: `netlify.toml`
+
 ```toml
 [[headers]]
   for = "/api/practices/tree"
@@ -363,13 +387,14 @@ export const config = { path: "/api/practices/tree" };
 ### Database Connection Pooling
 
 Already configured in `src/infrastructure/persistence/db.js`:
+
 ```javascript
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20,  // Max connections
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
-});
+	connectionString: process.env.DATABASE_URL,
+	max: 20, // Max connections
+	idleTimeoutMillis: 30000,
+	connectionTimeoutMillis: 2000
+})
 ```
 
 ## Security Checklist
@@ -384,19 +409,23 @@ const pool = new Pool({
 ## Cost Considerations
 
 ### Netlify Free Tier
+
 - 100GB bandwidth/month
 - 300 build minutes/month
 - Unlimited sites
 - ✅ Sufficient for this app
 
 ### Netlify Postgres Free Tier
+
 - 500MB storage
 - 1M rows
 - Shared connection pool
 - ✅ Sufficient for 23 practices + future growth
 
 ### Upgrading
+
 If you exceed free tier:
+
 - **Pro**: $19/month (1TB bandwidth, 25 concurrent builds)
 - **Postgres Pro**: $12/month (2GB storage, 10M rows)
 
@@ -433,11 +462,13 @@ netlify env:get DATABASE_URL
 ### Rollback Deployment
 
 **Via UI**:
+
 1. Go to Deploys
 2. Find previous working deploy
 3. Click "Publish deploy"
 
 **Via CLI**:
+
 ```bash
 # List deploys
 netlify deploy:list
@@ -461,6 +492,7 @@ COMMIT;
 ### GitHub Actions (Optional)
 
 **File**: `.github/workflows/deploy.yml`
+
 ```yaml
 name: Deploy to Netlify
 
@@ -499,6 +531,7 @@ jobs:
 ---
 
 **Quick Start Summary**:
+
 1. `netlify init` - Initialize site
 2. `netlify db init --assume-no` - Add database
 3. `netlify env:get DATABASE_URL` - Get connection string

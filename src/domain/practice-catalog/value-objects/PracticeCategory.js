@@ -12,30 +12,28 @@
  * Note: TOOLING will be moved to CapabilityCategory (platform capabilities) in future iterations
  */
 export class PracticeCategory {
-	#name;
-	#icon;
-	#isStatic;
+	#name
+	#icon
 
 	constructor(name, icon, isStatic = false) {
 		// Prevent direct instantiation - only allow predefined static instances
 		if (!isStatic) {
 			throw new Error(
 				'Cannot instantiate PracticeCategory directly. Use PracticeCategory.from() or static constants.'
-			);
+			)
 		}
 
-		this.#name = name;
-		this.#icon = icon;
-		this.#isStatic = isStatic;
+		this.#name = name
+		this.#icon = icon
 
 		// Freeze to prevent modifications
-		Object.freeze(this);
+		Object.freeze(this)
 	}
 
-	static PRACTICE = new PracticeCategory('practice', '🔄', true);
-	static BEHAVIOR = new PracticeCategory('behavior', '👥', true);
-	static CULTURE = new PracticeCategory('culture', '🌟', true);
-	static TOOLING = new PracticeCategory('tooling', '🛠️', true);
+	static PRACTICE = new PracticeCategory('practice', '🔄', true)
+	static BEHAVIOR = new PracticeCategory('behavior', '👥', true)
+	static CULTURE = new PracticeCategory('culture', '🌟', true)
+	static TOOLING = new PracticeCategory('tooling', '🛠️', true)
 
 	/**
 	 * Factory method to create a PracticeCategory from a string
@@ -48,17 +46,17 @@ export class PracticeCategory {
 			behavior: PracticeCategory.BEHAVIOR,
 			culture: PracticeCategory.CULTURE,
 			tooling: PracticeCategory.TOOLING
-		};
+		}
 
-		const category = categories[value];
+		const category = categories[value]
 
 		if (!category) {
 			throw new Error(
 				`Invalid practice category: "${value}". Must be one of: practice, behavior, culture, tooling`
-			);
+			)
 		}
 
-		return category;
+		return category
 	}
 
 	/**
@@ -68,9 +66,9 @@ export class PracticeCategory {
 	 */
 	equals(other) {
 		if (!other || !(other instanceof PracticeCategory)) {
-			return false;
+			return false
 		}
-		return this.#name === other.#name;
+		return this.#name === other.#name
 	}
 
 	/**
@@ -78,7 +76,7 @@ export class PracticeCategory {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.#name;
+		return this.#name
 	}
 
 	/**
@@ -86,7 +84,7 @@ export class PracticeCategory {
 	 * @returns {string}
 	 */
 	get icon() {
-		return this.#icon;
+		return this.#icon
 	}
 
 	/**
@@ -94,20 +92,20 @@ export class PracticeCategory {
 	 * @returns {string}
 	 */
 	get name() {
-		return this.#name;
+		return this.#name
 	}
 
 	/**
 	 * Prevent setting name from outside
 	 */
 	set name(value) {
-		throw new Error('PracticeCategory is immutable');
+		throw new Error('PracticeCategory is immutable')
 	}
 
 	/**
 	 * Prevent setting icon from outside
 	 */
 	set icon(value) {
-		throw new Error('PracticeCategory is immutable');
+		throw new Error('PracticeCategory is immutable')
 	}
 }

@@ -9,25 +9,30 @@ Successfully implemented the first feature: **Hierarchical Outline View** of CD 
 ### ✅ Complete Full-Stack Implementation
 
 **Domain Layer** (Pure JavaScript, No Dependencies)
+
 - `PracticeId` - Value object for type-safe practice identifiers
 - `PracticeCategory` - Enumeration value object (PRACTICE, BEHAVIOR, CULTURE)
 - `CDPractice` - Entity (Aggregate Root) with domain behavior
 - `PracticeRepository` - Repository interface (port)
 
 **Infrastructure Layer** (PostgreSQL Integration)
+
 - `db.js` - Database client with connection pooling
 - `PostgresPracticeRepository` - Repository implementation using PostgreSQL
 - Connects to existing database schema with recursive CTE support
 
 **Application Layer** (Use Cases)
+
 - `GetPracticeTreeService` - Orchestrates getting practice tree with prerequisites
 
 **Presentation Layer** (Svelte Components)
+
 - `PracticeCard.svelte` - Displays individual practice with details
 - `PracticeOutline.svelte` - Recursive component for hierarchical display
 - `+page.svelte` - Main page with loading, error handling, and data fetching
 
 **API Layer** (SvelteKit Routes)
+
 - `GET /api/practices/tree` - Returns complete practice hierarchy as JSON
 
 ## Architecture Highlights
@@ -130,15 +135,18 @@ interactive-cd/
 ## Testing Strategy
 
 ### Unit Tests (TDD)
+
 - ✅ `PracticeId.test.js` - Value object validation, immutability, equality
 - ✅ `PracticeCategory.test.js` - Enumeration, factory method, immutability
 - ✅ `CDPractice.test.js` - Entity construction, domain behavior
 
 ### Integration Tests (Future)
+
 - Repository tests with test database
 - Application service tests
 
 ### E2E Tests (Future)
+
 - Playwright tests from Gherkin scenarios
 - Test user workflows from `docs/features/outline-view.feature`
 
@@ -191,9 +199,11 @@ npm run test:e2e
 Returns the complete practice tree starting from root.
 
 **Query Parameters:**
+
 - `root` (optional) - Root practice ID (default: 'continuous-delivery')
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -221,23 +231,27 @@ Returns the complete practice tree starting from root.
 From `docs/features/outline-view.feature`:
 
 ✅ **Core Display**
+
 - All practices displayed in hierarchical order
 - Practice information complete (name, description, counts)
 - Hierarchical indentation with visual distinction
 - Direct and nested dependencies shown
 
 ✅ **User Experience**
+
 - Loading indicator while fetching data
 - Error handling with retry option
 - Practice count display
 - All practices visible on load (no collapse/expand needed)
 
 ✅ **Data Accuracy**
+
 - All practices from database displayed
 - Dependency relationships accurate
 - Requirement and benefit counts correct
 
 ✅ **Accessibility**
+
 - Semantic HTML (h1, h2, h3 hierarchy)
 - ARIA labels on interactive elements
 - Keyboard accessible
@@ -347,6 +361,7 @@ This implementation directly satisfies scenarios from `docs/features/outline-vie
 You need a PostgreSQL database. Choose one option:
 
 **Option A: Local PostgreSQL**
+
 ```bash
 # Install PostgreSQL (if not installed)
 brew install postgresql@14  # macOS
@@ -364,6 +379,7 @@ export DATABASE_URL="postgresql://localhost:5432/interactive_cd"
 ```
 
 **Option B: Hosted Database (Netlify Postgres)**
+
 ```bash
 # Get DATABASE_URL from Netlify dashboard
 export DATABASE_URL="postgresql://user:pass@host:port/database"
@@ -371,6 +387,7 @@ export DATABASE_URL="postgresql://user:pass@host:port/database"
 ```
 
 **Option C: Docker PostgreSQL**
+
 ```bash
 docker run --name interactive-cd-db \
   -e POSTGRES_DB=interactive_cd \
@@ -384,6 +401,7 @@ export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/interactive_c
 #### 2. Update .env File
 
 Edit `.env` with your actual DATABASE_URL:
+
 ```bash
 DATABASE_URL=postgresql://your-connection-string
 ```
@@ -407,11 +425,13 @@ Then visit: http://localhost:5173
 Evolved from card grid to interactive dependency graph with visual connections:
 
 **Evolution**:
+
 1. **v1**: Recursive tree (all 23 practices, nested indentation)
 2. **v2**: Card grid (7 practices, 2-column layout)
 3. **v3**: Dependency graph (7 practices, visual connections)
 
 **Current UX**:
+
 - Shows Continuous Delivery at top center (root node)
 - 6 direct dependencies arranged in grid below (3 columns on desktop)
 - Visual connecting lines from root to each dependency
@@ -448,6 +468,7 @@ Evolved from card grid to interactive dependency graph with visual connections:
 ### Technical Details
 
 **Graph Layout**:
+
 - Root node: centered, max-width 400px
 - Dependencies: CSS Grid (auto-fit, min 280px)
 - Breakpoints:
@@ -456,6 +477,7 @@ Evolved from card grid to interactive dependency graph with visual connections:
   - Desktop (1024px+): 3 columns
 
 **Visual Connections**:
+
 - SVG overlay with absolute positioning
 - Lines calculated dynamically using element bounding boxes
 - Connection points: root bottom-center → dependency top-center
@@ -463,6 +485,7 @@ Evolved from card grid to interactive dependency graph with visual connections:
 - Arrow indicators: 4px radius circles at dependency endpoints
 
 **Benefits Display**:
+
 - Root node: shows all benefits (5 items)
 - Dependency nodes: shows first 3 benefits + count of remaining
 - Each benefit has star (★) icon
@@ -471,6 +494,7 @@ Evolved from card grid to interactive dependency graph with visual connections:
 ### API Endpoint
 
 **Existing**: `src/routes/api/practices/cards/+server.js`
+
 - Returns flat array: CD + 6 dependencies
 - Each practice includes: id, name, category, description, requirements, benefits, counts
 - No changes needed for graph visualization
@@ -501,18 +525,21 @@ Evolved from card grid to interactive dependency graph with visual connections:
 **Completed**: 2025-10-17
 
 #### Selectable Cards
+
 - Cards default to collapsed (title only)
 - Click to select → Blue 4px border + full content
 - Click again to deselect → Black 2px border + title only
 - Root practice auto-selected on load
 
 #### Expand Button
+
 - Appears inside selected cards (below benefits)
 - Only shown when card has dependencies
 - Root practice never shows expand button (even when selected)
 - Clicking expand drills down into that practice's dependencies
 
 #### Drill-Down Navigation
+
 - Click "Expand Dependencies" to focus on one practice
 - All peer cards disappear
 - Parent remains at top (unselected, no expand button)
@@ -521,6 +548,7 @@ Evolved from card grid to interactive dependency graph with visual connections:
 - "Back to Parent" button to navigate up hierarchy
 
 #### Connection Line Styles
+
 - **Solid line** (100% opacity, no dashes): Parent → Current
 - **Dashed lines** (60% opacity, 5,5 dash): Current → Dependencies
 

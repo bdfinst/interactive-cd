@@ -4,22 +4,22 @@
  * Returns the complete practice tree starting from the root practice
  * (default: continuous-delivery)
  */
-import { json } from '@sveltejs/kit';
-import { PostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js';
-import { GetPracticeTreeService } from '$application/practice-catalog/GetPracticeTreeService.js';
+import { json } from '@sveltejs/kit'
+import { PostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js'
+import { GetPracticeTreeService } from '$application/practice-catalog/GetPracticeTreeService.js'
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
 	try {
 		// Get optional root parameter (defaults to 'continuous-delivery')
-		const rootId = url.searchParams.get('root') || 'continuous-delivery';
+		const rootId = url.searchParams.get('root') || 'continuous-delivery'
 
 		// Create repository and service (dependency injection)
-		const repository = new PostgresPracticeRepository();
-		const service = new GetPracticeTreeService(repository);
+		const repository = new PostgresPracticeRepository()
+		const service = new GetPracticeTreeService(repository)
 
 		// Execute use case
-		const result = await service.execute(rootId);
+		const result = await service.execute(rootId)
 
 		if (!result.success) {
 			return json(
@@ -28,18 +28,18 @@ export async function GET({ url }) {
 					metadata: result.metadata
 				},
 				{ status: 404 }
-			);
+			)
 		}
 
-		return json(result);
+		return json(result)
 	} catch (error) {
-		console.error('API error:', error);
+		console.error('API error:', error)
 		return json(
 			{
 				error: 'Internal server error',
 				message: error.message
 			},
 			{ status: 500 }
-		);
+		)
 	}
 }

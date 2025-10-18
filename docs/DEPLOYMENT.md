@@ -35,6 +35,7 @@ NODE_VERSION=18
 ### 3. Initialize Database
 
 Option A: Using Netlify CLI
+
 ```bash
 # Install Netlify CLI
 npm install -g netlify-cli
@@ -52,6 +53,7 @@ psql $DATABASE_URL -f seed.sql
 ```
 
 Option B: Using direct connection
+
 ```bash
 # Set DATABASE_URL from Netlify dashboard
 export DATABASE_URL="postgresql://..."
@@ -91,19 +93,19 @@ Create `netlify.toml`:
 Update `svelte.config.js`:
 
 ```javascript
-import adapter from '@sveltejs/adapter-netlify';
+import adapter from '@sveltejs/adapter-netlify'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  kit: {
-    adapter: adapter({
-      edge: false,
-      split: false
-    })
-  }
-};
+	kit: {
+		adapter: adapter({
+			edge: false,
+			split: false
+		})
+	}
+}
 
-export default config;
+export default config
 ```
 
 ### 6. Install Dependencies
@@ -117,23 +119,23 @@ Update `package.json`:
 
 ```json
 {
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "db:migrate": "psql $DATABASE_URL -f schema.sql",
-    "db:seed": "node seed-data.js | psql $DATABASE_URL",
-    "db:reset": "npm run db:migrate && npm run db:seed"
-  },
-  "dependencies": {
-    "pg": "^8.11.0"
-  },
-  "devDependencies": {
-    "@sveltejs/adapter-netlify": "^4.0.0",
-    "@sveltejs/kit": "^2.0.0",
-    "svelte": "^4.0.0",
-    "vite": "^5.0.0"
-  }
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"db:migrate": "psql $DATABASE_URL -f schema.sql",
+		"db:seed": "node seed-data.js | psql $DATABASE_URL",
+		"db:reset": "npm run db:migrate && npm run db:seed"
+	},
+	"dependencies": {
+		"pg": "^8.11.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-netlify": "^4.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"svelte": "^4.0.0",
+		"vite": "^5.0.0"
+	}
 }
 ```
 
@@ -142,24 +144,24 @@ Update `package.json`:
 File: `src/lib/server/db.ts`
 
 ```typescript
-import { DATABASE_URL } from '$env/static/private';
-import pkg from 'pg';
-const { Pool } = pkg;
+import { DATABASE_URL } from '$env/static/private'
+import pkg from 'pg'
+const { Pool } = pkg
 
 export const db = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  max: 10
-});
+	connectionString: DATABASE_URL,
+	ssl: { rejectUnauthorized: false },
+	max: 10
+})
 
 // Test connection
 db.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Database connection error:', err);
-  } else {
-    console.log('Database connected:', res.rows[0].now);
-  }
-});
+	if (err) {
+		console.error('Database connection error:', err)
+	} else {
+		console.log('Database connected:', res.rows[0].now)
+	}
+})
 ```
 
 ### 8. Create API Routes
@@ -167,42 +169,39 @@ db.query('SELECT NOW()', (err, res) => {
 File: `src/routes/api/practices/+server.ts`
 
 ```typescript
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async () => {
-  try {
-    const result = await db.query('SELECT * FROM practices ORDER BY name');
-    return json(result.rows);
-  } catch (error) {
-    console.error('Database error:', error);
-    return json({ error: 'Failed to fetch practices' }, { status: 500 });
-  }
-};
+	try {
+		const result = await db.query('SELECT * FROM practices ORDER BY name')
+		return json(result.rows)
+	} catch (error) {
+		console.error('Database error:', error)
+		return json({ error: 'Failed to fetch practices' }, { status: 500 })
+	}
+}
 ```
 
 File: `src/routes/api/tree/+server.ts`
 
 ```typescript
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ url }) => {
-  const rootId = url.searchParams.get('root') || 'continuous-delivery';
+	const rootId = url.searchParams.get('root') || 'continuous-delivery'
 
-  try {
-    const result = await db.query(
-      'SELECT * FROM get_practice_tree($1)',
-      [rootId]
-    );
-    return json(result.rows);
-  } catch (error) {
-    console.error('Database error:', error);
-    return json({ error: 'Failed to fetch tree' }, { status: 500 });
-  }
-};
+	try {
+		const result = await db.query('SELECT * FROM get_practice_tree($1)', [rootId])
+		return json(result.rows)
+	} catch (error) {
+		console.error('Database error:', error)
+		return json({ error: 'Failed to fetch tree' }, { status: 500 })
+	}
+}
 ```
 
 ### 9. Deploy to Netlify
@@ -273,34 +272,34 @@ Already configured in `db.ts` with max connections.
 
 ```typescript
 // src/routes/api/practices/+server.ts
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
 
 export const GET: RequestHandler = async ({ setHeaders }) => {
-  const result = await db.query('SELECT * FROM practices');
+	const result = await db.query('SELECT * FROM practices')
 
-  // Cache for 5 minutes
-  setHeaders({
-    'cache-control': 'public, max-age=300'
-  });
+	// Cache for 5 minutes
+	setHeaders({
+		'cache-control': 'public, max-age=300'
+	})
 
-  return json(result.rows);
-};
+	return json(result.rows)
+}
 ```
 
 ### 3. Use SvelteKit Load Functions
 
 ```typescript
 // src/routes/+page.server.ts
-import { db } from '$lib/server/db';
-import type { PageServerLoad } from './$types';
+import { db } from '$lib/server/db'
+import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async () => {
-  const result = await db.query('SELECT * FROM practices');
-  return {
-    practices: result.rows
-  };
-};
+	const result = await db.query('SELECT * FROM practices')
+	return {
+		practices: result.rows
+	}
+}
 ```
 
 ## Monitoring
@@ -335,6 +334,7 @@ View in Netlify Dashboard → Functions → Select function → Logs
 ### "relation does not exist" error
 
 Run migrations:
+
 ```bash
 psql $DATABASE_URL -f schema.sql
 ```
@@ -342,6 +342,7 @@ psql $DATABASE_URL -f schema.sql
 ### "Cannot connect to database"
 
 Check DATABASE_URL is set:
+
 ```bash
 netlify env:list
 ```
@@ -353,6 +354,7 @@ Ensure `ssl: { rejectUnauthorized: false }` in Pool config.
 ### Build failures
 
 Check Node version matches:
+
 ```bash
 # In netlify.toml
 [build.environment]
@@ -362,11 +364,13 @@ Check Node version matches:
 ## Cost Monitoring
 
 Free tier limits:
+
 - **Storage**: 1 GB
 - **Runtime**: 60 hours/month
 - **Rows**: No hard limit (1GB of data)
 
 Current usage:
+
 - **Practices**: ~23 rows × ~2KB = ~46 KB
 - **Dependencies**: ~50 rows × ~100B = ~5 KB
 - **Total**: < 100 KB (well within limits)

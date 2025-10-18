@@ -33,6 +33,7 @@ export DATABASE_URL="postgresql://..."
 ```
 
 This will:
+
 1. Create all tables, functions, and views
 2. Load initial data (23 practices)
 3. Verify the installation
@@ -45,6 +46,7 @@ export DATABASE_URL="postgresql://..."
 ```
 
 This will:
+
 1. Check database is initialized
 2. Apply new data migrations in order
 3. Skip already-applied migrations
@@ -105,33 +107,33 @@ netlify deploy --prod
 
 ### Schema Files
 
-| File | Purpose | Run When |
-|------|---------|----------|
-| `schema.sql` | Complete schema (all-in-one) | First deployment only |
-| `migrations/001_*.sql` | Initial tables and indexes | First deployment only |
-| `migrations/002_*.sql` | Database functions | First deployment only |
-| `migrations/003_*.sql` | Database views | First deployment only |
+| File                   | Purpose                      | Run When              |
+| ---------------------- | ---------------------------- | --------------------- |
+| `schema.sql`           | Complete schema (all-in-one) | First deployment only |
+| `migrations/001_*.sql` | Initial tables and indexes   | First deployment only |
+| `migrations/002_*.sql` | Database functions           | First deployment only |
+| `migrations/003_*.sql` | Database views               | First deployment only |
 
 ### Data Files
 
-| File | Purpose | Run When |
-|------|---------|----------|
-| `seed.sql` | All-in-one initial data | First deployment only |
-| `data/001_*.sql` | Initial 23 practices | First deployment only |
-| `data/002_*.sql` | Example template | Never (it's a template) |
-| `data/003+_*.sql` | Future practice additions | Each deployment |
+| File              | Purpose                   | Run When                |
+| ----------------- | ------------------------- | ----------------------- |
+| `seed.sql`        | All-in-one initial data   | First deployment only   |
+| `data/001_*.sql`  | Initial 23 practices      | First deployment only   |
+| `data/002_*.sql`  | Example template          | Never (it's a template) |
+| `data/003+_*.sql` | Future practice additions | Each deployment         |
 
 ### Deployment Scripts
 
-| Script | Purpose | Usage |
-|--------|---------|-------|
-| `deploy-initial.sh` | First-time setup | Run once |
-| `deploy-updates.sh` | Apply new data | Run on each deploy |
+| Script              | Purpose          | Usage              |
+| ------------------- | ---------------- | ------------------ |
+| `deploy-initial.sh` | First-time setup | Run once           |
+| `deploy-updates.sh` | Apply new data   | Run on each deploy |
 
 ### Application Files
 
-| File | Purpose |
-|------|---------|
+| File                | Purpose                        |
+| ------------------- | ------------------------------ |
 | `client.example.js` | Database client implementation |
 
 ## 🔍 Naming Conventions
@@ -145,6 +147,7 @@ Format: `NNN_description.sql`
 - Files are applied in numerical order
 
 Examples:
+
 - `001_initial_data.sql`
 - `003_add_security_practices.sql`
 - `004_add_observability_practices.sql`
@@ -154,6 +157,7 @@ Examples:
 Format: `kebab-case-name`
 
 Examples:
+
 - `continuous-delivery`
 - `trunk-based-development`
 - `secret-management`

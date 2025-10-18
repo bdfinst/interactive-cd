@@ -11,67 +11,67 @@
  * - Validate prerequisites
  */
 export class CDPractice {
-	#id;
-	#name;
-	#category;
-	#description;
-	#practicePrerequisites = [];
-	#capabilityPrerequisites = [];
-	#requirements = [];
-	#benefits = [];
+	#id
+	#name
+	#category
+	#description
+	#practicePrerequisites = []
+	#capabilityPrerequisites = []
+	#requirements = []
+	#benefits = []
 
 	constructor(id, name, category, description) {
 		// Validate required fields
 		if (!id) {
-			throw new Error('Practice ID is required');
+			throw new Error('Practice ID is required')
 		}
 		if (!name || name.trim() === '') {
-			throw new Error('Practice name is required');
+			throw new Error('Practice name is required')
 		}
 		if (!category) {
-			throw new Error('Practice category is required');
+			throw new Error('Practice category is required')
 		}
 		if (!description || description.trim() === '') {
-			throw new Error('Practice description is required');
+			throw new Error('Practice description is required')
 		}
 
-		this.#id = id;
-		this.#name = name.trim();
-		this.#category = category;
-		this.#description = description.trim();
+		this.#id = id
+		this.#name = name.trim()
+		this.#category = category
+		this.#description = description.trim()
 	}
 
 	// Getters - expose internal state
 	get id() {
-		return this.#id;
+		return this.#id
 	}
 
 	get name() {
-		return this.#name;
+		return this.#name
 	}
 
 	get category() {
-		return this.#category;
+		return this.#category
 	}
 
 	get description() {
-		return this.#description;
+		return this.#description
 	}
 
 	get practicePrerequisites() {
-		return [...this.#practicePrerequisites];
+		return [...this.#practicePrerequisites]
 	}
 
 	get capabilityPrerequisites() {
-		return [...this.#capabilityPrerequisites];
+		return [...this.#capabilityPrerequisites]
 	}
 
 	get requirements() {
-		return [...this.#requirements];
+		return [...this.#requirements]
 	}
 
 	get benefits() {
-		return [...this.#benefits];
+		return [...this.#benefits]
 	}
 
 	/**
@@ -81,16 +81,16 @@ export class CDPractice {
 	 */
 	requiresPractice(practiceId, rationale) {
 		if (!practiceId) {
-			throw new Error('Practice ID is required for prerequisite');
+			throw new Error('Practice ID is required for prerequisite')
 		}
 		if (!rationale || rationale.trim() === '') {
-			throw new Error('Rationale is required for prerequisite');
+			throw new Error('Rationale is required for prerequisite')
 		}
 
 		this.#practicePrerequisites.push({
 			practiceId,
 			rationale: rationale.trim()
-		});
+		})
 	}
 
 	/**
@@ -100,16 +100,16 @@ export class CDPractice {
 	 */
 	requiresCapability(capabilityId, rationale) {
 		if (!capabilityId || capabilityId.trim() === '') {
-			throw new Error('Capability ID is required for prerequisite');
+			throw new Error('Capability ID is required for prerequisite')
 		}
 		if (!rationale || rationale.trim() === '') {
-			throw new Error('Rationale is required for prerequisite');
+			throw new Error('Rationale is required for prerequisite')
 		}
 
 		this.#capabilityPrerequisites.push({
 			capabilityId: capabilityId.trim(),
 			rationale: rationale.trim()
-		});
+		})
 	}
 
 	/**
@@ -118,10 +118,10 @@ export class CDPractice {
 	 */
 	addRequirement(requirement) {
 		if (!requirement || requirement.trim() === '') {
-			throw new Error('Requirement cannot be empty');
+			throw new Error('Requirement cannot be empty')
 		}
 
-		this.#requirements.push(requirement.trim());
+		this.#requirements.push(requirement.trim())
 	}
 
 	/**
@@ -130,10 +130,10 @@ export class CDPractice {
 	 */
 	addBenefit(benefit) {
 		if (!benefit || benefit.trim() === '') {
-			throw new Error('Benefit cannot be empty');
+			throw new Error('Benefit cannot be empty')
 		}
 
-		this.#benefits.push(benefit.trim());
+		this.#benefits.push(benefit.trim())
 	}
 
 	/**
@@ -141,7 +141,7 @@ export class CDPractice {
 	 * @returns {string[]} - Copy of requirements array
 	 */
 	getRequirements() {
-		return [...this.#requirements];
+		return [...this.#requirements]
 	}
 
 	/**
@@ -149,7 +149,7 @@ export class CDPractice {
 	 * @returns {string[]} - Copy of benefits array
 	 */
 	getBenefits() {
-		return [...this.#benefits];
+		return [...this.#benefits]
 	}
 
 	/**
@@ -157,7 +157,7 @@ export class CDPractice {
 	 * @returns {Array} - All prerequisites
 	 */
 	getAllPrerequisites() {
-		return [...this.#practicePrerequisites, ...this.#capabilityPrerequisites];
+		return [...this.#practicePrerequisites, ...this.#capabilityPrerequisites]
 	}
 
 	/**
@@ -165,7 +165,7 @@ export class CDPractice {
 	 * @returns {boolean}
 	 */
 	hasPrerequisites() {
-		return this.#practicePrerequisites.length > 0 || this.#capabilityPrerequisites.length > 0;
+		return this.#practicePrerequisites.length > 0 || this.#capabilityPrerequisites.length > 0
 	}
 
 	/**
@@ -173,7 +173,7 @@ export class CDPractice {
 	 * @returns {number}
 	 */
 	getRequirementCount() {
-		return this.#requirements.length;
+		return this.#requirements.length
 	}
 
 	/**
@@ -181,6 +181,6 @@ export class CDPractice {
 	 * @returns {number}
 	 */
 	getBenefitCount() {
-		return this.#benefits.length;
+		return this.#benefits.length
 	}
 }

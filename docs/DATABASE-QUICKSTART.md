@@ -131,14 +131,14 @@ ORDER BY dependent_count DESC;
 
 ## 🛠️ Useful Functions
 
-| Function | Purpose | Example |
-|----------|---------|---------|
-| `get_practice_dependencies(id)` | Get direct dependencies | `SELECT * FROM get_practice_dependencies('continuous-integration')` |
-| `get_practice_dependents(id)` | Get reverse dependencies | `SELECT * FROM get_practice_dependents('version-control')` |
-| `get_practice_tree(id)` | Get full tree recursively | `SELECT * FROM get_practice_tree('continuous-delivery')` |
-| `get_practice_ancestors(id)` | Get all ancestors | `SELECT * FROM get_practice_ancestors('version-control')` |
-| `would_create_cycle(p1, p2)` | Check for circular deps | `SELECT would_create_cycle('cd', 'vc')` |
-| `get_practice_depth(id)` | Get depth from root | `SELECT get_practice_depth('version-control')` |
+| Function                        | Purpose                   | Example                                                             |
+| ------------------------------- | ------------------------- | ------------------------------------------------------------------- |
+| `get_practice_dependencies(id)` | Get direct dependencies   | `SELECT * FROM get_practice_dependencies('continuous-integration')` |
+| `get_practice_dependents(id)`   | Get reverse dependencies  | `SELECT * FROM get_practice_dependents('version-control')`          |
+| `get_practice_tree(id)`         | Get full tree recursively | `SELECT * FROM get_practice_tree('continuous-delivery')`            |
+| `get_practice_ancestors(id)`    | Get all ancestors         | `SELECT * FROM get_practice_ancestors('version-control')`           |
+| `would_create_cycle(p1, p2)`    | Check for circular deps   | `SELECT would_create_cycle('cd', 'vc')`                             |
+| `get_practice_depth(id)`        | Get depth from root       | `SELECT get_practice_depth('version-control')`                      |
 
 ## 💻 SvelteKit Integration
 
@@ -152,55 +152,55 @@ npm install -D @sveltejs/adapter-netlify
 ### Database Client (`src/lib/server/db.ts`)
 
 ```typescript
-import { DATABASE_URL } from '$env/static/private';
-import pkg from 'pg';
-const { Pool } = pkg;
+import { DATABASE_URL } from '$env/static/private'
+import pkg from 'pg'
+const { Pool } = pkg
 
 export const db = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+	connectionString: DATABASE_URL,
+	ssl: { rejectUnauthorized: false }
+})
 ```
 
 ### API Route (`src/routes/api/practices/+server.ts`)
 
 ```typescript
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
 
 export async function GET() {
-  const result = await db.query('SELECT * FROM practices');
-  return json(result.rows);
+	const result = await db.query('SELECT * FROM practices')
+	return json(result.rows)
 }
 ```
 
 ### Load Function (`src/routes/+page.server.ts`)
 
 ```typescript
-import { db } from '$lib/server/db';
+import { db } from '$lib/server/db'
 
 export async function load() {
-  const result = await db.query(`
+	const result = await db.query(`
     SELECT * FROM get_practice_tree('continuous-delivery')
-  `);
-  return { tree: result.rows };
+  `)
+	return { tree: result.rows }
 }
 ```
 
 ## 📦 File Reference
 
-| File | Purpose |
-|------|---------|
-| `schema.sql` | Complete database schema (all-in-one) |
-| `migrations/001_initial_schema.sql` | Tables and indexes |
-| `migrations/002_add_functions.sql` | Recursive query functions |
-| `migrations/003_add_views.sql` | Convenient views |
-| `seed.sql` | Initial data from practices.json |
-| `seed-data.js` | Script to generate seed.sql |
-| `db.types.ts` | TypeScript type definitions |
-| `db-client.example.ts` | Full database client implementation |
-| `DATABASE.md` | Complete documentation |
-| `DEPLOYMENT.md` | Netlify deployment guide |
+| File                                | Purpose                               |
+| ----------------------------------- | ------------------------------------- |
+| `schema.sql`                        | Complete database schema (all-in-one) |
+| `migrations/001_initial_schema.sql` | Tables and indexes                    |
+| `migrations/002_add_functions.sql`  | Recursive query functions             |
+| `migrations/003_add_views.sql`      | Convenient views                      |
+| `seed.sql`                          | Initial data from practices.json      |
+| `seed-data.js`                      | Script to generate seed.sql           |
+| `db.types.ts`                       | TypeScript type definitions           |
+| `db-client.example.ts`              | Full database client implementation   |
+| `DATABASE.md`                       | Complete documentation                |
+| `DEPLOYMENT.md`                     | Netlify deployment guide              |
 
 ## 🔍 Common Operations
 

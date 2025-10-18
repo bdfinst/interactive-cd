@@ -4,10 +4,10 @@
  * PostgreSQL connection using pg library.
  * Uses connection pooling for better performance.
  */
-import pkg from 'pg';
-const { Pool } = pkg;
+import pkg from 'pg'
+const { Pool } = pkg
 
-let pool;
+let pool
 
 /**
  * Get or create database connection pool
@@ -16,7 +16,7 @@ let pool;
 export function getPool() {
 	if (!pool) {
 		const connectionString =
-			process.env.DATABASE_URL || 'postgresql://localhost:5432/interactive_cd';
+			process.env.DATABASE_URL || 'postgresql://localhost:5432/interactive_cd'
 
 		pool = new Pool({
 			connectionString,
@@ -24,15 +24,15 @@ export function getPool() {
 			max: 20, // Maximum number of clients in the pool
 			idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
 			connectionTimeoutMillis: 2000 // Wait 2 seconds for connection
-		});
+		})
 
 		// Log connection errors
-		pool.on('error', (err) => {
-			console.error('Unexpected error on idle client', err);
-		});
+		pool.on('error', err => {
+			console.error('Unexpected error on idle client', err)
+		})
 	}
 
-	return pool;
+	return pool
 }
 
 /**
@@ -42,22 +42,22 @@ export function getPool() {
  * @returns {Promise} - Query result
  */
 export async function query(text, params) {
-	const start = Date.now();
-	const pool = getPool();
+	const start = Date.now()
+	const pool = getPool()
 
 	try {
-		const res = await pool.query(text, params);
-		const duration = Date.now() - start;
+		const res = await pool.query(text, params)
+		const duration = Date.now() - start
 
 		// Log slow queries in development
 		if (process.env.NODE_ENV === 'development' && duration > 1000) {
-			console.warn(`Slow query (${duration}ms):`, text);
+			console.warn(`Slow query (${duration}ms):`, text)
 		}
 
-		return res;
+		return res
 	} catch (error) {
-		console.error('Database query error:', error);
-		throw error;
+		console.error('Database query error:', error)
+		throw error
 	}
 }
 
@@ -67,7 +67,7 @@ export async function query(text, params) {
  */
 export async function closePool() {
 	if (pool) {
-		await pool.end();
-		pool = null;
+		await pool.end()
+		pool = null
 	}
 }

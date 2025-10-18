@@ -9,11 +9,11 @@
 export class PracticeRepository {
 	/**
 	 * Find a practice by its ID
-	 * @param {PracticeId} practiceId
+	 * @param {PracticeId} _practiceId
 	 * @returns {Promise<CDPractice|null>}
 	 */
-	async findById(practiceId) {
-		throw new Error('Not implemented - override in subclass');
+	async findById(_practiceId) {
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
@@ -21,51 +21,51 @@ export class PracticeRepository {
 	 * @returns {Promise<CDPractice[]>}
 	 */
 	async findAll() {
-		throw new Error('Not implemented - override in subclass');
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
 	 * Find practices by category
-	 * @param {PracticeCategory} category
+	 * @param {PracticeCategory} _category
 	 * @returns {Promise<CDPractice[]>}
 	 */
-	async findByCategory(category) {
-		throw new Error('Not implemented - override in subclass');
+	async findByCategory(_category) {
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
 	 * Find practice prerequisites for a given practice
-	 * @param {PracticeId} practiceId
+	 * @param {PracticeId} _practiceId
 	 * @returns {Promise<Array>}
 	 */
-	async findPracticePrerequisites(practiceId) {
-		throw new Error('Not implemented - override in subclass');
+	async findPracticePrerequisites(_practiceId) {
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
 	 * Find capability prerequisites for a given practice
-	 * @param {PracticeId} practiceId
+	 * @param {PracticeId} _practiceId
 	 * @returns {Promise<Array>}
 	 */
-	async findCapabilityPrerequisites(practiceId) {
-		throw new Error('Not implemented - override in subclass');
+	async findCapabilityPrerequisites(_practiceId) {
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
 	 * Get the complete practice tree starting from root
-	 * @param {PracticeId} rootId
+	 * @param {PracticeId} _rootId
 	 * @returns {Promise<Object>}
 	 */
-	async getPracticeTree(rootId) {
-		throw new Error('Not implemented - override in subclass');
+	async getPracticeTree(_rootId) {
+		throw new Error('Not implemented - override in subclass')
 	}
 
 	/**
 	 * Save a practice
-	 * @param {CDPractice} practice
+	 * @param {CDPractice} _practice
 	 * @returns {Promise<void>}
 	 */
-	async save(practice) {
-		throw new Error('Not implemented - override in subclass');
+	async save(_practice) {
+		throw new Error('Not implemented - override in subclass')
 	}
 }

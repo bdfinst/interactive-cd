@@ -55,9 +55,9 @@ class Order {
     private items: OrderItem[],
     private status: OrderStatus
   ) {}
-  
+
   getId(): OrderId { return this.id; }
-  
+
   // Behavior, not just getters/setters
   addItem(item: OrderItem): void { ... }
   submit(): void { ... }
@@ -73,24 +73,23 @@ class Order {
 
 ```typescript
 class Money {
-  constructor(
-    private readonly amount: number,
-    private readonly currency: Currency
-  ) {
-    if (amount < 0) throw new Error("Amount cannot be negative");
-  }
-  
-  add(other: Money): Money {
-    if (this.currency !== other.currency) {
-      throw new Error("Cannot add different currencies");
-    }
-    return new Money(this.amount + other.amount, this.currency);
-  }
-  
-  equals(other: Money): boolean {
-    return this.amount === other.amount && 
-           this.currency === other.currency;
-  }
+	constructor(
+		private readonly amount: number,
+		private readonly currency: Currency
+	) {
+		if (amount < 0) throw new Error('Amount cannot be negative')
+	}
+
+	add(other: Money): Money {
+		if (this.currency !== other.currency) {
+			throw new Error('Cannot add different currencies')
+		}
+		return new Money(this.amount + other.amount, this.currency)
+	}
+
+	equals(other: Money): boolean {
+		return this.amount === other.amount && this.currency === other.currency
+	}
 }
 ```
 
@@ -110,19 +109,22 @@ class Money {
 - Update one aggregate per use case when possible
 
 ```typescript
-class Order { // Aggregate Root
-  private items: OrderItem[] = [];
-  
-  addItem(product: ProductId, quantity: number): void {
-    // Enforce invariant: max 10 items per order
-    if (this.items.length >= 10) {
-      throw new Error("Cannot add more than 10 items");
-    }
-    this.items.push(new OrderItem(product, quantity));
-  }
-  
-  // Items can only be modified through Order (the root)
-  getItems(): readonly OrderItem[] { return this.items; }
+class Order {
+	// Aggregate Root
+	private items: OrderItem[] = []
+
+	addItem(product: ProductId, quantity: number): void {
+		// Enforce invariant: max 10 items per order
+		if (this.items.length >= 10) {
+			throw new Error('Cannot add more than 10 items')
+		}
+		this.items.push(new OrderItem(product, quantity))
+	}
+
+	// Items can only be modified through Order (the root)
+	getItems(): readonly OrderItem[] {
+		return this.items
+	}
 }
 ```
 
@@ -136,12 +138,12 @@ class Order { // Aggregate Root
 
 ```typescript
 class OrderPlaced {
-  constructor(
-    public readonly orderId: OrderId,
-    public readonly customerId: CustomerId,
-    public readonly orderTotal: Money,
-    public readonly occurredAt: Date
-  ) {}
+	constructor(
+		public readonly orderId: OrderId,
+		public readonly customerId: CustomerId,
+		public readonly orderTotal: Money,
+		public readonly occurredAt: Date
+	) {}
 }
 ```
 
@@ -154,9 +156,9 @@ class OrderPlaced {
 
 ```typescript
 interface OrderRepository {
-  save(order: Order): Promise<void>;
-  findById(id: OrderId): Promise<Order | null>;
-  findByCustomerId(customerId: CustomerId): Promise<Order[]>;
+	save(order: Order): Promise<void>
+	findById(id: OrderId): Promise<Order | null>
+	findByCustomerId(customerId: CustomerId): Promise<Order[]>
 }
 ```
 
@@ -169,14 +171,10 @@ interface OrderRepository {
 
 ```typescript
 class TransferMoneyService {
-  transfer(
-    from: Account,
-    to: Account,
-    amount: Money
-  ): void {
-    from.withdraw(amount);
-    to.deposit(amount);
-  }
+	transfer(from: Account, to: Account, amount: Money): void {
+		from.withdraw(amount)
+		to.deposit(amount)
+	}
 }
 ```
 
@@ -207,15 +205,15 @@ class OrderFactory {
 
 ```typescript
 interface Specification<T> {
-  isSatisfiedBy(candidate: T): boolean;
+	isSatisfiedBy(candidate: T): boolean
 }
 
 class OrdersOverAmountSpecification implements Specification<Order> {
-  constructor(private amount: Money) {}
-  
-  isSatisfiedBy(order: Order): boolean {
-    return order.getTotal().isGreaterThan(this.amount);
-  }
+	constructor(private amount: Money) {}
+
+	isSatisfiedBy(order: Order): boolean {
+		return order.getTotal().isGreaterThan(this.amount)
+	}
 }
 ```
 
@@ -251,19 +249,19 @@ class PlaceOrderApplicationService {
     private inventoryService: InventoryService,
     private eventBus: EventBus
   ) {}
-  
+
   async execute(command: PlaceOrderCommand): Promise<OrderId> {
     // Orchestration only, business logic in domain
     const order = OrderFactory.createFromCart(
       command.cart,
       command.customerId
     );
-    
+
     await this.inventoryService.reserve(order.getItems());
     await this.orderRepository.save(order);
-    
+
     this.eventBus.publish(new OrderPlaced(order.getId(), ...));
-    
+
     return order.getId();
   }
 }

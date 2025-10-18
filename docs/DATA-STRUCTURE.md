@@ -8,12 +8,12 @@ This document describes the data structure for the Continuous Delivery dependenc
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `db/schema.sql` | Complete database schema (tables, functions, views) |
-| `db/seed.sql` | Initial dataset (23 practices from MinimumCD.org) |
-| `db/client.example.js` | Database client implementation example |
-| `db/migrations/` | Step-by-step migration files |
+| File                   | Purpose                                             |
+| ---------------------- | --------------------------------------------------- |
+| `db/schema.sql`        | Complete database schema (tables, functions, views) |
+| `db/seed.sql`          | Initial dataset (23 practices from MinimumCD.org)   |
+| `db/client.example.js` | Database client implementation example              |
+| `db/migrations/`       | Step-by-step migration files                        |
 
 ## Data Structure
 
@@ -73,6 +73,7 @@ The data structure forms a **directed acyclic graph (DAG)** with:
 ## Key Metrics
 
 ### Statistics
+
 - **Total Practices**: 23
 - **Total Dependencies**: 41
 - **Maximum Depth**: 4 levels (from CD to leaf practices)
@@ -121,6 +122,7 @@ WHERE id = 'continuous-integration';
 ```
 
 **Result:**
+
 - **id**: continuous-integration
 - **name**: Continuous Integration
 - **type**: practice
@@ -139,6 +141,7 @@ WHERE pd.practice_id = 'continuous-integration';
 ```
 
 **Result:**
+
 - Trunk-based Development
 - Automated Testing
 - Build Automation
@@ -147,6 +150,7 @@ WHERE pd.practice_id = 'continuous-integration';
 ## Database Schema Properties
 
 ### Graph Type
+
 - **Directed Acyclic Graph (DAG)**
 - No circular dependencies
 - Single root node
@@ -186,18 +190,18 @@ SELECT * FROM practice_summary ORDER BY dependent_count DESC;
 
 ```javascript
 // src/lib/server/db.js
-import { db } from './db.js';
+import { db } from './db.js'
 
 // Get all practices
-const practices = await db.getAllPractices();
+const practices = await db.getAllPractices()
 
 // Get practice tree
-const tree = await db.getPracticeTree('continuous-delivery');
+const tree = await db.getPracticeTree('continuous-delivery')
 
 // Get single practice with dependencies
-const practice = await db.getPractice('continuous-integration');
-const dependencies = await db.getPracticeDependencies('continuous-integration');
-const dependents = await db.getPracticeDependents('continuous-integration');
+const practice = await db.getPractice('continuous-integration')
+const dependencies = await db.getPracticeDependencies('continuous-integration')
+const dependents = await db.getPracticeDependents('continuous-integration')
 ```
 
 ### Building Graph Structure
@@ -205,34 +209,32 @@ const dependents = await db.getPracticeDependents('continuous-integration');
 ```javascript
 // Build tree starting from root
 async function buildPracticeTree() {
-  const roots = await db.getRootPractices();
-  const tree = await db.getPracticeTree(roots[0].id);
+	const roots = await db.getRootPractices()
+	const tree = await db.getPracticeTree(roots[0].id)
 
-  // Convert flat tree to nested structure
-  const nodeMap = new Map();
-  tree.forEach(node => {
-    nodeMap.set(node.id, { ...node, children: [] });
-  });
+	// Convert flat tree to nested structure
+	const nodeMap = new Map()
+	tree.forEach(node => {
+		nodeMap.set(node.id, { ...node, children: [] })
+	})
 
-  tree.forEach(node => {
-    if (node.level > 0) {
-      const parent = tree.find(p =>
-        p.level === node.level - 1 &&
-        node.path.startsWith(p.path)
-      );
-      if (parent) {
-        nodeMap.get(parent.id).children.push(nodeMap.get(node.id));
-      }
-    }
-  });
+	tree.forEach(node => {
+		if (node.level > 0) {
+			const parent = tree.find(p => p.level === node.level - 1 && node.path.startsWith(p.path))
+			if (parent) {
+				nodeMap.get(parent.id).children.push(nodeMap.get(node.id))
+			}
+		}
+	})
 
-  return nodeMap.get(roots[0].id);
+	return nodeMap.get(roots[0].id)
 }
 ```
 
 ## Data Source
 
 All practices and requirements are derived from:
+
 - **MinimumCD.org** - Minimum viable continuous delivery standards
 - **Source**: https://minimumcd.org
 - **Version**: 1.0.0

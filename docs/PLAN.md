@@ -16,6 +16,7 @@ Build a web application to visualize how different activities impact Continuous 
 ### Practice Requirements
 
 #### Continuous Delivery Minimum Requirements
+
 - Use Continuous Integration
 - Application pipeline is the only deployment method
 - Pipeline determines releasability of changes
@@ -26,6 +27,7 @@ Build a web application to visualize how different activities impact Continuous 
 - Deploy application configuration with artifact
 
 #### Continuous Integration Minimum Requirements
+
 - Use Trunk-based Development
 - Integrate work to trunk at least daily
 - Automated testing before merging to trunk
@@ -34,6 +36,7 @@ Build a web application to visualize how different activities impact Continuous 
 - Ensure new work doesn't break existing work
 
 #### Trunk-based Development Minimum Requirements
+
 - All changes integrate into trunk
 - If branches are used:
   - Originate from trunk
@@ -41,6 +44,7 @@ Build a web application to visualize how different activities impact Continuous 
   - Short-lived and removed after merge
 
 ### Dependency Hierarchy
+
 - **Trunk-based Development** is prerequisite for **Continuous Integration**
 - **Continuous Integration** is prerequisite for **Continuous Delivery**
 
@@ -83,57 +87,52 @@ This application spans three bounded contexts:
 
 ```javascript
 class CDPractice {
-  constructor(id, name, category, description) {
-    this.id = PracticeId.from(id);
-    this.name = name;
-    this.category = PracticeCategory.from(category);
-    this.description = description;
-    this.practicePrerequisites = [];
-    this.capabilityPrerequisites = [];
-    this.requirements = [];
-    this.benefits = [];
-  }
+	constructor(id, name, category, description) {
+		this.id = PracticeId.from(id)
+		this.name = name
+		this.category = PracticeCategory.from(category)
+		this.description = description
+		this.practicePrerequisites = []
+		this.capabilityPrerequisites = []
+		this.requirements = []
+		this.benefits = []
+	}
 
-  // Domain behavior - Practice dependencies
-  requiresPractice(practiceId, rationale, type = PrerequisiteType.REQUIRED) {
-    const prereq = new PracticePrerequisite(practiceId, rationale, type);
-    this.validateNoCycles(prereq);
-    this.practicePrerequisites.push(prereq);
-    this.recordEvent(new PracticePrerequisiteAdded(this.id, practiceId));
-  }
+	// Domain behavior - Practice dependencies
+	requiresPractice(practiceId, rationale, type = PrerequisiteType.REQUIRED) {
+		const prereq = new PracticePrerequisite(practiceId, rationale, type)
+		this.validateNoCycles(prereq)
+		this.practicePrerequisites.push(prereq)
+		this.recordEvent(new PracticePrerequisiteAdded(this.id, practiceId))
+	}
 
-  // Domain behavior - Platform capability dependencies
-  requiresCapability(capabilityId, rationale, type = PrerequisiteType.REQUIRED) {
-    const prereq = new CapabilityPrerequisite(capabilityId, rationale, type);
-    this.capabilityPrerequisites.push(prereq);
-    this.recordEvent(new CapabilityPrerequisiteAdded(this.id, capabilityId));
-  }
+	// Domain behavior - Platform capability dependencies
+	requiresCapability(capabilityId, rationale, type = PrerequisiteType.REQUIRED) {
+		const prereq = new CapabilityPrerequisite(capabilityId, rationale, type)
+		this.capabilityPrerequisites.push(prereq)
+		this.recordEvent(new CapabilityPrerequisiteAdded(this.id, capabilityId))
+	}
 
-  canBeAdoptedBy(teamContext) {
-    const hasPractices = this.practicePrerequisites
-      .filter(p => p.isRequired())
-      .every(p => teamContext.hasPractice(p.practiceId));
+	canBeAdoptedBy(teamContext) {
+		const hasPractices = this.practicePrerequisites
+			.filter(p => p.isRequired())
+			.every(p => teamContext.hasPractice(p.practiceId))
 
-    const hasCapabilities = this.capabilityPrerequisites
-      .filter(c => c.isRequired())
-      .every(c => teamContext.hasCapability(c.capabilityId));
+		const hasCapabilities = this.capabilityPrerequisites
+			.filter(c => c.isRequired())
+			.every(c => teamContext.hasCapability(c.capabilityId))
 
-    return hasPractices && hasCapabilities;
-  }
+		return hasPractices && hasCapabilities
+	}
 
-  assessReadiness(teamContext) {
-    const scores = this.requirements.map(req =>
-      req.assessReadiness(teamContext)
-    );
-    return ReadinessScore.average(scores);
-  }
+	assessReadiness(teamContext) {
+		const scores = this.requirements.map(req => req.assessReadiness(teamContext))
+		return ReadinessScore.average(scores)
+	}
 
-  getAllPrerequisites() {
-    return [
-      ...this.practicePrerequisites,
-      ...this.capabilityPrerequisites
-    ];
-  }
+	getAllPrerequisites() {
+		return [...this.practicePrerequisites, ...this.capabilityPrerequisites]
+	}
 }
 ```
 
@@ -141,35 +140,34 @@ class CDPractice {
 
 ```javascript
 class PlatformCapability {
-  constructor(id, name, category, description) {
-    this.id = CapabilityId.from(id);
-    this.name = name;
-    this.category = CapabilityCategory.from(category);
-    this.description = description;
-    this.capabilityPrerequisites = [];
-    this.implementationOptions = [];
-  }
+	constructor(id, name, category, description) {
+		this.id = CapabilityId.from(id)
+		this.name = name
+		this.category = CapabilityCategory.from(category)
+		this.description = description
+		this.capabilityPrerequisites = []
+		this.implementationOptions = []
+	}
 
-  // Domain behavior - Capabilities can depend on other capabilities
-  requiresCapability(capabilityId, rationale) {
-    const prereq = new CapabilityPrerequisite(capabilityId, rationale);
-    this.capabilityPrerequisites.push(prereq);
-  }
+	// Domain behavior - Capabilities can depend on other capabilities
+	requiresCapability(capabilityId, rationale) {
+		const prereq = new CapabilityPrerequisite(capabilityId, rationale)
+		this.capabilityPrerequisites.push(prereq)
+	}
 
-  addImplementationOption(name, vendor, notes) {
-    const option = new ImplementationOption(name, vendor, notes);
-    this.implementationOptions.push(option);
-  }
+	addImplementationOption(name, vendor, notes) {
+		const option = new ImplementationOption(name, vendor, notes)
+		this.implementationOptions.push(option)
+	}
 
-  isAvailableFor(teamContext) {
-    return this.capabilityPrerequisites.every(c =>
-      teamContext.hasCapability(c.capabilityId)
-    );
-  }
+	isAvailableFor(teamContext) {
+		return this.capabilityPrerequisites.every(c => teamContext.hasCapability(c.capabilityId))
+	}
 }
 ```
 
 **Value Objects:**
+
 - `PracticeId` - Type-safe practice identifier
 - `CapabilityId` - Type-safe capability identifier
 - `PracticeCategory` - PRACTICE | BEHAVIOR | CULTURE
@@ -182,6 +180,7 @@ class PlatformCapability {
 - `PrerequisiteType` - REQUIRED | RECOMMENDED | COMPLEMENTARY
 
 **Domain Events:**
+
 - `PracticeAdded` - New practice added to catalog
 - `CapabilityAdded` - New platform capability added
 - `PracticePrerequisiteAdded` - Practice now depends on another practice
@@ -189,23 +188,48 @@ class PlatformCapability {
 - `PracticeUpdated` - Practice definition changed
 
 **Repositories:**
+
 ```javascript
 class PracticeRepository {
-  async findById(practiceId) { /* ... */ }
-  async findAll() { /* ... */ }
-  async findByCategory(category) { /* ... */ }
-  async findPracticePrerequisites(practiceId) { /* ... */ }
-  async findCapabilityPrerequisites(practiceId) { /* ... */ }
-  async findDependents(practiceId) { /* ... */ }
-  async save(practice) { /* ... */ }
+	async findById(practiceId) {
+		/* ... */
+	}
+	async findAll() {
+		/* ... */
+	}
+	async findByCategory(category) {
+		/* ... */
+	}
+	async findPracticePrerequisites(practiceId) {
+		/* ... */
+	}
+	async findCapabilityPrerequisites(practiceId) {
+		/* ... */
+	}
+	async findDependents(practiceId) {
+		/* ... */
+	}
+	async save(practice) {
+		/* ... */
+	}
 }
 
 class CapabilityRepository {
-  async findById(capabilityId) { /* ... */ }
-  async findAll() { /* ... */ }
-  async findByCategory(category) { /* ... */ }
-  async findPrerequisites(capabilityId) { /* ... */ }
-  async save(capability) { /* ... */ }
+	async findById(capabilityId) {
+		/* ... */
+	}
+	async findAll() {
+		/* ... */
+	}
+	async findByCategory(category) {
+		/* ... */
+	}
+	async findPrerequisites(capabilityId) {
+		/* ... */
+	}
+	async save(capability) {
+		/* ... */
+	}
 }
 ```
 
@@ -217,32 +241,32 @@ class CapabilityRepository {
 
 ```javascript
 class AdoptionJourney {
-  constructor(targetPracticeId, teamContext) {
-    this.id = JourneyId.generate();
-    this.targetPractice = targetPracticeId;
-    this.teamContext = teamContext;
-    this.steps = [];
-    this.currentStep = null;
-  }
+	constructor(targetPracticeId, teamContext) {
+		this.id = JourneyId.generate()
+		this.targetPractice = targetPracticeId
+		this.teamContext = teamContext
+		this.steps = []
+		this.currentStep = null
+	}
 
-  // Domain behavior
-  addStep(practice, estimatedDuration) {
-    const step = new JourneyStep(practice.id, practice.name, estimatedDuration);
-    this.validateStepOrder(step);
-    this.steps.push(step);
-  }
+	// Domain behavior
+	addStep(practice, estimatedDuration) {
+		const step = new JourneyStep(practice.id, practice.name, estimatedDuration)
+		this.validateStepOrder(step)
+		this.steps.push(step)
+	}
 
-  completeCurrentStep() {
-    if (!this.currentStep) throw new Error("No step in progress");
-    this.currentStep.markComplete();
-    this.recordEvent(new StepCompleted(this.id, this.currentStep.id));
-    this.currentStep = this.getNextStep();
-  }
+	completeCurrentStep() {
+		if (!this.currentStep) throw new Error('No step in progress')
+		this.currentStep.markComplete()
+		this.recordEvent(new StepCompleted(this.id, this.currentStep.id))
+		this.currentStep = this.getNextStep()
+	}
 
-  calculateProgress() {
-    const completed = this.steps.filter(s => s.isComplete()).length;
-    return completed / this.steps.length;
-  }
+	calculateProgress() {
+		const completed = this.steps.filter(s => s.isComplete()).length
+		return completed / this.steps.length
+	}
 }
 ```
 
@@ -250,29 +274,35 @@ class AdoptionJourney {
 
 ```javascript
 class JourneyPlanner {
-  constructor(practiceRepository) {
-    this.practiceRepository = practiceRepository;
-  }
+	constructor(practiceRepository) {
+		this.practiceRepository = practiceRepository
+	}
 
-  async planJourney(targetPracticeId, teamContext) {
-    const target = await this.practiceRepository.findById(targetPracticeId);
-    const allPrereqs = await this.getAllPrerequisites(target);
-    const missing = allPrereqs.filter(p => !teamContext.hasPractice(p.id));
-    const ordered = this.topologicalSort(missing);
+	async planJourney(targetPracticeId, teamContext) {
+		const target = await this.practiceRepository.findById(targetPracticeId)
+		const allPrereqs = await this.getAllPrerequisites(target)
+		const missing = allPrereqs.filter(p => !teamContext.hasPractice(p.id))
+		const ordered = this.topologicalSort(missing)
 
-    const journey = new AdoptionJourney(targetPracticeId, teamContext);
-    for (const practice of ordered) {
-      const duration = this.estimateDuration(practice, teamContext);
-      journey.addStep(practice, duration);
-    }
+		const journey = new AdoptionJourney(targetPracticeId, teamContext)
+		for (const practice of ordered) {
+			const duration = this.estimateDuration(practice, teamContext)
+			journey.addStep(practice, duration)
+		}
 
-    return journey;
-  }
+		return journey
+	}
 
-  // Domain logic for optimal path finding
-  async getAllPrerequisites(practice) { /* ... */ }
-  topologicalSort(practices) { /* ... */ }
-  estimateDuration(practice, context) { /* ... */ }
+	// Domain logic for optimal path finding
+	async getAllPrerequisites(practice) {
+		/* ... */
+	}
+	topologicalSort(practices) {
+		/* ... */
+	}
+	estimateDuration(practice, context) {
+		/* ... */
+	}
 }
 ```
 
@@ -284,26 +314,26 @@ class JourneyPlanner {
 
 ```javascript
 class PracticePresenter {
-  // Translates domain to UI representation
-  static toGraphNode(cdPractice) {
-    return {
-      id: cdPractice.id.toString(),
-      label: cdPractice.name,
-      icon: cdPractice.category.icon,
-      color: this.categoryColor(cdPractice.category),
-      requirementCount: cdPractice.getRequirements().length,
-      benefitCount: cdPractice.getBenefits().length
-    };
-  }
+	// Translates domain to UI representation
+	static toGraphNode(cdPractice) {
+		return {
+			id: cdPractice.id.toString(),
+			label: cdPractice.name,
+			icon: cdPractice.category.icon,
+			color: this.categoryColor(cdPractice.category),
+			requirementCount: cdPractice.getRequirements().length,
+			benefitCount: cdPractice.getBenefits().length
+		}
+	}
 
-  static toGraphEdge(prerequisite) {
-    return {
-      from: prerequisite.practiceId.toString(),
-      to: prerequisite.dependentId.toString(),
-      type: prerequisite.type.toString(),
-      style: prerequisite.isOptional() ? 'dashed' : 'solid'
-    };
-  }
+	static toGraphEdge(prerequisite) {
+		return {
+			from: prerequisite.practiceId.toString(),
+			to: prerequisite.dependentId.toString(),
+			type: prerequisite.type.toString(),
+			style: prerequisite.isOptional() ? 'dashed' : 'solid'
+		}
+	}
 }
 ```
 
@@ -330,23 +360,29 @@ class PracticePresenter {
 The domain model maps to PostgreSQL tables:
 
 **practices table** → `CDPractice` aggregate
+
 - Stores practice entity state
 - JSONB for requirements and benefits arrays
 
 **platform_capabilities table** → `PlatformCapability` aggregate
+
 - Stores capability entity state
 - JSONB for implementation options
 
 **practice_dependencies table** → Practice-to-Practice prerequisites
+
 - Junction table: practice_id → depends_on_practice_id
 
 **practice_capability_dependencies table** → Practice-to-Capability prerequisites
+
 - Junction table: practice_id → depends_on_capability_id
 
 **capability_dependencies table** → Capability-to-Capability prerequisites
+
 - Junction table: capability_id → depends_on_capability_id
 
 **Repository Pattern** handles translation:
+
 - Database rows → Rich domain objects
 - Domain objects → Database representation
 - Maintains aggregate boundaries
@@ -366,10 +402,12 @@ The domain model maps to PostgreSQL tables:
     - Artifact Repository (capability)
 
 **Key Distinction:**
+
 - **Practices** = What teams DO (behaviors, processes)
 - **Capabilities** = What platforms PROVIDE (tools, infrastructure)
 
 **Example:**
+
 - **"Trunk-based Development"** is a practice (team behavior)
 - **"Version Control System"** is a capability (Git, SVN, etc.)
 - **"Continuous Integration"** practice requires:
@@ -387,6 +425,7 @@ The domain model maps to PostgreSQL tables:
 ## 2. Technology Stack
 
 ### Frontend
+
 - **Svelte** - Lightweight, reactive component framework with no virtual DOM
 - **SvelteKit** - Full-stack framework with routing and SSR support
 - **D3.js** or **Svelvet** - Interactive graph visualization library
@@ -394,28 +433,33 @@ The domain model maps to PostgreSQL tables:
 - **Svelte Motion** or native Svelte transitions - Smooth animations
 
 ### Backend
+
 - **PostgreSQL** - Relational database (via Netlify Postgres free tier)
 - **SvelteKit API routes** - REST API endpoints
 - **Node.js** - Server runtime
 
 ### Data & Persistence
+
 - **PostgreSQL** with recursive CTEs for unlimited dependency depth
 - **pg** library for database client
 - Repository pattern for data access
 - Initial data from MinimumCD.org (23 practices)
 
 ### Build Tools
+
 - **Vite** - Fast development and build (built into SvelteKit)
 - **JavaScript** - Pure JS, no TypeScript
 - **Vitest** - Unit and integration testing
 - **Playwright** - E2E testing
 
 ### Additional Libraries
+
 - **Svelte Stores** - Built-in reactive state management
 - **SvelteKit routing** - File-based routing (built-in)
 - Native Svelte fetch capabilities
 
 ### Development Approach
+
 - **BDD** - Gherkin feature files for specifications
 - **ATDD** - Acceptance tests from BDD scenarios
 - **TDD** - Test-first development
@@ -425,12 +469,14 @@ The domain model maps to PostgreSQL tables:
 ### Why Svelte?
 
 **Performance Benefits:**
+
 - No virtual DOM - compiles to vanilla JavaScript
 - Smaller bundle sizes (typically 50-70% smaller than React)
 - Faster runtime performance for animations and transitions
 - Better for interactive visualizations with frequent updates
 
 **Developer Experience:**
+
 - Less boilerplate code than React
 - Built-in reactivity without hooks
 - Native transitions and animations
@@ -438,6 +484,7 @@ The domain model maps to PostgreSQL tables:
 - Works great with pure JavaScript
 
 **Perfect for This Project:**
+
 - Graph visualizations benefit from direct DOM manipulation
 - Smooth animations are critical for expand/collapse UX
 - Smaller bundle = faster initial load for users
@@ -446,6 +493,7 @@ The domain model maps to PostgreSQL tables:
 ## 3. UI/UX Flow
 
 ### Initial State
+
 ```
 ┌─────────────────────────┐
 │   Start Your CD Journey │
@@ -454,6 +502,7 @@ The domain model maps to PostgreSQL tables:
 ```
 
 ### Expanded State (Example)
+
 ```
                     ┌──────────────────┐
                     │ Continuous       │
@@ -472,6 +521,7 @@ The domain model maps to PostgreSQL tables:
 ```
 
 ### Interaction Patterns
+
 - **Click node** → Expand/collapse children
 - **Hover** → Show tooltip with description
 - **Double-click** → Open detail panel
@@ -480,6 +530,7 @@ The domain model maps to PostgreSQL tables:
 - **Color coding** → Category visualization (tooling/behavior/culture)
 
 ### Visual Design
+
 - Clean, modern interface
 - Node styling by category type
 - Connecting lines showing dependencies
@@ -489,6 +540,7 @@ The domain model maps to PostgreSQL tables:
 ## 4. Key Features
 
 ### Core Features
+
 1. **Progressive disclosure** - Start simple, reveal complexity on demand
 2. **Interactive graph** - Pan, zoom, click to navigate dependency tree
 3. **Search/filter** - Find specific practices quickly
@@ -497,12 +549,14 @@ The domain model maps to PostgreSQL tables:
 6. **Visual indicators** - Icons for practice categories
 
 ### Enhanced Features
+
 7. **Export/share** - Generate custom learning paths
 8. **Bookmarks** - Save favorite practices
 9. **Progress tracking** - Mark practices as "implemented" or "in progress"
 10. **Related practices** - Show connections beyond direct dependencies
 
 ### Future Enhancements
+
 - Multi-language support
 - Community contributions for practices
 - Integration with assessment tools
@@ -511,39 +565,46 @@ The domain model maps to PostgreSQL tables:
 ## 5. Implementation Phases
 
 ### Phase 1: Foundation (Week 1)
+
 - Set up project structure with SvelteKit
 - Create TypeScript interfaces for data model
 - Build practices.json with MinimumCD data
 - Basic routing and layout components
 
 **Deliverables:**
+
 - Working dev environment
 - Data structure defined
 - Basic app shell
 
 ### Phase 2: Visualization (Week 2)
+
 - Implement interactive graph with D3.js or Svelvet
 - Build Node component with category styling
 - Add expand/collapse animations using Svelte transitions
 - Implement pan/zoom functionality
 
 **Deliverables:**
+
 - Interactive dependency graph
 - Smooth animations
 - Basic navigation
 
 ### Phase 3: Interactivity (Week 3)
+
 - Click handlers for node expansion
 - Detail panel with practice information
 - Search and filter functionality
 - Breadcrumb navigation
 
 **Deliverables:**
+
 - Full interaction model
 - Search/filter working
 - Detail views implemented
 
 ### Phase 4: Enhancement (Week 4)
+
 - Progressive loading for performance
 - Mobile-responsive design
 - Custom learning path builder
@@ -551,6 +612,7 @@ The domain model maps to PostgreSQL tables:
 - Testing and refinement
 
 **Deliverables:**
+
 - Production-ready application
 - Mobile support
 - Export features
@@ -581,6 +643,7 @@ The domain model maps to PostgreSQL tables:
 ```
 
 **Key Principles:**
+
 - Domain layer has **no dependencies** on infrastructure or UI
 - Infrastructure implements **interfaces defined in domain**
 - Application layer **orchestrates** domain objects
@@ -732,6 +795,7 @@ interactive-cd/
 For the first release, we're implementing only the **outline view** from the BDD feature file:
 
 **In Scope:**
+
 - Domain layer: `CDPractice` entity with basic behavior
 - Application layer: `GetPracticeTreeService`
 - Infrastructure layer: `PostgresPracticeRepository`
@@ -739,6 +803,7 @@ For the first release, we're implementing only the **outline view** from the BDD
 - API route: `GET /api/practices/tree`
 
 **Out of Scope (Future Releases):**
+
 - Journey planning bounded context
 - Interactive graph visualization
 - Search and filter
@@ -813,151 +878,151 @@ CREATE INDEX idx_cap_deps ON capability_dependencies(depends_on_capability_id);
 ```javascript
 // CDPractice - Rich domain object for a practice
 const continuousIntegration = new CDPractice(
-  PracticeId.from("continuous-integration"),
-  "Continuous Integration",
-  PracticeCategory.PRACTICE,
-  "Integrate code changes frequently to detect integration issues early"
-);
+	PracticeId.from('continuous-integration'),
+	'Continuous Integration',
+	PracticeCategory.PRACTICE,
+	'Integrate code changes frequently to detect integration issues early'
+)
 
 // Add practice prerequisites
 continuousIntegration.requiresPractice(
-  PracticeId.from("trunk-based-development"),
-  "TBD enables frequent integration without breaking builds",
-  PrerequisiteType.REQUIRED
-);
+	PracticeId.from('trunk-based-development'),
+	'TBD enables frequent integration without breaking builds',
+	PrerequisiteType.REQUIRED
+)
 
 // Add platform capability prerequisites
 continuousIntegration.requiresCapability(
-  CapabilityId.from("version-control-system"),
-  "Need VCS to store and track code changes",
-  PrerequisiteType.REQUIRED
-);
+	CapabilityId.from('version-control-system'),
+	'Need VCS to store and track code changes',
+	PrerequisiteType.REQUIRED
+)
 
 continuousIntegration.requiresCapability(
-  CapabilityId.from("build-automation"),
-  "Automated builds verify integration success",
-  PrerequisiteType.REQUIRED
-);
+	CapabilityId.from('build-automation'),
+	'Automated builds verify integration success',
+	PrerequisiteType.REQUIRED
+)
 
 continuousIntegration.requiresCapability(
-  CapabilityId.from("test-automation-framework"),
-  "Automated tests catch integration issues",
-  PrerequisiteType.REQUIRED
-);
+	CapabilityId.from('test-automation-framework'),
+	'Automated tests catch integration issues',
+	PrerequisiteType.REQUIRED
+)
 
 // Add requirements as value objects
 continuousIntegration.addRequirement(
-  Requirement.create(
-    "Integrate work to trunk at least daily",
-    (teamContext) => teamContext.integrateFrequency >= 1
-  )
-);
+	Requirement.create(
+		'Integrate work to trunk at least daily',
+		teamContext => teamContext.integrateFrequency >= 1
+	)
+)
 
 // Domain behavior - checks both practice AND capability prerequisites
-const isReady = continuousIntegration.canBeAdoptedBy(teamContext);
+const isReady = continuousIntegration.canBeAdoptedBy(teamContext)
 // Returns true only if team has:
 // - Adopted trunk-based development practice
 // - Has version control system capability
 // - Has build automation capability
 // - Has test automation framework capability
 
-const readiness = continuousIntegration.assessReadiness(teamContext);
+const readiness = continuousIntegration.assessReadiness(teamContext)
 ```
 
 ```javascript
 // PlatformCapability - Rich domain object for a capability
 const versionControlSystem = new PlatformCapability(
-  CapabilityId.from("version-control-system"),
-  "Version Control System",
-  CapabilityCategory.TOOLING,
-  "System for tracking changes to source code over time"
-);
+	CapabilityId.from('version-control-system'),
+	'Version Control System',
+	CapabilityCategory.TOOLING,
+	'System for tracking changes to source code over time'
+)
 
 // Add implementation options
 versionControlSystem.addImplementationOption(
-  "Git",
-  "GitHub / GitLab / Bitbucket",
-  "Distributed version control, industry standard"
-);
+	'Git',
+	'GitHub / GitLab / Bitbucket',
+	'Distributed version control, industry standard'
+)
 
 versionControlSystem.addImplementationOption(
-  "Subversion",
-  "Apache",
-  "Centralized version control, legacy systems"
-);
+	'Subversion',
+	'Apache',
+	'Centralized version control, legacy systems'
+)
 
 // Capabilities can have prerequisites too
 const cicdPlatform = new PlatformCapability(
-  CapabilityId.from("cicd-platform"),
-  "CI/CD Platform",
-  CapabilityCategory.PLATFORM,
-  "Automated platform for building, testing, and deploying"
-);
+	CapabilityId.from('cicd-platform'),
+	'CI/CD Platform',
+	CapabilityCategory.PLATFORM,
+	'Automated platform for building, testing, and deploying'
+)
 
 // CI/CD platform requires VCS as a capability prerequisite
 cicdPlatform.requiresCapability(
-  CapabilityId.from("version-control-system"),
-  "CI/CD needs to pull code from version control"
-);
+	CapabilityId.from('version-control-system'),
+	'CI/CD needs to pull code from version control'
+)
 ```
 
 ### API Response (UI Representation)
 
 ```json
 {
-  "id": "continuous-integration",
-  "name": "Continuous Integration",
-  "type": "practice",
-  "category": "practice",
-  "icon": "🔄",
-  "description": "Integrate code changes frequently to detect integration issues early",
-  "practicePrerequisites": [
-    {
-      "id": "trunk-based-development",
-      "name": "Trunk-based Development",
-      "type": "practice",
-      "prerequisiteType": "required",
-      "rationale": "TBD enables frequent integration without breaking builds"
-    }
-  ],
-  "capabilityPrerequisites": [
-    {
-      "id": "version-control-system",
-      "name": "Version Control System",
-      "type": "capability",
-      "category": "tooling",
-      "prerequisiteType": "required",
-      "rationale": "Need VCS to store and track code changes"
-    },
-    {
-      "id": "build-automation",
-      "name": "Build Automation",
-      "type": "capability",
-      "category": "tooling",
-      "prerequisiteType": "required",
-      "rationale": "Automated builds verify integration success"
-    },
-    {
-      "id": "test-automation-framework",
-      "name": "Test Automation Framework",
-      "type": "capability",
-      "category": "tooling",
-      "prerequisiteType": "required",
-      "rationale": "Automated tests catch integration issues"
-    }
-  ],
-  "requirements": [
-    "Integrate work to trunk at least daily",
-    "Automated testing before merging to trunk",
-    "Stop feature work when build fails"
-  ],
-  "benefits": [
-    "Early detection of integration issues",
-    "Reduced merge conflicts",
-    "Faster feedback cycles"
-  ],
-  "requirementCount": 6,
-  "benefitCount": 4
+	"id": "continuous-integration",
+	"name": "Continuous Integration",
+	"type": "practice",
+	"category": "practice",
+	"icon": "🔄",
+	"description": "Integrate code changes frequently to detect integration issues early",
+	"practicePrerequisites": [
+		{
+			"id": "trunk-based-development",
+			"name": "Trunk-based Development",
+			"type": "practice",
+			"prerequisiteType": "required",
+			"rationale": "TBD enables frequent integration without breaking builds"
+		}
+	],
+	"capabilityPrerequisites": [
+		{
+			"id": "version-control-system",
+			"name": "Version Control System",
+			"type": "capability",
+			"category": "tooling",
+			"prerequisiteType": "required",
+			"rationale": "Need VCS to store and track code changes"
+		},
+		{
+			"id": "build-automation",
+			"name": "Build Automation",
+			"type": "capability",
+			"category": "tooling",
+			"prerequisiteType": "required",
+			"rationale": "Automated builds verify integration success"
+		},
+		{
+			"id": "test-automation-framework",
+			"name": "Test Automation Framework",
+			"type": "capability",
+			"category": "tooling",
+			"prerequisiteType": "required",
+			"rationale": "Automated tests catch integration issues"
+		}
+	],
+	"requirements": [
+		"Integrate work to trunk at least daily",
+		"Automated testing before merging to trunk",
+		"Stop feature work when build fails"
+	],
+	"benefits": [
+		"Early detection of integration issues",
+		"Reduced merge conflicts",
+		"Faster feedback cycles"
+	],
+	"requirementCount": 6,
+	"benefitCount": 4
 }
 ```
 
@@ -965,25 +1030,25 @@ cicdPlatform.requiresCapability(
 
 ```json
 {
-  "id": "version-control-system",
-  "name": "Version Control System",
-  "type": "capability",
-  "category": "tooling",
-  "icon": "🛠️",
-  "description": "System for tracking changes to source code over time",
-  "capabilityPrerequisites": [],
-  "implementationOptions": [
-    {
-      "name": "Git",
-      "vendor": "GitHub / GitLab / Bitbucket",
-      "notes": "Distributed version control, industry standard"
-    },
-    {
-      "name": "Subversion",
-      "vendor": "Apache",
-      "notes": "Centralized version control, legacy systems"
-    }
-  ]
+	"id": "version-control-system",
+	"name": "Version Control System",
+	"type": "capability",
+	"category": "tooling",
+	"icon": "🛠️",
+	"description": "System for tracking changes to source code over time",
+	"capabilityPrerequisites": [],
+	"implementationOptions": [
+		{
+			"name": "Git",
+			"vendor": "GitHub / GitLab / Bitbucket",
+			"notes": "Distributed version control, industry standard"
+		},
+		{
+			"name": "Subversion",
+			"vendor": "Apache",
+			"notes": "Centralized version control, legacy systems"
+		}
+	]
 }
 ```
 
@@ -992,77 +1057,80 @@ cicdPlatform.requiresCapability(
 ```javascript
 // PracticePresenter.js - translates domain to UI
 class PracticePresenter {
-  static toApiResponse(cdPractice, practicePrereqs, capabilityPrereqs) {
-    return {
-      id: cdPractice.id.toString(),
-      name: cdPractice.name,
-      type: "practice",
-      category: cdPractice.category.toString(),
-      icon: cdPractice.category.icon,
-      description: cdPractice.description,
-      practicePrerequisites: practicePrereqs.map(p => ({
-        id: p.practiceId.toString(),
-        name: p.name,
-        type: "practice",
-        prerequisiteType: p.type.toString(),
-        rationale: p.rationale
-      })),
-      capabilityPrerequisites: capabilityPrereqs.map(c => ({
-        id: c.capabilityId.toString(),
-        name: c.name,
-        type: "capability",
-        category: c.category.toString(),
-        prerequisiteType: c.type.toString(),
-        rationale: c.rationale
-      })),
-      requirements: cdPractice.getRequirements().map(r => r.text),
-      benefits: cdPractice.getBenefits().map(b => b.description),
-      requirementCount: cdPractice.getRequirements().length,
-      benefitCount: cdPractice.getBenefits().length
-    };
-  }
+	static toApiResponse(cdPractice, practicePrereqs, capabilityPrereqs) {
+		return {
+			id: cdPractice.id.toString(),
+			name: cdPractice.name,
+			type: 'practice',
+			category: cdPractice.category.toString(),
+			icon: cdPractice.category.icon,
+			description: cdPractice.description,
+			practicePrerequisites: practicePrereqs.map(p => ({
+				id: p.practiceId.toString(),
+				name: p.name,
+				type: 'practice',
+				prerequisiteType: p.type.toString(),
+				rationale: p.rationale
+			})),
+			capabilityPrerequisites: capabilityPrereqs.map(c => ({
+				id: c.capabilityId.toString(),
+				name: c.name,
+				type: 'capability',
+				category: c.category.toString(),
+				prerequisiteType: c.type.toString(),
+				rationale: c.rationale
+			})),
+			requirements: cdPractice.getRequirements().map(r => r.text),
+			benefits: cdPractice.getBenefits().map(b => b.description),
+			requirementCount: cdPractice.getRequirements().length,
+			benefitCount: cdPractice.getBenefits().length
+		}
+	}
 }
 
 // CapabilityPresenter.js - translates capabilities to UI
 class CapabilityPresenter {
-  static toApiResponse(platformCapability, capabilityPrereqs) {
-    return {
-      id: platformCapability.id.toString(),
-      name: platformCapability.name,
-      type: "capability",
-      category: platformCapability.category.toString(),
-      icon: platformCapability.category.icon,
-      description: platformCapability.description,
-      capabilityPrerequisites: capabilityPrereqs.map(c => ({
-        id: c.capabilityId.toString(),
-        name: c.name,
-        type: "capability",
-        rationale: c.rationale
-      })),
-      implementationOptions: platformCapability.getImplementationOptions().map(opt => ({
-        name: opt.name,
-        vendor: opt.vendor,
-        notes: opt.notes
-      }))
-    };
-  }
+	static toApiResponse(platformCapability, capabilityPrereqs) {
+		return {
+			id: platformCapability.id.toString(),
+			name: platformCapability.name,
+			type: 'capability',
+			category: platformCapability.category.toString(),
+			icon: platformCapability.category.icon,
+			description: platformCapability.description,
+			capabilityPrerequisites: capabilityPrereqs.map(c => ({
+				id: c.capabilityId.toString(),
+				name: c.name,
+				type: 'capability',
+				rationale: c.rationale
+			})),
+			implementationOptions: platformCapability.getImplementationOptions().map(opt => ({
+				name: opt.name,
+				vendor: opt.vendor,
+				notes: opt.notes
+			}))
+		}
+	}
 }
 ```
 
 ## 8. Success Metrics
 
 ### User Experience
+
 - Time to understand CD dependencies < 5 minutes
 - Intuitive navigation (minimal confusion)
 - Mobile usability score > 90%
 
 ### Technical
+
 - Initial load time < 2 seconds
 - Smooth animations (60fps)
 - Supports 100+ practice nodes
 - Cross-browser compatibility
 
 ### Business
+
 - Adoption by CD practitioners
 - Integration with MinimumCD.org community
 - Contributions for additional practices
@@ -1108,6 +1176,7 @@ This plan transforms the CD Practices application from a simple data visualizati
 ### First Release Focus
 
 The initial release delivers a **simple, behavior-focused outline view** that:
+
 - Displays all 23 CD practices from MinimumCD.org
 - Shows hierarchical prerequisite relationships
 - Presents practice requirements and benefits
@@ -1117,6 +1186,7 @@ The initial release delivers a **simple, behavior-focused outline view** that:
 ### Future Enhancements
 
 With the domain model in place, future releases can easily add:
+
 - **Journey Planning** - Personalized adoption paths for teams
 - **Readiness Assessment** - Evaluate capability and identify blockers
 - **Interactive Graph** - Visual exploration of practice landscape

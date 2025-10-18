@@ -24,6 +24,7 @@ practices                    practice_dependencies
 ```
 
 This pattern allows:
+
 - ✅ **Unlimited depth** of dependencies
 - ✅ **Multiple parents** (a practice can be a dependency of many practices)
 - ✅ **Multiple children** (a practice can depend on many practices)
@@ -36,23 +37,25 @@ This pattern allows:
 
 Core table storing all CD practices.
 
-| Column       | Type         | Constraints | Description |
-|--------------|--------------|-------------|-------------|
-| id           | VARCHAR(255) | PRIMARY KEY | Unique identifier (kebab-case) |
-| name         | VARCHAR(255) | NOT NULL    | Human-readable name |
-| type         | VARCHAR(50)  | NOT NULL    | 'root' or 'practice' |
+| Column       | Type         | Constraints | Description                                  |
+| ------------ | ------------ | ----------- | -------------------------------------------- |
+| id           | VARCHAR(255) | PRIMARY KEY | Unique identifier (kebab-case)               |
+| name         | VARCHAR(255) | NOT NULL    | Human-readable name                          |
+| type         | VARCHAR(50)  | NOT NULL    | 'root' or 'practice'                         |
 | category     | VARCHAR(50)  | NOT NULL    | 'practice', 'tooling', 'behavior', 'culture' |
-| description  | TEXT         | NOT NULL    | Detailed explanation |
-| requirements | JSONB        | NOT NULL    | Array of requirement strings |
-| benefits     | JSONB        | NOT NULL    | Array of benefit strings |
-| created_at   | TIMESTAMPTZ  | DEFAULT NOW | Creation timestamp |
-| updated_at   | TIMESTAMPTZ  | DEFAULT NOW | Last update timestamp |
+| description  | TEXT         | NOT NULL    | Detailed explanation                         |
+| requirements | JSONB        | NOT NULL    | Array of requirement strings                 |
+| benefits     | JSONB        | NOT NULL    | Array of benefit strings                     |
+| created_at   | TIMESTAMPTZ  | DEFAULT NOW | Creation timestamp                           |
+| updated_at   | TIMESTAMPTZ  | DEFAULT NOW | Last update timestamp                        |
 
 **Constraints:**
+
 - `type` must be 'root' or 'practice'
 - `category` must be 'practice', 'tooling', 'behavior', or 'culture'
 
 **Indexes:**
+
 - `idx_practices_category` - Filter by category
 - `idx_practices_type` - Filter by type
 - `idx_practices_requirements` - GIN index for JSONB queries
@@ -62,19 +65,21 @@ Core table storing all CD practices.
 
 Junction table representing dependency relationships.
 
-| Column        | Type         | Constraints | Description |
-|---------------|--------------|-------------|-------------|
-| id            | SERIAL       | PRIMARY KEY | Auto-increment ID |
-| practice_id   | VARCHAR(255) | FK, NOT NULL| The practice that has dependencies |
-| depends_on_id | VARCHAR(255) | FK, NOT NULL| The practice being depended on |
-| created_at    | TIMESTAMPTZ  | DEFAULT NOW | Creation timestamp |
+| Column        | Type         | Constraints  | Description                        |
+| ------------- | ------------ | ------------ | ---------------------------------- |
+| id            | SERIAL       | PRIMARY KEY  | Auto-increment ID                  |
+| practice_id   | VARCHAR(255) | FK, NOT NULL | The practice that has dependencies |
+| depends_on_id | VARCHAR(255) | FK, NOT NULL | The practice being depended on     |
+| created_at    | TIMESTAMPTZ  | DEFAULT NOW  | Creation timestamp                 |
 
 **Constraints:**
+
 - FOREIGN KEY to `practices(id)` with CASCADE delete
 - UNIQUE constraint on `(practice_id, depends_on_id)` - no duplicate edges
 - CHECK constraint: `practice_id != depends_on_id` - no self-loops
 
 **Indexes:**
+
 - `idx_practice_dependencies_practice_id` - Find all dependencies of a practice
 - `idx_practice_dependencies_depends_on_id` - Find all dependents of a practice
 
@@ -82,10 +87,10 @@ Junction table representing dependency relationships.
 
 Store dataset metadata.
 
-| Column     | Type         | Constraints | Description |
-|------------|--------------|-------------|-------------|
-| key        | VARCHAR(255) | PRIMARY KEY | Metadata key |
-| value      | JSONB        | NOT NULL    | Metadata value |
+| Column     | Type         | Constraints | Description           |
+| ---------- | ------------ | ----------- | --------------------- |
+| key        | VARCHAR(255) | PRIMARY KEY | Metadata key          |
+| value      | JSONB        | NOT NULL    | Metadata value        |
 | updated_at | TIMESTAMPTZ  | DEFAULT NOW | Last update timestamp |
 
 ## Database Functions
@@ -99,6 +104,7 @@ SELECT * FROM get_practice_dependencies('continuous-integration');
 ```
 
 **Returns:**
+
 ```
 id                          | name                      | type     | category
 ----------------------------|---------------------------|----------|----------
@@ -127,6 +133,7 @@ SELECT * FROM get_practice_tree('continuous-delivery');
 ```
 
 **Returns:**
+
 ```
 id          | name        | level | path
 ------------|-------------|-------|---------------------------
@@ -183,6 +190,7 @@ SELECT * FROM practice_summary ORDER BY dependent_count DESC;
 ```
 
 **Returns:**
+
 ```
 id              | name            | dependency_count | dependent_count
 ----------------|-----------------|------------------|----------------
@@ -373,45 +381,42 @@ DATABASE_URL=postgresql://user:pass@host:5432/dbname
 
 ```typescript
 // src/lib/server/db.ts
-import { DATABASE_URL } from '$env/static/private';
-import pkg from 'pg';
-const { Pool } = pkg;
+import { DATABASE_URL } from '$env/static/private'
+import pkg from 'pg'
+const { Pool } = pkg
 
 export const db = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+	connectionString: DATABASE_URL,
+	ssl: { rejectUnauthorized: false }
+})
 ```
 
 ### Example API Route
 
 ```typescript
 // src/routes/api/practices/+server.ts
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async () => {
-  const result = await db.query('SELECT * FROM practices ORDER BY name');
-  return json(result.rows);
-};
+	const result = await db.query('SELECT * FROM practices ORDER BY name')
+	return json(result.rows)
+}
 ```
 
 ### Example Tree Query
 
 ```typescript
 // src/routes/api/tree/[id]/+server.ts
-import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+import { db } from '$lib/server/db'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ params }) => {
-  const result = await db.query(
-    'SELECT * FROM get_practice_tree($1)',
-    [params.id]
-  );
-  return json(result.rows);
-};
+	const result = await db.query('SELECT * FROM get_practice_tree($1)', [params.id])
+	return json(result.rows)
+}
 ```
 
 ## Performance Considerations
@@ -419,6 +424,7 @@ export const GET: RequestHandler = async ({ params }) => {
 ### For Free Tier
 
 Netlify Postgres free tier limits:
+
 - **1 GB storage**
 - **60 hours/month runtime**
 - **1,000 rows** (our dataset: ~23 practices, ~50 dependencies = well within limits)
@@ -434,6 +440,7 @@ Netlify Postgres free tier limits:
 ### Scaling Strategy
 
 If you outgrow free tier:
+
 1. Upgrade to Netlify paid plan
 2. Or migrate to external Postgres (Supabase, Neon, etc.)
 3. Schema remains the same - just update connection string

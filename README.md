@@ -103,6 +103,7 @@ npm run dev
 ### 5. Deploy to Netlify
 
 **Quick Deploy** (5 minutes):
+
 ```bash
 netlify init
 netlify db init --assume-no
@@ -112,6 +113,7 @@ netlify deploy --prod
 ```
 
 📖 **Deployment Guides**:
+
 - [Quick Deploy Guide](./QUICK-DEPLOY.md) - Get live in 5 minutes
 - [Complete Deployment Guide](./NETLIFY-DEPLOYMENT.md) - Full documentation
 - [GitHub Actions CI/CD](./.github/workflows/deploy.yml) - Auto-deploy setup
@@ -150,11 +152,13 @@ SELECT would_create_cycle('practice-a', 'practice-b');
 ## 🎨 Technology Stack
 
 ### Frontend
+
 - **Svelte/SvelteKit** - Reactive UI framework
 - **D3.js** or **Svelvet** - Graph visualization
 - **Tailwind CSS** - Styling
 
 ### Backend
+
 - **Netlify Postgres** - Database (free tier)
 - **SvelteKit API routes** - REST API
 - **PostgreSQL** - Relational database
@@ -241,13 +245,13 @@ pg_dump $DATABASE_URL > backup.sql
 
 ## 📖 Documentation
 
-| File | Description |
-|------|-------------|
-| [docs/PLAN.md](docs/PLAN.md) | Implementation plan and roadmap |
-| [docs/DATABASE.md](docs/DATABASE.md) | Complete database documentation |
-| [docs/DATABASE-QUICKSTART.md](docs/DATABASE-QUICKSTART.md) | Quick reference guide |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Netlify deployment steps |
-| [docs/DATA-STRUCTURE.md](docs/DATA-STRUCTURE.md) | Data model documentation |
+| File                                                       | Description                     |
+| ---------------------------------------------------------- | ------------------------------- |
+| [docs/PLAN.md](docs/PLAN.md)                               | Implementation plan and roadmap |
+| [docs/DATABASE.md](docs/DATABASE.md)                       | Complete database documentation |
+| [docs/DATABASE-QUICKSTART.md](docs/DATABASE-QUICKSTART.md) | Quick reference guide           |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                   | Netlify deployment steps        |
+| [docs/DATA-STRUCTURE.md](docs/DATA-STRUCTURE.md)           | Data model documentation        |
 
 ## 🧪 Testing
 
@@ -329,12 +333,14 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed steps.
 ## 🎯 Roadmap
 
 ### Phase 1: Foundation ✅
+
 - [x] Data model design
 - [x] Database schema
 - [x] Seed data (23 practices from MinimumCD.org)
 - [x] Documentation
 
 ### Phase 2: Backend (In Progress)
+
 - [ ] SvelteKit setup
 - [ ] Database client
 - [ ] API routes
@@ -342,6 +348,7 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed steps.
 - [ ] Testing
 
 ### Phase 3: Frontend
+
 - [ ] Graph visualization
 - [ ] Interactive nodes
 - [ ] Search/filter
@@ -349,6 +356,7 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed steps.
 - [ ] Responsive design
 
 ### Phase 4: Polish
+
 - [ ] Animations
 - [ ] Mobile optimization
 - [ ] Performance tuning

@@ -42,20 +42,25 @@
 ## Key Technical Solutions
 
 ### Problem 1: Circular Dependencies in Tree Query
+
 **Issue**: Recursive CTE was following circular paths, returning 2,005 rows for 23 practices
 **Solution**:
+
 - Added `visited` array tracking in recursive CTE
 - Used `DISTINCT ON` to ensure each practice appears once
 - String-based path checking to prevent cycles
 
 ### Problem 2: Stack Overflow in Application
+
 **Issue**: Tree building caused infinite recursion
 **Solution**:
+
 - Added cycle detection with `visited` Set in `#addCounts()` method
 - Early return for already-visited nodes to prevent infinite recursion
 - Each branch gets its own copy of visited set
 
 ### Problem 3: Svelte Syntax Error
+
 **Issue**: Dynamic heading tags `<h{level + 1}>` not supported
 **Solution**: Changed to `<svelte:element this={h${level + 2}}>`
 
@@ -81,6 +86,7 @@ UI Layer (Svelte Components)
 ## How to Use
 
 ### Access the Application
+
 ```bash
 # Already running at:
 http://localhost:5173
@@ -90,6 +96,7 @@ curl http://localhost:5173/api/practices/tree | jq '.success, .metadata.totalPra
 ```
 
 ### API Response Format
+
 ```json
 {
   "success": true,
@@ -115,26 +122,31 @@ curl http://localhost:5173/api/practices/tree | jq '.success, .metadata.totalPra
 ## Files Modified This Session
 
 ### Database
+
 - ✏️ `db/data/001_initial_data.sql` - Fixed SQL syntax error
 - ✏️ `get_practice_tree()` function - Added cycle detection
 
 ### Domain/Application Layer
+
 - ✏️ `src/domain/practice-catalog/value-objects/PracticeCategory.js` - Added TOOLING category
 - ✏️ `src/infrastructure/persistence/PostgresPracticeRepository.js` - New tree building logic
 - ✏️ `src/application/practice-catalog/GetPracticeTreeService.js` - Added cycle detection
 
 ### UI Layer
+
 - ✏️ `src/lib/components/PracticeCard.svelte` - Fixed dynamic heading syntax
 - ✏️ `src/routes/+page.svelte` - (already working)
 - ✏️ `package.json` - Updated test script
 
 ### Configuration
+
 - ✏️ `vite.config.js` - Added path aliases
 - ✏️ `.env` - Created with local DATABASE_URL
 
 ## Test Results
 
 **Unit Tests**: ✅ 57/57 passing
+
 ```
 ✓ PracticeId.test.js      (15 tests)
 ✓ PracticeCategory.test.js (24 tests)
@@ -142,6 +154,7 @@ curl http://localhost:5173/api/practices/tree | jq '.success, .metadata.totalPra
 ```
 
 **API Test**: ✅ Working
+
 ```
 GET /api/practices/tree
 Status: 200 OK
@@ -149,6 +162,7 @@ Practices returned: 23 unique (94 with dependencies)
 ```
 
 **UI Test**: ✅ Rendering
+
 ```
 GET /
 Status: 200 OK
@@ -169,11 +183,13 @@ Content: Displays practice tree
 ## Next Steps (Future Work)
 
 ### Short Term
+
 1. **E2E Tests** - Convert Gherkin scenarios to Playwright tests
 2. **Practice Prerequisites** - Query and display practice/capability prerequisites
 3. **Search & Filter** - Add search functionality to tree view
 
 ### Future Features (From BDD Feature File)
+
 - Journey Planning - Help teams plan CD adoption paths
 - Interactive Graph - Visual dependency graph with D3.js
 - Assessment - Evaluate team readiness

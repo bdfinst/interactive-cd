@@ -8,18 +8,18 @@
  */
 
 export const CATEGORIES = {
-  behavior: {
-    color: '#10b981',    // Green
-    label: 'Behavior'
-  },
-  culture: {
-    color: '#f59e0b',     // Amber
-    label: 'Culture'
-  },
-  tooling: {
-    color: '#8b5cf6',     // Purple
-    label: 'Tooling'
-  }
-};
+	behavior: {
+		color: '#10b981', // Green
+		label: 'Behavior'
+	},
+	culture: {
+		color: '#f59e0b', // Amber
+		label: 'Culture'
+	},
+	tooling: {
+		color: '#8b5cf6', // Purple
+		label: 'Tooling'
+	}
+}
 
-export const CATEGORY_KEYS = Object.keys(CATEGORIES);
+export const CATEGORY_KEYS = Object.keys(CATEGORIES)

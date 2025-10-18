@@ -1,6 +1,6 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { sveltekit } from '@sveltejs/kit/vite'
+import { defineConfig } from 'vitest/config'
+import path from 'path'
 
 export default defineConfig({
 	plugins: [sveltekit()],
@@ -15,6 +15,7 @@ export default defineConfig({
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: ['./src/test/setup.js'],
-		include: ['tests/**/*.{test,spec}.{js,mjs,cjs}']
+		include: ['tests/**/*.{test,spec}.{js,mjs,cjs}'],
+		exclude: ['tests/e2e/**', 'node_modules/**']
 	}
-});
+})

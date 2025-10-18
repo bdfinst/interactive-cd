@@ -1,42 +1,66 @@
 {
-  "name": "interactive-cd",
-  "version": "0.0.1",
-  "private": true,
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bdfinst/interactive-cd.git"
-  },
-  "bugs": {
-    "url": "https://github.com/bdfinst/interactive-cd/issues"
-  },
-  "homepage": "https://github.com/bdfinst/interactive-cd#readme",
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite dev",
-    "preview": "vite preview",
-    "start": "vite dev",
-    "test": "vitest --run",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:ui": "vitest --ui",
-    "test:watch": "vitest --watch"
-  },
-  "dependencies": {
-    "@netlify/neon": "^0.1.0",
-    "pg": "^8.11.3"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "@sveltejs/adapter-netlify": "^4.0.0",
-    "@sveltejs/kit": "^2.0.0",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "@testing-library/jest-dom": "^6.1.5",
-    "@testing-library/svelte": "^4.0.5",
-    "jsdom": "^23.0.1",
-    "svelte": "^4.2.8",
-    "tailwindcss": "^3.4.0",
-    "vite": "^5.0.0",
-    "vitest": "^1.0.0"
-  }
+	"name": "interactive-cd",
+	"version": "0.0.1",
+	"private": true,
+	"homepage": "https://github.com/bdfinst/interactive-cd#readme",
+	"bugs": {
+		"url": "https://github.com/bdfinst/interactive-cd/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bdfinst/interactive-cd.git"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite dev",
+		"format:fix": "prettier --write '**/*.{js,yml,yaml,json,css,scss,toml,md,svelte}'",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"prepare": "husky",
+		"preview": "vite preview",
+		"start": "vite dev",
+		"test": "vitest --run",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:ui": "vitest --ui",
+		"test:watch": "vitest --watch",
+		"update": "npx npm-check-updates -u"
+	},
+	"lint-staged": {
+		"*.{js,svelte}": [
+			"npm run lint:fix",
+			"npm run format:fix"
+		]
+	},
+	"dependencies": {
+		"@netlify/neon": "^0.1.0",
+		"pg": "^8.11.3"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "^20.0.0",
+		"@playwright/test": "^1.40.0",
+		"@sveltejs/adapter-netlify": "^4.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@testing-library/jest-dom": "^6.1.5",
+		"@testing-library/svelte": "^4.0.5",
+		"@typescript-eslint/eslint-plugin": "^8.46.1",
+		"@typescript-eslint/parser": "^8.46.1",
+		"eslint": "^9.38.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.12.4",
+		"globals": "^16.4.0",
+		"husky": "^9.1.7",
+		"jsdom": "^23.0.1",
+		"lint-staged": "^16.2.4",
+		"prettier": "^3.6.2",
+		"prettier-plugin-svelte": "^3.4.0",
+		"svelte": "^4.2.8",
+		"svelte-eslint-parser": "^1.3.3",
+		"tailwindcss": "^3.4.0",
+		"vite": "^5.0.0",
+		"vitest": "^1.0.0"
+	}
 }

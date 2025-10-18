@@ -1,5 +1,5 @@
-import adapter from '@sveltejs/adapter-netlify';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import adapter from '@sveltejs/adapter-netlify'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -13,11 +13,11 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-			'$domain': './src/domain',
-			'$application': './src/application',
-			'$infrastructure': './src/infrastructure'
+			$domain: './src/domain',
+			$application: './src/application',
+			$infrastructure: './src/infrastructure'
 		}
 	}
-};
+}
 
-export default config;
+export default config

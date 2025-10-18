@@ -1,0 +1,49 @@
+# Prettier automatically respects .gitignore, but we list patterns explicitly for clarity
+
+# Claude Code
+.claude-flow/
+
+# OS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build
+build/
+.svelte-kit/
+package/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Netlify
+.netlify/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+.hive-mind/
+
+# Additional Prettier-specific ignores
+public/
+.cache
+.history
+*.toml

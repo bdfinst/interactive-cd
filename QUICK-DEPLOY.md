@@ -30,6 +30,7 @@ netlify init
 ```
 
 Follow the prompts:
+
 - **Create & configure a new site**: Yes
 - **Team**: Choose your team
 - **Site name**: `cd-practices` (or your preferred name)
@@ -104,6 +105,7 @@ Should return: `true`
 Open in browser: `https://your-site-name.netlify.app`
 
 You should see:
+
 - ✅ "CD Practices" heading
 - ✅ Practice count (Total Practices: 94)
 - ✅ Hierarchical tree of practices
@@ -214,6 +216,7 @@ netlify dev
 ## Cost
 
 **Free Tier Includes**:
+
 - ✅ 100GB bandwidth/month
 - ✅ 300 build minutes/month
 - ✅ 500MB PostgreSQL storage
@@ -231,6 +234,7 @@ netlify dev
 ---
 
 **Summary**: 5 steps to deploy:
+
 1. `netlify init` → Initialize
 2. `netlify db init --assume-no` → Add DB
 3. `netlify env:get DATABASE_URL` → Get connection string

@@ -237,6 +237,7 @@ The `deploy-updates.sh` script:
 Format: `NNN_description.sql`
 
 Examples:
+
 - `003_add_security_practices.sql`
 - `004_add_observability_practices.sql`
 - `005_update_ci_descriptions.sql`
@@ -443,12 +444,12 @@ ls -la db/data/
 
 ## Summary
 
-| Stage | Command | Purpose | Frequency |
-|-------|---------|---------|-----------|
-| **First Release** | `./db/deploy-initial.sh` | Setup schema + initial data | Once |
-| **Add Data** | Create `db/data/NNN_*.sql` | Add new practices | As needed |
-| **Deploy** | `./db/deploy-updates.sh` | Apply new migrations | Each deploy |
-| **Verify** | `psql -c "SELECT COUNT(*)"` | Check practice count | After deploy |
+| Stage             | Command                     | Purpose                     | Frequency    |
+| ----------------- | --------------------------- | --------------------------- | ------------ |
+| **First Release** | `./db/deploy-initial.sh`    | Setup schema + initial data | Once         |
+| **Add Data**      | Create `db/data/NNN_*.sql`  | Add new practices           | As needed    |
+| **Deploy**        | `./db/deploy-updates.sh`    | Apply new migrations        | Each deploy  |
+| **Verify**        | `psql -c "SELECT COUNT(*)"` | Check practice count        | After deploy |
 
 ---
 

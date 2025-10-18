@@ -6,25 +6,25 @@
  * Immutable - once created, cannot be changed.
  */
 export class PracticeId {
-	#value;
+	#value
 
 	constructor(value) {
 		if (!value || typeof value !== 'string' || value.trim() === '') {
-			throw new Error('Practice ID cannot be empty');
+			throw new Error('Practice ID cannot be empty')
 		}
 
-		const trimmedValue = value.trim();
+		const trimmedValue = value.trim()
 
 		// Validate kebab-case format: lowercase letters, numbers, and hyphens only
-		const kebabCasePattern = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+		const kebabCasePattern = /^[a-z0-9]+(-[a-z0-9]+)*$/
 		if (!kebabCasePattern.test(trimmedValue)) {
-			throw new Error('Practice ID must be in kebab-case format (e.g., "continuous-integration")');
+			throw new Error('Practice ID must be in kebab-case format (e.g., "continuous-integration")')
 		}
 
-		this.#value = trimmedValue;
+		this.#value = trimmedValue
 
 		// Freeze object to prevent modifications
-		Object.freeze(this);
+		Object.freeze(this)
 	}
 
 	/**
@@ -33,7 +33,7 @@ export class PracticeId {
 	 * @returns {PracticeId}
 	 */
 	static from(value) {
-		return new PracticeId(value);
+		return new PracticeId(value)
 	}
 
 	/**
@@ -43,9 +43,9 @@ export class PracticeId {
 	 */
 	equals(other) {
 		if (!other || !(other instanceof PracticeId)) {
-			return false;
+			return false
 		}
-		return this.#value === other.#value;
+		return this.#value === other.#value
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class PracticeId {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.#value;
+		return this.#value
 	}
 
 	/**
@@ -61,13 +61,13 @@ export class PracticeId {
 	 * @returns {string}
 	 */
 	get value() {
-		return this.#value;
+		return this.#value
 	}
 
 	/**
 	 * Prevent setting value from outside
 	 */
 	set value(newValue) {
-		throw new Error('PracticeId is immutable');
+		throw new Error('PracticeId is immutable')
 	}
 }
