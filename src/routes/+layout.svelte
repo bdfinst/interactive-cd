@@ -1,10 +1,10 @@
 <script>
-	import '../app.css';
-	import Header from '$lib/components/Header.svelte';
+  import Header from '$lib/components/Header.svelte'
+  import '../app.css'
 </script>
 
 <Header />
 
-<div class="min-h-screen bg-gray-800 pt-40">
-	<slot />
+<div class="min-h-screen pt-10">
+  <slot />
 </div>

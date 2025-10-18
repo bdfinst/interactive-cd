@@ -200,7 +200,7 @@
 	});
 </script>
 
-<div class="practice-graph" bind:this={containerRef}>
+<div class="relative w-full min-h-screen p-8 mt-16" bind:this={containerRef}>
 	{#if loading}
 		<div class="flex items-center justify-center py-12">
 			<div class="text-center">
@@ -285,14 +285,6 @@
 </div>
 
 <style>
-	.practice-graph {
-		position: relative;
-		width: 100%;
-		min-height: 100vh;
-		padding: 2rem;
-		margin-top: 4rem;
-	}
-
 	.connections-layer {
 		position: absolute;
 		top: 0;
@@ -305,7 +297,7 @@
 
 	.content-layer {
 		position: relative;
-		z-index: 1;
+		z-index: 10;
 	}
 
 	.ancestor-container,
@@ -323,10 +315,10 @@
 
 	.dependencies-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 3rem 2rem;
-		max-width: 1200px;
+		max-width: 1280px;
 		margin: 0 auto;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 	}
 
 	@media (min-width: 768px) {

@@ -101,6 +101,34 @@ This project uses specialized expert agents to ensure quality at each stage of d
 5. Verify tests catch real bugs
 ```
 
+#### 4. Tailwind CSS Expert (`.claude/agents/tailwind-expert.md`)
+
+**Use for:**
+- Reviewing Tailwind CSS usage and layout patterns
+- Improving responsive design with mobile-first approach
+- Fixing CSS specificity conflicts
+- Replacing inline styles with Tailwind utilities
+- Optimizing component composition with utilities
+- Ensuring accessibility in layouts
+
+**When to use:**
+- When inline styles are used instead of Tailwind utilities
+- When experiencing CSS specificity conflicts
+- When responsive layouts aren't working as expected
+- During component styling and layout design
+- When custom CSS conflicts with Tailwind utilities
+- Before finalizing UI components
+
+**Example workflow:**
+```
+1. Identify styling issues (inline styles, specificity conflicts)
+2. Run Tailwind Expert agent for recommendations
+3. Replace inline styles with Tailwind utilities
+4. Implement proper @layer structure for custom styles
+5. Verify responsive behavior across breakpoints
+6. Ensure accessibility and performance
+```
+
 ### Agent Integration in Development Workflow
 
 The agents enhance each phase of the BDD → ATDD → TDD workflow:

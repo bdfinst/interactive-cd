@@ -2,14 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-	line-height: 1.6;
-	color: #d1d5db;
+@layer base {
+	:root {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+		line-height: 1.6;
+	}
+
+	body {
+		@apply m-0 p-0 bg-gray-800 text-gray-300;
+	}
 }
 
-body {
-	margin: 0;
-	padding: 0;
-	background-color: #1f2937;
+@layer components {
+	/* Add reusable component patterns here if needed */
+	/* Example: .btn-primary, .card, etc. */
+}
+
+@layer utilities {
+	/* Add custom utility classes here if needed */
+	/* Example: .text-shadow, etc. */
 }

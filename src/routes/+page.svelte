@@ -5,12 +5,12 @@
 
 <Legend />
 
-<div class="container px-4 mx-auto" style="padding-top: 6rem;">
-  <div class="mb-6 text-center">
-    <p class="text-gray-300" style="color: #d1d5db;">
-      Explore Continuous Delivery practices and their dependencies
+<div class="container px-4 mx-auto">
+  <!-- <div class="mb-4">
+    <p class="text-center text-gray-300">
+      Explore CD practices and their dependencies
     </p>
-  </div>
+  </div> -->
 
   <main>
     <div data-testid="practice-graph">
