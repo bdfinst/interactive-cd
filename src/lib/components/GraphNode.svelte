@@ -4,7 +4,7 @@
    *
    * Displays a practice as a node in the dependency graph
    */
-  import { CATEGORY_COLORS } from '$lib/constants/categories.js';
+  import { CATEGORY_COLORS } from '$lib/constants/categories.js'
 
   export let practice
   export let isRoot = false
@@ -13,9 +13,12 @@
   export let onClick = () => {}
   export let onExpand = null
 
-  $: categories = practice.categories && practice.categories.length > 0
-    ? practice.categories
-    : (Array.isArray(practice.category) ? practice.category : [practice.category])
+  $: categories =
+    practice.categories && practice.categories.length > 0
+      ? practice.categories
+      : Array.isArray(practice.category)
+        ? practice.category
+        : [practice.category]
 
   $: borderClass = isSelected
     ? 'border-4 border-blue-600'
@@ -38,10 +41,14 @@
 >
   <!-- Title Section -->
   <div class="mb-2 text-center">
-    <h3 class="text-lg font-bold text-gray-900 leading-tight mb-2">
+    <h3 class="mb-2 text-lg font-bold leading-tight text-gray-900">
       {practice.name}
     </h3>
-    <div class="flex gap-1 items-center justify-center" role="img" aria-label="Category: {categories.join(', ')}">
+    <div
+      class="flex items-center justify-center gap-1"
+      role="img"
+      aria-label="Category: {categories.join(', ')}"
+    >
       {#each categories as category}
         <span
           class="w-3.5 h-3.5 rounded-full flex-shrink-0"
@@ -57,30 +64,20 @@
 
   {#if isSelected}
     <!-- Description -->
-    <p class="text-gray-600 text-sm mb-3">{practice.description}</p>
+    <p class="mb-3 text-sm text-gray-600">{practice.description}</p>
 
     <!-- Benefits -->
     {#if practice.benefits && practice.benefits.length > 0}
       <div class="mb-3">
-        <h4 class="text-sm font-semibold text-green-700 mb-2">Benefits</h4>
-        <ul class="space-y-1 text-xs text-gray-700 list-none pl-0">
+        <h4 class="mb-2 text-sm font-semibold text-green-700">Benefits</h4>
+        <ul class="pl-0 space-y-1 text-xs text-gray-700 list-none">
           {#each practice.benefits as benefit}
             <li class="flex items-start gap-2">
-              <span class="text-green-600 flex-shrink-0">→</span>
+              <span class="flex-shrink-0 text-green-600">→</span>
               <span>{benefit}</span>
             </li>
           {/each}
         </ul>
-      </div>
-    {/if}
-
-    <!-- Dependency Count -->
-    {#if practice.dependencyCount !== undefined && practice.dependencyCount > 0}
-      <div class="mb-3 flex items-center gap-2">
-        <span class="text-xs font-semibold text-gray-500">Dependencies:</span>
-        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
-          {practice.dependencyCount}
-        </span>
       </div>
     {/if}
 

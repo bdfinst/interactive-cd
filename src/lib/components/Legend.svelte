@@ -1,5 +1,5 @@
 <script>
-  import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORIES } from '$lib/constants/categories.js';
+  import { CATEGORY_LABELS, CATEGORIES } from '$lib/constants/categories.js';
 </script>
 
 <div class="fixed top-32 left-4 bg-white text-gray-800 rounded-xl p-4 shadow-lg z-[900] w-fit">
