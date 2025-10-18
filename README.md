@@ -11,21 +11,23 @@ This application shows how different Continuous Delivery practices relate to and
 - 🌳 **Hierarchical visualization** of CD practices
 - 🔄 **Interactive graph** - click to expand/collapse dependencies
 - 📊 **Multiple categories** - Practice, Tooling, Behavior, Culture
-- 🔍 **Search & filter** capabilities
+- 🔍 **Drill-down navigation** through practice dependencies
 - 📱 **Responsive design** for mobile and desktop
 - 🗄️ **Postgres-backed** with unlimited dependency depth
+- ⚡ **Functional programming** - Pure functions, immutability, composition
 
 ## 📁 Project Structure
 
-```
+``` bash
 interactive-cd/
 ├── README.md                    # This file
+├── docker-compose.yml           # Local PostgreSQL via Docker
+├── CLAUDE.md                    # Development guidelines (BDD/TDD/FP)
 │
 ├── 📂 db/                       # Database files
 │   ├── README.md                # Database documentation
 │   ├── schema.sql               # Complete database schema
-│   ├── seed.sql                 # All-in-one for first release
-│   ├── client.example.js        # Database client example
+│   ├── seed.sql                 # All practice data
 │   ├── deploy-initial.sh        # First deployment script
 │   ├── deploy-updates.sh        # Ongoing deployment script
 │   ├── migrations/              # Schema migrations
@@ -41,390 +43,346 @@ interactive-cd/
 │   ├── DATABASE.md              # Database schema docs
 │   ├── DATABASE-QUICKSTART.md   # Quick reference
 │   ├── DEPLOYMENT.md            # Netlify deployment guide
-│   └── DATA-STRUCTURE.md        # Data model documentation
+│   ├── DATA-STRUCTURE.md        # Data model documentation
+│   ├── OOP-vs-FP-comparison.md  # Architecture comparison
+│   └── features/                # BDD feature files (Gherkin)
+│       └── outline-view.feature
 │
-└── 📂 src/                      # Frontend (to be implemented)
-    ├── lib/
-    │   ├── components/          # Svelte components
-    │   ├── stores/              # State management
-    │   └── server/
-    │       └── db.js            # Database client
-    └── routes/
-        └── api/                 # API endpoints
+├── 📂 src/                      # Application source
+│   ├── routes/                  # SvelteKit routes
+│   │   ├── +layout.svelte       # Root layout
+│   │   ├── +page.svelte         # Home page
+│   │   └── api/                 # API endpoints
+│   │       └── practices/
+│   │           ├── cards/       # Practice cards API
+│   │           └── tree/        # Practice tree API
+│   │
+│   ├── domain/                  # Domain layer (pure functions)
+│   │   └── practice-catalog/
+│   │       ├── entities/        # Domain entities (CDPractice)
+│   │       ├── value-objects/   # Value objects (PracticeId, Category)
+│   │       └── repositories/    # Repository interfaces
+│   │
+│   ├── application/             # Application layer (use cases)
+│   │   └── practice-catalog/
+│   │       └── GetPracticeTreeService.js
+│   │
+│   ├── infrastructure/          # Infrastructure layer
+│   │   └── persistence/
+│   │       ├── db.js            # Database client
+│   │       └── PostgresPracticeRepository.js
+│   │
+│   └── lib/                     # UI components and utilities
+│       ├── components/          # Svelte components
+│       │   ├── GraphNode.svelte
+│       │   ├── PracticeGraph.svelte
+│       │   ├── Legend.svelte
+│       │   ├── Header.svelte
+│       │   └── SEO.svelte
+│       └── server/
+│           └── db.js            # Server-side database utilities
+│
+└── 📂 tests/                    # Test suite
+    ├── unit/                    # Unit tests (Vitest)
+    │   ├── domain/              # Domain layer tests
+    │   └── components/          # Component tests
+    ├── e2e/                     # End-to-end tests (Playwright)
+    │   └── practice-navigation.spec.js
+    └── utils/                   # Test utilities
+        └── builders.js
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local Development with Docker)
 
 ### Prerequisites
 
-- Node.js 18+
-- PostgreSQL (via Netlify free tier)
-- Netlify account
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **Docker Desktop** ([Download](https://www.docker.com/products/docker-desktop/))
+- **Git** ([Download](https://git-scm.com/))
 
-### 1. Setup Database (First Release)
+### 1. Clone the Repository
 
 ```bash
-# Set database connection string
-export DATABASE_URL="postgresql://user:pass@host:5432/db"
-
-# Run initial deployment script
-./db/deploy-initial.sh
-
-# This will:
-# - Create all tables, functions, and views
-# - Load initial data (23 practices from MinimumCD.org)
-# - Verify the installation
-
-# Expected output: 23 practices loaded
+git clone https://github.com/bdfinst/interactive-cd.git
+cd interactive-cd
 ```
 
-### 2. Install Dependencies
+### 2. Start PostgreSQL with Docker
+
+```bash
+# Start PostgreSQL container (includes schema and seed data)
+docker-compose up -d
+
+# Verify database is running
+docker-compose ps
+
+# Check logs if needed
+docker-compose logs postgres
+```
+
+This will:
+
+- Start PostgreSQL 16 on port 5432
+- Create database `interactive_cd` with user `cduser`
+- Automatically run schema and seed migrations
+- Load all 23 practices from MinimumCD.org
+
+### 3. Install Dependencies
 
 ```bash
 npm install
-npm install pg
-npm install -D @sveltejs/adapter-netlify
 ```
 
-### 3. Configure Environment
-
-Create `.env`:
+### 4. Configure Environment
 
 ```bash
-DATABASE_URL=postgresql://...
+# Copy the example environment file
+cp .env.example .env
+
+# The default values work with Docker setup:
+# DATABASE_URL=postgresql://cduser:cdpassword@localhost:5432/interactive_cd
 ```
 
-### 4. Run Development Server
+### 5. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-### 5. Deploy to Netlify
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-**Quick Deploy** (5 minutes):
+### 6. Run Tests
 
 ```bash
-netlify init
-netlify db init --assume-no
-netlify env:get DATABASE_URL
-./db/deploy-initial.sh
-netlify deploy --prod
+npm test
 ```
 
-📖 **Deployment Guides**:
+See the [Testing](#-testing) section for more test commands.
 
-- [Quick Deploy Guide](./QUICK-DEPLOY.md) - Get live in 5 minutes
-- [Complete Deployment Guide](./NETLIFY-DEPLOYMENT.md) - Full documentation
-- [GitHub Actions CI/CD](./.github/workflows/deploy.yml) - Auto-deploy setup
+### 7. Stop Database
+
+```bash
+# Stop the database container
+docker-compose down
+
+# Stop and remove volumes (deletes all data)
+docker-compose down -v
+```
+
+## 🗄️ Database Management
+
+### Access PostgreSQL CLI
+
+```bash
+# Connect to the database
+docker-compose exec postgres psql -U cduser -d interactive_cd
+
+# Or use psql directly if installed locally
+psql postgresql://cduser:cdpassword@localhost:5432/interactive_cd
+```
+
+### Useful Database Commands
+
+```bash
+# View all practices
+SELECT id, name, category FROM practices ORDER BY name;
+
+# Count practices by category
+SELECT category, COUNT(*) FROM practices GROUP BY category;
+
+# View practice dependencies
+SELECT p1.name as practice, p2.name as depends_on
+FROM practice_dependencies pd
+JOIN practices p1 ON pd.practice_id = p1.id
+JOIN practices p2 ON pd.depends_on_id = p2.id
+ORDER BY p1.name;
+
+# Get practice tree for Continuous Delivery
+SELECT * FROM get_practice_tree('continuous-delivery');
+```
+
+### Reset Database
+
+```bash
+# Stop and remove containers and volumes
+docker-compose down -v
+
+# Restart (will reinitialize database)
+docker-compose up -d
+```
 
 ## 📊 Database Schema
 
-### Tables
-
-- **`practices`** - Core practices table (23 rows)
-- **`practice_dependencies`** - Junction table for relationships (41 dependencies)
+- **`practices`** - Core practices (23 rows) with requirements and benefits
+- **`practice_dependencies`** - Relationships (41 dependencies)
 - **`metadata`** - Dataset metadata
 
-### Key Features
+**Functions:** `get_practice_tree()`, `get_practice_dependencies()`, `would_create_cycle()`
 
-✅ **Unlimited depth** - Supports infinite nesting via recursive queries
-✅ **Prevents cycles** - Built-in cycle detection
-✅ **Efficient queries** - Optimized indexes and views
-✅ **JavaScript-based** - No TypeScript dependencies
+**Views:** `practice_summary`, `leaf_practices`
 
-### Example Queries
-
-```sql
--- Get practice tree
-SELECT * FROM get_practice_tree('continuous-delivery');
-
--- Get practice dependencies
-SELECT * FROM get_practice_dependencies('continuous-integration');
-
--- Get leaf practices (no dependencies)
-SELECT * FROM leaf_practices;
-
--- Check for circular dependency
-SELECT would_create_cycle('practice-a', 'practice-b');
-```
+See [docs/DATABASE.md](./docs/DATABASE.md) for complete schema documentation.
 
 ## 🎨 Technology Stack
 
 ### Frontend
 
-- **Svelte/SvelteKit** - Reactive UI framework
-- **D3.js** or **Svelvet** - Graph visualization
-- **Tailwind CSS** - Styling
+- **Svelte 4** - Reactive UI framework
+- **SvelteKit 2** - Full-stack framework with SSR
+- **Tailwind CSS** - Utility-first styling
+- **Vite** - Fast build tool
 
 ### Backend
 
-- **Netlify Postgres** - Database (free tier)
-- **SvelteKit API routes** - REST API
-- **PostgreSQL** - Relational database
+- **PostgreSQL 16** - Relational database
+- **SvelteKit API Routes** - REST API
+- **Node.js** - JavaScript runtime
+
+### Architecture
+
+- **Hexagonal Architecture** - Clean separation of concerns
+- **Functional Programming** - Pure functions, immutability, composition
+- **Domain-Driven Design** - Rich domain model
+- **Test-Driven Development** - Tests first, code second
 
 ### Why This Stack?
 
-- ⚡ **Performance** - Svelte compiles to vanilla JS (smaller bundles)
-- 🎯 **Built-in reactivity** - No useState or hooks needed
-- 📦 **Free hosting** - Netlify free tier includes Postgres
-- 🌐 **SEO-friendly** - SSR with SvelteKit
+- ⚡ **Performance** - Svelte compiles to vanilla JS
+- 🎯 **Simplicity** - No TypeScript, pure JavaScript
+- 📦 **Free hosting** - Netlify free tier
+- 🌐 **SEO-friendly** - Server-side rendering
+- 🧪 **Testability** - Pure functions are easy to test
 
-## 📚 Data Model
+## 🧪 Testing
 
-### Practice Structure
+### Unit Tests (Vitest)
 
-Each practice in the database has:
+```bash
+# Run unit tests
+npm test
 
-- **id** - Unique identifier (kebab-case)
-- **name** - Human-readable name
-- **type** - `root` or `practice`
-- **category** - `practice`, `tooling`, `behavior`, or `culture`
-- **description** - Detailed explanation
-- **requirements** - JSONB array of implementation requirements
-- **benefits** - JSONB array of benefits
-- **dependencies** - Related practices via junction table
+# Watch mode
+npm run test:watch
 
-### Categories
+# With UI
+npm run test:ui
+```
+
+### End-to-End Tests (Playwright)
+
+```bash
+# Run E2E tests
+npm run test:e2e
+
+# Interactive UI mode
+npm run test:e2e:ui
+```
+
+### Test Coverage
+
+- **128 tests** currently passing
+- **100% coverage** of domain layer
+- **E2E tests** for critical user flows
+
+## 🎯 Development Practices
+
+This project follows strict development practices documented in [CLAUDE.md](./CLAUDE.md):
+
+### BDD → ATDD → TDD Workflow
+
+1. **BDD (Behavior-Driven Development)** - Define features with Gherkin
+2. **ATDD (Acceptance Test-Driven Development)** - Write acceptance tests
+3. **TDD (Test-Driven Development)** - Write unit tests first, then code
+
+### Functional Programming Principles
+
+- ✅ **Pure Functions** - No side effects, referentially transparent
+- ✅ **Immutability** - Object.freeze() for all data structures
+- ✅ **Function Composition** - Build complex operations from simple functions
+- ✅ **No Classes** - Factory functions instead of ES6 classes
+- ✅ **Type Safety** - Type markers (_type) for runtime type checking
+
+## 📚 Practice Categories
 
 - 🔄 **Practice** (3) - Core CD practices
 - 🛠️ **Tooling** (17) - Technical infrastructure
 - 👥 **Behavior** (2) - Team behaviors
 - 🌟 **Culture** (1) - Organizational culture
 
-### Hierarchy Example
+Example hierarchy: Continuous Delivery → Continuous Integration → Trunk-based Development → Version Control
 
-```
-🎯 Continuous Delivery (root)
-   ├── 🔄 Continuous Integration
-   │   ├── 👥 Trunk-based Development
-   │   │   ├── 🛠️ Version Control
-   │   │   └── 🛠️ Feature Flags
-   │   ├── 🔄 Automated Testing
-   │   └── 🛠️ Build Automation
-   ├── 🛠️ Application Pipeline
-   └── 🛠️ Immutable Artifact
-```
+See [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md) for complete data model.
 
-## 🔧 Development
+## 🚀 Deployment to Netlify
 
-### Database Migrations
+### Prerequisites
+
+- Netlify account
+- Netlify CLI installed: `npm install -g netlify-cli`
+
+### Quick Deploy
 
 ```bash
-# Run all migrations
-for f in db/migrations/*.sql; do
-  psql $DATABASE_URL -f $f
-done
+# Login to Netlify
+netlify login
 
-# Or use the all-in-one schema
-psql $DATABASE_URL -f db/schema.sql
+# Initialize project
+netlify init
+
+# Create Netlify Postgres database
+netlify db:create --team-id YOUR_TEAM_ID
+
+# Get database URL
+netlify env:set DATABASE_URL $(netlify env:get DATABASE_URL)
+
+# Deploy database schema and data
+export DATABASE_URL=$(netlify env:get DATABASE_URL)
+./db/deploy-initial.sh
+
+# Deploy application
+netlify deploy --prod
 ```
 
-### Validate Database
+### Environment Variables
+
+Set in Netlify dashboard or via CLI:
 
 ```bash
-# Check practice count
-psql $DATABASE_URL -c "SELECT COUNT(*) FROM practices;"
-
-# Check dependencies
-psql $DATABASE_URL -c "SELECT COUNT(*) FROM practice_dependencies;"
-
-# View practice summary
-psql $DATABASE_URL -c "SELECT * FROM practice_summary ORDER BY dependent_count DESC;"
+netlify env:set DATABASE_URL "postgresql://..."
+netlify env:set NODE_ENV "production"
 ```
 
-### Export Data
-
-```bash
-# Export practices to JSON
-psql $DATABASE_URL -c "SELECT json_agg(p) FROM practices p;" > practices-export.json
-
-# Backup entire database
-pg_dump $DATABASE_URL > backup.sql
-```
+See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment instructions.
 
 ## 📖 Documentation
 
-| File                                                       | Description                     |
-| ---------------------------------------------------------- | ------------------------------- |
-| [docs/PLAN.md](docs/PLAN.md)                               | Implementation plan and roadmap |
-| [docs/DATABASE.md](docs/DATABASE.md)                       | Complete database documentation |
-| [docs/DATABASE-QUICKSTART.md](docs/DATABASE-QUICKSTART.md) | Quick reference guide           |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                   | Netlify deployment steps        |
-| [docs/DATA-STRUCTURE.md](docs/DATA-STRUCTURE.md)           | Data model documentation        |
+| File | Description |
+|------|-------------|
+| [CLAUDE.md](./CLAUDE.md) | Development guidelines (BDD/TDD/FP) |
+| [docs/PLAN.md](./docs/PLAN.md) | Implementation plan and roadmap |
+| [docs/DATABASE.md](./docs/DATABASE.md) | Complete database documentation |
+| [docs/DATABASE-QUICKSTART.md](./docs/DATABASE-QUICKSTART.md) | Quick reference guide |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Netlify deployment steps |
+| [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md) | Data model documentation |
+| [docs/OOP-vs-FP-comparison.md](./docs/OOP-vs-FP-comparison.md) | Architecture comparison |
 
-## 🧪 Testing
+## 🔧 Available Scripts
 
-### Validate Database Integrity
-
-```bash
-# Check for orphaned dependencies
-psql $DATABASE_URL -c "
-  SELECT pd.* FROM practice_dependencies pd
-  LEFT JOIN practices p1 ON pd.practice_id = p1.id
-  LEFT JOIN practices p2 ON pd.depends_on_id = p2.id
-  WHERE p1.id IS NULL OR p2.id IS NULL;
-"
-# Should return 0 rows
-
-# Verify no cycles
-psql $DATABASE_URL -c "
-  SELECT * FROM practices p
-  WHERE exists(
-    SELECT 1 FROM get_practice_ancestors(p.id)
-    WHERE id = p.id AND level > 0
-  );
-"
-# Should return 0 rows
-```
-
-### Test API Routes
-
-```bash
-# Get all practices
-curl http://localhost:5173/api/practices
-
-# Get practice tree
-curl http://localhost:5173/api/tree?root=continuous-delivery
-
-# Get single practice
-curl http://localhost:5173/api/practices/continuous-integration
-```
-
-## 🚀 Deployment
-
-### Netlify Setup
-
-1. Create Netlify Postgres database (free tier)
-2. Set `DATABASE_URL` environment variable
-3. Run migrations on Netlify database
-4. Deploy SvelteKit app
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed steps.
-
-### Production Checklist
-
-- [ ] Database schema applied
-- [ ] Seed data loaded
-- [ ] Environment variables set
-- [ ] API routes tested
-- [ ] Frontend connected to API
-- [ ] Error handling implemented
-- [ ] Performance optimized
-- [ ] SEO metadata added
-- [ ] Analytics configured
-
-## 📊 Database Statistics
-
-- **Total Practices**: 23
-- **Total Dependencies**: 41
-- **Database Size**: ~100 KB
-- **Max Depth**: 4 levels
-- **Leaf Nodes**: 7 (foundation practices)
-
-### Most Critical Practices
-
-1. **Version Control** - 6 dependents
-2. **Build Automation** - 5 dependents
-3. **Configuration Management** - 4 dependents
-4. **Automated Testing** - 3 dependents
-5. **Deployment Automation** - 3 dependents
-
-## 🎯 Roadmap
-
-### Phase 1: Foundation ✅
-
-- [x] Data model design
-- [x] Database schema
-- [x] Seed data (23 practices from MinimumCD.org)
-- [x] Documentation
-
-### Phase 2: Backend (In Progress)
-
-- [ ] SvelteKit setup
-- [ ] Database client
-- [ ] API routes
-- [ ] Error handling
-- [ ] Testing
-
-### Phase 3: Frontend
-
-- [ ] Graph visualization
-- [ ] Interactive nodes
-- [ ] Search/filter
-- [ ] Detail panels
-- [ ] Responsive design
-
-### Phase 4: Polish
-
-- [ ] Animations
-- [ ] Mobile optimization
-- [ ] Performance tuning
-- [ ] Analytics
-- [ ] SEO
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm test` | Run unit tests |
+| `npm run test:e2e` | Run E2E tests |
+| `npm run lint` | Run ESLint |
 
 ## 🤝 Contributing
 
 This project is based on practices from [MinimumCD.org](https://minimumcd.org).
 
-### Adding New Practices
+**Code Style:** Pure JavaScript (no TypeScript), Functional Programming (no classes), TDD/BDD approach, Conventional Commits
 
-New practices are added via data migration files as part of the deployment process.
-
-**Step 1: Create Migration File**
-
-```bash
-# Copy the template
-cp db/data/002_example_new_practice.sql db/data/003_my_new_practice.sql
-```
-
-**Step 2: Edit the Migration**
-
-```sql
--- db/data/003_my_new_practice.sql
-BEGIN;
-
-INSERT INTO practices (id, name, type, category, description, requirements, benefits)
-VALUES (
-  'my-new-practice',
-  'My New Practice',
-  'practice',
-  'tooling',
-  'Description here',
-  '["Requirement 1", "Requirement 2"]'::jsonb,
-  '["Benefit 1", "Benefit 2"]'::jsonb
-)
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  description = EXCLUDED.description,
-  requirements = EXCLUDED.requirements,
-  benefits = EXCLUDED.benefits;
-
--- Add dependencies
-INSERT INTO practice_dependencies (practice_id, depends_on_id)
-VALUES ('my-new-practice', 'version-control')
-ON CONFLICT DO NOTHING;
-
-COMMIT;
-```
-
-**Step 3: Test and Deploy**
-
-```bash
-# Test locally
-psql $DATABASE_URL -f db/data/003_my_new_practice.sql
-
-# Commit to git
-git add db/data/003_my_new_practice.sql
-git commit -m "Add new practice: My New Practice"
-
-# Deploy
-git push
-netlify deploy --prod
-./db/deploy-updates.sh
-```
-
-See [db/README.md](db/README.md) for detailed instructions.
+**Adding practices:** See [db/README.md](./db/README.md) for SQL migration instructions.
 
 ## 📄 License
 
@@ -432,14 +390,4 @@ MIT
 
 ## 🔗 Resources
 
-- **MinimumCD.org**: https://minimumcd.org
-- **Svelte**: https://svelte.dev
-- **SvelteKit**: https://kit.svelte.dev
-- **Netlify Postgres**: https://docs.netlify.com/databases/overview/
-- **D3.js**: https://d3js.org
-
----
-
-**Status**: Database schema complete ✅ | Frontend in progress ⏳
-
-**Last Updated**: 2025-10-17
+- **MinimumCD.org**: <https://minimumcd.org>

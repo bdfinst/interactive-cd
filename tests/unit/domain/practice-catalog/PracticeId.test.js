@@ -6,7 +6,7 @@ describe('PracticeId', () => {
 		it('creates a PracticeId from a valid string', () => {
 			const id = PracticeId.from('continuous-integration')
 
-			expect(id).toBeInstanceOf(PracticeId)
+			expect(PracticeId.is(id)).toBe(true)
 			expect(id.toString()).toBe('continuous-integration')
 		})
 
@@ -99,10 +99,10 @@ describe('PracticeId', () => {
 		it('cannot be modified after creation', () => {
 			const id = PracticeId.from('continuous-integration')
 
-			// Attempt to modify should throw
+			// Attempt to modify should throw (frozen objects throw when trying to assign)
 			expect(() => {
 				id.value = 'something-else'
-			}).toThrow('PracticeId is immutable')
+			}).toThrow()
 
 			// Verify object is frozen
 			expect(Object.isFrozen(id)).toBe(true)

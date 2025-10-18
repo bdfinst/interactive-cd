@@ -4,7 +4,7 @@
  * Returns Continuous Delivery practice and its direct dependencies as a flat array
  */
 import { json } from '@sveltejs/kit'
-import { PostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js'
+import { createPostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
 
 /**
@@ -37,7 +37,7 @@ async function getTransitiveCategories(practiceId, repository, visited = new Set
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
 	try {
-		const repository = new PostgresPracticeRepository()
+		const repository = createPostgresPracticeRepository()
 
 		// Get root practice ID from query param, default to 'continuous-delivery'
 		const rootIdParam = url.searchParams.get('root') || 'continuous-delivery'

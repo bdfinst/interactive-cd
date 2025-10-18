@@ -1,73 +1,73 @@
 /**
- * PracticeId - Value Object
+ * PracticeId - Value Object (Functional)
  *
  * Type-safe identifier for CD practices.
  * Enforces kebab-case format (e.g., "continuous-integration")
  * Immutable - once created, cannot be changed.
+ *
+ * Usage:
+ *   const id = PracticeId.from('continuous-integration')
+ *   console.log(id.value)  // 'continuous-integration'
+ *   console.log(id.toString())  // 'continuous-integration'
  */
-export class PracticeId {
-	#value
 
-	constructor(value) {
-		if (!value || typeof value !== 'string' || value.trim() === '') {
-			throw new Error('Practice ID cannot be empty')
-		}
+const KEBAB_CASE_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
-		const trimmedValue = value.trim()
-
-		// Validate kebab-case format: lowercase letters, numbers, and hyphens only
-		const kebabCasePattern = /^[a-z0-9]+(-[a-z0-9]+)*$/
-		if (!kebabCasePattern.test(trimmedValue)) {
-			throw new Error('Practice ID must be in kebab-case format (e.g., "continuous-integration")')
-		}
-
-		this.#value = trimmedValue
-
-		// Freeze object to prevent modifications
-		Object.freeze(this)
+/**
+ * Validate practice ID value
+ * @param {string} value
+ * @throws {Error} if invalid
+ */
+const validatePracticeId = value => {
+	if (!value || typeof value !== 'string' || value.trim() === '') {
+		throw new Error('Practice ID cannot be empty')
 	}
 
+	const trimmedValue = value.trim()
+
+	if (!KEBAB_CASE_PATTERN.test(trimmedValue)) {
+		throw new Error('Practice ID must be in kebab-case format (e.g., "continuous-integration")')
+	}
+
+	return trimmedValue
+}
+
+/**
+ * Create a PracticeId value object
+ * @param {string} value - The ID value
+ * @returns {Object} Frozen PracticeId object
+ */
+const createPracticeId = value => {
+	const validatedValue = validatePracticeId(value)
+
+	return Object.freeze({
+		value: validatedValue,
+		toString: () => validatedValue,
+		equals: other => {
+			if (!other || other._type !== 'PracticeId') {
+				return false
+			}
+			return other.value === validatedValue
+		},
+		_type: 'PracticeId' // Type marker for runtime type checking
+	})
+}
+
+/**
+ * PracticeId factory with static from method
+ */
+export const PracticeId = {
 	/**
 	 * Factory method to create a PracticeId from a string
 	 * @param {string} value - The ID value
-	 * @returns {PracticeId}
+	 * @returns {Object} PracticeId object
 	 */
-	static from(value) {
-		return new PracticeId(value)
-	}
+	from: createPracticeId,
 
 	/**
-	 * Compare this PracticeId with another for equality
-	 * @param {PracticeId} other - Another PracticeId
+	 * Check if an object is a PracticeId
+	 * @param {any} obj
 	 * @returns {boolean}
 	 */
-	equals(other) {
-		if (!other || !(other instanceof PracticeId)) {
-			return false
-		}
-		return this.#value === other.#value
-	}
-
-	/**
-	 * Get string representation of this ID
-	 * @returns {string}
-	 */
-	toString() {
-		return this.#value
-	}
-
-	/**
-	 * Get the raw value (for serialization)
-	 * @returns {string}
-	 */
-	get value() {
-		return this.#value
-	}
-
-	/**
-	 * Prevent setting value from outside
-	 */
-	set value(newValue) {
-		throw new Error('PracticeId is immutable')
-	}
+	is: obj => obj && obj._type === 'PracticeId'
 }

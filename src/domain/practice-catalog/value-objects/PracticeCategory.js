@@ -1,5 +1,5 @@
 /**
- * PracticeCategory - Value Object (Enumeration)
+ * PracticeCategory - Value Object (Functional Enum)
  *
  * Represents the category of a CD practice.
  * Practices are behaviors and processes teams adopt.
@@ -10,102 +10,86 @@
  * - TOOLING: Tools and platforms (e.g., Version Control, CI/CD Pipeline)
  *
  * Note: TOOLING will be moved to CapabilityCategory (platform capabilities) in future iterations
+ *
+ * Usage:
+ *   const category = PracticeCategory.BEHAVIOR
+ *   const fromString = PracticeCategory.from('behavior')
+ *   console.log(category.name)  // 'behavior'
+ *   console.log(category.icon)  // '👥'
  */
-export class PracticeCategory {
-	#name
-	#icon
 
-	constructor(name, icon, isStatic = false) {
-		// Prevent direct instantiation - only allow predefined static instances
-		if (!isStatic) {
-			throw new Error(
-				'Cannot instantiate PracticeCategory directly. Use PracticeCategory.from() or static constants.'
-			)
-		}
+/**
+ * Create an immutable category object
+ * @param {string} name
+ * @param {string} icon
+ * @returns {Object} Frozen category object
+ */
+const createCategory = (name, icon) =>
+	Object.freeze({
+		name,
+		icon,
+		toString: () => name,
+		equals: other => {
+			if (!other || other._type !== 'PracticeCategory') {
+				return false
+			}
+			return other.name === name
+		},
+		_type: 'PracticeCategory'
+	})
 
-		this.#name = name
-		this.#icon = icon
+// Predefined category instances (frozen)
+const PRACTICE = createCategory('practice', '🔄')
+const BEHAVIOR = createCategory('behavior', '👥')
+const CULTURE = createCategory('culture', '🌟')
+const TOOLING = createCategory('tooling', '🛠️')
 
-		// Freeze to prevent modifications
-		Object.freeze(this)
+// Category lookup map
+const CATEGORIES = Object.freeze({
+	practice: PRACTICE,
+	behavior: BEHAVIOR,
+	culture: CULTURE,
+	tooling: TOOLING
+})
+
+/**
+ * Get category from string value
+ * @param {string} value - Category name ('practice', 'behavior', 'culture', 'tooling')
+ * @returns {Object} Category object
+ * @throws {Error} if invalid category
+ */
+const fromString = value => {
+	const category = CATEGORIES[value]
+
+	if (!category) {
+		throw new Error(
+			`Invalid practice category: "${value}". Must be one of: practice, behavior, culture, tooling`
+		)
 	}
 
-	static PRACTICE = new PracticeCategory('practice', '🔄', true)
-	static BEHAVIOR = new PracticeCategory('behavior', '👥', true)
-	static CULTURE = new PracticeCategory('culture', '🌟', true)
-	static TOOLING = new PracticeCategory('tooling', '🛠️', true)
-
-	/**
-	 * Factory method to create a PracticeCategory from a string
-	 * @param {string} value - The category name ('practice', 'behavior', 'culture', 'tooling')
-	 * @returns {PracticeCategory}
-	 */
-	static from(value) {
-		const categories = {
-			practice: PracticeCategory.PRACTICE,
-			behavior: PracticeCategory.BEHAVIOR,
-			culture: PracticeCategory.CULTURE,
-			tooling: PracticeCategory.TOOLING
-		}
-
-		const category = categories[value]
-
-		if (!category) {
-			throw new Error(
-				`Invalid practice category: "${value}". Must be one of: practice, behavior, culture, tooling`
-			)
-		}
-
-		return category
-	}
-
-	/**
-	 * Compare this category with another for equality
-	 * @param {PracticeCategory} other - Another category
-	 * @returns {boolean}
-	 */
-	equals(other) {
-		if (!other || !(other instanceof PracticeCategory)) {
-			return false
-		}
-		return this.#name === other.#name
-	}
-
-	/**
-	 * Get string representation
-	 * @returns {string}
-	 */
-	toString() {
-		return this.#name
-	}
-
-	/**
-	 * Get the category icon
-	 * @returns {string}
-	 */
-	get icon() {
-		return this.#icon
-	}
-
-	/**
-	 * Get the category name
-	 * @returns {string}
-	 */
-	get name() {
-		return this.#name
-	}
-
-	/**
-	 * Prevent setting name from outside
-	 */
-	set name(value) {
-		throw new Error('PracticeCategory is immutable')
-	}
-
-	/**
-	 * Prevent setting icon from outside
-	 */
-	set icon(value) {
-		throw new Error('PracticeCategory is immutable')
-	}
+	return category
 }
+
+/**
+ * Check if object is a PracticeCategory
+ * @param {any} obj
+ * @returns {boolean}
+ */
+const isCategory = obj => obj && obj._type === 'PracticeCategory'
+
+/**
+ * PracticeCategory namespace with enum-like static properties
+ */
+export const PracticeCategory = Object.freeze({
+	// Static category instances
+	PRACTICE,
+	BEHAVIOR,
+	CULTURE,
+	TOOLING,
+
+	// Factory method
+	from: fromString,
+
+	// Type guard
+	is: isCategory
+})

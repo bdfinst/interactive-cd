@@ -1,259 +1,283 @@
 import { describe, it, expect } from 'vitest'
-import { CDPractice } from '$domain/practice-catalog/entities/CDPractice.js'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
 import { PracticeCategory } from '$domain/practice-catalog/value-objects/PracticeCategory.js'
+import {
+	createCDPractice,
+	withRequirement,
+	withRequirements,
+	withBenefit,
+	withBenefits,
+	withPracticePrerequisite,
+	withCapabilityPrerequisite,
+	getAllPrerequisites,
+	hasPrerequisites,
+	getRequirementCount,
+	getBenefitCount,
+	pipePractice
+} from '$domain/practice-catalog/entities/CDPractice.js'
 
-describe('CDPractice', () => {
-	describe('construction', () => {
-		it('creates a practice with valid parameters', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
+describe('CDPractice (Functional)', () => {
+	const validId = PracticeId.from('continuous-integration')
+	const validCategory = PracticeCategory.BEHAVIOR
+
+	describe('createCDPractice', () => {
+		it('creates an immutable practice', () => {
+			const practice = createCDPractice(
+				validId,
 				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Integrate code changes frequently'
+				validCategory,
+				'Build and test on every commit'
 			)
 
-			expect(practice.id.toString()).toBe('continuous-integration')
+			expect(practice.id).toBe(validId)
 			expect(practice.name).toBe('Continuous Integration')
-			expect(practice.category).toBe(PracticeCategory.PRACTICE)
-			expect(practice.description).toBe('Integrate code changes frequently')
+			expect(practice.category).toBe(validCategory)
+			expect(practice.description).toBe('Build and test on every commit')
+			expect(Object.isFrozen(practice)).toBe(true)
 		})
 
-		it('throws error when id is missing', () => {
-			expect(
-				() =>
-					new CDPractice(null, 'Continuous Integration', PracticeCategory.PRACTICE, 'Description')
-			).toThrow('Practice ID is required')
-		})
-
-		it('throws error when name is missing', () => {
-			expect(
-				() =>
-					new CDPractice(
-						PracticeId.from('continuous-integration'),
-						'',
-						PracticeCategory.PRACTICE,
-						'Description'
-					)
-			).toThrow('Practice name is required')
-		})
-
-		it('throws error when category is missing', () => {
-			expect(
-				() =>
-					new CDPractice(
-						PracticeId.from('continuous-integration'),
-						'Continuous Integration',
-						null,
-						'Description'
-					)
-			).toThrow('Practice category is required')
-		})
-
-		it('throws error when description is missing', () => {
-			expect(
-				() =>
-					new CDPractice(
-						PracticeId.from('continuous-integration'),
-						'Continuous Integration',
-						PracticeCategory.PRACTICE,
-						''
-					)
-			).toThrow('Practice description is required')
-		})
-
-		it('initializes with empty prerequisites arrays', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
+		it('trims name and description', () => {
+			const practice = createCDPractice(
+				validId,
+				'  Continuous Integration  ',
+				validCategory,
+				'  Description  '
 			)
 
-			expect(practice.practicePrerequisites).toEqual([])
-			expect(practice.capabilityPrerequisites).toEqual([])
+			expect(practice.name).toBe('Continuous Integration')
+			expect(practice.description).toBe('Description')
 		})
 
-		it('initializes with empty requirements and benefits arrays', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
+		it('throws error for missing required fields', () => {
+			expect(() => createCDPractice(null, 'Name', validCategory, 'Desc')).toThrow(
+				'Practice ID is required'
 			)
+			expect(() => createCDPractice(validId, '', validCategory, 'Desc')).toThrow(
+				'Practice name is required'
+			)
+			expect(() => createCDPractice(validId, 'Name', null, 'Desc')).toThrow(
+				'Practice category is required'
+			)
+			expect(() => createCDPractice(validId, 'Name', validCategory, '')).toThrow(
+				'Practice description is required'
+			)
+		})
+
+		it('initializes empty arrays', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
 			expect(practice.requirements).toEqual([])
 			expect(practice.benefits).toEqual([])
+			expect(practice.practicePrerequisites).toEqual([])
+			expect(practice.capabilityPrerequisites).toEqual([])
 		})
 	})
 
-	describe('addRequirement', () => {
-		it('adds a requirement to the practice', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+	describe('immutability', () => {
+		it('cannot modify practice after creation', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-			practice.addRequirement('Integrate to trunk daily')
-
-			expect(practice.requirements).toContain('Integrate to trunk daily')
+			expect(() => {
+				practice.name = 'New Name'
+			}).toThrow()
 		})
 
-		it('adds multiple requirements', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+		it('freezes all arrays', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-			practice.addRequirement('Requirement 1')
-			practice.addRequirement('Requirement 2')
+			expect(Object.isFrozen(practice.requirements)).toBe(true)
+			expect(Object.isFrozen(practice.benefits)).toBe(true)
+			expect(Object.isFrozen(practice.practicePrerequisites)).toBe(true)
+			expect(Object.isFrozen(practice.capabilityPrerequisites)).toBe(true)
+		})
+	})
 
-			expect(practice.requirements).toHaveLength(2)
-			expect(practice.requirements).toEqual(['Requirement 1', 'Requirement 2'])
+	describe('withRequirement', () => {
+		it('returns new practice with requirement added', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const updated = withRequirement(practice, 'Must have automated tests')
+
+			// Original unchanged
+			expect(practice.requirements).toEqual([])
+			// New practice has requirement
+			expect(updated.requirements).toEqual(['Must have automated tests'])
+			// Returns new object
+			expect(updated).not.toBe(practice)
+		})
+
+		it('trims requirement text', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const updated = withRequirement(practice, '  Must have tests  ')
+
+			expect(updated.requirements).toEqual(['Must have tests'])
 		})
 
 		it('throws error for empty requirement', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-			expect(() => practice.addRequirement('')).toThrow('Requirement cannot be empty')
+			expect(() => withRequirement(practice, '')).toThrow('Requirement is required')
+			expect(() => withRequirement(practice, '   ')).toThrow('Requirement is required')
 		})
 	})
 
-	describe('addBenefit', () => {
-		it('adds a benefit to the practice', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+	describe('withRequirements', () => {
+		it('adds multiple requirements at once', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const requirements = ['Req 1', 'Req 2', 'Req 3']
+			const updated = withRequirements(practice, requirements)
 
-			practice.addBenefit('Early detection of integration issues')
-
-			expect(practice.benefits).toContain('Early detection of integration issues')
+			expect(updated.requirements).toEqual(['Req 1', 'Req 2', 'Req 3'])
+			expect(practice.requirements).toEqual([])
 		})
+	})
 
-		it('adds multiple benefits', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+	describe('withBenefit', () => {
+		it('returns new practice with benefit added', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const updated = withBenefit(practice, 'Faster feedback')
 
-			practice.addBenefit('Benefit 1')
-			practice.addBenefit('Benefit 2')
-
-			expect(practice.benefits).toHaveLength(2)
+			expect(practice.benefits).toEqual([])
+			expect(updated.benefits).toEqual(['Faster feedback'])
+			expect(updated).not.toBe(practice)
 		})
 
 		it('throws error for empty benefit', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-			expect(() => practice.addBenefit('')).toThrow('Benefit cannot be empty')
+			expect(() => withBenefit(practice, '')).toThrow('Benefit is required')
 		})
 	})
 
-	describe('requiresPractice', () => {
-		it('adds a practice prerequisite', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
+	describe('withBenefits', () => {
+		it('adds multiple benefits at once', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const benefits = ['Benefit 1', 'Benefit 2']
+			const updated = withBenefits(practice, benefits)
 
-			practice.requiresPractice(
-				PracticeId.from('trunk-based-development'),
-				'TBD enables frequent integration'
-			)
-
-			expect(practice.practicePrerequisites).toHaveLength(1)
-			expect(practice.practicePrerequisites[0].practiceId.toString()).toBe(
-				'trunk-based-development'
-			)
-			expect(practice.practicePrerequisites[0].rationale).toBe('TBD enables frequent integration')
-		})
-
-		it('adds multiple practice prerequisites', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
-			)
-
-			practice.requiresPractice(PracticeId.from('practice-1'), 'Rationale 1')
-			practice.requiresPractice(PracticeId.from('practice-2'), 'Rationale 2')
-
-			expect(practice.practicePrerequisites).toHaveLength(2)
+			expect(updated.benefits).toEqual(['Benefit 1', 'Benefit 2'])
 		})
 	})
 
-	describe('requiresCapability', () => {
-		it('adds a capability prerequisite', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
+	describe('withPracticePrerequisite', () => {
+		it('returns new practice with practice prerequisite', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const prereqId = PracticeId.from('version-control')
+			const updated = withPracticePrerequisite(practice, prereqId, 'Need source control')
+
+			expect(practice.practicePrerequisites).toEqual([])
+			expect(updated.practicePrerequisites).toEqual([
+				{ practiceId: prereqId, rationale: 'Need source control' }
+			])
+		})
+
+		it('throws error for missing fields', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+
+			expect(() => withPracticePrerequisite(practice, null, 'Rationale')).toThrow(
+				'Practice ID is required'
 			)
-
-			practice.requiresCapability('version-control-system', 'Need VCS to track changes')
-
-			expect(practice.capabilityPrerequisites).toHaveLength(1)
-			expect(practice.capabilityPrerequisites[0].capabilityId).toBe('version-control-system')
-			expect(practice.capabilityPrerequisites[0].rationale).toBe('Need VCS to track changes')
+			expect(() => withPracticePrerequisite(practice, PracticeId.from('test'), '')).toThrow(
+				'Rationale is required'
+			)
 		})
 	})
 
-	describe('getRequirements', () => {
-		it('returns a copy of requirements array', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
+	describe('withCapabilityPrerequisite', () => {
+		it('returns new practice with capability prerequisite', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const updated = withCapabilityPrerequisite(
+				practice,
+				'ci-cd-pipeline',
+				'Need automated pipeline'
 			)
 
-			practice.addRequirement('Requirement 1')
-			const requirements = practice.getRequirements()
-
-			// Modifying returned array should not affect internal state
-			requirements.push('Should not be added')
-			expect(practice.requirements).toHaveLength(1)
+			expect(practice.capabilityPrerequisites).toEqual([])
+			expect(updated.capabilityPrerequisites).toEqual([
+				{ capabilityId: 'ci-cd-pipeline', rationale: 'Need automated pipeline' }
+			])
 		})
 	})
 
-	describe('getBenefits', () => {
-		it('returns a copy of benefits array', () => {
-			const practice = new CDPractice(
-				PracticeId.from('continuous-integration'),
-				'Continuous Integration',
-				PracticeCategory.PRACTICE,
-				'Description'
+	describe('query functions', () => {
+		it('getAllPrerequisites combines both types', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description', {
+				practicePrerequisites: [{ practiceId: validId, rationale: 'Test' }],
+				capabilityPrerequisites: [{ capabilityId: 'test-cap', rationale: 'Test' }]
+			})
+
+			const all = getAllPrerequisites(practice)
+			expect(all.length).toBe(2)
+		})
+
+		it('hasPrerequisites returns true when prerequisites exist', () => {
+			const withPrereq = createCDPractice(validId, 'Name', validCategory, 'Description', {
+				practicePrerequisites: [{ practiceId: validId, rationale: 'Test' }]
+			})
+			const withoutPrereq = createCDPractice(validId, 'Name', validCategory, 'Description')
+
+			expect(hasPrerequisites(withPrereq)).toBe(true)
+			expect(hasPrerequisites(withoutPrereq)).toBe(false)
+		})
+
+		it('getRequirementCount returns count', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description', {
+				requirements: ['Req 1', 'Req 2', 'Req 3']
+			})
+
+			expect(getRequirementCount(practice)).toBe(3)
+		})
+
+		it('getBenefitCount returns count', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description', {
+				benefits: ['Benefit 1', 'Benefit 2']
+			})
+
+			expect(getBenefitCount(practice)).toBe(2)
+		})
+	})
+
+	describe('composition', () => {
+		it('pipePractice composes transformations left-to-right', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+
+			const transform = pipePractice(
+				p => withRequirement(p, 'Req 1'),
+				p => withRequirement(p, 'Req 2'),
+				p => withBenefit(p, 'Benefit 1')
 			)
 
-			practice.addBenefit('Benefit 1')
-			const benefits = practice.getBenefits()
+			const result = transform(practice)
 
-			// Modifying returned array should not affect internal state
-			benefits.push('Should not be added')
-			expect(practice.benefits).toHaveLength(1)
+			expect(result.requirements).toEqual(['Req 1', 'Req 2'])
+			expect(result.benefits).toEqual(['Benefit 1'])
+			expect(practice.requirements).toEqual([]) // Original unchanged
+		})
+
+		it('allows chaining transformations', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+
+			const result = pipePractice(
+				p => withRequirement(p, 'Must have tests'),
+				p => withBenefit(p, 'Faster feedback'),
+				p => withBenefit(p, 'Better quality')
+			)(practice)
+
+			expect(result.requirements.length).toBe(1)
+			expect(result.benefits.length).toBe(2)
+		})
+	})
+
+	describe('referential transparency', () => {
+		it('same inputs always produce same outputs', () => {
+			const practice1 = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const practice2 = createCDPractice(validId, 'Name', validCategory, 'Description')
+
+			expect(practice1).toEqual(practice2)
+
+			const updated1 = withRequirement(practice1, 'Test requirement')
+			const updated2 = withRequirement(practice2, 'Test requirement')
+
+			expect(updated1).toEqual(updated2)
 		})
 	})
 })

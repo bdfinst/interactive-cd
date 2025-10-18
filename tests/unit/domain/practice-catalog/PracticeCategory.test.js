@@ -5,22 +5,22 @@ describe('PracticeCategory', () => {
 	describe('predefined categories', () => {
 		it('has PRACTICE category', () => {
 			expect(PracticeCategory.PRACTICE).toBeDefined()
-			expect(PracticeCategory.PRACTICE).toBeInstanceOf(PracticeCategory)
+			expect(PracticeCategory.is(PracticeCategory.PRACTICE)).toBe(true)
 		})
 
 		it('has BEHAVIOR category', () => {
 			expect(PracticeCategory.BEHAVIOR).toBeDefined()
-			expect(PracticeCategory.BEHAVIOR).toBeInstanceOf(PracticeCategory)
+			expect(PracticeCategory.is(PracticeCategory.BEHAVIOR)).toBe(true)
 		})
 
 		it('has CULTURE category', () => {
 			expect(PracticeCategory.CULTURE).toBeDefined()
-			expect(PracticeCategory.CULTURE).toBeInstanceOf(PracticeCategory)
+			expect(PracticeCategory.is(PracticeCategory.CULTURE)).toBe(true)
 		})
 
 		it('has TOOLING category', () => {
 			expect(PracticeCategory.TOOLING).toBeDefined()
-			expect(PracticeCategory.TOOLING).toBeInstanceOf(PracticeCategory)
+			expect(PracticeCategory.is(PracticeCategory.TOOLING)).toBe(true)
 		})
 
 		it('each category has unique name', () => {
@@ -143,24 +143,15 @@ describe('PracticeCategory', () => {
 	})
 
 	describe('immutability', () => {
-		it('cannot create new instances directly', () => {
-			expect(() => new PracticeCategory('practice', '🔄')).toThrow()
+		it('all categories are frozen', () => {
+			expect(Object.isFrozen(PracticeCategory.PRACTICE)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.BEHAVIOR)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.CULTURE)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.TOOLING)).toBe(true)
 		})
 
-		it('cannot modify category name', () => {
-			const category = PracticeCategory.PRACTICE
-
-			expect(() => {
-				category.name = 'something-else'
-			}).toThrow()
-		})
-
-		it('cannot modify category icon', () => {
-			const category = PracticeCategory.PRACTICE
-
-			expect(() => {
-				category.icon = '❌'
-			}).toThrow()
+		it('PracticeCategory namespace is frozen', () => {
+			expect(Object.isFrozen(PracticeCategory)).toBe(true)
 		})
 	})
 })
