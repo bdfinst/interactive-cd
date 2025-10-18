@@ -30,7 +30,7 @@
 </script>
 
 <button
-  class="block w-full bg-white text-gray-800 rounded-[20px] shadow-md p-4 text-left cursor-pointer transition-all duration-200 {borderClass} hover:shadow-lg"
+  class="block w-full bg-white text-gray-800 rounded-[20px] shadow-md p-4 text-left cursor-pointer transition-all duration-200 {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
   data-testid="graph-node"
   data-practice-id={practice.id}
   data-selected={isSelected}
@@ -44,8 +44,11 @@
     <div class="flex gap-1 items-center justify-center" role="img" aria-label="Category: {categories.join(', ')}">
       {#each categories as category}
         <span
-          class="category-dot"
-          style="--dot-color: {CATEGORY_COLORS[category] || '#6b7280'}"
+          class="w-3.5 h-3.5 rounded-full flex-shrink-0"
+          class:bg-[#10b981]={category === 'behavior'}
+          class:bg-[#f59e0b]={category === 'culture'}
+          class:bg-[#8b5cf6]={category === 'tooling'}
+          class:bg-gray-500={!CATEGORY_COLORS[category]}
           title={category}
         ></span>
       {/each}
@@ -85,22 +88,12 @@
     {#if onExpand && practice.dependencyCount > 0 && !isRoot}
       <button
         on:click={handleExpand}
-        class="w-full px-3 py-2 rounded-md font-semibold text-sm border-none cursor-pointer transition-colors {isExpanded
-          ? 'bg-gray-500 text-white hover:bg-gray-600'
-          : 'bg-blue-600 text-white hover:bg-blue-700'}"
+        class="w-full px-3 py-2 rounded-md font-semibold text-sm border-none cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isExpanded
+          ? 'bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-400'
+          : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'}"
       >
         {isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
       </button>
     {/if}
   {/if}
 </button>
-
-<style>
-  .category-dot {
-    width: 0.875rem;
-    height: 0.875rem;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background-color: var(--dot-color);
-  }
-</style>

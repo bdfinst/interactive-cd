@@ -10,25 +10,14 @@
 	export let level = 0;
 </script>
 
-<div class="practice-outline" data-testid="practice-outline">
+<div class="mb-4" data-testid="practice-outline">
 	<PracticeCard {practice} {level} />
 
 	{#if practice.dependencies && practice.dependencies.length > 0}
-		<div class="dependencies ml-4 mt-2">
+		<div class="ml-4 mt-2 border-l-2 border-gray-200 pl-4">
 			{#each practice.dependencies as dependency}
 				<svelte:self practice={dependency} level={level + 1} />
 			{/each}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.practice-outline {
-		margin-bottom: 1rem;
-	}
-
-	.dependencies {
-		border-left: 2px solid #e5e7eb;
-		padding-left: 1rem;
-	}
-</style>

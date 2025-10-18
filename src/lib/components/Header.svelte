@@ -11,12 +11,12 @@
       <img
         src="/images/logo.png"
         alt="Logo"
-        class="h-[60px] sm:h-[66px] md:h-[72px] w-auto"
+        class="h-logo-sm sm:h-logo-md md:h-logo-lg w-auto"
       />
     </div>
 
     <!-- Center title -->
-    <h1 class="text-[2.1rem] sm:text-[2.4rem] md:text-[2.7rem] font-bold m-0 text-center whitespace-nowrap">
+    <h1 class="text-title-sm sm:text-title-md md:text-title-lg font-bold m-0 text-center whitespace-nowrap">
       CD Dependency Tree
     </h1>
 
@@ -28,7 +28,7 @@
           href="https://github.com/bdfinst/interactive-cd"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10"
+          class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           aria-label="View on GitHub"
           on:mouseenter={() => showGithubTooltip = true}
           on:mouseleave={() => showGithubTooltip = false}
@@ -50,7 +50,7 @@
           href="https://minimumcd.org"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center px-2 py-1 rounded-md transition-colors hover:bg-black/10"
+          class="flex items-center px-2 py-1 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           aria-label="MinimumCD.org"
           on:mouseenter={() => showMinimumCDTooltip = true}
           on:mouseleave={() => showMinimumCDTooltip = false}
@@ -74,7 +74,7 @@
           href="https://ko-fi.com/bryanfinster"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl md:text-3xl leading-none hover:bg-black/10"
+          class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl md:text-3xl leading-none hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           aria-label="Support this project"
           on:mouseenter={() => showSupportTooltip = true}
           on:mouseleave={() => showSupportTooltip = false}

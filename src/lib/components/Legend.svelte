@@ -10,21 +10,13 @@
     {#each CATEGORIES as category}
       <li class="flex items-center gap-2">
         <span
-          class="legend-dot"
-          style="--dot-color: {CATEGORY_COLORS[category]}"
+          class="w-3 h-3 rounded-full flex-shrink-0"
+          class:bg-[#10b981]={category === 'behavior'}
+          class:bg-[#f59e0b]={category === 'culture'}
+          class:bg-[#8b5cf6]={category === 'tooling'}
         ></span>
         <span class="text-sm text-gray-600">{CATEGORY_LABELS[category]}</span>
       </li>
     {/each}
   </ul>
 </div>
-
-<style>
-  .legend-dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background-color: var(--dot-color);
-  }
-</style>

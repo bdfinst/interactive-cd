@@ -210,7 +210,7 @@
 		</div>
 	{:else}
 		<!-- SVG Layer for Connections -->
-		<svg class="connections-layer" aria-hidden="true">
+		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each connections as conn}
 				<line
 					x1={conn.x1}
@@ -227,12 +227,12 @@
 		</svg>
 
 		<!-- Content Layer -->
-		<div class="content-layer">
+		<div class="relative z-10">
 			<!-- Ancestor Practices (all ancestors in the path) -->
 			{#if ancestorPractices.length > 0}
 				{#each ancestorPractices as ancestor, i}
-					<div class="ancestor-container">
-						<div bind:this={ancestorRefs[i]}>
+					<div class="flex justify-center mb-16">
+						<div bind:this={ancestorRefs[i]} class="max-w-[400px] w-full">
 							<GraphNode
 								practice={ancestor}
 								isRoot={i === 0}
@@ -247,8 +247,8 @@
 
 			<!-- Current Practice -->
 			{#if currentPractice}
-				<div class="current-container">
-					<div bind:this={currentRef}>
+				<div class="flex justify-center mb-16">
+					<div bind:this={currentRef} class="max-w-[400px] w-full">
 						<GraphNode
 							practice={currentPractice}
 							isRoot={navigationPath.length === 1}
@@ -263,7 +263,7 @@
 
 			<!-- Dependencies -->
 			{#if dependencies.length > 0}
-				<div class="dependencies-container">
+				<div class="grid gap-y-12 gap-x-8 max-w-screen-xl mx-auto grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:grid-cols-2 lg:grid-cols-3">
 					{#each dependencies as dependency, i}
 						<div bind:this={dependencyRefs[i]}>
 							<GraphNode
@@ -283,53 +283,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.connections-layer {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		z-index: 0;
-	}
-
-	.content-layer {
-		position: relative;
-		z-index: 10;
-	}
-
-	.ancestor-container,
-	.current-container {
-		display: flex;
-		justify-content: center;
-		margin-bottom: 4rem;
-	}
-
-	.ancestor-container > div,
-	.current-container > div {
-		max-width: 400px;
-		width: 100%;
-	}
-
-	.dependencies-container {
-		display: grid;
-		gap: 3rem 2rem;
-		max-width: 1280px;
-		margin: 0 auto;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-	}
-
-	@media (min-width: 768px) {
-		.dependencies-container {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.dependencies-container {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-</style>
