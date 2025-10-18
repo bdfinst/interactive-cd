@@ -4,7 +4,7 @@
    *
    * Displays a practice as a node in the dependency graph
    */
-  import { CATEGORY_COLORS } from '$lib/constants/categories.js'
+  import { CATEGORIES } from '$lib/constants/categories.js'
 
   export let practice
   export let isRoot = false
@@ -55,7 +55,7 @@
           class:bg-[#10b981]={category === 'behavior'}
           class:bg-[#f59e0b]={category === 'culture'}
           class:bg-[#8b5cf6]={category === 'tooling'}
-          class:bg-gray-500={!CATEGORY_COLORS[category]}
+          class:bg-gray-500={!CATEGORIES[category]}
           title={category}
         ></span>
       {/each}
