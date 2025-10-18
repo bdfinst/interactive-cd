@@ -5,6 +5,6 @@
 
 <Header />
 
-<div class="min-h-screen bg-gray-50 pt-20">
+<div class="min-h-screen bg-gray-800 pt-40">
 	<slot />
 </div>

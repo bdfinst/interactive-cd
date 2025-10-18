@@ -5,10 +5,10 @@
 
 <Legend />
 
-<div class="container mx-auto px-4 py-8">
+<div class="container px-4 mx-auto" style="padding-top: 6rem;">
   <div class="mb-6 text-center">
-    <p class="text-gray-600">
-      Explore the Continuous Delivery practices and their dependencies
+    <p class="text-gray-300" style="color: #d1d5db;">
+      Explore Continuous Delivery practices and their dependencies
     </p>
   </div>
 

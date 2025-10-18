@@ -17,7 +17,7 @@
 <style>
   .legend {
     position: fixed;
-    top: 5rem; /* Below the header (header is ~4rem tall) */
+    top: 8rem; /* Below the header */
     left: 1rem;
     background-color: white;
     border-radius: 12px;

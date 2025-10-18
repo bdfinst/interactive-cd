@@ -6,8 +6,14 @@
 
 <header class="header">
   <div class="header-container">
-    <!-- Left spacer for layout balance -->
-    <div class="header-left"></div>
+    <!-- Left logo -->
+    <div class="header-left">
+      <img
+        src="/images/logo.png"
+        alt="Logo"
+        class="header-logo"
+      />
+    </div>
 
     <!-- Center title -->
     <h1 class="header-title">CD Dependency Tree</h1>
@@ -80,8 +86,8 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: #1e3a8a; /* Navy blue (Tailwind blue-900) */
-    color: white;
+    background-color: #cbd5e1; /* Light blue-gray (Tailwind slate-300) */
+    color: #1f2937;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -92,16 +98,23 @@
     align-items: center;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 1rem 1.5rem;
+    padding: 1.2rem 1.5rem;
     gap: 1rem;
   }
 
   .header-left {
-    /* Empty spacer for grid balance */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .header-logo {
+    height: 50px;
+    width: auto;
   }
 
   .header-title {
-    font-size: 1.5rem;
+    font-size: 2.7rem;
     font-weight: 700;
     margin: 0;
     text-align: center;
@@ -116,7 +129,7 @@
   }
 
   .header-link {
-    color: white;
+    color: #1f2937;
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -125,26 +138,26 @@
   }
 
   .header-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .github-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #1f2937;
     padding: 0.5rem;
     border-radius: 0.375rem;
     transition: background-color 0.2s ease-in-out;
   }
 
   .github-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .github-link svg {
-    width: 24px;
-    height: 24px;
+    width: 29px;
+    height: 29px;
   }
 
   .minimumcd-logo-link {
@@ -156,11 +169,11 @@
   }
 
   .minimumcd-logo-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .minimumcd-logo {
-    height: 24px;
+    height: 29px;
     width: auto;
   }
 
@@ -168,17 +181,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #1f2937;
     text-decoration: none;
     padding: 0.5rem;
     border-radius: 0.375rem;
     transition: background-color 0.2s ease-in-out;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     line-height: 1;
   }
 
   .kofi-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .tooltip-wrapper {
@@ -213,7 +226,7 @@
 
   @media (max-width: 768px) {
     .header-title {
-      font-size: 1.25rem;
+      font-size: 2.4rem;
     }
 
     .header-link {
@@ -222,16 +235,20 @@
     }
 
     .kofi-button {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
 
     .github-link svg {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
     }
 
     .minimumcd-logo {
-      height: 20px;
+      height: 24px;
+    }
+
+    .header-logo {
+      height: 44px;
     }
 
     .custom-tooltip {
@@ -245,21 +262,29 @@
   }
 
   @media (max-width: 640px) {
+    .header-title {
+      font-size: 2.1rem;
+    }
+
     .header-link {
       display: none;
     }
 
     .kofi-button {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
 
     .github-link svg {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
     }
 
     .minimumcd-logo {
-      height: 22px;
+      height: 26px;
+    }
+
+    .header-logo {
+      height: 38px;
     }
 
     .custom-tooltip {

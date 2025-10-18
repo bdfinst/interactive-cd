@@ -205,7 +205,7 @@
 		<div class="flex items-center justify-center py-12">
 			<div class="text-center">
 				<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-				<p class="text-gray-600">Loading dependencies...</p>
+				<p class="text-gray-300">Loading dependencies...</p>
 			</div>
 		</div>
 	{:else}
@@ -278,7 +278,7 @@
 					{/each}
 				</div>
 			{:else if currentPractice && currentPractice.dependencyCount === 0}
-				<p class="text-center text-gray-500 mt-8">No dependencies (Leaf practice)</p>
+				<p class="text-center text-gray-300 mt-8">No dependencies (Leaf practice)</p>
 			{/if}
 		</div>
 	{/if}
@@ -288,8 +288,9 @@
 	.practice-graph {
 		position: relative;
 		width: 100%;
-		min-height: 800px;
+		min-height: 100vh;
 		padding: 2rem;
+		margin-top: 4rem;
 	}
 
 	.connections-layer {
