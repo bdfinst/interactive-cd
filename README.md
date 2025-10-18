@@ -18,7 +18,7 @@ This application shows how different Continuous Delivery practices relate to and
 
 ## 📁 Project Structure
 
-``` bash
+```bash
 interactive-cd/
 ├── README.md                    # This file
 ├── docker-compose.yml           # Local PostgreSQL via Docker
@@ -300,7 +300,7 @@ This project follows strict development practices documented in [CLAUDE.md](./CL
 - ✅ **Immutability** - Object.freeze() for all data structures
 - ✅ **Function Composition** - Build complex operations from simple functions
 - ✅ **No Classes** - Factory functions instead of ES6 classes
-- ✅ **Type Safety** - Type markers (_type) for runtime type checking
+- ✅ **Type Safety** - Type markers (\_type) for runtime type checking
 
 ## 📚 Practice Categories
 
@@ -356,25 +356,25 @@ See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment instructions.
 
 ## 📖 Documentation
 
-| File | Description |
-|------|-------------|
-| [CLAUDE.md](./CLAUDE.md) | Development guidelines (BDD/TDD/FP) |
-| [docs/PLAN.md](./docs/PLAN.md) | Implementation plan and roadmap |
-| [docs/DATABASE.md](./docs/DATABASE.md) | Complete database documentation |
-| [docs/DATABASE-QUICKSTART.md](./docs/DATABASE-QUICKSTART.md) | Quick reference guide |
-| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Netlify deployment steps |
-| [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md) | Data model documentation |
-| [docs/OOP-vs-FP-comparison.md](./docs/OOP-vs-FP-comparison.md) | Architecture comparison |
+| File                                                           | Description                         |
+| -------------------------------------------------------------- | ----------------------------------- |
+| [CLAUDE.md](./CLAUDE.md)                                       | Development guidelines (BDD/TDD/FP) |
+| [docs/PLAN.md](./docs/PLAN.md)                                 | Implementation plan and roadmap     |
+| [docs/DATABASE.md](./docs/DATABASE.md)                         | Complete database documentation     |
+| [docs/DATABASE-QUICKSTART.md](./docs/DATABASE-QUICKSTART.md)   | Quick reference guide               |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)                     | Netlify deployment steps            |
+| [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md)             | Data model documentation            |
+| [docs/OOP-vs-FP-comparison.md](./docs/OOP-vs-FP-comparison.md) | Architecture comparison             |
 
 ## 🔧 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm test` | Run unit tests |
-| `npm run test:e2e` | Run E2E tests |
-| `npm run lint` | Run ESLint |
+| Command            | Description              |
+| ------------------ | ------------------------ |
+| `npm run dev`      | Start development server |
+| `npm run build`    | Build for production     |
+| `npm test`         | Run unit tests           |
+| `npm run test:e2e` | Run E2E tests            |
+| `npm run lint`     | Run ESLint               |
 
 ## 🤝 Contributing
 

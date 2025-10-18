@@ -1,5 +1,7 @@
 # CD Dependency Visualization App - Implementation Plan
 
+> **⚠️ Historical Document**: This is the original planning document created before implementation. Code examples show class-based OOP approach, but the **actual implementation uses Functional Programming** (pure functions, factory functions, Object.freeze). See [OOP-vs-FP-comparison.md](./OOP-vs-FP-comparison.md) for details on the architectural decision. For current code patterns, see the actual implementation in `/src`.
+
 ## Overview
 
 Build a web application to visualize how different activities impact Continuous Delivery, showing dependencies between practices, tooling, behaviors, and culture based on MinimumCD.org.
