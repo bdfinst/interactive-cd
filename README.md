@@ -356,17 +356,17 @@ See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment instructions.
 
 ## 📖 Documentation
 
-| File                                                           | Description                           |
-| -------------------------------------------------------------- | ------------------------------------- |
-| [CLAUDE.md](./CLAUDE.md)                                       | Development guidelines (BDD/TDD/FP)   |
-| [docs/practices/](./docs/practices/)                           | **Comprehensive practices guide**     |
-| [docs/TESTING-GUIDE.md](./docs/TESTING-GUIDE.md)               | **Complete testing practices**        |
-| [docs/PLAN.md](./docs/PLAN.md)                                 | Implementation plan and roadmap       |
-| [docs/DATABASE.md](./docs/DATABASE.md)                         | Complete database documentation       |
-| [docs/DATABASE-QUICKSTART.md](./docs/DATABASE-QUICKSTART.md)   | Quick reference guide                 |
-| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)                     | Netlify deployment steps              |
-| [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md)             | Data model documentation              |
-| [docs/OOP-vs-FP-comparison.md](./docs/OOP-vs-FP-comparison.md) | Architecture comparison               |
+| File                                                           | Description                             |
+| -------------------------------------------------------------- | --------------------------------------- |
+| [CLAUDE.md](./CLAUDE.md)                                       | Development guidelines (BDD/TDD/FP)     |
+| [docs/practices/](./docs/practices/)                           | **Comprehensive practices guide**       |
+| [docs/TESTING-GUIDE.md](./docs/TESTING-GUIDE.md)               | **Complete testing practices**          |
+| [docs/PLAN.md](./docs/PLAN.md)                                 | Implementation plan and roadmap         |
+| [docs/DATABASE.md](./docs/DATABASE.md)                         | Complete database documentation         |
+| [docs/DATABASE-QUICKSTART.md](./docs/DATABASE-QUICKSTART.md)   | Quick reference guide                   |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)                     | Netlify deployment steps                |
+| [docs/DATA-STRUCTURE.md](./docs/DATA-STRUCTURE.md)             | Data model documentation                |
+| [docs/OOP-vs-FP-comparison.md](./docs/OOP-vs-FP-comparison.md) | Architecture comparison                 |
 | [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)                 | Contributor guidelines and Git workflow |
 
 ## 🔧 Available Scripts

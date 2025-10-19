@@ -14,7 +14,9 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 ## Files Created/Modified
 
 ### 1. New Migration Script
+
 **File**: `/db/deploy-migrations.sh` ✅ Created
+
 - Runs migrations automatically during build
 - Safe and idempotent (can run multiple times)
 - Gracefully handles errors
@@ -22,7 +24,9 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 - Reports what changed
 
 ### 2. Updated package.json
+
 **Changes**:
+
 ```diff
 "scripts": {
 -  "build": "vite build",
@@ -35,7 +39,9 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 **Result**: `npm run build` now runs migrations before building the app
 
 ### 3. Updated netlify.toml
+
 **Changes**:
+
 ```diff
 [build.environment]
   NODE_VERSION = "24.8.0"
@@ -46,9 +52,11 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 **Result**: Documented that migrations run automatically
 
 ### 4. Updated GitHub Actions
+
 **File**: `.github/workflows/deploy.yml`
 
 **Added Steps**:
+
 ```yaml
 - name: Install PostgreSQL client
   run: |
@@ -68,7 +76,9 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 **Result**: Migrations run in GitHub Actions before deployment
 
 ### 5. New Documentation
+
 **File**: `/docs/AUTOMATED-DEPLOYMENT.md` ✅ Created
+
 - Complete guide to automated deployment
 - Troubleshooting section
 - Best practices
@@ -79,6 +89,7 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 ## How It Works Now
 
 ### Before (Manual Process)
+
 ```
 1. Push code to GitHub
 2. Deployment happens
@@ -88,6 +99,7 @@ Database migrations now run **automatically** on every deployment to Netlify. No
 ```
 
 ### After (Fully Automated) ✅
+
 ```
 1. Push code to GitHub
    ↓
@@ -169,6 +181,7 @@ The migration script (`/db/deploy-migrations.sh`) automatically:
 ## Required Environment Variables
 
 ### GitHub Secrets (Already Set)
+
 ```
 DATABASE_URL          # Production database connection
 NETLIFY_AUTH_TOKEN    # Netlify authentication
@@ -177,6 +190,7 @@ NETLIFY_SITE_NAME     # Netlify site name
 ```
 
 ### Netlify Environment Variables (Already Set)
+
 ```
 DATABASE_URL          # Production database connection
 ```
@@ -188,6 +202,7 @@ DATABASE_URL          # Production database connection
 ## Testing the Setup
 
 ### Local Test
+
 ```bash
 # Set your local database
 export DATABASE_URL="postgresql://cduser:cdpassword@localhost:5432/interactive_cd"
@@ -202,6 +217,7 @@ npm run db:migrate
 ```
 
 ### CI Test
+
 ```bash
 # Make a small change
 echo "# Test" >> README.md
@@ -221,17 +237,20 @@ git push origin main
 ## Example Migration Deployment
 
 **1. Create Migration**
+
 ```bash
 cp db/data/002_example_new_practice.sql db/data/004_code_review.sql
 vim db/data/004_code_review.sql
 ```
 
 **2. Test Locally**
+
 ```bash
 npm run db:migrate
 ```
 
 **3. Commit and Push**
+
 ```bash
 git add db/data/004_code_review.sql
 git commit -m "feat(db): add code review practice"
@@ -240,6 +259,7 @@ git push origin main
 
 **4. Automatic Deployment**
 GitHub Actions will:
+
 - ✅ Run tests
 - ✅ Run migrations (004_code_review.sql)
 - ✅ Build app with new practice
@@ -253,6 +273,7 @@ GitHub Actions will:
 ## Safety Features
 
 ### 1. Idempotent Migrations
+
 ```sql
 -- Migrations use ON CONFLICT for safety
 INSERT INTO practices (id, name, ...) VALUES (...)
@@ -260,29 +281,36 @@ ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   ...;
 ```
+
 **Result**: Running migration twice is safe
 
 ### 2. Graceful Error Handling
+
 ```bash
 continue-on-error: true
 ```
+
 **Result**: Build continues even if migrations fail
 
 ### 3. Transaction Safety
+
 ```sql
 BEGIN;
 -- All changes here
 COMMIT;
 ```
+
 **Result**: All or nothing - no partial updates
 
 ### 4. Connection Checks
+
 ```bash
 if ! psql "$DATABASE_URL" -c "SELECT 1;" > /dev/null 2>&1; then
   echo "Skipping migrations"
   exit 0
 fi
 ```
+
 **Result**: Doesn't fail build if database unreachable
 
 ---
@@ -292,13 +320,16 @@ fi
 If a migration causes issues:
 
 **1. Revert Git Commit**
+
 ```bash
 git revert HEAD
 git push origin main
 ```
+
 **Result**: Deployment runs without the bad migration
 
 **2. Manual Rollback (If Needed)**
+
 ```bash
 export DATABASE_URL=$(netlify env:get DATABASE_URL)
 
@@ -316,18 +347,21 @@ EOF
 ## Monitoring Deployments
 
 ### GitHub Actions
+
 - Go to: `https://github.com/[user]/interactive-cd/actions`
 - Click on latest workflow run
 - Check "Run database migrations" step
 - View migration output
 
 ### Netlify Deploy Logs
+
 - Go to Netlify dashboard
 - Click on latest deployment
 - View build logs
 - Search for "DATABASE MIGRATIONS"
 
 ### Database Verification
+
 ```bash
 # Check practice count
 psql $DATABASE_URL -c "SELECT COUNT(*) FROM practices;"
@@ -372,11 +406,13 @@ Before pushing a new migration:
 ## Next Steps
 
 1. **Test the Setup**
+
    ```bash
    npm run db:migrate
    ```
 
 2. **Push Current Changes**
+
    ```bash
    git add .
    git commit -m "feat: add automated database migrations"

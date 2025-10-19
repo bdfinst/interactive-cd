@@ -29,6 +29,7 @@ Test Data Management
 ### New Practices (2)
 
 #### 1. Behavior-Driven Development (BDD)
+
 - **ID**: `behavior-driven-development`
 - **Category**: Behavior
 - **Type**: Practice
@@ -37,6 +38,7 @@ Test Data Management
 - **7 Benefits**: Shared understanding, testable criteria, living documentation, etc.
 
 #### 2. Deterministic Tests
+
 - **ID**: `deterministic-tests`
 - **Category**: Behavior
 - **Type**: Practice
@@ -60,11 +62,13 @@ Test Data Management
 ## Database Impact
 
 **Before Migration**:
+
 - Total Practices: 23
 - Total Dependencies: 41
 - Version: 1.0.0
 
 **After Migration**:
+
 - Total Practices: 25 (+2)
 - Total Dependencies: 47 (+6)
 - Version: 1.1.0
@@ -98,6 +102,7 @@ export DATABASE_URL="postgresql://..."
 ```
 
 The script will:
+
 - Detect migration 003 has not been applied
 - Execute it in a transaction
 - Show updated statistics
@@ -116,6 +121,7 @@ ORDER BY id;
 ```
 
 **Expected Output**:
+
 ```
              id              |              name              | category | type
 -----------------------------+--------------------------------+----------+----------
@@ -137,6 +143,7 @@ ORDER BY p2.name;
 ```
 
 **Expected Output**:
+
 ```
       practice       |         depends_on
 ---------------------+-----------------------------
@@ -160,6 +167,7 @@ ORDER BY p2.name;
 ```
 
 **Expected Output**:
+
 ```
          practice         |      depends_on
 --------------------------+----------------------
@@ -191,6 +199,7 @@ WHERE p1.id = 'behavior-driven-development';
 ```
 
 **Expected Output**:
+
 ```
             practice            | depends_on
 --------------------------------+----------------
@@ -204,6 +213,7 @@ WHERE p1.id = 'behavior-driven-development';
 ### For the Application
 
 The practice tree visualization will now show:
+
 - Trunk-based Development depends on Deterministic Tests
 - Deterministic Tests depends on BDD and test infrastructure
 - Complete dependency chain is visible
@@ -211,6 +221,7 @@ The practice tree visualization will now show:
 ### For Documentation
 
 The database now reflects the critical insight:
+
 > Trunk-based Development → Deterministic Tests → (Right Behavior + Test Tooling) → Testable Acceptance Criteria → BDD
 
 ### For Future Practices
@@ -300,10 +311,12 @@ psql $DATABASE_URL -c "SELECT version FROM metadata WHERE key = 'version';"
 After applying this migration, the following API endpoints will return updated data:
 
 ### `/api/practices/tree`
+
 - Will now show deterministic-tests and behavior-driven-development in the tree
 - Trunk-based-development will show deterministic-tests as a dependency
 
 ### `/api/practices/cards`
+
 - Will include 2 new practice cards
 - Total practice count will be 25
 

@@ -40,6 +40,7 @@ Deploy to Netlify
 **File**: `/db/deploy-migrations.sh`
 
 **What it does**:
+
 - ✅ Checks if DATABASE_URL is set
 - ✅ Installs PostgreSQL client if needed (Netlify environment)
 - ✅ Verifies database connection
@@ -50,6 +51,7 @@ Deploy to Netlify
 - ✅ Exits gracefully on errors (doesn't fail the build)
 
 **Safety Features**:
+
 - Migrations are **idempotent** (safe to run multiple times)
 - Uses `ON CONFLICT DO UPDATE/NOTHING` in SQL
 - Gracefully handles missing database
@@ -63,15 +65,16 @@ Deploy to Netlify
 
 ```json
 {
-  "scripts": {
-    "build": "npm run db:migrate && vite build",
-    "build:app": "vite build",
-    "db:migrate": "bash db/deploy-migrations.sh"
-  }
+	"scripts": {
+		"build": "npm run db:migrate && vite build",
+		"build:app": "vite build",
+		"db:migrate": "bash db/deploy-migrations.sh"
+	}
 }
 ```
 
 **Changes**:
+
 - ✅ `build` now runs migrations before building
 - ✅ `build:app` for app-only builds
 - ✅ `db:migrate` runs the migration script
@@ -91,6 +94,7 @@ Deploy to Netlify
 ```
 
 **Changes**:
+
 - ✅ Build command includes migrations
 - ✅ Comment explains the process
 
@@ -115,6 +119,7 @@ Deploy to Netlify
 ```
 
 **Changes**:
+
 - ✅ Installs `psql` in CI environment
 - ✅ Runs migrations with DATABASE_URL secret
 - ✅ Continues build even if migrations fail
@@ -128,20 +133,20 @@ Deploy to Netlify
 
 Set in **Site Settings → Environment Variables**:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
+| Variable       | Description                  | Example                               |
+| -------------- | ---------------------------- | ------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:port/db` |
 
 ### Required in GitHub Secrets
 
 Set in **Repository → Settings → Secrets**:
 
-| Secret | Description |
-|--------|-------------|
-| `DATABASE_URL` | Production database connection |
-| `NETLIFY_AUTH_TOKEN` | Netlify authentication token |
-| `NETLIFY_SITE_ID` | Netlify site ID |
-| `NETLIFY_SITE_NAME` | Netlify site name |
+| Secret               | Description                    |
+| -------------------- | ------------------------------ |
+| `DATABASE_URL`       | Production database connection |
+| `NETLIFY_AUTH_TOKEN` | Netlify authentication token   |
+| `NETLIFY_SITE_ID`    | Netlify site ID                |
+| `NETLIFY_SITE_NAME`  | Netlify site name              |
 
 ---
 
@@ -254,11 +259,13 @@ psql $DATABASE_URL -c "SELECT value FROM metadata WHERE key = 'version';"
 **Symptom**: Build logs show migration errors
 
 **Check**:
+
 1. Is `DATABASE_URL` set in GitHub Secrets?
 2. Is the migration SQL syntax valid?
 3. Does the migration use `ON CONFLICT` for idempotency?
 
 **Fix**:
+
 ```bash
 # Test migration locally first
 export DATABASE_URL="postgresql://..."
@@ -275,11 +282,13 @@ psql $DATABASE_URL -f db/data/00X_migration.sql
 **Symptom**: No migration output in build logs
 
 **Check**:
+
 1. Is the migration file in `db/data/` directory?
 2. Does filename match pattern `[0-9][0-9][0-9]_*.sql`?
 3. Is the file committed to git?
 
 **Fix**:
+
 ```bash
 # Verify file exists and is committed
 ls -la db/data/
@@ -299,11 +308,13 @@ git push
 **Symptom**: "Cannot connect to database" in logs
 
 **Check**:
+
 1. Is `DATABASE_URL` set in Netlify environment?
 2. Is database accessible from Netlify?
 3. Are database credentials correct?
 
 **Fix**:
+
 ```bash
 # Verify DATABASE_URL is set
 netlify env:list
@@ -327,10 +338,10 @@ If you need to run migrations manually (e.g., for testing):
 
 ```json
 {
-  "scripts": {
-    "build": "vite build",  // Remove npm run db:migrate
-    "db:migrate": "bash db/deploy-migrations.sh"
-  }
+	"scripts": {
+		"build": "vite build", // Remove npm run db:migrate
+		"db:migrate": "bash db/deploy-migrations.sh"
+	}
 }
 ```
 
@@ -345,9 +356,9 @@ export DATABASE_URL=$(netlify env:get DATABASE_URL)
 
 ```json
 {
-  "scripts": {
-    "build": "npm run db:migrate && vite build"
-  }
+	"scripts": {
+		"build": "npm run db:migrate && vite build"
+	}
 }
 ```
 
@@ -419,14 +430,14 @@ Before pushing a new migration:
 
 **When you push to main:**
 
-| Time | Action |
-|------|--------|
-| 0:00 | Push to GitHub |
+| Time | Action                |
+| ---- | --------------------- |
+| 0:00 | Push to GitHub        |
 | 0:10 | GitHub Actions starts |
-| 0:30 | Tests complete |
-| 0:40 | Migrations run |
-| 0:50 | App builds |
-| 1:00 | Deploys to Netlify |
+| 0:30 | Tests complete        |
+| 0:40 | Migrations run        |
+| 0:50 | App builds            |
+| 1:00 | Deploys to Netlify    |
 | 1:10 | ✅ Live with new data |
 
 **Total Time**: ~1-2 minutes from push to production

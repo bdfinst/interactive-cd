@@ -50,6 +50,7 @@ src/
 ```
 
 **Why co-location?**
+
 - Keeps related code together
 - Reduces cognitive overhead
 - Easier to find and modify components
@@ -61,6 +62,7 @@ src/
 Keep all components, models, and types in `$lib` with routes purely handling route logic.
 
 **Use this when:**
+
 - Building component libraries
 - Need strict separation of concerns
 - Working with complex shared domain models
@@ -105,31 +107,31 @@ Keep all components, models, and types in `$lib` with routes purely handling rou
 
 ```javascript
 // stores/counter.js
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
 export const createCounter = (initialValue = 0) => {
-  const { subscribe, update, set } = writable(initialValue);
+	const { subscribe, update, set } = writable(initialValue)
 
-  return {
-    subscribe,
-    increment: () => update(n => n + 1),
-    decrement: () => update(n => n - 1),
-    reset: () => set(initialValue),
-    add: amount => update(n => n + amount)
-  };
-};
+	return {
+		subscribe,
+		increment: () => update(n => n + 1),
+		decrement: () => update(n => n - 1),
+		reset: () => set(initialValue),
+		add: amount => update(n => n + amount)
+	}
+}
 
-export const counter = createCounter();
+export const counter = createCounter()
 ```
 
 **Usage in components:**
 
 ```svelte
 <script>
-  import { counter } from '$lib/stores/counter';
+	import { counter } from '$lib/stores/counter'
 
-  // Auto-subscribe with $ prefix
-  $: currentValue = $counter;
+	// Auto-subscribe with $ prefix
+	$: currentValue = $counter
 </script>
 
 <p>Count: {$counter}</p>
@@ -142,14 +144,14 @@ export const counter = createCounter();
 
 ```javascript
 // ❌ BAD - Server stores are shared across requests
-import { writable } from 'svelte/store';
-export const userStore = writable(null); // Shared across all users!
+import { writable } from 'svelte/store'
+export const userStore = writable(null) // Shared across all users!
 
 // ✅ GOOD - Use event.locals for request-scoped data
 export async function load({ locals }) {
-  return {
-    user: locals.user
-  };
+	return {
+		user: locals.user
+	}
 }
 ```
 
@@ -220,17 +222,18 @@ Runs only on the server:
 ```javascript
 // src/routes/blog/[slug]/+page.server.js
 export async function load({ params }) {
-  const post = await db.posts.findUnique({
-    where: { slug: params.slug }
-  });
+	const post = await db.posts.findUnique({
+		where: { slug: params.slug }
+	})
 
-  return {
-    post
-  };
+	return {
+		post
+	}
 }
 ```
 
 **Use when:**
+
 - Accessing database directly
 - Using private environment variables
 - Need server-side only code
@@ -242,16 +245,17 @@ Runs on server during SSR and browser during hydration:
 ```javascript
 // src/routes/blog/+page.js
 export async function load({ fetch }) {
-  const response = await fetch('/api/posts');
-  const posts = await response.json();
+	const response = await fetch('/api/posts')
+	const posts = await response.json()
 
-  return {
-    posts
-  };
+	return {
+		posts
+	}
 }
 ```
 
 **Use when:**
+
 - Fetching from external APIs without credentials
 - Need same code on server and client
 - Want client-side navigation without re-fetching
@@ -273,24 +277,24 @@ export async function load({ fetch }) {
 ```javascript
 // src/hooks.server.js
 export async function handle({ event, resolve }) {
-  // Runs on every request
-  const session = await getSession(event.cookies.get('sessionid'));
+	// Runs on every request
+	const session = await getSession(event.cookies.get('sessionid'))
 
-  // Make available to load functions via event.locals
-  event.locals.user = session?.user || null;
+	// Make available to load functions via event.locals
+	event.locals.user = session?.user || null
 
-  const response = await resolve(event);
-  return response;
+	const response = await resolve(event)
+	return response
 }
 
 export function handleError({ error, event }) {
-  // Log errors
-  console.error(error);
+	// Log errors
+	console.error(error)
 
-  return {
-    message: 'An error occurred',
-    code: error?.code ?? 'UNKNOWN'
-  };
+	return {
+		message: 'An error occurred',
+		code: error?.code ?? 'UNKNOWN'
+	}
 }
 ```
 
@@ -298,28 +302,28 @@ export function handleError({ error, event }) {
 
 ```javascript
 // hooks.server.js
-event.locals.user = user;
+event.locals.user = user
 
 // +page.server.js
 export async function load({ locals }) {
-  return {
-    user: locals.user
-  };
+	return {
+		user: locals.user
+	}
 }
 ```
 
 ### Route Files Cheat Sheet
 
-| File | Runs On | Purpose |
-|------|---------|---------|
-| `+page.svelte` | Server + Client | UI component |
-| `+page.js` | Server + Client | Universal load |
-| `+page.server.js` | Server only | Server load |
-| `+layout.svelte` | Server + Client | Layout UI |
-| `+layout.js` | Server + Client | Layout load |
-| `+layout.server.js` | Server only | Layout server load |
-| `+server.js` | Server only | API endpoint |
-| `+error.svelte` | Server + Client | Error boundary |
+| File                | Runs On         | Purpose            |
+| ------------------- | --------------- | ------------------ |
+| `+page.svelte`      | Server + Client | UI component       |
+| `+page.js`          | Server + Client | Universal load     |
+| `+page.server.js`   | Server only     | Server load        |
+| `+layout.svelte`    | Server + Client | Layout UI          |
+| `+layout.js`        | Server + Client | Layout load        |
+| `+layout.server.js` | Server only     | Layout server load |
+| `+server.js`        | Server only     | API endpoint       |
+| `+error.svelte`     | Server + Client | Error boundary     |
 
 ---
 
@@ -344,19 +348,19 @@ For conditionally rendered components, use dynamic imports:
 
 ```svelte
 <script>
-  let showModal = false;
+	let showModal = false
 
-  // Only load when needed
-  async function openModal() {
-    const { default: Modal } = await import('./Modal.svelte');
-    showModal = true;
-  }
+	// Only load when needed
+	async function openModal() {
+		const { default: Modal } = await import('./Modal.svelte')
+		showModal = true
+	}
 </script>
 
 {#if showModal}
-  {#await import('./Modal.svelte') then { default: Modal }}
-    <Modal />
-  {/await}
+	{#await import('./Modal.svelte') then { default: Modal }}
+		<Modal />
+	{/await}
 {/if}
 ```
 
@@ -366,32 +370,22 @@ Speed up navigation by preloading:
 
 ```svelte
 <script>
-  import { preloadData } from '$app/navigation';
+	import { preloadData } from '$app/navigation'
 </script>
 
-<a
-  href="/blog/post-1"
-  on:mouseenter={() => preloadData('/blog/post-1')}
->
-  Read article
-</a>
+<a href="/blog/post-1" on:mouseenter={() => preloadData('/blog/post-1')}> Read article </a>
 ```
 
 ### Image Optimization
 
 ```svelte
 <script>
-  // Lazy load images
-  export let src;
-  export let alt;
+	// Lazy load images
+	export let src
+	export let alt
 </script>
 
-<img
-  {src}
-  {alt}
-  loading="lazy"
-  decoding="async"
-/>
+<img {src} {alt} loading="lazy" decoding="async" />
 ```
 
 ### Bundle Size Optimization
@@ -407,10 +401,10 @@ npm run build
 
 ```javascript
 // ✅ GOOD - Named imports enable tree-shaking
-import { map, filter } from 'lodash-es';
+import { map, filter } from 'lodash-es'
 
 // ❌ BAD - Imports entire library
-import _ from 'lodash';
+import _ from 'lodash'
 ```
 
 ### Performance Checklist
@@ -464,22 +458,17 @@ Svelte is an "a11y-first framework" with compiler warnings for:
 
 ```svelte
 <script>
-  import { page } from '$app/stores';
+	import { page } from '$app/stores'
 </script>
 
 <nav>
-  <a
-    href="/home"
-    aria-current={$page.url.pathname === '/home' ? 'page' : undefined}
-  >
-    Home
-  </a>
+	<a href="/home" aria-current={$page.url.pathname === '/home' ? 'page' : undefined}> Home </a>
 </nav>
 
 <style>
-  a[aria-current='page'] {
-    font-weight: bold;
-  }
+	a[aria-current='page'] {
+		font-weight: bold;
+	}
 </style>
 ```
 
@@ -487,22 +476,17 @@ Svelte is an "a11y-first framework" with compiler warnings for:
 
 ```svelte
 <script>
-  function handleKeydown(event) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleClick();
-    }
-  }
+	function handleKeydown(event) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault()
+			handleClick()
+		}
+	}
 </script>
 
 <!-- If you use on:click, also add on:keydown -->
-<div
-  role="button"
-  tabindex="0"
-  on:click={handleClick}
-  on:keydown={handleKeydown}
->
-  Interactive element
+<div role="button" tabindex="0" on:click={handleClick} on:keydown={handleKeydown}>
+	Interactive element
 </div>
 ```
 
@@ -510,23 +494,23 @@ Svelte is an "a11y-first framework" with compiler warnings for:
 
 ```svelte
 <form>
-  <label for="email">
-    Email address
-    <input
-      id="email"
-      type="email"
-      name="email"
-      aria-required="true"
-      aria-invalid={errors.email ? 'true' : 'false'}
-      aria-describedby={errors.email ? 'email-error' : undefined}
-    />
-  </label>
+	<label for="email">
+		Email address
+		<input
+			id="email"
+			type="email"
+			name="email"
+			aria-required="true"
+			aria-invalid={errors.email ? 'true' : 'false'}
+			aria-describedby={errors.email ? 'email-error' : undefined}
+		/>
+	</label>
 
-  {#if errors.email}
-    <p id="email-error" role="alert">
-      {errors.email}
-    </p>
-  {/if}
+	{#if errors.email}
+		<p id="email-error" role="alert">
+			{errors.email}
+		</p>
+	{/if}
 </form>
 ```
 
@@ -537,15 +521,15 @@ Update `src/app.html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
-    <meta name="viewport" content="width=device-width" />
-    %sveltekit.head%
-  </head>
-  <body data-sveltekit-preload-data="hover">
-    <div style="display: contents">%sveltekit.body%</div>
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
 </html>
 ```
 
@@ -557,19 +541,19 @@ SvelteKit automatically announces page changes to screen readers using an ARIA l
 
 ```svelte
 <script>
-  import { onMount } from 'svelte';
+	import { onMount } from 'svelte'
 
-  let dialogElement;
+	let dialogElement
 
-  onMount(() => {
-    // Focus first interactive element
-    dialogElement.querySelector('button')?.focus();
-  });
+	onMount(() => {
+		// Focus first interactive element
+		dialogElement.querySelector('button')?.focus()
+	})
 </script>
 
 <dialog bind:this={dialogElement}>
-  <h2>Dialog Title</h2>
-  <button>Action</button>
+	<h2>Dialog Title</h2>
+	<button>Action</button>
 </dialog>
 ```
 
@@ -610,23 +594,23 @@ SvelteKit automatically announces page changes to screen readers using an ARIA l
 ```javascript
 // lib/utils/validators.js
 export const isValidEmail = email => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	return emailRegex.test(email)
+}
 
 // lib/utils/validators.test.js
-import { describe, it, expect } from 'vitest';
-import { isValidEmail } from './validators';
+import { describe, it, expect } from 'vitest'
+import { isValidEmail } from './validators'
 
 describe('isValidEmail', () => {
-  it('returns true for valid email', () => {
-    expect(isValidEmail('user@example.com')).toBe(true);
-  });
+	it('returns true for valid email', () => {
+		expect(isValidEmail('user@example.com')).toBe(true)
+	})
 
-  it('returns false for invalid email', () => {
-    expect(isValidEmail('invalid-email')).toBe(false);
-  });
-});
+	it('returns false for invalid email', () => {
+		expect(isValidEmail('invalid-email')).toBe(false)
+	})
+})
 ```
 
 ### Component Testing with Testing Library
@@ -641,22 +625,22 @@ describe('isValidEmail', () => {
 
 ```javascript
 // components/Counter.test.js
-import { describe, it, expect } from 'vitest';
-import { render, fireEvent } from '@testing-library/svelte';
-import Counter from './Counter.svelte';
+import { describe, it, expect } from 'vitest'
+import { render, fireEvent } from '@testing-library/svelte'
+import Counter from './Counter.svelte'
 
 describe('Counter Component', () => {
-  it('increments count when button clicked', async () => {
-    const { getByRole, getByText } = render(Counter);
+	it('increments count when button clicked', async () => {
+		const { getByRole, getByText } = render(Counter)
 
-    // ✅ GOOD - Use getByRole for accessibility
-    const incrementButton = getByRole('button', { name: /increment/i });
+		// ✅ GOOD - Use getByRole for accessibility
+		const incrementButton = getByRole('button', { name: /increment/i })
 
-    await fireEvent.click(incrementButton);
+		await fireEvent.click(incrementButton)
 
-    expect(getByText('Count: 1')).toBeInTheDocument();
-  });
-});
+		expect(getByText('Count: 1')).toBeInTheDocument()
+	})
+})
 ```
 
 ### When to Use `data-testid`
@@ -666,14 +650,14 @@ Use sparingly - only when semantic queries aren't practical:
 ```svelte
 <!-- For complex component structures -->
 <div data-testid="complex-widget">
-  <!-- Complex nested structure -->
+	<!-- Complex nested structure -->
 </div>
 ```
 
 ```javascript
 // In E2E tests (Playwright)
-const widget = page.locator('[data-testid="complex-widget"]');
-await expect(widget).toBeVisible();
+const widget = page.locator('[data-testid="complex-widget"]')
+await expect(widget).toBeVisible()
 ```
 
 ### E2E Testing with Playwright
@@ -682,23 +666,23 @@ await expect(widget).toBeVisible();
 
 ```javascript
 // tests/e2e/auth.spec.js
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('User Authentication', () => {
-  test('user can log in successfully', async ({ page }) => {
-    // Given: User is on login page
-    await page.goto('/login');
+	test('user can log in successfully', async ({ page }) => {
+		// Given: User is on login page
+		await page.goto('/login')
 
-    // When: User enters credentials and submits
-    await page.fill('[name="email"]', 'user@example.com');
-    await page.fill('[name="password"]', 'password123');
-    await page.click('button[type="submit"]');
+		// When: User enters credentials and submits
+		await page.fill('[name="email"]', 'user@example.com')
+		await page.fill('[name="password"]', 'password123')
+		await page.click('button[type="submit"]')
 
-    // Then: User is redirected to dashboard
-    await expect(page).toHaveURL('/dashboard');
-    await expect(page.locator('h1')).toContainText('Dashboard');
-  });
-});
+		// Then: User is redirected to dashboard
+		await expect(page).toHaveURL('/dashboard')
+		await expect(page.locator('h1')).toContainText('Dashboard')
+	})
+})
 ```
 
 ### Testing Best Practices
@@ -707,16 +691,16 @@ test.describe('User Authentication', () => {
 
 ```javascript
 it('updates user name', async () => {
-  // Arrange
-  const user = { id: 1, name: 'John' };
+	// Arrange
+	const user = { id: 1, name: 'John' }
 
-  // Act
-  const updated = updateUserName(user, 'Jane');
+	// Act
+	const updated = updateUserName(user, 'Jane')
 
-  // Assert
-  expect(updated.name).toBe('Jane');
-  expect(updated.id).toBe(1); // Unchanged
-});
+	// Assert
+	expect(updated.name).toBe('Jane')
+	expect(updated.id).toBe(1) // Unchanged
+})
 ```
 
 #### 2. Test Behavior, Not Implementation
@@ -724,46 +708,46 @@ it('updates user name', async () => {
 ```javascript
 // ❌ BAD - Testing implementation
 it('calls handleClick when button clicked', () => {
-  const spy = vi.spyOn(component, 'handleClick');
-  // ...
-});
+	const spy = vi.spyOn(component, 'handleClick')
+	// ...
+})
 
 // ✅ GOOD - Testing behavior
 it('increments counter when button clicked', async () => {
-  const { getByRole, getByText } = render(Counter);
-  const button = getByRole('button', { name: /increment/i });
+	const { getByRole, getByText } = render(Counter)
+	const button = getByRole('button', { name: /increment/i })
 
-  await fireEvent.click(button);
+	await fireEvent.click(button)
 
-  expect(getByText('Count: 1')).toBeInTheDocument();
-});
+	expect(getByText('Count: 1')).toBeInTheDocument()
+})
 ```
 
 #### 3. Keep Tests Isolated
 
 ```javascript
 // ❌ BAD - Tests depend on each other
-let sharedState;
+let sharedState
 
 it('creates user', () => {
-  sharedState = createUser();
-});
+	sharedState = createUser()
+})
 
 it('updates user', () => {
-  updateUser(sharedState); // Depends on previous test
-});
+	updateUser(sharedState) // Depends on previous test
+})
 
 // ✅ GOOD - Independent tests
 it('creates user', () => {
-  const user = createUser();
-  expect(user).toBeDefined();
-});
+	const user = createUser()
+	expect(user).toBeDefined()
+})
 
 it('updates user', () => {
-  const user = createUser(); // Fresh state
-  const updated = updateUser(user);
-  expect(updated).toBeDefined();
-});
+	const user = createUser() // Fresh state
+	const updated = updateUser(user)
+	expect(updated).toBeDefined()
+})
 ```
 
 #### 4. Use Test Helpers
@@ -771,59 +755,59 @@ it('updates user', () => {
 ```javascript
 // test/helpers/builders.js
 export const buildUser = (overrides = {}) => ({
-  id: crypto.randomUUID(),
-  email: 'test@example.com',
-  name: 'Test User',
-  createdAt: new Date().toISOString(),
-  ...overrides
-});
+	id: crypto.randomUUID(),
+	email: 'test@example.com',
+	name: 'Test User',
+	createdAt: new Date().toISOString(),
+	...overrides
+})
 
 // Usage
-const user = buildUser({ email: 'custom@example.com' });
+const user = buildUser({ email: 'custom@example.com' })
 ```
 
 #### 5. Mock External Dependencies
 
 ```javascript
-import { vi } from 'vitest';
+import { vi } from 'vitest'
 
 // Mock fetch
 global.fetch = vi.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: async () => ({ data: 'mock' })
-  })
-);
+	Promise.resolve({
+		ok: true,
+		json: async () => ({ data: 'mock' })
+	})
+)
 ```
 
 ### Store Testing
 
 ```javascript
 // stores/counter.test.js
-import { describe, it, expect } from 'vitest';
-import { get } from 'svelte/store';
-import { createCounter } from './counter';
+import { describe, it, expect } from 'vitest'
+import { get } from 'svelte/store'
+import { createCounter } from './counter'
 
 describe('Counter Store', () => {
-  it('initializes with default value', () => {
-    const store = createCounter();
-    expect(get(store)).toBe(0);
-  });
+	it('initializes with default value', () => {
+		const store = createCounter()
+		expect(get(store)).toBe(0)
+	})
 
-  it('increments by 1', () => {
-    const store = createCounter(5);
-    store.increment();
-    expect(get(store)).toBe(6);
-  });
+	it('increments by 1', () => {
+		const store = createCounter(5)
+		store.increment()
+		expect(get(store)).toBe(6)
+	})
 
-  it('resets to initial value', () => {
-    const store = createCounter(10);
-    store.increment();
-    store.increment();
-    store.reset();
-    expect(get(store)).toBe(10);
-  });
-});
+	it('resets to initial value', () => {
+		const store = createCounter(10)
+		store.increment()
+		store.increment()
+		store.reset()
+		expect(get(store)).toBe(10)
+	})
+})
 ```
 
 ### Testing Complex Components
@@ -832,17 +816,17 @@ For components with two-way bindings, context, or snippets:
 
 ```javascript
 // Create wrapper component for testing
-import { render } from '@testing-library/svelte';
-import ComplexComponent from './ComplexComponent.svelte';
+import { render } from '@testing-library/svelte'
+import ComplexComponent from './ComplexComponent.svelte'
 
 const TestWrapper = {
-  Component: ComplexComponent,
-  props: {
-    // Test-specific props
-  }
-};
+	Component: ComplexComponent,
+	props: {
+		// Test-specific props
+	}
+}
 
-const { container } = render(TestWrapper);
+const { container } = render(TestWrapper)
 ```
 
 ### Mocking in E2E Tests
@@ -851,16 +835,16 @@ Use MSW (Mock Service Worker) for API mocking:
 
 ```javascript
 // tests/mocks/handlers.js
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw'
 
 export const handlers = [
-  http.get('/api/users', () => {
-    return HttpResponse.json([
-      { id: 1, name: 'John' },
-      { id: 2, name: 'Jane' }
-    ]);
-  })
-];
+	http.get('/api/users', () => {
+		return HttpResponse.json([
+			{ id: 1, name: 'John' },
+			{ id: 2, name: 'Jane' }
+		])
+	})
+]
 ```
 
 ### Testing Checklist
@@ -887,39 +871,40 @@ Every page should have:
 ```svelte
 <!-- src/routes/+page.svelte -->
 <svelte:head>
-  <title>Page Title - Site Name</title>
-  <meta name="description" content="Clear, concise page description" />
-  <link rel="canonical" href="https://example.com/page" />
+	<title>Page Title - Site Name</title>
+	<meta name="description" content="Clear, concise page description" />
+	<link rel="canonical" href="https://example.com/page" />
 </svelte:head>
 ```
 
 ### Open Graph Tags
 
 **Recommended image sizes:**
+
 - Facebook/LinkedIn: 1200px × 627px
 - WhatsApp/Signal: 400px × 400px (square)
 - Twitter: 800px × 418px
 
 ```svelte
 <svelte:head>
-  <!-- Essential OG tags -->
-  <meta property="og:title" content="Page Title" />
-  <meta property="og:description" content="Page description" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://example.com/page" />
-  <meta property="og:locale" content="en_US" />
+	<!-- Essential OG tags -->
+	<meta property="og:title" content="Page Title" />
+	<meta property="og:description" content="Page description" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://example.com/page" />
+	<meta property="og:locale" content="en_US" />
 
-  <!-- Multiple images for different platforms -->
-  <meta property="og:image" content="https://example.com/og-image-1200x627.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="627" />
-  <meta property="og:image" content="https://example.com/og-image-400x400.jpg" />
-  <meta property="og:image:width" content="400" />
-  <meta property="og:image:height" content="400" />
+	<!-- Multiple images for different platforms -->
+	<meta property="og:image" content="https://example.com/og-image-1200x627.jpg" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="627" />
+	<meta property="og:image" content="https://example.com/og-image-400x400.jpg" />
+	<meta property="og:image:width" content="400" />
+	<meta property="og:image:height" content="400" />
 
-  <!-- Twitter Card (falls back to OG tags) -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://example.com/twitter-800x418.jpg" />
+	<!-- Twitter Card (falls back to OG tags) -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="https://example.com/twitter-800x418.jpg" />
 </svelte:head>
 ```
 
@@ -928,33 +913,33 @@ Every page should have:
 ```javascript
 // src/routes/blog/[slug]/+page.server.js
 export async function load({ params }) {
-  const post = await getPost(params.slug);
+	const post = await getPost(params.slug)
 
-  return {
-    post,
-    meta: {
-      title: post.title,
-      description: post.excerpt,
-      image: post.coverImage,
-      url: `https://example.com/blog/${params.slug}`
-    }
-  };
+	return {
+		post,
+		meta: {
+			title: post.title,
+			description: post.excerpt,
+			image: post.coverImage,
+			url: `https://example.com/blog/${params.slug}`
+		}
+	}
 }
 ```
 
 ```svelte
 <!-- src/routes/blog/[slug]/+page.svelte -->
 <script>
-  export let data;
+	export let data
 </script>
 
 <svelte:head>
-  <title>{data.meta.title}</title>
-  <meta name="description" content={data.meta.description} />
-  <meta property="og:title" content={data.meta.title} />
-  <meta property="og:description" content={data.meta.description} />
-  <meta property="og:image" content={data.meta.image} />
-  <meta property="og:url" content={data.meta.url} />
+	<title>{data.meta.title}</title>
+	<meta name="description" content={data.meta.description} />
+	<meta property="og:title" content={data.meta.title} />
+	<meta property="og:description" content={data.meta.description} />
+	<meta property="og:image" content={data.meta.image} />
+	<meta property="og:url" content={data.meta.url} />
 </svelte:head>
 ```
 
@@ -1001,7 +986,7 @@ export async function load({ params }) {
 
 ```svelte
 <svelte:head>
-  {@html `
+	{@html `
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -1048,14 +1033,14 @@ Consider using established packages:
 ```javascript
 // ❌ BAD - Server-side stores are shared across requests
 // src/lib/stores/user.js
-import { writable } from 'svelte/store';
-export const currentUser = writable(null);
+import { writable } from 'svelte/store'
+export const currentUser = writable(null)
 
 // ✅ GOOD - Use event.locals for request-scoped data
 // src/hooks.server.js
 export async function handle({ event, resolve }) {
-  event.locals.user = await getUser(event.cookies);
-  return resolve(event);
+	event.locals.user = await getUser(event.cookies)
+	return resolve(event)
 }
 ```
 
@@ -1099,19 +1084,19 @@ export const actions = {
 ```javascript
 // ❌ BAD - Catching thrown redirects
 export async function load() {
-  try {
-    // Some logic
-    throw redirect(303, '/login');
-  } catch (error) {
-    // This catches the redirect!
-    console.error(error);
-  }
+	try {
+		// Some logic
+		throw redirect(303, '/login')
+	} catch (error) {
+		// This catches the redirect!
+		console.error(error)
+	}
 }
 
 // ✅ GOOD - Let redirects propagate
 export async function load() {
-  // Some logic
-  throw redirect(303, '/login'); // Not caught
+	// Some logic
+	throw redirect(303, '/login') // Not caught
 }
 ```
 
@@ -1167,12 +1152,12 @@ export async function load() {
 ```svelte
 <!-- ❌ BAD - No action attribute for named actions -->
 <form method="POST">
-  <button>Submit</button>
+	<button>Submit</button>
 </form>
 
 <!-- ✅ GOOD - Include action for named handlers -->
 <form method="POST" action="?/register">
-  <button>Register</button>
+	<button>Register</button>
 </form>
 ```
 
@@ -1181,23 +1166,23 @@ export async function load() {
 ```javascript
 // ❌ BAD - Testing edge cases with slow E2E tests
 test('validates 20 different email formats', async ({ page }) => {
-  // Slow and fragile
-});
+	// Slow and fragile
+})
 
 // ✅ GOOD - Use unit tests for edge cases
 describe('email validation', () => {
-  const testCases = [
-    'user@example.com',
-    'user+tag@example.com',
-    // ... 18 more cases
-  ];
+	const testCases = [
+		'user@example.com',
+		'user+tag@example.com'
+		// ... 18 more cases
+	]
 
-  testCases.forEach(email => {
-    it(`validates ${email}`, () => {
-      expect(isValidEmail(email)).toBe(true);
-    });
-  });
-});
+	testCases.forEach(email => {
+		it(`validates ${email}`, () => {
+			expect(isValidEmail(email)).toBe(true)
+		})
+	})
+})
 ```
 
 ### 8. Not Handling Component Reuse
@@ -1224,16 +1209,16 @@ describe('email validation', () => {
 ```javascript
 // ❌ BAD - Importing server code in client
 // +page.svelte
-import { db } from '$lib/server/database'; // Error!
+import { db } from '$lib/server/database' // Error!
 
 // ✅ GOOD - Use load functions
 // +page.server.js
-import { db } from '$lib/server/database';
+import { db } from '$lib/server/database'
 
 export async function load() {
-  return {
-    users: await db.users.findMany()
-  };
+	return {
+		users: await db.users.findMany()
+	}
 }
 ```
 
@@ -1258,20 +1243,20 @@ Functions with same input → same output, no side effects:
 
 ```javascript
 // ✅ GOOD - Pure function
-export const calculateTotal = (items) => {
-  return items.reduce((sum, item) => sum + item.price, 0);
-};
+export const calculateTotal = items => {
+	return items.reduce((sum, item) => sum + item.price, 0)
+}
 
 // ✅ GOOD - Pure transformation
 export const addItem = (cart, item) => {
-  return [...cart, { ...item, id: crypto.randomUUID() }];
-};
+	return [...cart, { ...item, id: crypto.randomUUID() }]
+}
 
 // ❌ BAD - Mutates input
 export const addItemMutating = (cart, item) => {
-  cart.push(item); // Mutation!
-  return cart;
-};
+	cart.push(item) // Mutation!
+	return cart
+}
 ```
 
 ### Immutability
@@ -1280,21 +1265,19 @@ Always create new data structures:
 
 ```javascript
 // Array operations
-const users = [{ id: 1, name: 'John' }];
+const users = [{ id: 1, name: 'John' }]
 
 // ✅ GOOD - Immutable operations
-const withNewUser = [...users, { id: 2, name: 'Jane' }];
-const withoutFirst = users.filter(u => u.id !== 1);
-const updated = users.map(u =>
-  u.id === 1 ? { ...u, name: 'Johnny' } : u
-);
+const withNewUser = [...users, { id: 2, name: 'Jane' }]
+const withoutFirst = users.filter(u => u.id !== 1)
+const updated = users.map(u => (u.id === 1 ? { ...u, name: 'Johnny' } : u))
 
 // Object operations
-const user = { id: 1, name: 'John', age: 30 };
+const user = { id: 1, name: 'John', age: 30 }
 
 // ✅ GOOD - Immutable update
-const olderUser = { ...user, age: 31 };
-const withEmail = { ...user, email: 'john@example.com' };
+const olderUser = { ...user, age: 31 }
+const withEmail = { ...user, email: 'john@example.com' }
 ```
 
 ### Function Composition
@@ -1303,25 +1286,25 @@ Build complex operations from simple functions:
 
 ```javascript
 // utils/compose.js
-export const compose = (...fns) => x =>
-  fns.reduceRight((acc, fn) => fn(acc), x);
+export const compose =
+	(...fns) =>
+	x =>
+		fns.reduceRight((acc, fn) => fn(acc), x)
 
-export const pipe = (...fns) => x =>
-  fns.reduce((acc, fn) => fn(acc), x);
+export const pipe =
+	(...fns) =>
+	x =>
+		fns.reduce((acc, fn) => fn(acc), x)
 
 // utils/transformers.js
-export const trim = str => str.trim();
-export const toLowerCase = str => str.toLowerCase();
-export const removeSpaces = str => str.replace(/\s+/g, '');
+export const trim = str => str.trim()
+export const toLowerCase = str => str.toLowerCase()
+export const removeSpaces = str => str.replace(/\s+/g, '')
 
-export const normalizeEmail = pipe(
-  trim,
-  toLowerCase,
-  removeSpaces
-);
+export const normalizeEmail = pipe(trim, toLowerCase, removeSpaces)
 
 // Usage
-const email = normalizeEmail('  User@Example.com  ');
+const email = normalizeEmail('  User@Example.com  ')
 // Result: 'user@example.com'
 ```
 
@@ -1331,22 +1314,18 @@ Functions that take or return functions:
 
 ```javascript
 // utils/array.js
-export const map = fn => array => array.map(fn);
-export const filter = predicate => array => array.filter(predicate);
-export const reduce = (fn, initial) => array => array.reduce(fn, initial);
+export const map = fn => array => array.map(fn)
+export const filter = predicate => array => array.filter(predicate)
+export const reduce = (fn, initial) => array => array.reduce(fn, initial)
 
 // Usage
-const double = x => x * 2;
-const isEven = x => x % 2 === 0;
-const sum = (acc, x) => acc + x;
+const double = x => x * 2
+const isEven = x => x % 2 === 0
+const sum = (acc, x) => acc + x
 
-const processNumbers = pipe(
-  filter(isEven),
-  map(double),
-  reduce(sum, 0)
-);
+const processNumbers = pipe(filter(isEven), map(double), reduce(sum, 0))
 
-const result = processNumbers([1, 2, 3, 4, 5]);
+const result = processNumbers([1, 2, 3, 4, 5])
 // Result: 12 (evens: [2, 4], doubled: [4, 8], sum: 12)
 ```
 
@@ -1354,30 +1333,24 @@ const result = processNumbers([1, 2, 3, 4, 5]);
 
 ```svelte
 <script>
-  import { pipe } from '$lib/utils/compose';
+	import { pipe } from '$lib/utils/compose'
 
-  let items = [];
-  let searchTerm = '';
-  let sortBy = 'name';
+	let items = []
+	let searchTerm = ''
+	let sortBy = 'name'
 
-  // Pure functions
-  const filterBySearch = term => items =>
-    items.filter(item =>
-      item.name.toLowerCase().includes(term.toLowerCase())
-    );
+	// Pure functions
+	const filterBySearch = term => items =>
+		items.filter(item => item.name.toLowerCase().includes(term.toLowerCase()))
 
-  const sortByField = field => items =>
-    [...items].sort((a, b) => a[field].localeCompare(b[field]));
+	const sortByField = field => items => [...items].sort((a, b) => a[field].localeCompare(b[field]))
 
-  // Reactive declaration using composition
-  $: processedItems = pipe(
-    filterBySearch(searchTerm),
-    sortByField(sortBy)
-  )(items);
+	// Reactive declaration using composition
+	$: processedItems = pipe(filterBySearch(searchTerm), sortByField(sortBy))(items)
 </script>
 
 {#each processedItems as item}
-  <div>{item.name}</div>
+	<div>{item.name}</div>
 {/each}
 ```
 
@@ -1385,49 +1358,42 @@ const result = processNumbers([1, 2, 3, 4, 5]);
 
 ```svelte
 <script>
-  import { validateLoginForm } from '$lib/utils/validators';
+	import { validateLoginForm } from '$lib/utils/validators'
 
-  let formData = { email: '', password: '' };
-  let errors = {};
+	let formData = { email: '', password: '' }
+	let errors = {}
 
-  // Higher-order function returning handler
-  const handleInputChange = field => event => {
-    formData = { ...formData, [field]: event.target.value };
-  };
+	// Higher-order function returning handler
+	const handleInputChange = field => event => {
+		formData = { ...formData, [field]: event.target.value }
+	}
 
-  const handleSubmit = onSuccess => async event => {
-    event.preventDefault();
+	const handleSubmit = onSuccess => async event => {
+		event.preventDefault()
 
-    const validation = validateLoginForm(formData);
+		const validation = validateLoginForm(formData)
 
-    if (!validation.isValid) {
-      errors = validation.errors;
-      return;
-    }
+		if (!validation.isValid) {
+			errors = validation.errors
+			return
+		}
 
-    try {
-      await onSuccess(formData);
-    } catch (error) {
-      errors = { form: error.message };
-    }
-  };
+		try {
+			await onSuccess(formData)
+		} catch (error) {
+			errors = { form: error.message }
+		}
+	}
 
-  async function loginUser(credentials) {
-    // API call
-  }
+	async function loginUser(credentials) {
+		// API call
+	}
 </script>
 
 <form on:submit={handleSubmit(loginUser)}>
-  <input
-    value={formData.email}
-    on:input={handleInputChange('email')}
-  />
-  <input
-    type="password"
-    value={formData.password}
-    on:input={handleInputChange('password')}
-  />
-  <button type="submit">Login</button>
+	<input value={formData.email} on:input={handleInputChange('email')} />
+	<input type="password" value={formData.password} on:input={handleInputChange('password')} />
+	<button type="submit">Login</button>
 </form>
 ```
 
@@ -1435,66 +1401,52 @@ const result = processNumbers([1, 2, 3, 4, 5]);
 
 ```javascript
 // stores/shoppingCart.js
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
 export const createShoppingCart = () => {
-  const { subscribe, update } = writable([]);
+	const { subscribe, update } = writable([])
 
-  // All operations are pure transformations
-  const addItem = item =>
-    update(items => [...items, { ...item, id: crypto.randomUUID() }]);
+	// All operations are pure transformations
+	const addItem = item => update(items => [...items, { ...item, id: crypto.randomUUID() }])
 
-  const removeItem = itemId =>
-    update(items => items.filter(item => item.id !== itemId));
+	const removeItem = itemId => update(items => items.filter(item => item.id !== itemId))
 
-  const updateQuantity = (itemId, quantity) =>
-    update(items =>
-      items.map(item =>
-        item.id === itemId ? { ...item, quantity } : item
-      )
-    );
+	const updateQuantity = (itemId, quantity) =>
+		update(items => items.map(item => (item.id === itemId ? { ...item, quantity } : item)))
 
-  const clear = () => update(() => []);
+	const clear = () => update(() => [])
 
-  return {
-    subscribe,
-    addItem,
-    removeItem,
-    updateQuantity,
-    clear
-  };
-};
+	return {
+		subscribe,
+		addItem,
+		removeItem,
+		updateQuantity,
+		clear
+	}
+}
 
-export const cart = createShoppingCart();
+export const cart = createShoppingCart()
 ```
 
 ### Derived Stores as Computed Values
 
 ```javascript
 // stores/cart.js
-import { derived } from 'svelte/store';
-import { cart } from './shoppingCart';
+import { derived } from 'svelte/store'
+import { cart } from './shoppingCart'
 
 // Pure computation
-export const cartTotal = derived(
-  cart,
-  $cart => $cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-);
+export const cartTotal = derived(cart, $cart =>
+	$cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+)
 
-export const cartItemCount = derived(
-  cart,
-  $cart => $cart.reduce((count, item) => count + item.quantity, 0)
-);
+export const cartItemCount = derived(cart, $cart =>
+	$cart.reduce((count, item) => count + item.quantity, 0)
+)
 
-export const cartTax = derived(
-  cartTotal,
-  $total => $total * 0.08
-);
+export const cartTax = derived(cartTotal, $total => $total * 0.08)
 
-export const cartGrandTotal = derived(
-  [cartTotal, cartTax],
-  ([$total, $tax]) => $total + $tax
-);
+export const cartGrandTotal = derived([cartTotal, cartTax], ([$total, $tax]) => $total + $tax)
 ```
 
 ### Functional Programming Principles Summary
@@ -1507,6 +1459,7 @@ export const cartGrandTotal = derived(
 6. **Referential Transparency** - Can replace function call with result
 
 **Benefits:**
+
 - Easier to test
 - Easier to reason about
 - Easier to refactor
@@ -1580,16 +1533,19 @@ export const cartGrandTotal = derived(
 ## Additional Resources
 
 ### Official Documentation
+
 - [SvelteKit Docs](https://svelte.dev/docs/kit)
 - [Svelte Tutorial](https://svelte.dev/tutorial)
 - [Svelte Examples](https://svelte.dev/examples)
 
 ### Testing
+
 - [Vitest Documentation](https://vitest.dev)
 - [Testing Library - Svelte](https://testing-library.com/docs/svelte-testing-library/intro)
 - [Playwright Documentation](https://playwright.dev)
 
 ### Community
+
 - [Svelte Discord](https://svelte.dev/chat)
 - [Svelte Reddit](https://reddit.com/r/sveltejs)
 - [Awesome Svelte](https://github.com/TheComputerM/awesome-svelte)

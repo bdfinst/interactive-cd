@@ -29,6 +29,7 @@ Behavior-Driven Development (BDD)
 ### Trunk-based Development Requires Deterministic Tests
 
 Without deterministic (non-flaky) tests:
+
 - Developers cannot trust failing tests
 - Teams waste time investigating false failures
 - CI/CD pipelines become unreliable
@@ -38,6 +39,7 @@ Without deterministic (non-flaky) tests:
 ### Deterministic Tests Require Two Foundations
 
 #### 1. Right Behavior & Patterns
+
 - Isolate test state (no shared state between tests)
 - Clean up test data (beforeEach/afterEach)
 - Use explicit, predictable test data
@@ -45,6 +47,7 @@ Without deterministic (non-flaky) tests:
 - Control all inputs (time, randomness)
 
 #### 2. Test Tooling & Infrastructure
+
 - Mocking libraries (Vitest `vi.fn()`, `vi.mock()`)
 - Fake timers (Vitest `vi.useFakeTimers()`)
 - Test data builders (`buildUser`, `buildPractice`)
@@ -54,15 +57,18 @@ Without deterministic (non-flaky) tests:
 ### Testable Acceptance Criteria → Deterministic Tests
 
 **Bad (Non-Testable) Criteria:**
+
 ```gherkin
 Scenario: User logs in
   Given a user
   When they log in
   Then they should see their dashboard
 ```
-*Problem*: Vague, no specific data, timing unclear → leads to flaky tests
+
+_Problem_: Vague, no specific data, timing unclear → leads to flaky tests
 
 **Good (Testable) Criteria:**
+
 ```gherkin
 Scenario: Successful login redirects to dashboard
   Given a user with email "alice@example.com" and password "password123"
@@ -73,7 +79,8 @@ Scenario: Successful login redirects to dashboard
   Then the user should be redirected to "/dashboard"
   And the user should see "Welcome, Alice"
 ```
-*Solution*: Specific data, explicit state, clear actions → leads to deterministic tests
+
+_Solution_: Specific data, explicit state, clear actions → leads to deterministic tests
 
 ### BDD Provides Testable Acceptance Criteria
 
@@ -96,6 +103,7 @@ Scenario: Successful login redirects to dashboard
 **File**: `/docs/practices/02-testing/deterministic-tests.md`
 
 **Contents**:
+
 - Complete guide to writing deterministic tests
 - 6 common causes of flakiness (time, randomness, APIs, database, race conditions, floating-point)
 - 5 principles for ensuring determinism
@@ -106,6 +114,7 @@ Scenario: Successful login redirects to dashboard
 - Checklist for verifying test determinism
 
 **Key Sections**:
+
 - What Makes Tests Non-Deterministic
 - Ensuring Deterministic Tests (5 principles)
 - The Role of BDD in Deterministic Tests
@@ -120,6 +129,7 @@ Scenario: Successful login redirects to dashboard
 **File**: `/CLAUDE.md`
 
 **Updates**:
+
 - Added "Critical Dependency: Deterministic Tests" section in Philosophy
 - Visual dependency chain diagram
 - Explanation of why this matters
@@ -134,6 +144,7 @@ Scenario: Successful login redirects to dashboard
 **File**: `/docs/practices/README.md`
 
 **Updates**:
+
 - Highlighted deterministic tests as "Foundation of trunk-based development"
 - Added critical dependency chain diagram
 - Linked to detailed practice document
@@ -148,12 +159,14 @@ Scenario: Successful login redirects to dashboard
 ### For Developers
 
 **Before** (without this guidance):
+
 - Flaky tests accepted as "just how tests are"
 - Time wasted investigating false failures
 - Trunk-based development difficult due to unreliable tests
 - CI/CD pipelines frequently "red" with no real issues
 
 **After** (with this guidance):
+
 - Clear understanding of what causes flakiness
 - Specific patterns to avoid non-determinism
 - Tooling and techniques to ensure determinism
@@ -162,6 +175,7 @@ Scenario: Successful login redirects to dashboard
 ### For the Project
 
 **Enables**:
+
 - ✅ Reliable trunk-based development
 - ✅ Frequent integration to main branch
 - ✅ Trustworthy CI/CD pipeline
@@ -169,6 +183,7 @@ Scenario: Successful login redirects to dashboard
 - ✅ Reduced investigation time
 
 **Prevents**:
+
 - ❌ Flaky tests that erode trust
 - ❌ False failures blocking development
 - ❌ Wasted time on investigation
@@ -182,17 +197,20 @@ Scenario: Successful login redirects to dashboard
 This aligns perfectly with the project's BDD → ATDD → TDD approach:
 
 ### BDD Phase (Feature Definition)
+
 - Write Gherkin with **specific, testable acceptance criteria**
 - Avoid vague terms that lead to non-deterministic tests
 - Include explicit data values in scenarios
 
 ### ATDD Phase (Acceptance Tests)
+
 - Convert Gherkin to E2E tests with **controlled, predictable test data**
 - Setup deterministic initial state
 - Use explicit selectors and assertions
 - Clean up test data after each test
 
 ### TDD Phase (Unit/Integration Tests)
+
 - Write unit tests with **test data builders** (predictable data)
 - Mock external dependencies (time, APIs, randomness)
 - Ensure test isolation (no shared state)
@@ -203,6 +221,7 @@ This aligns perfectly with the project's BDD → ATDD → TDD approach:
 ## Key Practices from the Document
 
 ### 1. Control All Inputs
+
 ```javascript
 // ❌ Non-deterministic (depends on current time)
 const token = createToken()
@@ -213,38 +232,42 @@ const token = createToken({ now })
 ```
 
 ### 2. Use Test Data Builders
+
 ```javascript
 // tests/utils/builders.js
 export const buildUser = (overrides = {}) => ({
-  id: 'user-123',
-  name: 'Test User',
-  email: 'test@example.com',
-  createdAt: new Date('2025-10-18T00:00:00Z'),
-  ...overrides
+	id: 'user-123',
+	name: 'Test User',
+	email: 'test@example.com',
+	createdAt: new Date('2025-10-18T00:00:00Z'),
+	...overrides
 })
 ```
 
 ### 3. Mock External Dependencies
+
 ```javascript
 // ✅ Mock API calls
 global.fetch = vi.fn().mockResolvedValueOnce({
-  ok: true,
-  json: async () => ({ id: '123', name: 'Alice' })
+	ok: true,
+	json: async () => ({ id: '123', name: 'Alice' })
 })
 ```
 
 ### 4. Isolate Test State
+
 ```javascript
 beforeEach(async () => {
-  await db.query('DELETE FROM users')
+	await db.query('DELETE FROM users')
 })
 ```
 
 ### 5. Use Fake Timers
+
 ```javascript
 beforeEach(() => {
-  vi.useFakeTimers()
-  vi.setSystemTime(new Date('2025-10-18T12:00:00Z'))
+	vi.useFakeTimers()
+	vi.setSystemTime(new Date('2025-10-18T12:00:00Z'))
 })
 ```
 
@@ -266,6 +289,7 @@ Every test must satisfy these criteria:
 - [ ] Passes 10+ times in a row
 
 **Verification command**:
+
 ```bash
 for i in {1..10}; do npm test || break; done
 ```
@@ -284,6 +308,7 @@ for i in {1..10}; do npm test || break; done
 ### Integration with Expert Agents
 
 **Test Quality Reviewer Agent** should check for:
+
 - Non-deterministic patterns (time, randomness, external dependencies)
 - Missing test data builders
 - Lack of test isolation
@@ -294,60 +319,63 @@ for i in {1..10}; do npm test || break; done
 ## Real-World Examples from This Project
 
 ### Example 1: GraphNode Component Test
+
 ```javascript
 // tests/unit/components/GraphNode.test.js
 describe('GraphNode', () => {
-  // ✅ Deterministic - uses specific test data
-  const practice = buildPractice({
-    id: 'test-practice',
-    name: 'Test Practice',
-    category: 'tooling',
-    description: 'A test practice',
-    requirements: ['Requirement 1'],
-    benefits: ['Benefit 1']
-  })
+	// ✅ Deterministic - uses specific test data
+	const practice = buildPractice({
+		id: 'test-practice',
+		name: 'Test Practice',
+		category: 'tooling',
+		description: 'A test practice',
+		requirements: ['Requirement 1'],
+		benefits: ['Benefit 1']
+	})
 
-  test('renders practice name', () => {
-    const { getByText } = render(GraphNode, { props: { practice } })
-    expect(getByText('Test Practice')).toBeInTheDocument()
-  })
+	test('renders practice name', () => {
+		const { getByText } = render(GraphNode, { props: { practice } })
+		expect(getByText('Test Practice')).toBeInTheDocument()
+	})
 })
 ```
 
 ### Example 2: PracticeId Value Object Test
+
 ```javascript
 // tests/unit/domain/practice-catalog/PracticeId.test.js
 describe('PracticeId.fromString', () => {
-  // ✅ Deterministic - specific inputs, no external dependencies
-  test('creates PracticeId from valid string', () => {
-    const result = PracticeId.fromString('continuous-delivery')
+	// ✅ Deterministic - specific inputs, no external dependencies
+	test('creates PracticeId from valid string', () => {
+		const result = PracticeId.fromString('continuous-delivery')
 
-    expect(result.isSuccess).toBe(true)
-    expect(result.value.getValue()).toBe('continuous-delivery')
-  })
+		expect(result.isSuccess).toBe(true)
+		expect(result.value.getValue()).toBe('continuous-delivery')
+	})
 })
 ```
 
 ### Example 3: Practice Repository (Would Need Improvement)
+
 ```javascript
 // If this existed, it should be:
 beforeEach(async () => {
-  await db.query('DELETE FROM practices')
-  await db.query('DELETE FROM practice_dependencies')
+	await db.query('DELETE FROM practices')
+	await db.query('DELETE FROM practice_dependencies')
 })
 
 test('fetches practice tree', async () => {
-  // Setup deterministic test data
-  const practice = await db.insert('practices', {
-    id: 'test-practice',
-    name: 'Test Practice',
-    category: 'tooling',
-    // ... explicit values
-  })
+	// Setup deterministic test data
+	const practice = await db.insert('practices', {
+		id: 'test-practice',
+		name: 'Test Practice',
+		category: 'tooling'
+		// ... explicit values
+	})
 
-  const tree = await repository.getPracticeTree('test-practice')
+	const tree = await repository.getPracticeTree('test-practice')
 
-  expect(tree.practice.id).toBe('test-practice')
+	expect(tree.practice.id).toBe('test-practice')
 })
 ```
 
@@ -356,18 +384,21 @@ test('fetches practice tree', async () => {
 ## Next Steps
 
 ### Immediate
+
 1. ✅ Document created and integrated
 2. ✅ CLAUDE.md updated with dependency chain
 3. ✅ Practices index updated
 4. Review existing tests for non-deterministic patterns
 
 ### Short Term (Next Week)
+
 1. Run test suite 10 times to detect flakiness
 2. Refactor any non-deterministic tests found
 3. Add test data builders for database fixtures
 4. Update Test Quality Reviewer agent to check for determinism
 
 ### Long Term (Next Month)
+
 1. Add determinism checks to pre-commit hooks
 2. Create test template with deterministic patterns
 3. Train team on deterministic testing principles
@@ -387,9 +418,11 @@ test('fetches practice tree', async () => {
 ## Summary
 
 **Critical Insight Captured:**
+
 > Trunk-based Development has a dependency on Deterministic Tests. Deterministic Tests require the right behavior and tooling. Deterministic Tests require testable acceptance criteria. That depends on Behavior-Driven Development.
 
 **Documentation Created:**
+
 - ✅ Comprehensive practice document (deterministic-tests.md)
 - ✅ Integration with CLAUDE.md (main development guide)
 - ✅ Integration with practices index

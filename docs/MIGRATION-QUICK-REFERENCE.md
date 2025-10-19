@@ -70,15 +70,15 @@ COMMIT;
 
 ## Field Reference
 
-| Field | Type | Options | Example |
-|-------|------|---------|---------|
-| `id` | string | kebab-case, unique | `'secret-management'` |
-| `name` | string | Proper case | `'Secret Management'` |
-| `type` | enum | `'root'`, `'practice'` | `'practice'` |
-| `category` | enum | `'practice'`, `'tooling'`, `'behavior'`, `'culture'` | `'tooling'` |
-| `description` | text | Clear, concise | `'Securely store...'` |
-| `requirements` | jsonb | Array of strings | `["Req 1", "Req 2"]` |
-| `benefits` | jsonb | Array of strings | `["Benefit 1", "Benefit 2"]` |
+| Field          | Type   | Options                                              | Example                      |
+| -------------- | ------ | ---------------------------------------------------- | ---------------------------- |
+| `id`           | string | kebab-case, unique                                   | `'secret-management'`        |
+| `name`         | string | Proper case                                          | `'Secret Management'`        |
+| `type`         | enum   | `'root'`, `'practice'`                               | `'practice'`                 |
+| `category`     | enum   | `'practice'`, `'tooling'`, `'behavior'`, `'culture'` | `'tooling'`                  |
+| `description`  | text   | Clear, concise                                       | `'Securely store...'`        |
+| `requirements` | jsonb  | Array of strings                                     | `["Req 1", "Req 2"]`         |
+| `benefits`     | jsonb  | Array of strings                                     | `["Benefit 1", "Benefit 2"]` |
 
 ---
 
@@ -101,6 +101,7 @@ COMMIT;
 ## Common Patterns
 
 **Single practice:**
+
 ```sql
 INSERT INTO practices (id, name, type, category, description, requirements, benefits)
 VALUES ('my-practice', 'My Practice', 'practice', 'tooling', 'Desc', '[]'::jsonb, '[]'::jsonb)
@@ -108,6 +109,7 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name;
 ```
 
 **With dependencies:**
+
 ```sql
 INSERT INTO practice_dependencies (practice_id, depends_on_id)
 VALUES ('my-practice', 'dependency-1')
@@ -115,6 +117,7 @@ ON CONFLICT (practice_id, depends_on_id) DO NOTHING;
 ```
 
 **Update existing:**
+
 ```sql
 UPDATE practices
 SET description = 'New description', updated_at = CURRENT_TIMESTAMP
@@ -125,13 +128,13 @@ WHERE id = 'existing-practice';
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Duplicate key error | Add `ON CONFLICT (id) DO UPDATE` |
-| Foreign key violation | Ensure dependency exists first |
-| Circular dependency | Use `SELECT would_create_cycle('parent', 'child')` |
-| Invalid JSONB | Check quotes: `'["Item 1"]'::jsonb` |
-| Migration not applied | Check `npm run db:status` |
+| Problem               | Solution                                           |
+| --------------------- | -------------------------------------------------- |
+| Duplicate key error   | Add `ON CONFLICT (id) DO UPDATE`                   |
+| Foreign key violation | Ensure dependency exists first                     |
+| Circular dependency   | Use `SELECT would_create_cycle('parent', 'child')` |
+| Invalid JSONB         | Check quotes: `'["Item 1"]'::jsonb`                |
+| Migration not applied | Check `npm run db:status`                          |
 
 ---
 
@@ -198,24 +201,24 @@ git push origin main
 
 ## Categories Explained
 
-| Category | Use For | Examples |
-|----------|---------|----------|
-| `practice` | Development practices | TDD, pair programming, code review |
-| `tooling` | Tools and infrastructure | CI/CD, version control, monitoring |
-| `behavior` | Team behaviors | Retrospectives, standups, demos |
-| `culture` | Cultural values | Psychological safety, learning culture |
+| Category   | Use For                  | Examples                               |
+| ---------- | ------------------------ | -------------------------------------- |
+| `practice` | Development practices    | TDD, pair programming, code review     |
+| `tooling`  | Tools and infrastructure | CI/CD, version control, monitoring     |
+| `behavior` | Team behaviors           | Retrospectives, standups, demos        |
+| `culture`  | Cultural values          | Psychological safety, learning culture |
 
 ---
 
 ## npm Scripts
 
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Auto-migrate + start dev |
-| `npm run dev:app` | Skip migrations, start dev |
-| `npm run db:migrate:local` | Run migrations manually |
-| `npm run db:check` | Check for pending migrations |
-| `npm run db:status` | View migration history |
+| Command                    | Purpose                      |
+| -------------------------- | ---------------------------- |
+| `npm run dev`              | Auto-migrate + start dev     |
+| `npm run dev:app`          | Skip migrations, start dev   |
+| `npm run db:migrate:local` | Run migrations manually      |
+| `npm run db:check`         | Check for pending migrations |
+| `npm run db:status`        | View migration history       |
 
 ---
 

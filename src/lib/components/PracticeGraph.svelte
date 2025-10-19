@@ -166,6 +166,26 @@
 		return result
 	}
 
+	function createCurvePath(x1, y1, x2, y2) {
+		// Calculate the vertical distance between points
+		const dy = y2 - y1
+
+		// For vertical connections, use a smooth S-curve
+		// Control points are placed vertically between start and end
+		const controlOffset = Math.abs(dy) * 0.5
+
+		// Control point 1: offset from start point
+		const cx1 = x1
+		const cy1 = y1 + controlOffset
+
+		// Control point 2: offset from end point
+		const cx2 = x2
+		const cy2 = y2 - controlOffset
+
+		// Create cubic bezier path
+		return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`
+	}
+
 	function calculateConnections() {
 		if (!containerRef) return
 
@@ -305,15 +325,13 @@
 		<!-- SVG Layer for Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each connections as conn}
-				<line
-					x1={conn.x1}
-					y1={conn.y1}
-					x2={conn.x2}
-					y2={conn.y2}
+				<path
+					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
 					stroke="#3b82f6"
 					stroke-width="2"
 					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
 					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '1' : '0.6'}
+					fill="none"
 				/>
 				<circle cx={conn.x2} cy={conn.y2} r="4" fill="#3b82f6" />
 			{/each}

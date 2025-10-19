@@ -9,6 +9,7 @@ All practices align with our core development philosophy:
 **BDD → ATDD → TDD → Red → Green → Refactor**
 
 Emphasizing:
+
 - Behavior-driven development with Gherkin feature files
 - Functional programming principles (pure functions, immutability, composition)
 - Test-first approach with comprehensive coverage
@@ -20,9 +21,11 @@ Emphasizing:
 ## Practice Categories
 
 ### 01. Code Quality
+
 **Focus**: Writing clean, maintainable, functional code
 
 **Key Practices**:
+
 - Pure functions with no side effects
 - Immutability using Object.freeze
 - Function composition with pipe/compose
@@ -34,26 +37,31 @@ Emphasizing:
 ---
 
 ### 02. Testing
+
 **Focus**: Comprehensive test coverage following the testing pyramid
 
 **Coverage Targets**:
+
 - Domain layer: 95-100% (enforced)
 - Application layer: 85-95%
 - Infrastructure layer: 75-85%
 - UI components: 70-80%
 
 **Testing Stack**:
+
 - Unit/Integration: Vitest + @testing-library/svelte
 - E2E: Playwright
 - Test data: Builder pattern in `/tests/utils/builders.js`
 
 **Key Practices**:
+
 - [Deterministic Tests](./02-testing/deterministic-tests.md) - **Foundation of trunk-based development**
 - Unit, integration, and E2E testing strategies
 - Test data builders and fixtures
 - Mocking and test isolation
 
 **Critical Dependency Chain**:
+
 ```
 Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Testable Acceptance Criteria → BDD
 ```
@@ -65,9 +73,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 03. Git Workflow
+
 **Focus**: Version control best practices and collaboration
 
 **Key Practices**:
+
 - Conventional commits (enforced by commitlint)
 - Feature branches with descriptive names
 - Pre-commit hooks with lint-staged
@@ -79,9 +89,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 04. CI/CD
+
 **Focus**: Continuous integration and deployment automation
 
 **Current Setup**:
+
 - GitHub Actions for CI
 - Automated testing on every push
 - Netlify deployment on main branch
@@ -93,9 +105,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 05. Security
+
 **Focus**: Application security and data protection
 
 **Key Practices**:
+
 - Input validation using value objects
 - Parameterized database queries (no SQL injection)
 - Environment variables for secrets
@@ -107,9 +121,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 06. Accessibility
+
 **Focus**: Building inclusive, accessible applications
 
 **Key Practices**:
+
 - Semantic HTML first
 - ARIA attributes when necessary (sparingly)
 - Keyboard navigation support
@@ -123,9 +139,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 07. Performance
+
 **Focus**: Optimizing application speed and efficiency
 
 **Key Practices**:
+
 - Code splitting by route (automatic with SvelteKit)
 - Lazy loading components with dynamic imports
 - Bundle size monitoring
@@ -137,9 +155,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 08. Documentation
+
 **Focus**: Writing effective code and feature documentation
 
 **Key Practices**:
+
 - Gherkin feature files in `/features` directory
 - Living documentation aligned with implementation
 - JSDoc for public APIs
@@ -153,9 +173,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ---
 
 ### 09. Architecture
+
 **Focus**: System design and architectural patterns
 
 **Current Architecture**:
+
 - Hexagonal architecture (Domain, Application, Infrastructure)
 - Domain-Driven Design with value objects and entities
 - Repository pattern for data access
@@ -171,18 +193,21 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ## How to Use This Guide
 
 ### For New Contributors
+
 1. Read [CLAUDE.md](/CLAUDE.md) for complete development workflow
 2. Review [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for Git practices
 3. Study [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md) for testing approach
 4. Set up local environment with Docker (see [DATABASE-QUICKSTART.md](/docs/DATABASE-QUICKSTART.md))
 
 ### For Existing Contributors
+
 1. Refer to [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md) when writing tests
 2. Use [Test Quality Reviewer agent](/.claude/agents/test-quality-reviewer.md) before committing
 3. Follow [BDD Expert agent](/.claude/agents/bdd-expert.md) for feature files
 4. Consult [DDD Expert agent](/.claude/agents/ddd-expert.md) for domain modeling
 
 ### For Reviewers
+
 1. Verify all tests pass (unit, integration, E2E)
 2. Check test coverage meets targets by layer
 3. Ensure feature files align with implementation
@@ -250,18 +275,18 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 
 ## Quick Reference
 
-| When you need... | Consult... |
-|------------------|------------|
-| To understand BDD → ATDD → TDD | [CLAUDE.md](/CLAUDE.md) |
-| To write tests | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md) |
-| To make a commit | [CONTRIBUTING.md](/docs/CONTRIBUTING.md) |
-| To deploy | [DEPLOYMENT.md](/docs/DEPLOYMENT.md) |
-| To understand database schema | [DATABASE.md](/docs/DATABASE.md) |
-| To understand domain model | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md) |
-| To review feature files | [BDD Expert Agent](/.claude/agents/bdd-expert.md) |
-| To review tests | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
-| To model domain | [DDD Expert Agent](/.claude/agents/ddd-expert.md) |
-| To style components | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md) |
+| When you need...               | Consult...                                                              |
+| ------------------------------ | ----------------------------------------------------------------------- |
+| To understand BDD → ATDD → TDD | [CLAUDE.md](/CLAUDE.md)                                                 |
+| To write tests                 | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)                              |
+| To make a commit               | [CONTRIBUTING.md](/docs/CONTRIBUTING.md)                                |
+| To deploy                      | [DEPLOYMENT.md](/docs/DEPLOYMENT.md)                                    |
+| To understand database schema  | [DATABASE.md](/docs/DATABASE.md)                                        |
+| To understand domain model     | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)                            |
+| To review feature files        | [BDD Expert Agent](/.claude/agents/bdd-expert.md)                       |
+| To review tests                | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
+| To model domain                | [DDD Expert Agent](/.claude/agents/ddd-expert.md)                       |
+| To style components            | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md)             |
 
 ---
 
@@ -270,17 +295,20 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 Based on comprehensive project analysis, here are the **priority improvements** identified:
 
 ### HIGH PRIORITY (Next 1 month)
+
 1. **Error Handling Strategy** - Create centralized error classes and handling utilities
 2. **Logging and Monitoring** - Implement structured logging with levels
 3. **Environment Configuration** - Add validation for required environment variables
 
 ### MEDIUM PRIORITY (Next 3 months)
+
 4. **Security Documentation** - Create SECURITY.md with vulnerability disclosure
 5. **Performance Monitoring** - Add Lighthouse CI and Core Web Vitals tracking
 6. **Code Review Guidelines** - Create PR template and review checklist
 7. **Dependency Management** - Configure Dependabot for automated updates
 
 ### LOW PRIORITY (Next 6 months)
+
 8. **Release Management** - Implement semantic versioning and CHANGELOG.md
 9. **Developer Experience** - Add VS Code workspace settings and .nvmrc
 10. **Database Management** - Document migration rollback and backup procedures
@@ -294,21 +322,25 @@ Based on comprehensive project analysis, here are the **priority improvements** 
 This project uses specialized expert agents to ensure quality at each stage of development:
 
 ### BDD Expert
+
 **Use for**: Reviewing Gherkin feature files
 **When**: After creating or updating feature files
 **Run**: Via Claude Code Task tool
 
 ### DDD Expert
+
 **Use for**: Domain modeling and bounded context identification
 **When**: During initial feature planning and domain design
 **Run**: Via Claude Code Task tool
 
 ### Test Quality Reviewer
+
 **Use for**: Reviewing unit, integration, and E2E tests
 **When**: After writing or updating test files
 **Run**: Via Claude Code Task tool
 
 ### Tailwind CSS Expert
+
 **Use for**: Reviewing Tailwind usage and responsive design
 **When**: During component styling and layout design
 **Run**: Via Claude Code Task tool
@@ -361,6 +393,7 @@ The following research documents informed these practices:
 ## Feedback and Improvements
 
 This is a living document. If you find:
+
 - Missing practices or gaps in coverage
 - Outdated information or incorrect examples
 - Better approaches or more efficient patterns

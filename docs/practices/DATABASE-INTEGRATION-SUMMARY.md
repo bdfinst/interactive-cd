@@ -26,14 +26,18 @@ Test Data Management
 ## Files Created
 
 ### 1. Database Migration
+
 **File**: `/db/data/003_add_deterministic_tests.sql`
+
 - Adds 2 new practices (BDD, Deterministic Tests)
 - Adds 6 new dependencies
 - Updates metadata (version 1.0.0 → 1.1.0)
 - Includes verification queries
 
 ### 2. Migration Documentation
+
 **File**: `/db/data/README.md`
+
 - Complete guide to data migrations
 - Details about migration 003
 - Verification queries
@@ -41,7 +45,9 @@ Test Data Management
 - Best practices
 
 ### 3. Deployment Guide
+
 **File**: `/docs/DATABASE-MIGRATION-003.md`
+
 - Step-by-step application instructions
 - Expected outputs for all verification queries
 - Testing procedures (local + production)
@@ -49,7 +55,9 @@ Test Data Management
 - API impact analysis
 
 ### 4. Main Database README Update
+
 **File**: `/db/README.md`
+
 - Updated directory structure to show migration 003
 
 ---
@@ -88,6 +96,7 @@ Test Data Management
 ```
 
 **Dependencies**:
+
 - `behavior-driven-development` → `version-control`
 
 ---
@@ -127,6 +136,7 @@ Test Data Management
 ```
 
 **Dependencies**:
+
 - `deterministic-tests` → `automated-testing`
 - `deterministic-tests` → `test-automation-framework`
 - `deterministic-tests` → `test-data-management`
@@ -137,6 +147,7 @@ Test Data Management
 ### Updated Practice: Trunk-based Development
 
 **New Dependency Added**:
+
 - `trunk-based-development` → `deterministic-tests`
 
 This creates the critical dependency showing that trunk-based development requires deterministic tests.
@@ -187,6 +198,7 @@ psql $DATABASE_URL -c "SELECT id, name FROM practices WHERE id IN ('behavior-dri
 ```
 
 **Expected Output**:
+
 ```
              id              |              name
 -----------------------------+--------------------------------
@@ -222,26 +234,31 @@ psql $DATABASE_URL -c "SELECT value FROM metadata WHERE key = 'version';"
 After applying the migration:
 
 - [ ] Total practices = 25 (was 23)
+
   ```bash
   psql $DATABASE_URL -c "SELECT COUNT(*) FROM practices;"
   ```
 
 - [ ] Total dependencies = 47 (was 41)
+
   ```bash
   psql $DATABASE_URL -c "SELECT COUNT(*) FROM practice_dependencies;"
   ```
 
 - [ ] Version = 1.1.0 (was 1.0.0)
+
   ```bash
   psql $DATABASE_URL -c "SELECT value FROM metadata WHERE key = 'version';"
   ```
 
 - [ ] BDD practice exists
+
   ```bash
   psql $DATABASE_URL -c "SELECT name FROM practices WHERE id = 'behavior-driven-development';"
   ```
 
 - [ ] Deterministic Tests practice exists
+
   ```bash
   psql $DATABASE_URL -c "SELECT name FROM practices WHERE id = 'deterministic-tests';"
   ```
@@ -258,16 +275,19 @@ After applying the migration:
 ### API Endpoints
 
 #### `/api/practices/tree`
+
 **Before**: Returns 23 practices
 **After**: Returns 25 practices with new dependency relationships
 
 #### `/api/practices/cards`
+
 **Before**: Shows 23 practice cards
 **After**: Shows 25 practice cards (includes BDD and Deterministic Tests)
 
 ### UI Visualization
 
 The practice graph/tree visualization will now show:
+
 - Trunk-based Development has a new dependency: Deterministic Tests
 - Deterministic Tests is a new node with 4 dependencies
 - BDD is a new node with 1 dependency (Version Control)
@@ -299,6 +319,7 @@ This database migration aligns with:
 ## Database Schema
 
 No schema changes required. Uses existing tables:
+
 - `practices` - Stores practice definitions
 - `practice_dependencies` - Stores relationships
 - `metadata` - Stores version info
@@ -342,12 +363,14 @@ EOF
 ## Testing Results
 
 ### Local Testing
+
 ✅ Migration applied successfully
 ✅ All verification queries pass
 ✅ Practice tree renders correctly
 ✅ No errors in application logs
 
 ### Production Testing (When Applied)
+
 - [ ] Migration applied successfully
 - [ ] Verification queries pass
 - [ ] API endpoints return correct data
@@ -359,11 +382,13 @@ EOF
 ## Next Steps
 
 1. **Apply Migration Locally**
+
    ```bash
    psql $DATABASE_URL -f db/data/003_add_deterministic_tests.sql
    ```
 
 2. **Test Application Locally**
+
    ```bash
    npm run dev
    # Visit http://localhost:5173
@@ -372,6 +397,7 @@ EOF
    ```
 
 3. **Commit Changes**
+
    ```bash
    git add db/data/003_add_deterministic_tests.sql
    git add db/data/README.md
@@ -387,6 +413,7 @@ EOF
    ```
 
 4. **Deploy to Production**
+
    ```bash
    git push
    netlify deploy --prod
@@ -401,17 +428,20 @@ EOF
 ## Summary
 
 **Created**:
+
 - ✅ Database migration file (`003_add_deterministic_tests.sql`)
 - ✅ Migration documentation (`db/data/README.md`)
 - ✅ Deployment guide (`docs/DATABASE-MIGRATION-003.md`)
 - ✅ Updated main database README
 
 **Adds to Database**:
+
 - ✅ 2 new practices (BDD, Deterministic Tests)
 - ✅ 6 new dependencies
 - ✅ Version bump (1.0.0 → 1.1.0)
 
 **Impact**:
+
 - Total practices: 23 → 25
 - Total dependencies: 41 → 47
 - New practice tree paths visible in UI

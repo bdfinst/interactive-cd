@@ -63,13 +63,13 @@ VITE v5.0.0  ready in 543 ms
 
 ### Local Development Commands
 
-| Command                  | Purpose                               |
-| ------------------------ | ------------------------------------- |
-| `npm run dev`            | Auto-migrate & start dev server       |
-| `npm run dev:app`        | Start dev server (skip migrations)    |
-| `npm run db:migrate:local` | Run migrations manually             |
-| `npm run db:check`       | Check for pending migrations          |
-| `npm run db:status`      | View migration history                |
+| Command                    | Purpose                            |
+| -------------------------- | ---------------------------------- |
+| `npm run dev`              | Auto-migrate & start dev server    |
+| `npm run dev:app`          | Start dev server (skip migrations) |
+| `npm run db:migrate:local` | Run migrations manually            |
+| `npm run db:check`         | Check for pending migrations       |
+| `npm run db:status`        | View migration history             |
 
 ### Database Setup
 
@@ -140,6 +140,7 @@ npm run build  # Runs db:migrate internally
 ```
 
 This is configured in:
+
 - `.github/workflows/deploy.yml` (GitHub Actions)
 - `netlify.toml` (Netlify build)
 - `package.json` (`build` script)
@@ -196,6 +197,7 @@ git push
 👉 **[Complete Migration Guide](../docs/ADDING-NEW-PRACTICES.md)**
 
 The guide covers:
+
 - Step-by-step walkthrough with examples
 - Field descriptions and validation rules
 - Advanced patterns (multiple practices, hierarchies, updates)
@@ -226,13 +228,13 @@ The guide covers:
 
 ### Deployment Scripts
 
-| Script                  | Purpose                        | Usage              |
-| ----------------------- | ------------------------------ | ------------------ |
-| `migrate-local.sh`      | 🆕 Automated local migrations  | Auto on `npm dev`  |
-| `check-migrations.sh`   | 🆕 Check migration status      | `npm run db:check` |
-| `deploy-initial.sh`     | First-time setup               | Run once           |
-| `deploy-updates.sh`     | Apply new data manually        | Manual updates     |
-| `deploy-migrations.sh`  | CI/CD automated migrations     | Auto in CI/CD      |
+| Script                 | Purpose                       | Usage              |
+| ---------------------- | ----------------------------- | ------------------ |
+| `migrate-local.sh`     | 🆕 Automated local migrations | Auto on `npm dev`  |
+| `check-migrations.sh`  | 🆕 Check migration status     | `npm run db:check` |
+| `deploy-initial.sh`    | First-time setup              | Run once           |
+| `deploy-updates.sh`    | Apply new data manually       | Manual updates     |
+| `deploy-migrations.sh` | CI/CD automated migrations    | Auto in CI/CD      |
 
 ### Application Files
 

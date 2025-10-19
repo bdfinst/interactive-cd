@@ -25,12 +25,14 @@ git push
 ## 🎯 Overview
 
 When you add a new practice, you create a **data migration file** that:
+
 - Inserts the practice into the `practices` table
 - Defines its dependencies via `practice_dependencies` table
 - Uses `ON CONFLICT` for idempotency (safe to run multiple times)
 - Updates the `metadata` table with new version info
 
 The migration applies **automatically** when:
+
 - Developers run `npm run dev` locally
 - CI/CD runs `npm run build` in production
 
@@ -47,6 +49,7 @@ ls db/data/[0-9][0-9][0-9]_*.sql | tail -1
 ```
 
 **Example output:**
+
 ```
 db/data/003_add_deterministic_tests.sql
 ```
@@ -66,6 +69,7 @@ cp db/data/002_example_new_practice.sql db/data/004_my_practice.sql
 ```
 
 **Naming Convention:**
+
 - Format: `NNN_description.sql`
 - Use **kebab-case** for description
 - Be descriptive but concise
@@ -132,15 +136,15 @@ COMMIT;
 
 #### **Practice Fields**
 
-| Field | Type | Required | Description | Example |
-|-------|------|----------|-------------|---------|
-| `id` | VARCHAR(255) | ✅ | Unique kebab-case identifier | `'secret-management'` |
-| `name` | VARCHAR(255) | ✅ | Human-readable name | `'Secret Management'` |
-| `type` | VARCHAR(50) | ✅ | `'root'` or `'practice'` | `'practice'` |
-| `category` | VARCHAR(50) | ✅ | `practice`, `tooling`, `behavior`, or `culture` | `'tooling'` |
-| `description` | TEXT | ✅ | Clear, concise description | `'Securely store...'` |
-| `requirements` | JSONB | ✅ | Array of requirements (what you need) | `["Encryption", "Access control"]` |
-| `benefits` | JSONB | ✅ | Array of benefits (what you gain) | `["Reduced risk", "Audit trail"]` |
+| Field          | Type         | Required | Description                                     | Example                            |
+| -------------- | ------------ | -------- | ----------------------------------------------- | ---------------------------------- |
+| `id`           | VARCHAR(255) | ✅       | Unique kebab-case identifier                    | `'secret-management'`              |
+| `name`         | VARCHAR(255) | ✅       | Human-readable name                             | `'Secret Management'`              |
+| `type`         | VARCHAR(50)  | ✅       | `'root'` or `'practice'`                        | `'practice'`                       |
+| `category`     | VARCHAR(50)  | ✅       | `practice`, `tooling`, `behavior`, or `culture` | `'tooling'`                        |
+| `description`  | TEXT         | ✅       | Clear, concise description                      | `'Securely store...'`              |
+| `requirements` | JSONB        | ✅       | Array of requirements (what you need)           | `["Encryption", "Access control"]` |
+| `benefits`     | JSONB        | ✅       | Array of benefits (what you gain)               | `["Reduced risk", "Audit trail"]`  |
 
 #### **Categories**
 
@@ -177,6 +181,7 @@ ON CONFLICT (practice_id, depends_on_id) DO NOTHING;
    - ❌ Bad: Adding `trunk-based-dev` if it already depends on `version-control`
 
 2. **Check for cycles** - Don't create circular dependencies
+
    ```bash
    # Check before committing
    psql $DATABASE_URL -c "
@@ -199,12 +204,14 @@ npm run dev
 ```
 
 **Expected output:**
+
 ```
 ✅ Applied 1 migration(s) (0 schema, 1 data)
 VITE v5.0.0  ready in 543 ms
 ```
 
 **If already applied:**
+
 ```
 ✅ Database migrations up-to-date
 VITE v5.0.0  ready in 543 ms
@@ -225,6 +232,7 @@ psql $DATABASE_URL -c "
 ```
 
 **Expected output:**
+
 ```
         id         |       name        |  type    | category
 -------------------+-------------------+----------+----------
@@ -243,6 +251,7 @@ psql $DATABASE_URL -c "
 ```
 
 **Expected output:**
+
 ```
     practice_id    |    depends_on_id     |         name
 -------------------+----------------------+----------------------
@@ -285,6 +294,7 @@ npm run db:status
 ```
 
 **Expected output:**
+
 ```
          migration_name          | migration_type |          applied_at           | success
 ---------------------------------+----------------+-------------------------------+---------
@@ -449,6 +459,7 @@ COMMIT;
 **Problem:** Two people create `004_*.sql` on different branches
 
 **Solution:**
+
 ```bash
 # Before creating migration, pull latest
 git pull origin main
@@ -703,6 +714,7 @@ COMMIT;
 Your migration applies automatically in CI/CD:
 
 1. **Push to GitHub**
+
    ```bash
    git push origin main
    ```
@@ -718,6 +730,7 @@ Your migration applies automatically in CI/CD:
    - Database now includes your new practice
 
 4. **Verify in production**
+
    ```bash
    # Set production DATABASE_URL
    export DATABASE_URL="postgresql://prod-host/prod-db"
@@ -731,26 +744,31 @@ Your migration applies automatically in CI/CD:
 ## 📞 Getting Help
 
 **Check migration status:**
+
 ```bash
 npm run db:status
 ```
 
 **Check for pending migrations:**
+
 ```bash
 npm run db:check
 ```
 
 **View migration tracking table:**
+
 ```bash
 psql $DATABASE_URL -c "SELECT * FROM schema_migrations ORDER BY applied_at DESC;"
 ```
 
 **Test migration locally:**
+
 ```bash
 psql $DATABASE_URL -f db/data/004_my_migration.sql
 ```
 
 **View database schema:**
+
 ```bash
 psql $DATABASE_URL -c "\d practices"
 psql $DATABASE_URL -c "\d practice_dependencies"

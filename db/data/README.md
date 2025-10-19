@@ -6,11 +6,11 @@ This directory contains data-only migrations for adding or updating practice dat
 
 ## Migration Files
 
-| File | Description | Date | Status |
-|------|-------------|------|--------|
-| `001_initial_data.sql` | Initial 23 practices from MinimumCD.org | 2025-10-17 | ✅ Applied |
-| `002_example_new_practice.sql` | Template for adding new practices | 2025-10-17 | 📄 Template |
-| `003_add_deterministic_tests.sql` | Deterministic Tests + BDD practices | 2025-10-18 | ✅ Applied |
+| File                              | Description                             | Date       | Status      |
+| --------------------------------- | --------------------------------------- | ---------- | ----------- |
+| `001_initial_data.sql`            | Initial 23 practices from MinimumCD.org | 2025-10-17 | ✅ Applied  |
+| `002_example_new_practice.sql`    | Template for adding new practices       | 2025-10-17 | 📄 Template |
+| `003_add_deterministic_tests.sql` | Deterministic Tests + BDD practices     | 2025-10-18 | ✅ Applied  |
 
 **Check your migration status**: `npm run db:status`
 
@@ -33,10 +33,12 @@ Test Data Management
 ### What's Added
 
 **New Practices:**
+
 1. **Behavior-Driven Development (BDD)** - Foundation for testable acceptance criteria
 2. **Deterministic Tests** - Tests that produce the same result every time
 
 **New Dependencies:**
+
 - `trunk-based-development` → `deterministic-tests`
 - `deterministic-tests` → `automated-testing`
 - `deterministic-tests` → `test-automation-framework`
@@ -144,6 +146,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 **Description**: Define software behavior using structured, human-readable scenarios (Gherkin) that serve as executable specifications and living documentation.
 
 **Requirements**:
+
 - Write features using Gherkin syntax (Given/When/Then)
 - Scenarios focus on user behavior, not implementation
 - Use specific, testable acceptance criteria
@@ -154,6 +157,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 - Features serve as living documentation
 
 **Benefits**:
+
 - Shared understanding between technical and business teams
 - Testable acceptance criteria
 - Living documentation stays current
@@ -163,6 +167,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 - Clear definition of done
 
 **Dependencies**:
+
 - Version Control (feature files are versioned)
 
 ---
@@ -175,6 +180,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 **Description**: Tests that produce the same result every time they run, eliminating flakiness and enabling reliable trunk-based development.
 
 **Requirements**:
+
 - Same input produces same output every time
 - Control all inputs (time, randomness, external services)
 - Isolate test execution (no shared state)
@@ -187,6 +193,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 - Fix flaky tests immediately
 
 **Benefits**:
+
 - Enables trunk-based development
 - Builds trust in test suite
 - Eliminates wasted time on false failures
@@ -197,6 +204,7 @@ psql $DATABASE_URL -c "SELECT * FROM get_practice_tree('trunk-based-development'
 - Enables parallel test execution
 
 **Dependencies**:
+
 - Automated Testing
 - Test Automation Framework
 - Test Data Management
@@ -262,6 +270,7 @@ git push
 👉 **[Quick Reference Cheat Sheet](../../docs/MIGRATION-QUICK-REFERENCE.md)**
 
 The guides cover:
+
 - Step-by-step walkthrough with examples
 - Field descriptions and validation rules
 - Advanced patterns (multiple practices, hierarchies, updates)
@@ -286,11 +295,13 @@ The guides cover:
 ## Related Documentation
 
 ### Migration Guides
+
 - **[Adding New Practices Guide](../../docs/ADDING-NEW-PRACTICES.md)** - Complete walkthrough with examples
 - **[Migration Quick Reference](../../docs/MIGRATION-QUICK-REFERENCE.md)** - One-page cheat sheet
 - **[Database README](../README.md)** - Database overview and architecture
 
 ### Practice Documentation
+
 - **[Deterministic Tests Practice](../../docs/practices/02-testing/deterministic-tests.md)** - Full practice guide
 - **[BDD in CLAUDE.md](../../CLAUDE.md)** - BDD/ATDD/TDD workflow
 - **[Testing Guide](../../docs/TESTING-GUIDE.md)** - Testing best practices

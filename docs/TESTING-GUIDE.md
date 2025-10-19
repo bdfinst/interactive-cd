@@ -76,11 +76,11 @@ This project follows a comprehensive testing strategy aligned with **BDD → ATD
 
 ### Test Types by Purpose
 
-| Test Type | Purpose | Tool | Speed | Coverage |
-|-----------|---------|------|-------|----------|
-| **Unit** | Test pure functions and business logic | Vitest | Fast | High |
-| **Integration** | Test component behavior with dependencies | Vitest + Testing Library | Medium | Medium |
-| **E2E** | Test user workflows and acceptance criteria | Playwright | Slow | Low |
+| Test Type       | Purpose                                     | Tool                     | Speed  | Coverage |
+| --------------- | ------------------------------------------- | ------------------------ | ------ | -------- |
+| **Unit**        | Test pure functions and business logic      | Vitest                   | Fast   | High     |
+| **Integration** | Test component behavior with dependencies   | Vitest + Testing Library | Medium | Medium   |
+| **E2E**         | Test user workflows and acceptance criteria | Playwright               | Slow   | Low      |
 
 ---
 
@@ -165,13 +165,13 @@ interactive-cd/
 
 ### File Naming Conventions
 
-| File Type | Pattern | Example |
-|-----------|---------|---------|
-| **Unit Tests** | `[ComponentName].test.js` | `GraphNode.test.js` |
-| **E2E Tests** | `[feature-name].spec.js` | `practice-navigation.spec.js` |
-| **Test Builders** | `builders.js` | `tests/utils/builders.js` |
-| **Test Fixtures** | `fixtures.js` | `tests/utils/fixtures.js` |
-| **Feature Files** | `[feature-name].feature` | `practice-graph.feature` |
+| File Type         | Pattern                   | Example                       |
+| ----------------- | ------------------------- | ----------------------------- |
+| **Unit Tests**    | `[ComponentName].test.js` | `GraphNode.test.js`           |
+| **E2E Tests**     | `[feature-name].spec.js`  | `practice-navigation.spec.js` |
+| **Test Builders** | `builders.js`             | `tests/utils/builders.js`     |
+| **Test Fixtures** | `fixtures.js`             | `tests/utils/fixtures.js`     |
+| **Feature Files** | `[feature-name].feature`  | `practice-graph.feature`      |
 
 ---
 
@@ -184,27 +184,27 @@ interactive-cd/
 ```javascript
 // ✅ Good: Clear hierarchical organization
 describe('GraphNode', () => {
-  describe('rendering', () => {
-    it('renders practice name', () => { })
-    it('renders category indicators', () => { })
-  })
+	describe('rendering', () => {
+		it('renders practice name', () => {})
+		it('renders category indicators', () => {})
+	})
 
-  describe('selection state', () => {
-    it('shows description when selected', () => { })
-    it('hides description when not selected', () => { })
-  })
+	describe('selection state', () => {
+		it('shows description when selected', () => {})
+		it('hides description when not selected', () => {})
+	})
 
-  describe('user interactions', () => {
-    it('calls onClick when clicked', () => { })
-  })
+	describe('user interactions', () => {
+		it('calls onClick when clicked', () => {})
+	})
 
-  describe('accessibility', () => {
-    it('includes category information in aria-label', () => { })
-  })
+	describe('accessibility', () => {
+		it('includes category information in aria-label', () => {})
+	})
 
-  describe('edge cases', () => {
-    it('handles practice with no benefits', () => { })
-  })
+	describe('edge cases', () => {
+		it('handles practice with no benefits', () => {})
+	})
 })
 ```
 
@@ -212,9 +212,9 @@ describe('GraphNode', () => {
 
 ```javascript
 describe('ComponentName', () => {
-  describe('feature group', () => {
-    it('specific behavior', () => { })
-  })
+	describe('feature group', () => {
+		it('specific behavior', () => {})
+	})
 })
 ```
 
@@ -224,17 +224,17 @@ describe('ComponentName', () => {
 
 ```javascript
 // ✅ Good: Describes expected behavior
-it('renders practice name', () => { })
-it('shows description when selected', () => { })
-it('calls onClick when clicked', () => { })
-it('throws error when id is empty string', () => { })
-it('returns true for same ID values', () => { })
+it('renders practice name', () => {})
+it('shows description when selected', () => {})
+it('calls onClick when clicked', () => {})
+it('throws error when id is empty string', () => {})
+it('returns true for same ID values', () => {})
 
 // ❌ Bad: Vague or implementation-focused
-it('works', () => { })
-it('test component', () => { })
-it('sets state', () => { })
-it('calls function', () => { })
+it('works', () => {})
+it('test component', () => {})
+it('sets state', () => {})
+it('calls function', () => {})
 ```
 
 ### E2E Test Naming
@@ -245,13 +245,13 @@ it('calls function', () => { })
 import { test, expect } from '@playwright/test'
 
 test.describe('Feature Name', () => {
-  test('user can complete primary workflow', async ({ page }) => {
-    // Test implementation
-  })
+	test('user can complete primary workflow', async ({ page }) => {
+		// Test implementation
+	})
 
-  test('shows error message for invalid input', async ({ page }) => {
-    // Test implementation
-  })
+	test('shows error message for invalid input', async ({ page }) => {
+		// Test implementation
+	})
 })
 ```
 
@@ -262,16 +262,16 @@ test.describe('Feature Name', () => {
 // Scenario: Display root practice node
 
 test.describe('Practice Dependency Graph', () => {
-  test('displays root practice node', async ({ page }) => {
-    // Given I am on the CD Practices application
-    await page.goto('/')
+	test('displays root practice node', async ({ page }) => {
+		// Given I am on the CD Practices application
+		await page.goto('/')
 
-    // Then I should see a graph node for "Continuous Delivery"
-    await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
+		// Then I should see a graph node for "Continuous Delivery"
+		await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
 
-    // And the node should display the practice title
-    await expect(page.getByText('Continuous Delivery')).toBeVisible()
-  })
+		// And the node should display the practice title
+		await expect(page.getByText('Continuous Delivery')).toBeVisible()
+	})
 })
 ```
 
@@ -286,21 +286,21 @@ test.describe('Practice Dependency Graph', () => {
 ```javascript
 // lib/validators.js
 export const isValidEmail = email => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	return emailRegex.test(email)
 }
 
 export const validatePracticeId = id => {
-  if (!id || typeof id !== 'string' || id.trim() === '') {
-    throw new Error('Practice ID cannot be empty')
-  }
+	if (!id || typeof id !== 'string' || id.trim() === '') {
+		throw new Error('Practice ID cannot be empty')
+	}
 
-  const kebabCaseRegex = /^[a-z0-9]+(-[a-z0-9]+)*$/
-  if (!kebabCaseRegex.test(id)) {
-    throw new Error('Practice ID must be in kebab-case format')
-  }
+	const kebabCaseRegex = /^[a-z0-9]+(-[a-z0-9]+)*$/
+	if (!kebabCaseRegex.test(id)) {
+		throw new Error('Practice ID must be in kebab-case format')
+	}
 
-  return id
+	return id
 }
 ```
 
@@ -312,41 +312,37 @@ import { describe, it, expect } from 'vitest'
 import { isValidEmail, validatePracticeId } from './validators'
 
 describe('isValidEmail', () => {
-  it('returns true for valid email', () => {
-    expect(isValidEmail('user@example.com')).toBe(true)
-  })
+	it('returns true for valid email', () => {
+		expect(isValidEmail('user@example.com')).toBe(true)
+	})
 
-  it('returns false for invalid email', () => {
-    expect(isValidEmail('invalid-email')).toBe(false)
-  })
+	it('returns false for invalid email', () => {
+		expect(isValidEmail('invalid-email')).toBe(false)
+	})
 
-  it('returns false for null', () => {
-    expect(isValidEmail(null)).toBe(false)
-  })
+	it('returns false for null', () => {
+		expect(isValidEmail(null)).toBe(false)
+	})
 })
 
 describe('validatePracticeId', () => {
-  it('accepts valid kebab-case IDs', () => {
-    const validIds = [
-      'continuous-delivery',
-      'trunk-based-development',
-      'version-control'
-    ]
+	it('accepts valid kebab-case IDs', () => {
+		const validIds = ['continuous-delivery', 'trunk-based-development', 'version-control']
 
-    validIds.forEach(id => {
-      expect(() => validatePracticeId(id)).not.toThrow()
-    })
-  })
+		validIds.forEach(id => {
+			expect(() => validatePracticeId(id)).not.toThrow()
+		})
+	})
 
-  it('throws error when id is empty string', () => {
-    expect(() => validatePracticeId('')).toThrow('Practice ID cannot be empty')
-  })
+	it('throws error when id is empty string', () => {
+		expect(() => validatePracticeId('')).toThrow('Practice ID cannot be empty')
+	})
 
-  it('throws error when id is not kebab-case', () => {
-    expect(() => validatePracticeId('Continuous Delivery')).toThrow(
-      'Practice ID must be in kebab-case format'
-    )
-  })
+	it('throws error when id is not kebab-case', () => {
+		expect(() => validatePracticeId('Continuous Delivery')).toThrow(
+			'Practice ID must be in kebab-case format'
+		)
+	})
 })
 ```
 
@@ -360,52 +356,52 @@ import { describe, it, expect } from 'vitest'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
 
 describe('PracticeId', () => {
-  describe('from', () => {
-    it('creates a PracticeId from a valid string', () => {
-      const id = PracticeId.from('continuous-integration')
+	describe('from', () => {
+		it('creates a PracticeId from a valid string', () => {
+			const id = PracticeId.from('continuous-integration')
 
-      expect(PracticeId.is(id)).toBe(true)
-      expect(id.toString()).toBe('continuous-integration')
-    })
+			expect(PracticeId.is(id)).toBe(true)
+			expect(id.toString()).toBe('continuous-integration')
+		})
 
-    it('throws error when id is null', () => {
-      expect(() => PracticeId.from(null)).toThrow('Practice ID cannot be empty')
-    })
+		it('throws error when id is null', () => {
+			expect(() => PracticeId.from(null)).toThrow('Practice ID cannot be empty')
+		})
 
-    it('validates kebab-case format', () => {
-      expect(() => PracticeId.from('Continuous Integration')).toThrow(
-        'Practice ID must be in kebab-case format'
-      )
-    })
-  })
+		it('validates kebab-case format', () => {
+			expect(() => PracticeId.from('Continuous Integration')).toThrow(
+				'Practice ID must be in kebab-case format'
+			)
+		})
+	})
 
-  describe('equals', () => {
-    it('returns true for same ID values', () => {
-      const id1 = PracticeId.from('continuous-integration')
-      const id2 = PracticeId.from('continuous-integration')
+	describe('equals', () => {
+		it('returns true for same ID values', () => {
+			const id1 = PracticeId.from('continuous-integration')
+			const id2 = PracticeId.from('continuous-integration')
 
-      expect(id1.equals(id2)).toBe(true)
-    })
+			expect(id1.equals(id2)).toBe(true)
+		})
 
-    it('returns false for different ID values', () => {
-      const id1 = PracticeId.from('continuous-integration')
-      const id2 = PracticeId.from('continuous-delivery')
+		it('returns false for different ID values', () => {
+			const id1 = PracticeId.from('continuous-integration')
+			const id2 = PracticeId.from('continuous-delivery')
 
-      expect(id1.equals(id2)).toBe(false)
-    })
-  })
+			expect(id1.equals(id2)).toBe(false)
+		})
+	})
 
-  describe('immutability', () => {
-    it('cannot be modified after creation', () => {
-      const id = PracticeId.from('continuous-integration')
+	describe('immutability', () => {
+		it('cannot be modified after creation', () => {
+			const id = PracticeId.from('continuous-integration')
 
-      expect(() => {
-        id.value = 'something-else'
-      }).toThrow()
+			expect(() => {
+				id.value = 'something-else'
+			}).toThrow()
 
-      expect(Object.isFrozen(id)).toBe(true)
-    })
-  })
+			expect(Object.isFrozen(id)).toBe(true)
+		})
+	})
 })
 ```
 
@@ -417,62 +413,62 @@ describe('PracticeId', () => {
 // domain/practice-catalog/entities/CDPractice.test.js
 import { describe, it, expect } from 'vitest'
 import {
-  createCDPractice,
-  withRequirement,
-  withBenefit,
-  pipePractice
+	createCDPractice,
+	withRequirement,
+	withBenefit,
+	pipePractice
 } from '$domain/practice-catalog/entities/CDPractice.js'
 
 describe('CDPractice (Functional)', () => {
-  const validId = PracticeId.from('continuous-integration')
-  const validCategory = PracticeCategory.BEHAVIOR
+	const validId = PracticeId.from('continuous-integration')
+	const validCategory = PracticeCategory.BEHAVIOR
 
-  describe('createCDPractice', () => {
-    it('creates an immutable practice', () => {
-      const practice = createCDPractice(
-        validId,
-        'Continuous Integration',
-        validCategory,
-        'Build and test on every commit'
-      )
+	describe('createCDPractice', () => {
+		it('creates an immutable practice', () => {
+			const practice = createCDPractice(
+				validId,
+				'Continuous Integration',
+				validCategory,
+				'Build and test on every commit'
+			)
 
-      expect(practice.id).toBe(validId)
-      expect(practice.name).toBe('Continuous Integration')
-      expect(Object.isFrozen(practice)).toBe(true)
-    })
-  })
+			expect(practice.id).toBe(validId)
+			expect(practice.name).toBe('Continuous Integration')
+			expect(Object.isFrozen(practice)).toBe(true)
+		})
+	})
 
-  describe('withRequirement', () => {
-    it('returns new practice with requirement added', () => {
-      const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
-      const updated = withRequirement(practice, 'Must have automated tests')
+	describe('withRequirement', () => {
+		it('returns new practice with requirement added', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+			const updated = withRequirement(practice, 'Must have automated tests')
 
-      // Original unchanged
-      expect(practice.requirements).toEqual([])
-      // New practice has requirement
-      expect(updated.requirements).toEqual(['Must have automated tests'])
-      // Returns new object
-      expect(updated).not.toBe(practice)
-    })
-  })
+			// Original unchanged
+			expect(practice.requirements).toEqual([])
+			// New practice has requirement
+			expect(updated.requirements).toEqual(['Must have automated tests'])
+			// Returns new object
+			expect(updated).not.toBe(practice)
+		})
+	})
 
-  describe('composition', () => {
-    it('pipePractice composes transformations left-to-right', () => {
-      const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+	describe('composition', () => {
+		it('pipePractice composes transformations left-to-right', () => {
+			const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-      const transform = pipePractice(
-        p => withRequirement(p, 'Req 1'),
-        p => withRequirement(p, 'Req 2'),
-        p => withBenefit(p, 'Benefit 1')
-      )
+			const transform = pipePractice(
+				p => withRequirement(p, 'Req 1'),
+				p => withRequirement(p, 'Req 2'),
+				p => withBenefit(p, 'Benefit 1')
+			)
 
-      const result = transform(practice)
+			const result = transform(practice)
 
-      expect(result.requirements).toEqual(['Req 1', 'Req 2'])
-      expect(result.benefits).toEqual(['Benefit 1'])
-      expect(practice.requirements).toEqual([]) // Original unchanged
-    })
-  })
+			expect(result.requirements).toEqual(['Req 1', 'Req 2'])
+			expect(result.benefits).toEqual(['Benefit 1'])
+			expect(practice.requirements).toEqual([]) // Original unchanged
+		})
+	})
 })
 ```
 
@@ -482,19 +478,19 @@ describe('CDPractice (Functional)', () => {
 
 ```javascript
 describe('PracticeStore', () => {
-  it('adds practice to store', () => {
-    // Arrange: Set up test data and initial state
-    const store = createPracticeStore()
-    const practice = buildPractice({ id: 'test-practice' })
+	it('adds practice to store', () => {
+		// Arrange: Set up test data and initial state
+		const store = createPracticeStore()
+		const practice = buildPractice({ id: 'test-practice' })
 
-    // Act: Execute the code being tested
-    store.addPractice(practice)
+		// Act: Execute the code being tested
+		store.addPractice(practice)
 
-    // Assert: Verify the expected outcome
-    const state = get(store)
-    expect(state.practices).toContainEqual(practice)
-    expect(state.practices.length).toBe(1)
-  })
+		// Assert: Verify the expected outcome
+		const state = get(store)
+		expect(state.practices).toContainEqual(practice)
+		expect(state.practices.length).toBe(1)
+	})
 })
 ```
 
@@ -513,71 +509,71 @@ import GraphNode from '$lib/components/GraphNode.svelte'
 import { buildPractice } from '../../utils/builders.js'
 
 describe('GraphNode', () => {
-  describe('rendering', () => {
-    it('renders practice name', () => {
-      // Arrange
-      const practice = buildPractice({ name: 'Continuous Integration' })
+	describe('rendering', () => {
+		it('renders practice name', () => {
+			// Arrange
+			const practice = buildPractice({ name: 'Continuous Integration' })
 
-      // Act
-      const { getByText } = render(GraphNode, { props: { practice } })
+			// Act
+			const { getByText } = render(GraphNode, { props: { practice } })
 
-      // Assert
-      expect(getByText('Continuous Integration')).toBeInTheDocument()
-    })
+			// Assert
+			expect(getByText('Continuous Integration')).toBeInTheDocument()
+		})
 
-    it('renders category indicators', () => {
-      const practice = buildPractice({ categories: ['behavior', 'tooling'] })
-      const { container } = render(GraphNode, { props: { practice } })
+		it('renders category indicators', () => {
+			const practice = buildPractice({ categories: ['behavior', 'tooling'] })
+			const { container } = render(GraphNode, { props: { practice } })
 
-      const categoryDots = container.querySelectorAll('.w-3\\.5')
-      expect(categoryDots.length).toBe(2)
-    })
-  })
+			const categoryDots = container.querySelectorAll('.w-3\\.5')
+			expect(categoryDots.length).toBe(2)
+		})
+	})
 
-  describe('selection state', () => {
-    it('shows description when selected', () => {
-      const practice = buildPractice({ description: 'Test description' })
-      const { getByText } = render(GraphNode, {
-        props: { practice, isSelected: true }
-      })
+	describe('selection state', () => {
+		it('shows description when selected', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { getByText } = render(GraphNode, {
+				props: { practice, isSelected: true }
+			})
 
-      expect(getByText('Test description')).toBeInTheDocument()
-    })
+			expect(getByText('Test description')).toBeInTheDocument()
+		})
 
-    it('hides description when not selected', () => {
-      const practice = buildPractice({ description: 'Test description' })
-      const { queryByText } = render(GraphNode, {
-        props: { practice, isSelected: false }
-      })
+		it('hides description when not selected', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { queryByText } = render(GraphNode, {
+				props: { practice, isSelected: false }
+			})
 
-      expect(queryByText('Test description')).not.toBeInTheDocument()
-    })
-  })
+			expect(queryByText('Test description')).not.toBeInTheDocument()
+		})
+	})
 
-  describe('user interactions', () => {
-    it('calls onClick when clicked', async () => {
-      const practice = buildPractice()
-      const handleClick = vi.fn()
-      const { getByTestId } = render(GraphNode, {
-        props: { practice, onClick: handleClick }
-      })
+	describe('user interactions', () => {
+		it('calls onClick when clicked', async () => {
+			const practice = buildPractice()
+			const handleClick = vi.fn()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, onClick: handleClick }
+			})
 
-      await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByTestId('graph-node'))
 
-      expect(handleClick).toHaveBeenCalledOnce()
-    })
-  })
+			expect(handleClick).toHaveBeenCalledOnce()
+		})
+	})
 
-  describe('accessibility', () => {
-    it('includes category information in aria-label', () => {
-      const practice = buildPractice({ categories: ['behavior', 'tooling'] })
-      const { container } = render(GraphNode, { props: { practice } })
+	describe('accessibility', () => {
+		it('includes category information in aria-label', () => {
+			const practice = buildPractice({ categories: ['behavior', 'tooling'] })
+			const { container } = render(GraphNode, { props: { practice } })
 
-      const categoryContainer = container.querySelector('[role="img"]')
-      expect(categoryContainer?.getAttribute('aria-label')).toContain('behavior')
-      expect(categoryContainer?.getAttribute('aria-label')).toContain('tooling')
-    })
-  })
+			const categoryContainer = container.querySelector('[role="img"]')
+			expect(categoryContainer?.getAttribute('aria-label')).toContain('behavior')
+			expect(categoryContainer?.getAttribute('aria-label')).toContain('tooling')
+		})
+	})
 })
 ```
 
@@ -591,30 +587,30 @@ import { get } from 'svelte/store'
 import { createCounter } from './counter'
 
 describe('Counter Store', () => {
-  it('initializes with default value', () => {
-    const store = createCounter()
-    expect(get(store)).toBe(0)
-  })
+	it('initializes with default value', () => {
+		const store = createCounter()
+		expect(get(store)).toBe(0)
+	})
 
-  it('increments by 1', () => {
-    const store = createCounter(5)
-    store.increment()
-    expect(get(store)).toBe(6)
-  })
+	it('increments by 1', () => {
+		const store = createCounter(5)
+		store.increment()
+		expect(get(store)).toBe(6)
+	})
 
-  it('adds custom amount', () => {
-    const store = createCounter(0)
-    store.add(5)
-    expect(get(store)).toBe(5)
-  })
+	it('adds custom amount', () => {
+		const store = createCounter(0)
+		store.add(5)
+		expect(get(store)).toBe(5)
+	})
 
-  it('resets to initial value', () => {
-    const store = createCounter(10)
-    store.increment()
-    store.increment()
-    store.reset()
-    expect(get(store)).toBe(10)
-  })
+	it('resets to initial value', () => {
+		const store = createCounter(10)
+		store.increment()
+		store.increment()
+		store.reset()
+		expect(get(store)).toBe(10)
+	})
 })
 ```
 
@@ -627,41 +623,41 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { fetchPractices } from './api'
 
 describe('fetchPractices', () => {
-  beforeEach(() => {
-    global.fetch = vi.fn()
-  })
+	beforeEach(() => {
+		global.fetch = vi.fn()
+	})
 
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
+	afterEach(() => {
+		vi.restoreAllMocks()
+	})
 
-  it('fetches data successfully', async () => {
-    const mockData = [{ id: 'ci', name: 'Continuous Integration' }]
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockData
-    })
+	it('fetches data successfully', async () => {
+		const mockData = [{ id: 'ci', name: 'Continuous Integration' }]
+		global.fetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => mockData
+		})
 
-    const result = await fetchPractices()
+		const result = await fetchPractices()
 
-    expect(result).toEqual(mockData)
-    expect(global.fetch).toHaveBeenCalledWith('/api/practices')
-  })
+		expect(result).toEqual(mockData)
+		expect(global.fetch).toHaveBeenCalledWith('/api/practices')
+	})
 
-  it('throws error on failed request', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: false,
-      status: 404
-    })
+	it('throws error on failed request', async () => {
+		global.fetch.mockResolvedValueOnce({
+			ok: false,
+			status: 404
+		})
 
-    await expect(fetchPractices()).rejects.toThrow('HTTP error! status: 404')
-  })
+		await expect(fetchPractices()).rejects.toThrow('HTTP error! status: 404')
+	})
 
-  it('throws error on network failure', async () => {
-    global.fetch.mockRejectedValueOnce(new Error('Network error'))
+	it('throws error on network failure', async () => {
+		global.fetch.mockRejectedValueOnce(new Error('Network error'))
 
-    await expect(fetchPractices()).rejects.toThrow('Failed to fetch')
-  })
+		await expect(fetchPractices()).rejects.toThrow('Failed to fetch')
+	})
 })
 ```
 
@@ -680,33 +676,33 @@ describe('fetchPractices', () => {
 import { test, expect } from '@playwright/test'
 
 test.describe('Practice Dependency Graph', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/')
-  })
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/')
+	})
 
-  test('displays root practice node', async ({ page }) => {
-    // Given I am on the CD Practices application
-    // (handled in beforeEach)
+	test('displays root practice node', async ({ page }) => {
+		// Given I am on the CD Practices application
+		// (handled in beforeEach)
 
-    // When I visit the homepage
-    // (already there)
+		// When I visit the homepage
+		// (already there)
 
-    // Then I should see a graph node for "Continuous Delivery"
-    await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
+		// Then I should see a graph node for "Continuous Delivery"
+		await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
 
-    // And the node should display the practice title
-    const rootNode = page.locator('[data-testid="graph-node"]').first()
-    const practiceId = await rootNode.getAttribute('data-practice-id')
-    expect(practiceId).toBeTruthy()
-  })
+		// And the node should display the practice title
+		const rootNode = page.locator('[data-testid="graph-node"]').first()
+		const practiceId = await rootNode.getAttribute('data-practice-id')
+		expect(practiceId).toBeTruthy()
+	})
 
-  test('shows practice details when selected', async ({ page }) => {
-    // Wait for selected practice
-    await page.waitForSelector('[data-selected="true"]')
+	test('shows practice details when selected', async ({ page }) => {
+		// Wait for selected practice
+		await page.waitForSelector('[data-selected="true"]')
 
-    // Practice description should be visible
-    await expect(page.locator('[data-selected="true"] p').first()).toBeVisible()
-  })
+		// Practice description should be visible
+		await expect(page.locator('[data-selected="true"] p').first()).toBeVisible()
+	})
 })
 ```
 
@@ -737,14 +733,14 @@ await page.waitForTimeout(1000)
 
 ```javascript
 test.describe('Practice Navigation', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/')
-    await page.waitForSelector('[data-testid="graph-node"]')
-  })
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/')
+		await page.waitForSelector('[data-testid="graph-node"]')
+	})
 
-  test('can select practice', async ({ page }) => {
-    // Tests start with page already loaded
-  })
+	test('can select practice', async ({ page }) => {
+		// Tests start with page already loaded
+	})
 })
 ```
 
@@ -762,32 +758,32 @@ await page.click('[data-testid="button"]')
 
 ```javascript
 test.describe('Critical User Journey: Practice Navigation', () => {
-  test('user can navigate through practice dependencies', async ({ page }) => {
-    // 1. Visit homepage
-    await page.goto('/')
-    await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
+	test('user can navigate through practice dependencies', async ({ page }) => {
+		// 1. Visit homepage
+		await page.goto('/')
+		await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
 
-    // 2. Select root practice
-    const rootNode = page.locator('[data-testid="graph-node"]').first()
-    await rootNode.click()
-    await expect(rootNode).toHaveAttribute('data-selected', 'true')
+		// 2. Select root practice
+		const rootNode = page.locator('[data-testid="graph-node"]').first()
+		await rootNode.click()
+		await expect(rootNode).toHaveAttribute('data-selected', 'true')
 
-    // 3. Expand dependencies
-    const expandButton = page.locator('button:has-text("Expand Dependencies")').first()
-    if (await expandButton.isVisible()) {
-      await expandButton.click()
-      await page.waitForTimeout(500)
-    }
+		// 3. Expand dependencies
+		const expandButton = page.locator('button:has-text("Expand Dependencies")').first()
+		if (await expandButton.isVisible()) {
+			await expandButton.click()
+			await page.waitForTimeout(500)
+		}
 
-    // 4. Verify dependencies are visible
-    const nodeCount = await page.locator('[data-testid="graph-node"]').count()
-    expect(nodeCount).toBeGreaterThan(1)
+		// 4. Verify dependencies are visible
+		const nodeCount = await page.locator('[data-testid="graph-node"]').count()
+		expect(nodeCount).toBeGreaterThan(1)
 
-    // 5. Select dependency
-    await page.locator('[data-testid="graph-node"]').nth(1).click()
-    const selectedNode = page.locator('[data-testid="graph-node"]').nth(1)
-    await expect(selectedNode).toHaveAttribute('data-selected', 'true')
-  })
+		// 5. Select dependency
+		await page.locator('[data-testid="graph-node"]').nth(1).click()
+		const selectedNode = page.locator('[data-testid="graph-node"]').nth(1)
+		await expect(selectedNode).toHaveAttribute('data-selected', 'true')
+	})
 })
 ```
 
@@ -808,17 +804,17 @@ test.describe('Critical User Journey: Practice Navigation', () => {
  * @returns {Object} Practice object
  */
 export const buildPractice = (overrides = {}) => ({
-  id: 'test-practice',
-  name: 'Test Practice',
-  category: 'behavior',
-  categories: ['behavior'],
-  description: 'A test practice for unit testing',
-  benefits: ['Improved test coverage', 'Better code quality'],
-  requirements: [],
-  dependencies: [],
-  dependencyCount: 0,
-  benefitCount: 2,
-  ...overrides
+	id: 'test-practice',
+	name: 'Test Practice',
+	category: 'behavior',
+	categories: ['behavior'],
+	description: 'A test practice for unit testing',
+	benefits: ['Improved test coverage', 'Better code quality'],
+	requirements: [],
+	dependencies: [],
+	dependencyCount: 0,
+	benefitCount: 2,
+	...overrides
 })
 
 /**
@@ -827,14 +823,14 @@ export const buildPractice = (overrides = {}) => ({
  * @returns {Object} Practice with dependencies
  */
 export const buildPracticeWithDependencies = (overrides = {}) => ({
-  ...buildPractice(),
-  dependencyCount: 3,
-  dependencies: [
-    buildPractice({ id: 'dep-1', name: 'Dependency 1' }),
-    buildPractice({ id: 'dep-2', name: 'Dependency 2' }),
-    buildPractice({ id: 'dep-3', name: 'Dependency 3' })
-  ],
-  ...overrides
+	...buildPractice(),
+	dependencyCount: 3,
+	dependencies: [
+		buildPractice({ id: 'dep-1', name: 'Dependency 1' }),
+		buildPractice({ id: 'dep-2', name: 'Dependency 2' }),
+		buildPractice({ id: 'dep-3', name: 'Dependency 3' })
+	],
+	...overrides
 })
 
 /**
@@ -843,17 +839,17 @@ export const buildPracticeWithDependencies = (overrides = {}) => ({
  * @returns {Object} Minimal practice
  */
 export const buildMinimalPractice = (overrides = {}) => ({
-  id: 'minimal-practice',
-  name: 'Minimal Practice',
-  category: 'tooling',
-  categories: ['tooling'],
-  description: 'Minimal test practice',
-  benefits: [],
-  requirements: [],
-  dependencies: [],
-  dependencyCount: 0,
-  benefitCount: 0,
-  ...overrides
+	id: 'minimal-practice',
+	name: 'Minimal Practice',
+	category: 'tooling',
+	categories: ['tooling'],
+	description: 'Minimal test practice',
+	benefits: [],
+	requirements: [],
+	dependencies: [],
+	dependencyCount: 0,
+	benefitCount: 0,
+	...overrides
 })
 
 /**
@@ -863,13 +859,13 @@ export const buildMinimalPractice = (overrides = {}) => ({
  * @returns {Array} Array of practices
  */
 export const buildPractices = (count, baseOverrides = {}) => {
-  return Array.from({ length: count }, (_, i) =>
-    buildPractice({
-      ...baseOverrides,
-      id: `practice-${i + 1}`,
-      name: `Practice ${i + 1}`
-    })
-  )
+	return Array.from({ length: count }, (_, i) =>
+		buildPractice({
+			...baseOverrides,
+			id: `practice-${i + 1}`,
+			name: `Practice ${i + 1}`
+		})
+	)
 }
 ```
 
@@ -879,23 +875,23 @@ export const buildPractices = (count, baseOverrides = {}) => {
 import { buildPractice, buildPracticeWithDependencies } from '../../utils/builders'
 
 describe('GraphNode', () => {
-  it('renders practice name', () => {
-    // Use builder with custom overrides
-    const practice = buildPractice({ name: 'Continuous Integration' })
-    const { getByText } = render(GraphNode, { props: { practice } })
+	it('renders practice name', () => {
+		// Use builder with custom overrides
+		const practice = buildPractice({ name: 'Continuous Integration' })
+		const { getByText } = render(GraphNode, { props: { practice } })
 
-    expect(getByText('Continuous Integration')).toBeInTheDocument()
-  })
+		expect(getByText('Continuous Integration')).toBeInTheDocument()
+	})
 
-  it('shows expand button when practice has dependencies', () => {
-    // Use specialized builder
-    const practice = buildPracticeWithDependencies()
-    const { getByText } = render(GraphNode, {
-      props: { practice, isSelected: true, onExpand: vi.fn() }
-    })
+	it('shows expand button when practice has dependencies', () => {
+		// Use specialized builder
+		const practice = buildPracticeWithDependencies()
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true, onExpand: vi.fn() }
+		})
 
-    expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
-  })
+		expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
+	})
 })
 ```
 
@@ -909,9 +905,9 @@ describe('GraphNode', () => {
  * @returns {Object} API response
  */
 export const buildApiResponse = (data = [], overrides = {}) => ({
-  success: true,
-  data,
-  ...overrides
+	success: true,
+	data,
+	...overrides
 })
 
 /**
@@ -921,9 +917,9 @@ export const buildApiResponse = (data = [], overrides = {}) => ({
  * @returns {Object} Error response
  */
 export const buildApiError = (message = 'Test error', overrides = {}) => ({
-  success: false,
-  error: message,
-  ...overrides
+	success: false,
+	error: message,
+	...overrides
 })
 ```
 
@@ -937,28 +933,28 @@ export const buildApiError = (message = 'Test error', overrides = {}) => ({
 import { vi } from 'vitest'
 
 describe('Component with callbacks', () => {
-  it('calls onClick when clicked', async () => {
-    const handleClick = vi.fn()
-    const { getByTestId } = render(GraphNode, {
-      props: { practice: buildPractice(), onClick: handleClick }
-    })
+	it('calls onClick when clicked', async () => {
+		const handleClick = vi.fn()
+		const { getByTestId } = render(GraphNode, {
+			props: { practice: buildPractice(), onClick: handleClick }
+		})
 
-    await fireEvent.click(getByTestId('graph-node'))
+		await fireEvent.click(getByTestId('graph-node'))
 
-    expect(handleClick).toHaveBeenCalledOnce()
-  })
+		expect(handleClick).toHaveBeenCalledOnce()
+	})
 
-  it('calls callback with correct arguments', async () => {
-    const handleExpand = vi.fn()
-    const practice = buildPractice({ id: 'test-practice' })
-    const { getByText } = render(GraphNode, {
-      props: { practice, isSelected: true, onExpand: handleExpand }
-    })
+	it('calls callback with correct arguments', async () => {
+		const handleExpand = vi.fn()
+		const practice = buildPractice({ id: 'test-practice' })
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true, onExpand: handleExpand }
+		})
 
-    await fireEvent.click(getByText(/Expand Dependencies/))
+		await fireEvent.click(getByText(/Expand Dependencies/))
 
-    expect(handleExpand).toHaveBeenCalledWith('test-practice')
-  })
+		expect(handleExpand).toHaveBeenCalledWith('test-practice')
+	})
 })
 ```
 
@@ -968,26 +964,26 @@ describe('Component with callbacks', () => {
 import { vi, beforeEach, afterEach } from 'vitest'
 
 describe('API integration', () => {
-  beforeEach(() => {
-    global.fetch = vi.fn()
-  })
+	beforeEach(() => {
+		global.fetch = vi.fn()
+	})
 
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
+	afterEach(() => {
+		vi.restoreAllMocks()
+	})
 
-  it('fetches practices successfully', async () => {
-    const mockPractices = buildPractices(3)
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => buildApiResponse(mockPractices)
-    })
+	it('fetches practices successfully', async () => {
+		const mockPractices = buildPractices(3)
+		global.fetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => buildApiResponse(mockPractices)
+		})
 
-    const result = await fetchPractices()
+		const result = await fetchPractices()
 
-    expect(result.data).toEqual(mockPractices)
-    expect(global.fetch).toHaveBeenCalledWith('/api/practices')
-  })
+		expect(result.data).toEqual(mockPractices)
+		expect(global.fetch).toHaveBeenCalledWith('/api/practices')
+	})
 })
 ```
 
@@ -999,36 +995,32 @@ describe('API integration', () => {
 // tests/utils/fixtures.js
 
 export const practiceFixtures = {
-  continuousDelivery: {
-    id: 'continuous-delivery',
-    name: 'Continuous Delivery',
-    category: 'practice',
-    categories: ['practice'],
-    description: 'Ability to get changes into production safely and quickly',
-    benefits: [
-      'Improved delivery performance',
-      'Higher quality releases',
-      'Better team culture'
-    ],
-    dependencyCount: 6
-  },
+	continuousDelivery: {
+		id: 'continuous-delivery',
+		name: 'Continuous Delivery',
+		category: 'practice',
+		categories: ['practice'],
+		description: 'Ability to get changes into production safely and quickly',
+		benefits: ['Improved delivery performance', 'Higher quality releases', 'Better team culture'],
+		dependencyCount: 6
+	},
 
-  continuousIntegration: {
-    id: 'continuous-integration',
-    name: 'Continuous Integration',
-    category: 'practice',
-    categories: ['practice'],
-    description: 'Integrate code changes frequently',
-    benefits: ['Faster feedback', 'Reduced integration issues'],
-    dependencyCount: 4
-  }
+	continuousIntegration: {
+		id: 'continuous-integration',
+		name: 'Continuous Integration',
+		category: 'practice',
+		categories: ['practice'],
+		description: 'Integrate code changes frequently',
+		benefits: ['Faster feedback', 'Reduced integration issues'],
+		dependencyCount: 4
+	}
 }
 
 export const categoryFixtures = {
-  practice: { name: 'practice', icon: '🔄', color: '#3b82f6' },
-  behavior: { name: 'behavior', icon: '👥', color: '#10b981' },
-  culture: { name: 'culture', icon: '🌟', color: '#f59e0b' },
-  tooling: { name: 'tooling', icon: '🛠️', color: '#8b5cf6' }
+	practice: { name: 'practice', icon: '🔄', color: '#3b82f6' },
+	behavior: { name: 'behavior', icon: '👥', color: '#10b981' },
+	culture: { name: 'culture', icon: '🌟', color: '#f59e0b' },
+	tooling: { name: 'tooling', icon: '🛠️', color: '#8b5cf6' }
 }
 ```
 
@@ -1038,13 +1030,13 @@ export const categoryFixtures = {
 
 ### Coverage Targets
 
-| Layer | Coverage Target | Why |
-|-------|----------------|-----|
-| **Domain Layer** | 95-100% | Business logic must be thoroughly tested |
-| **Application Layer** | 85-95% | Service coordination and use cases |
-| **Infrastructure Layer** | 70-85% | Adapters and external integrations |
-| **UI Components** | 80-90% | User-facing behavior |
-| **Overall** | 80%+ | Maintain high confidence in codebase |
+| Layer                    | Coverage Target | Why                                      |
+| ------------------------ | --------------- | ---------------------------------------- |
+| **Domain Layer**         | 95-100%         | Business logic must be thoroughly tested |
+| **Application Layer**    | 85-95%          | Service coordination and use cases       |
+| **Infrastructure Layer** | 70-85%          | Adapters and external integrations       |
+| **UI Components**        | 80-90%          | User-facing behavior                     |
+| **Overall**              | 80%+            | Maintain high confidence in codebase     |
 
 ### Running Coverage Reports
 
@@ -1064,23 +1056,17 @@ npm test -- --coverage --reporter=html
 ```javascript
 // vite.config.js
 export default defineConfig({
-  test: {
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'tests/',
-        '**/*.config.js',
-        '**/*.spec.js',
-        '**/*.test.js'
-      ],
-      statements: 80,
-      branches: 75,
-      functions: 80,
-      lines: 80
-    }
-  }
+	test: {
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'json', 'html'],
+			exclude: ['node_modules/', 'tests/', '**/*.config.js', '**/*.spec.js', '**/*.test.js'],
+			statements: 80,
+			branches: 75,
+			functions: 80,
+			lines: 80
+		}
+	}
 })
 ```
 
@@ -1121,9 +1107,15 @@ export default defineConfig({
 import { describe, it } from 'vitest'
 
 describe.concurrent('Fast parallel tests', () => {
-  it('test 1', async () => { /* ... */ })
-  it('test 2', async () => { /* ... */ })
-  it('test 3', async () => { /* ... */ })
+	it('test 1', async () => {
+		/* ... */
+	})
+	it('test 2', async () => {
+		/* ... */
+	})
+	it('test 3', async () => {
+		/* ... */
+	})
 })
 ```
 
@@ -1132,23 +1124,23 @@ describe.concurrent('Fast parallel tests', () => {
 ```javascript
 // ✅ Good: Minimal setup
 describe('PracticeId', () => {
-  it('creates valid ID', () => {
-    const id = PracticeId.from('test-id')
-    expect(id.toString()).toBe('test-id')
-  })
+	it('creates valid ID', () => {
+		const id = PracticeId.from('test-id')
+		expect(id.toString()).toBe('test-id')
+	})
 })
 
 // ❌ Bad: Excessive setup
 describe('PracticeId', () => {
-  beforeEach(() => {
-    // Unnecessary database connection
-    // Unnecessary API calls
-  })
+	beforeEach(() => {
+		// Unnecessary database connection
+		// Unnecessary API calls
+	})
 
-  it('creates valid ID', () => {
-    const id = PracticeId.from('test-id')
-    expect(id.toString()).toBe('test-id')
-  })
+	it('creates valid ID', () => {
+		const id = PracticeId.from('test-id')
+		expect(id.toString()).toBe('test-id')
+	})
 })
 ```
 
@@ -1157,8 +1149,8 @@ describe('PracticeId', () => {
 ```javascript
 // Mock API calls instead of real network requests
 global.fetch = vi.fn().mockResolvedValue({
-  ok: true,
-  json: async () => mockData
+	ok: true,
+	json: async () => mockData
 })
 ```
 
@@ -1167,12 +1159,12 @@ global.fetch = vi.fn().mockResolvedValue({
 ```javascript
 // vite.config.js
 export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    // Skip source maps in tests for faster execution
-    sourcemap: false
-  }
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		// Skip source maps in tests for faster execution
+		sourcemap: false
+	}
 })
 ```
 
@@ -1184,15 +1176,15 @@ export default defineConfig({
 
 ```javascript
 describe('immutability', () => {
-  it('cannot be modified after creation', () => {
-    const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
+	it('cannot be modified after creation', () => {
+		const practice = createCDPractice(validId, 'Name', validCategory, 'Description')
 
-    expect(() => {
-      practice.name = 'New Name'
-    }).toThrow()
+		expect(() => {
+			practice.name = 'New Name'
+		}).toThrow()
 
-    expect(Object.isFrozen(practice)).toBe(true)
-  })
+		expect(Object.isFrozen(practice)).toBe(true)
+	})
 })
 ```
 
@@ -1200,20 +1192,20 @@ describe('immutability', () => {
 
 ```javascript
 describe('composition', () => {
-  it('pipePractice composes transformations', () => {
-    const practice = createCDPractice(validId, 'Name', validCategory, 'Desc')
+	it('pipePractice composes transformations', () => {
+		const practice = createCDPractice(validId, 'Name', validCategory, 'Desc')
 
-    const transform = pipePractice(
-      p => withRequirement(p, 'Req 1'),
-      p => withBenefit(p, 'Benefit 1')
-    )
+		const transform = pipePractice(
+			p => withRequirement(p, 'Req 1'),
+			p => withBenefit(p, 'Benefit 1')
+		)
 
-    const result = transform(practice)
+		const result = transform(practice)
 
-    expect(result.requirements).toEqual(['Req 1'])
-    expect(result.benefits).toEqual(['Benefit 1'])
-    expect(practice.requirements).toEqual([]) // Original unchanged
-  })
+		expect(result.requirements).toEqual(['Req 1'])
+		expect(result.benefits).toEqual(['Benefit 1'])
+		expect(practice.requirements).toEqual([]) // Original unchanged
+	})
 })
 ```
 
@@ -1221,10 +1213,10 @@ describe('composition', () => {
 
 ```javascript
 describe('error handling', () => {
-  it('throws descriptive error for invalid input', () => {
-    expect(() => validatePracticeId('')).toThrow('Practice ID cannot be empty')
-    expect(() => validatePracticeId('Invalid')).toThrow('must be in kebab-case')
-  })
+	it('throws descriptive error for invalid input', () => {
+		expect(() => validatePracticeId('')).toThrow('Practice ID cannot be empty')
+		expect(() => validatePracticeId('Invalid')).toThrow('must be in kebab-case')
+	})
 })
 ```
 
@@ -1232,23 +1224,23 @@ describe('error handling', () => {
 
 ```javascript
 describe('conditional rendering', () => {
-  it('shows expand button when has dependencies', () => {
-    const practice = buildPractice({ dependencyCount: 3 })
-    const { getByText } = render(GraphNode, {
-      props: { practice, isSelected: true, onExpand: vi.fn() }
-    })
+	it('shows expand button when has dependencies', () => {
+		const practice = buildPractice({ dependencyCount: 3 })
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true, onExpand: vi.fn() }
+		})
 
-    expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
-  })
+		expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
+	})
 
-  it('hides expand button when no dependencies', () => {
-    const practice = buildMinimalPractice()
-    const { queryByText } = render(GraphNode, {
-      props: { practice, isSelected: true, onExpand: vi.fn() }
-    })
+	it('hides expand button when no dependencies', () => {
+		const practice = buildMinimalPractice()
+		const { queryByText } = render(GraphNode, {
+			props: { practice, isSelected: true, onExpand: vi.fn() }
+		})
 
-    expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
-  })
+		expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
+	})
 })
 ```
 
@@ -1256,20 +1248,20 @@ describe('conditional rendering', () => {
 
 ```javascript
 describe('event propagation', () => {
-  it('prevents propagation when expand button is clicked', async () => {
-    const handleClick = vi.fn()
-    const handleExpand = vi.fn()
-    const practice = buildPractice({ dependencyCount: 3 })
+	it('prevents propagation when expand button is clicked', async () => {
+		const handleClick = vi.fn()
+		const handleExpand = vi.fn()
+		const practice = buildPractice({ dependencyCount: 3 })
 
-    const { getByText } = render(GraphNode, {
-      props: { practice, isSelected: true, onClick: handleClick, onExpand: handleExpand }
-    })
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true, onClick: handleClick, onExpand: handleExpand }
+		})
 
-    await fireEvent.click(getByText(/Expand Dependencies/))
+		await fireEvent.click(getByText(/Expand Dependencies/))
 
-    expect(handleExpand).toHaveBeenCalledOnce()
-    expect(handleClick).not.toHaveBeenCalled() // Propagation stopped
-  })
+		expect(handleExpand).toHaveBeenCalledOnce()
+		expect(handleClick).not.toHaveBeenCalled() // Propagation stopped
+	})
 })
 ```
 
@@ -1282,14 +1274,14 @@ describe('event propagation', () => {
 ```javascript
 // ❌ Bad: Testing internal state
 it('sets loading state to true', () => {
-  const component = render(MyComponent)
-  expect(component.instance().state.loading).toBe(true)
+	const component = render(MyComponent)
+	expect(component.instance().state.loading).toBe(true)
 })
 
 // ✅ Good: Testing user-visible behavior
 it('shows loading spinner while fetching data', () => {
-  const { getByTestId } = render(MyComponent)
-  expect(getByTestId('loading-spinner')).toBeVisible()
+	const { getByTestId } = render(MyComponent)
+	expect(getByTestId('loading-spinner')).toBeVisible()
 })
 ```
 
@@ -1322,17 +1314,17 @@ vi.mock('node-fetch') // External API
 ```javascript
 // ❌ Bad: Relies on timing
 it('updates after delay', async () => {
-  component.update()
-  await new Promise(resolve => setTimeout(resolve, 100))
-  expect(component.state).toBe('updated')
+	component.update()
+	await new Promise(resolve => setTimeout(resolve, 100))
+	expect(component.state).toBe('updated')
 })
 
 // ✅ Good: Wait for specific condition
 it('updates after delay', async () => {
-  component.update()
-  await waitFor(() => {
-    expect(component.state).toBe('updated')
-  })
+	component.update()
+	await waitFor(() => {
+		expect(component.state).toBe('updated')
+	})
 })
 ```
 
@@ -1341,24 +1333,24 @@ it('updates after delay', async () => {
 ```javascript
 // ❌ Bad: Tests too much
 it('handles user workflow', () => {
-  component.login()
-  expect(user.isLoggedIn).toBe(true)
-  component.createPost()
-  expect(posts.length).toBe(1)
-  component.logout()
-  expect(user.isLoggedIn).toBe(false)
+	component.login()
+	expect(user.isLoggedIn).toBe(true)
+	component.createPost()
+	expect(posts.length).toBe(1)
+	component.logout()
+	expect(user.isLoggedIn).toBe(false)
 })
 
 // ✅ Good: One behavior per test
 it('logs user in successfully', () => {
-  component.login()
-  expect(user.isLoggedIn).toBe(true)
+	component.login()
+	expect(user.isLoggedIn).toBe(true)
 })
 
 it('creates new post when logged in', () => {
-  // Setup: user is logged in
-  component.createPost()
-  expect(posts.length).toBe(1)
+	// Setup: user is logged in
+	component.createPost()
+	expect(posts.length).toBe(1)
 })
 ```
 
@@ -1367,24 +1359,24 @@ it('creates new post when logged in', () => {
 ```javascript
 // ❌ Bad: Only tests happy path
 it('creates practice', () => {
-  const practice = createPractice('valid-id', 'Name')
-  expect(practice.id).toBe('valid-id')
+	const practice = createPractice('valid-id', 'Name')
+	expect(practice.id).toBe('valid-id')
 })
 
 // ✅ Good: Tests error cases
 describe('createPractice', () => {
-  it('creates practice with valid inputs', () => {
-    const practice = createPractice('valid-id', 'Name')
-    expect(practice.id).toBe('valid-id')
-  })
+	it('creates practice with valid inputs', () => {
+		const practice = createPractice('valid-id', 'Name')
+		expect(practice.id).toBe('valid-id')
+	})
 
-  it('throws error when id is empty', () => {
-    expect(() => createPractice('', 'Name')).toThrow('ID cannot be empty')
-  })
+	it('throws error when id is empty', () => {
+		expect(() => createPractice('', 'Name')).toThrow('ID cannot be empty')
+	})
 
-  it('throws error when name is empty', () => {
-    expect(() => createPractice('valid-id', '')).toThrow('Name is required')
-  })
+	it('throws error when name is empty', () => {
+		expect(() => createPractice('valid-id', '')).toThrow('Name is required')
+	})
 })
 ```
 
@@ -1396,20 +1388,20 @@ describe('createPractice', () => {
 
 ```javascript
 describe('accessibility', () => {
-  it('uses semantic heading for title', () => {
-    const { container } = render(Legend)
+	it('uses semantic heading for title', () => {
+		const { container } = render(Legend)
 
-    const heading = container.querySelector('h3')
-    expect(heading).toBeInTheDocument()
-    expect(heading?.textContent).toBe('Requires')
-  })
+		const heading = container.querySelector('h3')
+		expect(heading).toBeInTheDocument()
+		expect(heading?.textContent).toBe('Requires')
+	})
 
-  it('uses list semantics for categories', () => {
-    const { container } = render(Legend)
+	it('uses list semantics for categories', () => {
+		const { container } = render(Legend)
 
-    const list = container.querySelector('ul.list-none')
-    expect(list).toBeInTheDocument()
-  })
+		const list = container.querySelector('ul.list-none')
+		expect(list).toBeInTheDocument()
+	})
 })
 ```
 
@@ -1417,21 +1409,21 @@ describe('accessibility', () => {
 
 ```javascript
 describe('ARIA attributes', () => {
-  it('includes category information in aria-label', () => {
-    const practice = buildPractice({ categories: ['behavior', 'tooling'] })
-    const { container } = render(GraphNode, { props: { practice } })
+	it('includes category information in aria-label', () => {
+		const practice = buildPractice({ categories: ['behavior', 'tooling'] })
+		const { container } = render(GraphNode, { props: { practice } })
 
-    const categoryContainer = container.querySelector('[role="img"]')
-    expect(categoryContainer?.getAttribute('aria-label')).toContain('behavior')
-    expect(categoryContainer?.getAttribute('aria-label')).toContain('tooling')
-  })
+		const categoryContainer = container.querySelector('[role="img"]')
+		expect(categoryContainer?.getAttribute('aria-label')).toContain('behavior')
+		expect(categoryContainer?.getAttribute('aria-label')).toContain('tooling')
+	})
 
-  it('provides accessible button labels', () => {
-    const { getByRole } = render(ExpandButton)
+	it('provides accessible button labels', () => {
+		const { getByRole } = render(ExpandButton)
 
-    const button = getByRole('button', { name: /Expand Dependencies/i })
-    expect(button).toBeInTheDocument()
-  })
+		const button = getByRole('button', { name: /Expand Dependencies/i })
+		expect(button).toBeInTheDocument()
+	})
 })
 ```
 
@@ -1439,26 +1431,26 @@ describe('ARIA attributes', () => {
 
 ```javascript
 describe('keyboard navigation', () => {
-  it('includes focus styles for keyboard navigation', () => {
-    const practice = buildPractice()
-    const { getByTestId } = render(GraphNode, { props: { practice } })
+	it('includes focus styles for keyboard navigation', () => {
+		const practice = buildPractice()
+		const { getByTestId } = render(GraphNode, { props: { practice } })
 
-    const node = getByTestId('graph-node')
-    expect(node.className).toContain('focus:outline-none')
-    expect(node.className).toContain('focus:ring-2')
-  })
+		const node = getByTestId('graph-node')
+		expect(node.className).toContain('focus:outline-none')
+		expect(node.className).toContain('focus:ring-2')
+	})
 
-  it('can be activated with Enter key', async () => {
-    const handleClick = vi.fn()
-    const { getByTestId } = render(GraphNode, {
-      props: { practice: buildPractice(), onClick: handleClick }
-    })
+	it('can be activated with Enter key', async () => {
+		const handleClick = vi.fn()
+		const { getByTestId } = render(GraphNode, {
+			props: { practice: buildPractice(), onClick: handleClick }
+		})
 
-    const node = getByTestId('graph-node')
-    await fireEvent.keyDown(node, { key: 'Enter' })
+		const node = getByTestId('graph-node')
+		await fireEvent.keyDown(node, { key: 'Enter' })
 
-    expect(handleClick).toHaveBeenCalled()
-  })
+		expect(handleClick).toHaveBeenCalled()
+	})
 })
 ```
 
@@ -1466,16 +1458,16 @@ describe('keyboard navigation', () => {
 
 ```javascript
 describe('color accessibility', () => {
-  it('does not rely solely on color for information', () => {
-    const { container } = render(PracticeNode)
+	it('does not rely solely on color for information', () => {
+		const { container } = render(PracticeNode)
 
-    // Categories use both color AND icon
-    const categoryIcon = container.querySelector('[role="img"]')
-    expect(categoryIcon).toBeInTheDocument()
+		// Categories use both color AND icon
+		const categoryIcon = container.querySelector('[role="img"]')
+		expect(categoryIcon).toBeInTheDocument()
 
-    // Status uses both color AND text
-    expect(container.textContent).toContain('Selected')
-  })
+		// Status uses both color AND text
+		expect(container.textContent).toContain('Selected')
+	})
 })
 ```
 
@@ -1541,13 +1533,9 @@ jobs:
 ```json
 // package.json
 {
-  "lint-staged": {
-    "*.{js,svelte}": [
-      "npm run lint:fix",
-      "npm run format:fix",
-      "npm test -- --run --changed"
-    ]
-  }
+	"lint-staged": {
+		"*.{js,svelte}": ["npm run lint:fix", "npm run format:fix", "npm test -- --run --changed"]
+	}
 }
 ```
 
@@ -1556,19 +1544,19 @@ jobs:
 ```javascript
 // playwright.config.js
 export default defineConfig({
-  // Run fewer workers in CI
-  workers: process.env.CI ? 1 : undefined,
+	// Run fewer workers in CI
+	workers: process.env.CI ? 1 : undefined,
 
-  // Retry failed tests in CI
-  retries: process.env.CI ? 2 : 0,
+	// Retry failed tests in CI
+	retries: process.env.CI ? 2 : 0,
 
-  // Don't allow test.only in CI
-  forbidOnly: !!process.env.CI,
+	// Don't allow test.only in CI
+	forbidOnly: !!process.env.CI,
 
-  // Use trace on first retry
-  use: {
-    trace: 'on-first-retry'
-  }
+	// Use trace on first retry
+	use: {
+		trace: 'on-first-retry'
+	}
 })
 ```
 
@@ -1590,14 +1578,14 @@ export default defineConfig({
 // When refactoring component, update tests to match
 // Old implementation
 it('calls setLoading when fetching', () => {
-  component.fetchData()
-  expect(mockSetLoading).toHaveBeenCalled()
+	component.fetchData()
+	expect(mockSetLoading).toHaveBeenCalled()
 })
 
 // New implementation (using loading state differently)
 it('shows loading spinner while fetching', () => {
-  component.fetchData()
-  expect(getByTestId('loading-spinner')).toBeVisible()
+	component.fetchData()
+	expect(getByTestId('loading-spinner')).toBeVisible()
 })
 ```
 
@@ -1606,7 +1594,7 @@ it('shows loading spinner while fetching', () => {
 ```javascript
 // When removing a feature, remove its tests
 describe('Deprecated Feature', () => {
-  // ❌ Delete these tests when feature is removed
+	// ❌ Delete these tests when feature is removed
 })
 ```
 
@@ -1631,16 +1619,16 @@ npm test -- --run --reporter=verbose --repeat=10
 ```javascript
 // ❌ Flaky: Race condition
 it('loads data', async () => {
-  loadData()
-  expect(data).toBeDefined()
+	loadData()
+	expect(data).toBeDefined()
 })
 
 // ✅ Fixed: Wait for condition
 it('loads data', async () => {
-  loadData()
-  await waitFor(() => {
-    expect(data).toBeDefined()
-  })
+	loadData()
+	await waitFor(() => {
+		expect(data).toBeDefined()
+	})
 })
 ```
 
@@ -1650,17 +1638,17 @@ it('loads data', async () => {
 
 ```javascript
 describe('Complex Feature', () => {
-  /**
-   * Setup explanation:
-   * 1. Create practice with specific dependencies
-   * 2. Mock API to return specific data
-   * 3. Simulate user navigating to practice detail
-   *
-   * This tests the edge case where a practice has circular dependencies.
-   */
-  it('handles circular dependencies gracefully', async () => {
-    // Test implementation
-  })
+	/**
+	 * Setup explanation:
+	 * 1. Create practice with specific dependencies
+	 * 2. Mock API to return specific data
+	 * 3. Simulate user navigating to practice detail
+	 *
+	 * This tests the edge case where a practice has circular dependencies.
+	 */
+	it('handles circular dependencies gracefully', async () => {
+		// Test implementation
+	})
 })
 ```
 
