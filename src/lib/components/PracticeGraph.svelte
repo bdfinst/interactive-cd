@@ -306,12 +306,15 @@
 			{#each treeConnections as conn}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#3b82f6"
+					stroke="#93c5fd"
 					stroke-width="2"
-					opacity="0.4"
+					opacity="0.7"
 					fill="none"
 				/>
-				<circle cx={conn.x2} cy={conn.y2} r="3" fill="#3b82f6" opacity="0.6" />
+				<!-- Start point (parent) -->
+				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<!-- End point (child) -->
+				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
 			{/each}
 		</svg>
 
@@ -351,13 +354,16 @@
 			{#each connections as conn}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#3b82f6"
+					stroke="#93c5fd"
 					stroke-width="2"
 					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
-					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '1' : '0.6'}
+					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '0.9' : '0.7'}
 					fill="none"
 				/>
-				<circle cx={conn.x2} cy={conn.y2} r="4" fill="#3b82f6" />
+				<!-- Start point (parent) -->
+				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<!-- End point (child) -->
+				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
 			{/each}
 		</svg>
 
