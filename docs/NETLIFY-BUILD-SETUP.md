@@ -36,6 +36,7 @@ Netlify's current default build image (Ubuntu Focal 20.04) may already include P
 **Action Required:** None - just deploy and check build logs.
 
 If the build succeeds and you see:
+
 ```
 ✅ PostgreSQL client installed
 ```
@@ -43,6 +44,7 @@ If the build succeeds and you see:
 Then you're all set! The current configuration will work.
 
 If you see:
+
 ```
 ⚠️  WARNING: psql (PostgreSQL client) not found in build environment
 ```
@@ -95,11 +97,13 @@ Add build image configuration:
 Commit and push the changes. Netlify will build using your custom Docker image.
 
 **Pros:**
+
 - ✅ Full control over build environment
 - ✅ Guaranteed to have psql available
 - ✅ Consistent builds
 
 **Cons:**
+
 - ❌ Longer build times (Docker image build)
 - ❌ More complex configuration
 
@@ -112,6 +116,7 @@ Run migrations separately from the build process.
 #### **How It Works:**
 
 Your current script already handles this gracefully. If `psql` is not available, it exits with:
+
 ```
 Skipping database migrations (build will continue).
 ```
@@ -140,11 +145,13 @@ netlify build --context production
 ```
 
 **Pros:**
+
 - ✅ Simplest setup
 - ✅ No build configuration needed
 - ✅ Fast builds (skips migration step)
 
 **Cons:**
+
 - ❌ Manual step required after deployment
 - ❌ Potential for production to run without latest migrations
 
@@ -162,40 +169,40 @@ Create `netlify/functions/migrate.js`:
 import { Client } from 'pg'
 
 export async function handler(event, context) {
-  // Only allow POST requests from authorized sources
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' }
-  }
+	// Only allow POST requests from authorized sources
+	if (event.httpMethod !== 'POST') {
+		return { statusCode: 405, body: 'Method Not Allowed' }
+	}
 
-  // Verify authorization (use environment variable for secret)
-  const authHeader = event.headers.authorization
-  if (authHeader !== `Bearer ${process.env.MIGRATION_SECRET}`) {
-    return { statusCode: 401, body: 'Unauthorized' }
-  }
+	// Verify authorization (use environment variable for secret)
+	const authHeader = event.headers.authorization
+	if (authHeader !== `Bearer ${process.env.MIGRATION_SECRET}`) {
+		return { statusCode: 401, body: 'Unauthorized' }
+	}
 
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-  })
+	const client = new Client({
+		connectionString: process.env.DATABASE_URL,
+		ssl: { rejectUnauthorized: false }
+	})
 
-  try {
-    await client.connect()
+	try {
+		await client.connect()
 
-    // Run migrations here
-    // (You can read SQL files or include migration logic)
+		// Run migrations here
+		// (You can read SQL files or include migration logic)
 
-    await client.end()
+		await client.end()
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true, message: 'Migrations applied' })
-    }
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, error: error.message })
-    }
-  }
+		return {
+			statusCode: 200,
+			body: JSON.stringify({ success: true, message: 'Migrations applied' })
+		}
+	} catch (error) {
+		return {
+			statusCode: 500,
+			body: JSON.stringify({ success: false, error: error.message })
+		}
+	}
 }
 ```
 
@@ -208,11 +215,13 @@ curl -X POST https://your-site.netlify.app/.netlify/functions/migrate \
 ```
 
 **Pros:**
+
 - ✅ No psql dependency
 - ✅ Can be automated via build hooks
 - ✅ Uses existing pg npm package
 
 **Cons:**
+
 - ❌ More complex implementation
 - ❌ Need to reimplement migration logic in JavaScript
 - ❌ Security considerations (need to secure endpoint)
@@ -228,12 +237,14 @@ For most use cases, we recommend **Option 3 (Skip During Build)** initially:
 3. **When adding data:** Run `./db/deploy-migrations.sh` manually
 
 **Why?**
+
 - ✅ No build configuration changes needed
 - ✅ Works immediately
 - ✅ Clear separation of concerns
 - ✅ Easy to understand and debug
 
 **When to use other options:**
+
 - **Option 1:** Try first - it might just work!
 - **Option 2:** When you need automatic migrations on every deploy
 - **Option 4:** When you want fully automated migrations without build dependencies
@@ -256,6 +267,7 @@ npm run build
 ### **Check Build Logs in Netlify:**
 
 Look for:
+
 ```
 ============================================================================
   DATABASE MIGRATIONS - CI/CD DEPLOYMENT
@@ -279,6 +291,7 @@ psql $DATABASE_URL -c "SELECT * FROM schema_migrations ORDER BY applied_at DESC 
 ### Build fails with "psql: command not found"
 
 **Solution:** Script already handles this gracefully. Check build logs to confirm it says:
+
 ```
 ⚠️  WARNING: psql (PostgreSQL client) not found in build environment
 Skipping database migrations (build will continue).
@@ -289,6 +302,7 @@ If build still fails, there's a different issue. Check full build logs.
 ### Migrations don't run but build succeeds
 
 **Expected behavior** if psql is not available. Run migrations manually:
+
 ```bash
 export DATABASE_URL="..."
 ./db/deploy-migrations.sh
@@ -313,6 +327,7 @@ fi
 ```
 
 This means:
+
 - ✅ Builds will **never fail** due to missing psql
 - ✅ You can run migrations manually when needed
 - ✅ No configuration changes required
@@ -326,5 +341,6 @@ This means:
 3. **If you need automation** - Implement Option 2 (Docker) or Option 4 (Functions)
 
 For questions or issues, see:
+
 - [Netlify Build Documentation](https://docs.netlify.com/configure-builds/overview/)
 - [Neon Database Documentation](https://neon.tech/docs)

@@ -50,8 +50,8 @@
 	<link rel="canonical" href={canonical} />
 
 	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="/favicon.png" />
-	<link rel="apple-touch-icon" href="/images/logo.png" />
+	<link rel="icon" type="image/png" href="/images/favicons/favicon.png" />
+	<link rel="apple-touch-icon" href="/images/favicons/favicon-180x180.png" />
 
 	<!-- Theme Color -->
 	<meta name="theme-color" content={themeColor} />

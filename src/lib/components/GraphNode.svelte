@@ -89,6 +89,27 @@
 			{practice.description}
 		</p>
 
+		<!-- Requirements (Culture, Behavior, Tooling) -->
+		{#if practice.requirements && practice.requirements.length > 0}
+			<div class={compact ? 'mb-1' : 'mb-3'}>
+				<h4 class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-blue-700">
+					Requirements
+				</h4>
+				<ul
+					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
+						? 'text-[0.45rem]'
+						: 'text-xs'} text-gray-700 list-none"
+				>
+					{#each practice.requirements as requirement}
+						<li class="flex items-start {compact ? 'gap-0.5' : 'gap-2'}">
+							<span class="flex-shrink-0 text-blue-600">•</span>
+							<span>{requirement}</span>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+
 		<!-- Benefits -->
 		{#if practice.benefits && practice.benefits.length > 0}
 			<div class={compact ? 'mb-1' : 'mb-3'}>
@@ -124,6 +145,18 @@
 			>
 				{isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
 			</button>
+		{/if}
+	{:else}
+		<!-- Show dependency count when not selected -->
+		{#if practice.dependencyCount > 0}
+			<div
+				class="text-center {compact
+					? 'mt-1 pt-1 text-[0.45rem]'
+					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
+			>
+				{practice.dependencyCount}
+				{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+			</div>
 		{/if}
 	{/if}
 </button>

@@ -7,6 +7,7 @@ This guide explains how to configure different databases for production and pre-
 ## Overview
 
 Your Netlify site can use different Neon databases for:
+
 - **Production** - Main branch deploys
 - **Deploy Previews** - Pull request previews
 - **Branch Deploys** - Feature branch deploys
@@ -46,16 +47,19 @@ Branch Deploys:  postgres://user:pass@ep-xxx-staging-xxx.neon.tech/main
 3. Add `DATABASE_URL` with different values for each context:
 
 #### Production Environment:
+
 - Variable: `DATABASE_URL`
 - Value: `postgres://...main...`
 - Scopes: **Production** only
 
 #### Deploy Preview Environment:
+
 - Variable: `DATABASE_URL`
 - Value: `postgres://...preview...`
 - Scopes: **Deploy previews** only
 
 #### Branch Deploy Environment:
+
 - Variable: `DATABASE_URL`
 - Value: `postgres://...staging...`
 - Scopes: **Branch deploys** only
@@ -82,6 +86,7 @@ Branch Deploys:  postgres://user:pass@ep-xxx-staging-xxx.neon.tech/main
 ### Build Output:
 
 You'll see in the build logs:
+
 ```
 ============================================================================
   DATABASE MIGRATIONS - CI/CD DEPLOYMENT
@@ -114,6 +119,7 @@ export DATABASE_URL="postgres://...preview..."
 ## Neon-Specific Features
 
 ### Database Branching Benefits:
+
 - **Instant creation** - Branches are created in seconds
 - **Copy-on-write** - Only stores differences, saving storage
 - **Point-in-time recovery** - Create branches from any point in time
@@ -151,14 +157,17 @@ neon branches delete preview
 ## Troubleshooting
 
 ### Build fails with "DATABASE_URL not set"
+
 - Check environment variable is set for correct context
 - Verify scope includes the deployment context
 
 ### Migrations fail on preview database
+
 - Ensure preview database is initialized
 - Check if schema version matches migration expectations
 
 ### Can't connect to database
+
 - Verify connection string is correct
 - Check Neon database is running (not suspended)
 - Ensure IP allowlist includes Netlify (if configured)
@@ -173,6 +182,7 @@ neon branches delete preview
 ## Cost Optimization
 
 Neon branches are cost-effective:
+
 - **Free tier** - Includes 10 branches
 - **Autosuspend** - Preview databases suspend when inactive
 - **Storage** - Only changed data counts toward storage quota

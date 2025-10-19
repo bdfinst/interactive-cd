@@ -165,14 +165,14 @@ describe('SEO', () => {
 			render(SEO)
 
 			const favicon = document.querySelector('link[rel="icon"]')
-			expect(favicon?.getAttribute('href')).toBe('/favicon.png')
+			expect(favicon?.getAttribute('href')).toBe('/images/favicons/favicon.png')
 		})
 
 		it('sets apple touch icon', () => {
 			render(SEO)
 
 			const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]')
-			expect(appleTouchIcon?.getAttribute('href')).toBe('/images/logo.png')
+			expect(appleTouchIcon?.getAttribute('href')).toBe('/images/favicons/favicon-180x180.png')
 		})
 
 		it('sets theme color', () => {
