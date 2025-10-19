@@ -136,8 +136,10 @@ npm run db:check
 Migrations run automatically during build:
 
 ```bash
-npm run build  # Runs db:migrate internally
+npm run build  # Runs db:migrate:node internally
 ```
+
+**Note:** CI/CD environments use the Node.js migration runner (`db/deploy-migrations.js`) instead of the bash version, since it doesn't require the `psql` command-line tool. Both versions produce identical results.
 
 This is configured in:
 

@@ -12,10 +12,11 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "npm run db:migrate && vite build",
+		"build": "npm run db:migrate:node && vite build",
 		"build:app": "vite build",
 		"db:check": "bash db/check-migrations.sh",
 		"db:migrate": "bash db/deploy-migrations.sh",
+		"db:migrate:node": "node db/deploy-migrations.js",
 		"db:migrate:local": "bash db/migrate-local.sh",
 		"db:status": "psql ${DATABASE_URL:-postgresql://localhost:5432/interactive_cd} -c 'SELECT migration_name, migration_type, applied_at, success FROM schema_migrations ORDER BY applied_at DESC LIMIT 20;'",
 		"dev": "npm run db:migrate:local && vite dev",

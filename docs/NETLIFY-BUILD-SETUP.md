@@ -1,12 +1,33 @@
-# Netlify Build Setup - PostgreSQL Client Installation
+# Netlify Build Setup - Database Migrations
 
-This guide explains how to ensure PostgreSQL client tools (`psql`) are available during Netlify builds for running database migrations.
+This guide explains how database migrations work in Netlify builds.
 
-## The Problem
+## ✅ Current Solution: Node.js Migration Runner
 
-The build fails because `psql` (PostgreSQL client) is not available by default in Netlify's build environment, and the script cannot use `sudo` to install it.
+**Status:** Migrations now work automatically in all Netlify builds!
 
-## Solutions (Choose One)
+We use a Node.js-based migration runner (`db/deploy-migrations.js`) that uses the `pg` npm package instead of requiring the `psql` command-line tool. This works in any Node.js environment without additional setup.
+
+### How It Works:
+
+1. **Build process** runs `npm run build`
+2. **Build script** runs `npm run db:migrate:node` before building the app
+3. **Node.js runner** uses the `pg` package to:
+   - Connect to the database
+   - Read SQL migration files
+   - Execute migrations
+   - Report results
+
+### Benefits:
+
+- ✅ Works in all Netlify build environments (no psql required)
+- ✅ No custom Docker images needed
+- ✅ No build plugins required
+- ✅ Uses existing `pg` npm dependency
+- ✅ Identical output format to bash version
+- ✅ Automatic in production, previews, and branch deploys
+
+## Previous Approaches (Historical Reference)
 
 ### **Option 1: Use Netlify's Default Image (Recommended - Try First)**
 
