@@ -5,6 +5,7 @@
 	 * Displays a practice as a node in the dependency graph
 	 */
 	import { CATEGORIES } from '$lib/constants/categories.js'
+	import { categorizeRequirement } from '$lib/utils/categorizeRequirement.js'
 
 	export let practice
 	export let isRoot = false
@@ -101,9 +102,23 @@
 						: 'text-xs'} text-gray-700 list-none"
 				>
 					{#each practice.requirements as requirement}
-						<li class="flex items-start {compact ? 'gap-0.5' : 'gap-2'}">
-							<span class="flex-shrink-0 text-blue-600">•</span>
-							<span>{requirement}</span>
+						{@const categories = categorizeRequirement(requirement)}
+						<li class="flex items-start {compact ? 'gap-1' : 'gap-2'}">
+							<span class="flex-shrink-0 text-gray-400">•</span>
+							<div class="flex items-center {compact ? 'gap-1' : 'gap-1.5'} flex-1">
+								<div class="flex items-center {compact ? 'gap-0.5' : 'gap-1'}">
+									{#each categories as category}
+										<span
+											class="{compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} rounded-full flex-shrink-0"
+											class:bg-[#10b981]={category === 'behavior'}
+											class:bg-[#f59e0b]={category === 'culture'}
+											class:bg-[#8b5cf6]={category === 'tooling'}
+											title={category}
+										></span>
+									{/each}
+								</div>
+								<span class="flex-1">{requirement}</span>
+							</div>
 						</li>
 					{/each}
 				</ul>
