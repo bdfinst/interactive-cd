@@ -10,10 +10,15 @@
 #
 # Environment Variables:
 #   DATABASE_URL - PostgreSQL connection string (default: localhost)
+#   CI, GITHUB_ACTIONS, GITLAB_CI, CIRCLECI - Skip migrations if set and DB unavailable
+#
+# CI Behavior:
+#   In CI environments without database access, exits gracefully (exit 0)
+#   This allows tests to run without requiring a database connection.
 #
 # Exit Codes:
-#   0 - Success (migrations applied or already up-to-date)
-#   1 - Error (database unavailable or migration failed)
+#   0 - Success (migrations applied, already up-to-date, or skipped in CI)
+#   1 - Error (database unavailable in non-CI environment or migration failed)
 # ============================================================================
 
 set -e  # Exit on error
@@ -60,6 +65,12 @@ log_error() {
 # Check if psql is available
 check_psql() {
   if ! command -v psql &> /dev/null; then
+    # Check if we're in a CI environment
+    if [ -n "${CI:-}" ] || [ -n "${GITHUB_ACTIONS:-}" ] || [ -n "${GITLAB_CI:-}" ] || [ -n "${CIRCLECI:-}" ]; then
+      log_warning "Skipping database migrations (CI environment, psql not available)"
+      exit 0
+    fi
+
     log_error "psql not found"
     echo ""
     echo "Install PostgreSQL client:"
@@ -73,6 +84,12 @@ check_psql() {
 # Check if database is reachable
 check_database() {
   if ! psql "$DATABASE_URL" -c "SELECT 1;" > /dev/null 2>&1; then
+    # Check if we're in a CI environment
+    if [ -n "${CI:-}" ] || [ -n "${GITHUB_ACTIONS:-}" ] || [ -n "${GITLAB_CI:-}" ] || [ -n "${CIRCLECI:-}" ]; then
+      log_warning "Skipping database migrations (CI environment, no database configured)"
+      exit 0
+    fi
+
     log_error "Cannot connect to database"
     echo ""
     echo "Ensure database is running:"
