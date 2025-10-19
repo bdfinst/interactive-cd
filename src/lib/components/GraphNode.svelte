@@ -14,6 +14,8 @@
 	export let onExpand = null
 	export let compact = false
 
+	let hoveredCategory = null
+
 	$: categories =
 		practice.categories && practice.categories.length > 0
 			? practice.categories
@@ -56,15 +58,27 @@
 			role="img"
 			aria-label="Category: {categories.join(', ')}"
 		>
-			{#each categories as category}
-				<span
-					class="{compact ? 'w-1.5 h-1.5' : 'w-3.5 h-3.5'} rounded-full flex-shrink-0"
-					class:bg-[#10b981]={category === 'behavior'}
-					class:bg-[#f59e0b]={category === 'culture'}
-					class:bg-[#8b5cf6]={category === 'tooling'}
-					class:bg-gray-500={!CATEGORIES[category]}
-					title={category}
-				></span>
+			{#each categories as category, index}
+				<div class="relative inline-flex">
+					<span
+						class="{compact ? 'w-1.5 h-1.5' : 'w-3.5 h-3.5'} rounded-full flex-shrink-0 cursor-help"
+						class:bg-[#10b981]={category === 'behavior'}
+						class:bg-[#f59e0b]={category === 'culture'}
+						class:bg-[#8b5cf6]={category === 'tooling'}
+						class:bg-gray-500={!CATEGORIES[category]}
+						on:mouseenter={() => (hoveredCategory = index)}
+						on:mouseleave={() => (hoveredCategory = null)}
+						role="tooltip"
+						aria-label={CATEGORIES[category]?.label || category}
+					></span>
+					{#if hoveredCategory === index && CATEGORIES[category]}
+						<div
+							class="absolute top-[calc(100%+0.25rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[4px] before:border-transparent before:border-b-black/90"
+						>
+							{CATEGORIES[category].label}
+						</div>
+					{/if}
+				</div>
 			{/each}
 		</div>
 	</div>

@@ -8,6 +8,6 @@
 
 <Header />
 
-<div class="min-h-screen pt-10">
+<div class="min-h-screen pt-32 sm:pt-28">
 	<slot />
 </div>

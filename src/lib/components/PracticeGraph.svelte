@@ -5,6 +5,7 @@
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
 	import { onMount, afterUpdate } from 'svelte'
+	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import GraphNode from './GraphNode.svelte'
 
 	let containerRef
@@ -21,14 +22,36 @@
 	let dependencies = []
 	let loading = false
 
-	// Full tree expand/collapse state
-	let isFullTreeExpanded = false
+	// Full tree data
 	let fullTreeData = null
 
 	// Initialize with provided practices
 	onMount(async () => {
 		await loadCurrentView()
 	})
+
+	// React to expand/collapse changes from store
+	$: if ($isFullTreeExpanded) {
+		handleExpand()
+	} else {
+		handleCollapse()
+	}
+
+	async function handleExpand() {
+		if (!fullTreeData) {
+			await loadFullTree()
+			selectedNodeId = currentPractice?.id || 'continuous-delivery'
+		}
+	}
+
+	async function handleCollapse() {
+		if (fullTreeData) {
+			navigationPath = ['continuous-delivery']
+			selectedNodeId = null
+			fullTreeData = null
+			await loadCurrentView()
+		}
+	}
 
 	async function loadCurrentView() {
 		loading = true
@@ -110,23 +133,6 @@
 			selectedNodeId = practiceId
 		}
 		setTimeout(calculateConnections, 50)
-	}
-
-	async function toggleFullTree() {
-		isFullTreeExpanded = !isFullTreeExpanded
-
-		if (isFullTreeExpanded) {
-			// Load full tree
-			await loadFullTree()
-			// Select the current practice
-			selectedNodeId = currentPractice?.id || 'continuous-delivery'
-		} else {
-			// Collapse: reset to root and select it
-			navigationPath = ['continuous-delivery']
-			selectedNodeId = null
-			fullTreeData = null
-			await loadCurrentView()
-		}
 	}
 
 	async function loadFullTree() {
@@ -278,20 +284,7 @@
 	})
 </script>
 
-<div class="relative w-full min-h-screen p-8 mt-16" bind:this={containerRef}>
-	<!-- Toggle Full Tree Button -->
-	<div class="flex justify-end mb-6">
-		<button
-			on:click={toggleFullTree}
-			class="px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isFullTreeExpanded
-				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
-			data-testid="toggle-full-tree"
-		>
-			{isFullTreeExpanded ? 'Collapse Tree' : 'Expand Full Tree'}
-		</button>
-	</div>
-
+<div class="relative w-full min-h-screen p-8" bind:this={containerRef}>
 	{#if loading}
 		<div class="flex items-center justify-center py-12">
 			<div class="text-center">
@@ -299,7 +292,7 @@
 				<p class="text-gray-300">Loading dependencies...</p>
 			</div>
 		</div>
-	{:else if isFullTreeExpanded}
+	{:else if $isFullTreeExpanded}
 		<!-- Full Tree View -->
 		<div class="relative z-10">
 			{#if flattenedTree.length > 0}
