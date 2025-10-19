@@ -19,6 +19,10 @@ echo "  DATABASE MIGRATIONS - CI/CD DEPLOYMENT"
 echo "============================================================================"
 echo ""
 
+# Detect Netlify context
+CONTEXT="${CONTEXT:-unknown}"
+echo "🌐 Netlify Context: $CONTEXT"
+
 # Check if DATABASE_URL is set
 if [ -z "$DATABASE_URL" ]; then
   echo "❌ ERROR: DATABASE_URL environment variable is not set"
@@ -29,20 +33,22 @@ if [ -z "$DATABASE_URL" ]; then
   exit 0  # Exit gracefully (don't fail the build)
 fi
 
-echo "📊 Database connection detected"
+# Show database being used (mask password)
+DB_INFO=$(echo "$DATABASE_URL" | sed -E 's/:[^:@]+@/:***@/')
+echo "📊 Database: $DB_INFO"
 echo ""
 
 # Check if psql is available
 if ! command -v psql &> /dev/null; then
-  echo "⚠️  WARNING: psql not found in build environment"
-  echo "Installing PostgreSQL client..."
-
-  # Install psql in Netlify Ubuntu environment
-  sudo apt-get update -qq
-  sudo apt-get install -y -qq postgresql-client
-
-  echo "✅ PostgreSQL client installed"
+  echo "⚠️  WARNING: psql (PostgreSQL client) not found in build environment"
   echo ""
+  echo "To run migrations in Netlify, you need to:"
+  echo "  1. Add the 'essential-postgres' build plugin to netlify.toml, OR"
+  echo "  2. Use a build image that includes PostgreSQL client"
+  echo ""
+  echo "Skipping database migrations (build will continue)."
+  echo ""
+  exit 0  # Exit gracefully - don't fail the build
 fi
 
 # Check if database is reachable
