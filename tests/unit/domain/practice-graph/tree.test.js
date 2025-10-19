@@ -160,11 +160,97 @@ describe('Practice Graph Tree Operations', () => {
 			expect(result.map(n => ({ id: n.id, level: n.level }))).toEqual([
 				{ id: 'root', level: 0 },
 				{ id: 'branch1', level: 1 },
+				{ id: 'branch2', level: 1 },
 				{ id: 'branch1-child1', level: 2 },
 				{ id: 'branch1-child2', level: 2 },
-				{ id: 'branch2', level: 1 },
 				{ id: 'branch2-child1', level: 2 }
 			])
+		})
+
+		it('deduplicates practices appearing at multiple levels (shows at deepest level only)', () => {
+			const sharedDependency = {
+				id: 'shared',
+				name: 'Shared Practice',
+				dependencies: []
+			}
+
+			const tree = {
+				id: 'root',
+				dependencies: [
+					{
+						id: 'branch1',
+						dependencies: [sharedDependency] // shared at level 2
+					},
+					{
+						id: 'branch2',
+						dependencies: [
+							{
+								id: 'intermediate',
+								dependencies: [sharedDependency] // shared at level 3 (deeper)
+							}
+						]
+					}
+				]
+			}
+
+			const result = flattenTree(tree)
+
+			// Should only include 'shared' once
+			const sharedOccurrences = result.filter(n => n.id === 'shared')
+			expect(sharedOccurrences).toHaveLength(1)
+
+			// Should be at the deepest level (3, not 2)
+			expect(sharedOccurrences[0].level).toBe(3)
+
+			// Total should be 5 unique practices
+			expect(result).toHaveLength(5)
+			expect(result.map(n => ({ id: n.id, level: n.level }))).toEqual([
+				{ id: 'root', level: 0 },
+				{ id: 'branch1', level: 1 },
+				{ id: 'branch2', level: 1 },
+				{ id: 'intermediate', level: 2 },
+				{ id: 'shared', level: 3 }
+			])
+		})
+
+		it('deduplicates multiple shared practices at various levels', () => {
+			const versionControl = { id: 'version-control', name: 'Version Control', dependencies: [] }
+			const automation = { id: 'automation', name: 'Automation', dependencies: [] }
+
+			const tree = {
+				id: 'continuous-delivery',
+				dependencies: [
+					{
+						id: 'continuous-integration',
+						dependencies: [versionControl, automation] // level 2
+					},
+					{
+						id: 'trunk-based-development',
+						dependencies: [
+							versionControl, // level 2 (same as above)
+							{
+								id: 'feature-toggles',
+								dependencies: [automation] // level 3 (deeper than above)
+							}
+						]
+					}
+				]
+			}
+
+			const result = flattenTree(tree)
+
+			// version-control appears at level 2 (both occurrences same depth)
+			const vcOccurrences = result.filter(n => n.id === 'version-control')
+			expect(vcOccurrences).toHaveLength(1)
+			expect(vcOccurrences[0].level).toBe(2)
+
+			// automation appears at level 3 (deeper occurrence wins)
+			const autoOccurrences = result.filter(n => n.id === 'automation')
+			expect(autoOccurrences).toHaveLength(1)
+			expect(autoOccurrences[0].level).toBe(3)
+
+			// Total unique practices
+			expect(result).toHaveLength(6)
 		})
 	})
 })

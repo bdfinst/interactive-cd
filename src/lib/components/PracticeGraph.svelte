@@ -117,7 +117,7 @@
 		} else {
 			selectedNodeId = practiceId
 		}
-		setTimeout(calculateConnections, 50)
+		setTimeout(recalculateAllConnections, 50)
 	}
 
 	async function loadFullTree() {
@@ -139,6 +139,58 @@
 	}
 
 	let flattenedTree = []
+	const treeNodeRefs = {}
+	let treeConnections = []
+
+	// Group practices by hierarchy level for horizontal display
+	$: groupedByLevel = flattenedTree.reduce((acc, practice) => {
+		if (!acc[practice.level]) {
+			acc[practice.level] = []
+		}
+		acc[practice.level].push(practice)
+		return acc
+	}, {})
+
+	function calculateTreeConnections() {
+		if (!containerRef || flattenedTree.length === 0) return
+
+		const containerRect = containerRef.getBoundingClientRect()
+		treeConnections = []
+
+		// Draw connections from each practice to its dependencies
+		flattenedTree.forEach(practice => {
+			if (!practice.dependencies || practice.dependencies.length === 0) return
+
+			const parentRef = treeNodeRefs[practice.id]
+			if (!parentRef) return
+
+			const parentRect = parentRef.getBoundingClientRect()
+			const parentX = parentRect.left - containerRect.left + parentRect.width / 2
+			const parentY = parentRect.bottom - containerRect.top
+
+			practice.dependencies.forEach(dep => {
+				// Dependencies are full objects, not just IDs
+				const childRef = treeNodeRefs[dep.id]
+				if (!childRef) return
+
+				const childRect = childRef.getBoundingClientRect()
+				const childX = childRect.left - containerRect.left + childRect.width / 2
+				const childY = childRect.top - containerRect.top
+
+				treeConnections.push({
+					x1: parentX,
+					y1: parentY,
+					x2: childX,
+					y2: childY,
+					type: 'tree'
+				})
+			})
+		})
+	}
+
+	$: if ($isFullTreeExpanded && flattenedTree.length > 0) {
+		setTimeout(calculateTreeConnections, 100)
+	}
 
 	function calculateConnections() {
 		if (!containerRef) return
@@ -221,14 +273,22 @@
 		}
 	}
 
+	function recalculateAllConnections() {
+		if ($isFullTreeExpanded) {
+			calculateTreeConnections()
+		} else {
+			calculateConnections()
+		}
+	}
+
 	onMount(() => {
-		calculateConnections()
-		window.addEventListener('resize', calculateConnections)
-		return () => window.removeEventListener('resize', calculateConnections)
+		recalculateAllConnections()
+		window.addEventListener('resize', recalculateAllConnections)
+		return () => window.removeEventListener('resize', recalculateAllConnections)
 	})
 
 	afterUpdate(() => {
-		setTimeout(calculateConnections, 100)
+		setTimeout(recalculateAllConnections, 100)
 	})
 </script>
 
@@ -241,25 +301,48 @@
 			</div>
 		</div>
 	{:else if $isFullTreeExpanded}
-		<!-- Full Tree View -->
-		<div class="relative z-10">
+		<!-- SVG Layer for Tree Connections -->
+		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
+			{#each treeConnections as conn}
+				<path
+					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
+					stroke="#3b82f6"
+					stroke-width="2"
+					opacity="0.4"
+					fill="none"
+				/>
+				<circle cx={conn.x2} cy={conn.y2} r="3" fill="#3b82f6" opacity="0.6" />
+			{/each}
+		</svg>
+
+		<!-- Full Tree View - Hierarchical Grid Layout -->
+		<div class="relative z-10 space-y-8">
 			{#if flattenedTree.length > 0}
-				<div class="space-y-2">
-					{#each flattenedTree as practice}
-						<div class="flex justify-center" style="margin-left: {practice.level * 16}px">
-							<div class="max-w-[160px] w-full">
-								<GraphNode
-									{practice}
-									isRoot={practice.level === 0}
-									isSelected={selectedNodeId === practice.id}
-									onClick={() => selectNode(practice.id)}
-									onExpand={null}
-									compact={true}
-								/>
-							</div>
+				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level}
+					<div class="space-y-4">
+						<!-- Cards at this level in horizontal grid -->
+						<div class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12">
+							{#each groupedByLevel[level] as practice}
+								{@const isSelected = selectedNodeId === practice.id}
+								<div
+									bind:this={treeNodeRefs[practice.id]}
+									class="col-span-6 {isSelected
+										? 'sm:col-span-6 md:col-span-4 lg:col-span-3'
+										: 'sm:col-span-4 md:col-span-3 lg:col-span-2'}"
+								>
+									<GraphNode
+										{practice}
+										isRoot={practice.level === 0}
+										{isSelected}
+										onClick={() => selectNode(practice.id)}
+										onExpand={null}
+										compact={true}
+									/>
+								</div>
+							{/each}
 						</div>
-					{/each}
-				</div>
+					</div>
+				{/each}
 			{/if}
 		</div>
 	{:else}
@@ -315,15 +398,19 @@
 
 			<!-- Dependencies -->
 			{#if dependencies.length > 0}
-				<div
-					class="grid gap-y-12 gap-x-8 max-w-screen-xl mx-auto grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:grid-cols-3 lg:grid-cols-4"
-				>
+				<div class="grid gap-x-8 gap-y-12 max-w-screen-xl mx-auto grid-cols-12">
 					{#each dependencies as dependency, i}
-						<div bind:this={dependencyRefs[i]}>
+						{@const isSelected = selectedNodeId === dependency.id}
+						<div
+							bind:this={dependencyRefs[i]}
+							class="col-span-12 {isSelected
+								? 'md:col-span-8 lg:col-span-6'
+								: 'md:col-span-6 lg:col-span-4'}"
+						>
 							<GraphNode
 								practice={dependency}
 								isRoot={false}
-								isSelected={selectedNodeId === dependency.id}
+								{isSelected}
 								isExpanded={isPracticeExpanded(dependency.id)}
 								onClick={() => selectNode(dependency.id)}
 								onExpand={() => expandPractice(dependency.id)}

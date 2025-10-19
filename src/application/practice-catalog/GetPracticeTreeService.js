@@ -61,16 +61,55 @@ export const createGetPracticeTreeService = practiceRepository => {
 		return enrichedNode
 	}
 
+	// Private helper: Collect all unique categories from dependencies
+	const collectTransitiveCategories = (node, visited = new Set()) => {
+		if (!node) return new Set()
+
+		// Prevent infinite recursion
+		if (visited.has(node.id)) {
+			return new Set()
+		}
+		visited.add(node.id)
+
+		const categories = new Set()
+
+		// Add categories from all dependencies
+		if (node.dependencies && node.dependencies.length > 0) {
+			node.dependencies.forEach(dep => {
+				// Normalize category to string
+				const depCategory =
+					typeof dep.category === 'object' && dep.category !== null
+						? dep.category.toString()
+						: dep.category
+
+				categories.add(depCategory)
+
+				// Recursively collect from sub-dependencies
+				const subCategories = collectTransitiveCategories(dep, new Set(visited))
+				subCategories.forEach(cat => categories.add(cat))
+			})
+		}
+
+		return categories
+	}
+
 	// Private helper: Add requirement and benefit counts to tree nodes
 	const addCounts = (node, visited = new Set()) => {
 		if (!node) return null
+
+		// Normalize category to string if it's an object
+		const categoryString =
+			typeof node.category === 'object' && node.category !== null
+				? node.category.toString()
+				: node.category
 
 		// Prevent infinite recursion
 		if (visited.has(node.id)) {
 			return {
 				id: node.id,
 				name: node.name,
-				category: node.category,
+				category: categoryString,
+				categories: [categoryString],
 				description: node.description,
 				requirements: node.requirements || [],
 				benefits: node.benefits || [],
@@ -84,16 +123,25 @@ export const createGetPracticeTreeService = practiceRepository => {
 
 		visited.add(node.id)
 
+		// First, recursively process dependencies
+		let enrichedDependencies = []
+		if (node.dependencies && node.dependencies.length > 0) {
+			enrichedDependencies = node.dependencies.map(dep => addCounts(dep, new Set(visited)))
+		}
+
+		// Collect all transitive categories from dependencies
+		const transitiveCategories = collectTransitiveCategories(node)
+		const categoriesArray = [...transitiveCategories].sort()
+
 		const enriched = {
 			...node,
+			category: categoryString,
+			categories: categoriesArray, // Transitive categories from all dependencies
 			requirementCount: node.requirements?.length || 0,
 			benefitCount: node.benefits?.length || 0,
 			practicePrerequisites: [],
-			capabilityPrerequisites: []
-		}
-
-		if (node.dependencies && node.dependencies.length > 0) {
-			enriched.dependencies = node.dependencies.map(dep => addCounts(dep, new Set(visited)))
+			capabilityPrerequisites: [],
+			dependencies: enrichedDependencies
 		}
 
 		return enriched
