@@ -2,6 +2,8 @@
 
 This guide explains how to configure different databases for production and pre-production environments on Netlify using Neon (serverless Postgres).
 
+> **Note:** This guide assumes you have PostgreSQL client tools (`psql`) available in your Netlify build environment. If you need help setting this up, see [NETLIFY-BUILD-SETUP.md](./NETLIFY-BUILD-SETUP.md).
+
 ## Overview
 
 Your Netlify site can use different Neon databases for:

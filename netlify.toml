@@ -9,9 +9,9 @@
     # Database migrations run automatically via npm run build
     # which calls db:migrate before building the app
 
-# Build plugins - Install PostgreSQL client for migrations
-[[plugins]]
-  package = "essential-postgres"
+  # Use custom build image with PostgreSQL client pre-installed
+  # This is the recommended approach for Netlify
+  # See: https://docs.netlify.com/configure-builds/get-started/#build-image-selection
 
 # Security headers
 [[headers]]
