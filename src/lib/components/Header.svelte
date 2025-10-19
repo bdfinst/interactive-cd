@@ -12,10 +12,10 @@
 
 <header class="fixed top-0 left-0 right-0 bg-slate-300 text-gray-800 z-[1000] shadow-md">
 	<div class="max-w-screen-xl mx-auto px-6 py-5">
-		<!-- Desktop: Flex layout with space between -->
-		<div class="hidden sm:flex items-center justify-between relative">
+		<!-- Desktop: CSS Grid layout -->
+		<div class="hidden sm:grid sm:grid-cols-[1fr_auto_1fr] items-center gap-4">
 			<!-- Left: Expand button -->
-			<div class="flex items-center">
+			<div class="flex items-center justify-start">
 				<button
 					on:click={toggleFullTree}
 					class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
@@ -28,7 +28,7 @@
 			</div>
 
 			<!-- Center: Logo and Title -->
-			<div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-4">
+			<div class="flex items-center justify-center gap-4">
 				<img src="/images/logo.png" alt="Logo" class="h-logo-md md:h-logo-lg w-auto" />
 				<h1 class="text-title-md md:text-title-lg font-bold m-0 text-center whitespace-nowrap">
 					CD Dependency Tree
@@ -36,7 +36,7 @@
 			</div>
 
 			<!-- Right: Menu buttons -->
-			<div class="flex items-center gap-2 md:gap-3">
+			<div class="flex items-center justify-end gap-2 md:gap-3">
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
 					<a

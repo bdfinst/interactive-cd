@@ -136,8 +136,10 @@ npm run db:check
 Migrations run automatically during build:
 
 ```bash
-npm run build  # Runs db:migrate internally
+npm run build  # Runs db:migrate:node internally
 ```
+
+**Note:** CI/CD environments use the Node.js migration runner (`db/deploy-migrations.js`) instead of the bash version, since it doesn't require the `psql` command-line tool. Both versions produce identical results.
 
 This is configured in:
 
@@ -385,3 +387,4 @@ psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 - [Database Quick Start](../docs/DATABASE-QUICKSTART.md)
 - [Deployment Guide](../docs/DEPLOYMENT.md)
 - [Data Structure](../docs/DATA-STRUCTURE.md)
+- [Netlify Database Setup (Multi-Environment)](../docs/NETLIFY-DATABASE-SETUP.md) - Configure separate databases for production and previews

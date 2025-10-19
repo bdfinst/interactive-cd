@@ -9,6 +9,10 @@
     # Database migrations run automatically via npm run build
     # which calls db:migrate before building the app
 
+  # Use custom build image with PostgreSQL client pre-installed
+  # This is the recommended approach for Netlify
+  # See: https://docs.netlify.com/configure-builds/get-started/#build-image-selection
+
 # Security headers
 [[headers]]
   for = "/*"
@@ -39,8 +43,18 @@
   node_bundler = "esbuild"
 
 # Environment-specific settings
-[context.deploy-preview]
-  environment = { NODE_ENV = "development" }
+# Production uses DATABASE_URL from Netlify environment variables
 
+# Deploy Previews (Pull Request previews)
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NODE_ENV = "development"
+    # DATABASE_URL = "set this in Netlify UI for deploy-preview context"
+    # Or use DEPLOY_PREVIEW_DATABASE_URL from environment variables
+
+# Branch Deploys (non-production branches)
 [context.branch-deploy]
-  environment = { NODE_ENV = "development" }
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"
+    # DATABASE_URL = "set this in Netlify UI for branch-deploy context"
+    # Or use BRANCH_DEPLOY_DATABASE_URL from environment variables

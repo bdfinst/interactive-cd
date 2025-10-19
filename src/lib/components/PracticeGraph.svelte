@@ -7,6 +7,13 @@
 	import { onMount, afterUpdate } from 'svelte'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import GraphNode from './GraphNode.svelte'
+	import {
+		expandPractice as expandPracticeLogic,
+		navigateToAncestor as navigateToAncestorLogic,
+		isPracticeExpanded as isPracticeExpandedLogic
+	} from '$lib/domain/practice-graph/navigation.js'
+	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
 
 	let containerRef
 	const ancestorRefs = []
@@ -89,41 +96,19 @@
 	}
 
 	async function expandPractice(practiceId) {
-		// Get the current practice ID
-		const currentId = navigationPath[navigationPath.length - 1]
-
-		if (practiceId === currentId) {
-			// Trying to collapse the current practice - navigate back
-			await navigateBack()
-		} else {
-			// Expand a dependency - add to navigation path and load new view
-			navigationPath = [...navigationPath, practiceId]
-			selectedNodeId = null
-			await loadCurrentView()
-		}
+		navigationPath = expandPracticeLogic(navigationPath, practiceId)
+		selectedNodeId = null
+		await loadCurrentView()
 	}
 
 	function isPracticeExpanded(practiceId) {
-		// A practice is expanded if it's the current practice and we can navigate back
-		const currentId = navigationPath[navigationPath.length - 1]
-		return practiceId === currentId && navigationPath.length > 1
-	}
-
-	async function navigateBack() {
-		if (navigationPath.length > 1) {
-			navigationPath = navigationPath.slice(0, -1)
-			selectedNodeId = null
-			await loadCurrentView()
-		}
+		return isPracticeExpandedLogic(navigationPath, practiceId)
 	}
 
 	async function navigateToAncestor(ancestorIndex) {
-		// Navigate to a specific ancestor by trimming the path
-		if (ancestorIndex >= 0 && ancestorIndex < navigationPath.length - 1) {
-			navigationPath = navigationPath.slice(0, ancestorIndex + 1)
-			selectedNodeId = null
-			await loadCurrentView()
-		}
+		navigationPath = navigateToAncestorLogic(navigationPath, ancestorIndex)
+		selectedNodeId = null
+		await loadCurrentView()
 	}
 
 	function selectNode(practiceId) {
@@ -154,43 +139,6 @@
 	}
 
 	let flattenedTree = []
-
-	function flattenTree(node, level = 0, result = []) {
-		if (!node) return result
-
-		result.push({
-			...node,
-			level
-		})
-
-		if (node.dependencies && node.dependencies.length > 0) {
-			node.dependencies.forEach(dep => {
-				flattenTree(dep, level + 1, result)
-			})
-		}
-
-		return result
-	}
-
-	function createCurvePath(x1, y1, x2, y2) {
-		// Calculate the vertical distance between points
-		const dy = y2 - y1
-
-		// For vertical connections, use a smooth S-curve
-		// Control points are placed vertically between start and end
-		const controlOffset = Math.abs(dy) * 0.5
-
-		// Control point 1: offset from start point
-		const cx1 = x1
-		const cy1 = y1 + controlOffset
-
-		// Control point 2: offset from end point
-		const cx2 = x2
-		const cy2 = y2 - controlOffset
-
-		// Create cubic bezier path
-		return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`
-	}
 
 	function calculateConnections() {
 		if (!containerRef) return

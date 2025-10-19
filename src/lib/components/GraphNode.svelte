@@ -5,6 +5,7 @@
 	 * Displays a practice as a node in the dependency graph
 	 */
 	import { CATEGORIES } from '$lib/constants/categories.js'
+	import { categorizeRequirement } from '$lib/utils/categorizeRequirement.js'
 
 	export let practice
 	export let isRoot = false
@@ -89,6 +90,41 @@
 			{practice.description}
 		</p>
 
+		<!-- Requirements (Culture, Behavior, Tooling) -->
+		{#if practice.requirements && practice.requirements.length > 0}
+			<div class={compact ? 'mb-1' : 'mb-3'}>
+				<h4 class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-blue-700">
+					Requirements
+				</h4>
+				<ul
+					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
+						? 'text-[0.45rem]'
+						: 'text-xs'} text-gray-700 list-none"
+				>
+					{#each practice.requirements as requirement}
+						{@const categories = categorizeRequirement(requirement)}
+						<li class="flex items-start {compact ? 'gap-1' : 'gap-2'}">
+							<span class="flex-shrink-0 text-gray-400">•</span>
+							<div class="flex items-center {compact ? 'gap-1' : 'gap-1.5'} flex-1">
+								<div class="flex items-center {compact ? 'gap-0.5' : 'gap-1'}">
+									{#each categories as category}
+										<span
+											class="{compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} rounded-full flex-shrink-0"
+											class:bg-[#10b981]={category === 'behavior'}
+											class:bg-[#f59e0b]={category === 'culture'}
+											class:bg-[#8b5cf6]={category === 'tooling'}
+											title={category}
+										></span>
+									{/each}
+								</div>
+								<span class="flex-1">{requirement}</span>
+							</div>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+
 		<!-- Benefits -->
 		{#if practice.benefits && practice.benefits.length > 0}
 			<div class={compact ? 'mb-1' : 'mb-3'}>
@@ -124,6 +160,18 @@
 			>
 				{isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
 			</button>
+		{/if}
+	{:else}
+		<!-- Show dependency count when not selected -->
+		{#if practice.dependencyCount > 0}
+			<div
+				class="text-center {compact
+					? 'mt-1 pt-1 text-[0.45rem]'
+					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
+			>
+				{practice.dependencyCount}
+				{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+			</div>
 		{/if}
 	{/if}
 </button>
