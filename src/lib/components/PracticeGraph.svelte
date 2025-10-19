@@ -21,6 +21,10 @@
 	let dependencies = []
 	let loading = false
 
+	// Full tree expand/collapse state
+	let isFullTreeExpanded = false
+	let fullTreeData = null
+
 	// Initialize with provided practices
 	onMount(async () => {
 		await loadCurrentView()
@@ -106,6 +110,60 @@
 			selectedNodeId = practiceId
 		}
 		setTimeout(calculateConnections, 50)
+	}
+
+	async function toggleFullTree() {
+		isFullTreeExpanded = !isFullTreeExpanded
+
+		if (isFullTreeExpanded) {
+			// Load full tree
+			await loadFullTree()
+			// Select the current practice
+			selectedNodeId = currentPractice?.id || 'continuous-delivery'
+		} else {
+			// Collapse: reset to root and select it
+			navigationPath = ['continuous-delivery']
+			selectedNodeId = null
+			fullTreeData = null
+			await loadCurrentView()
+		}
+	}
+
+	async function loadFullTree() {
+		loading = true
+		try {
+			const response = await fetch('/api/practices/tree?root=continuous-delivery')
+			const result = await response.json()
+
+			if (result.success) {
+				fullTreeData = result.data
+				// Flatten the tree for easier rendering
+				flattenedTree = flattenTree(fullTreeData)
+			}
+		} catch (error) {
+			console.error('Error loading full tree:', error)
+		} finally {
+			loading = false
+		}
+	}
+
+	let flattenedTree = []
+
+	function flattenTree(node, level = 0, result = []) {
+		if (!node) return result
+
+		result.push({
+			...node,
+			level
+		})
+
+		if (node.dependencies && node.dependencies.length > 0) {
+			node.dependencies.forEach(dep => {
+				flattenTree(dep, level + 1, result)
+			})
+		}
+
+		return result
 	}
 
 	function calculateConnections() {
@@ -201,12 +259,47 @@
 </script>
 
 <div class="relative w-full min-h-screen p-8 mt-16" bind:this={containerRef}>
+	<!-- Toggle Full Tree Button -->
+	<div class="flex justify-end mb-6">
+		<button
+			on:click={toggleFullTree}
+			class="px-4 py-2 rounded-lg font-semibold text-sm border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isFullTreeExpanded
+				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
+				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+			data-testid="toggle-full-tree"
+		>
+			{isFullTreeExpanded ? 'Collapse Tree' : 'Expand Full Tree'}
+		</button>
+	</div>
+
 	{#if loading}
 		<div class="flex items-center justify-center py-12">
 			<div class="text-center">
 				<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
 				<p class="text-gray-300">Loading dependencies...</p>
 			</div>
+		</div>
+	{:else if isFullTreeExpanded}
+		<!-- Full Tree View -->
+		<div class="relative z-10">
+			{#if flattenedTree.length > 0}
+				<div class="space-y-2">
+					{#each flattenedTree as practice}
+						<div class="flex justify-center" style="margin-left: {practice.level * 16}px">
+							<div class="max-w-[160px] w-full">
+								<GraphNode
+									{practice}
+									isRoot={practice.level === 0}
+									isSelected={selectedNodeId === practice.id}
+									onClick={() => selectNode(practice.id)}
+									onExpand={null}
+									compact={true}
+								/>
+							</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	{:else}
 		<!-- SVG Layer for Connections -->
@@ -264,7 +357,7 @@
 			<!-- Dependencies -->
 			{#if dependencies.length > 0}
 				<div
-					class="grid gap-y-12 gap-x-8 max-w-screen-xl mx-auto grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:grid-cols-2 lg:grid-cols-3"
+					class="grid gap-y-12 gap-x-8 max-w-screen-xl mx-auto grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:grid-cols-3 lg:grid-cols-4"
 				>
 					{#each dependencies as dependency, i}
 						<div bind:this={dependencyRefs[i]}>
