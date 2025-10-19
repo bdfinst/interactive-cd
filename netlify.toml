@@ -6,6 +6,8 @@
 
   [build.environment]
     NODE_VERSION = "24.8.0"
+    # Database migrations run automatically via npm run build
+    # which calls db:migrate before building the app
 
 # Security headers
 [[headers]]

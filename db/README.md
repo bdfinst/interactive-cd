@@ -10,20 +10,139 @@ db/
 ├── schema.sql                     # Complete database schema
 ├── seed.sql                       # All-in-one for first release
 ├── client.example.js              # Database client implementation
+│
+├── migrate-local.sh               # 🆕 Automated local migrations
+├── check-migrations.sh            # 🆕 Check migration status
 ├── deploy-initial.sh              # First deployment script
 ├── deploy-updates.sh              # Ongoing deployment script
+├── deploy-migrations.sh           # CI/CD deployment script
 │
 ├── migrations/                    # Schema migrations
 │   ├── 001_initial_schema.sql
 │   ├── 002_add_functions.sql
-│   └── 003_add_views.sql
+│   ├── 003_add_views.sql
+│   └── 004_add_migration_tracking.sql  # 🆕 Migration tracking
 │
 └── data/                          # Data-only migrations
     ├── 001_initial_data.sql       # Initial 23 practices
-    └── 002_example_new_practice.sql  # Template for new practices
+    ├── 002_example_new_practice.sql  # Template for new practices
+    └── 003_add_deterministic_tests.sql  # Deterministic Tests + BDD
 ```
 
-## 🚀 Deployment
+## 💻 Local Development (Automated)
+
+### Quick Start
+
+Migrations now apply **automatically** when you start development:
+
+```bash
+npm run dev
+```
+
+That's it! The system will:
+
+1. ✅ Check database connectivity
+2. ✅ Ensure migration tracking table exists
+3. ✅ Detect unapplied migrations
+4. ✅ Apply schema and data migrations in order
+5. ✅ Start the dev server
+
+**Output:**
+
+```
+✅ Applied 2 migration(s) (1 schema, 1 data)
+VITE v5.0.0  ready in 543 ms
+```
+
+or if already up-to-date:
+
+```
+✅ Database migrations up-to-date
+VITE v5.0.0  ready in 543 ms
+```
+
+### Local Development Commands
+
+| Command                  | Purpose                               |
+| ------------------------ | ------------------------------------- |
+| `npm run dev`            | Auto-migrate & start dev server       |
+| `npm run dev:app`        | Start dev server (skip migrations)    |
+| `npm run db:migrate:local` | Run migrations manually             |
+| `npm run db:check`       | Check for pending migrations          |
+| `npm run db:status`      | View migration history                |
+
+### Database Setup
+
+**First Time:**
+
+```bash
+# Start PostgreSQL with Docker
+docker-compose up -d
+
+# Start development (migrations apply automatically)
+npm run dev
+```
+
+**After Pulling Changes:**
+
+```bash
+git pull
+npm run dev  # New migrations apply automatically
+```
+
+**Check Migration Status:**
+
+```bash
+npm run db:status
+```
+
+**Output:**
+
+```
+         migration_name          | migration_type |          applied_at           | success
+---------------------------------+----------------+-------------------------------+---------
+ 004_add_migration_tracking.sql  | schema         | 2025-10-19 08:22:37.104165-05 | t
+ 003_add_deterministic_tests.sql | data           | 2025-10-19 08:21:51.200711-05 | t
+ ...
+```
+
+### Troubleshooting Local Development
+
+**Database not running:**
+
+```bash
+docker-compose up -d
+npm run dev
+```
+
+**Reset local database:**
+
+```bash
+docker-compose down -v  # Delete volumes
+docker-compose up -d     # Recreate
+npm run dev              # Re-initialize
+```
+
+**Check for pending migrations:**
+
+```bash
+npm run db:check
+```
+
+## 🚀 Production Deployment
+
+### CI/CD (Automated)
+
+Migrations run automatically during build:
+
+```bash
+npm run build  # Runs db:migrate internally
+```
+
+This is configured in:
+- `.github/workflows/deploy.yml` (GitHub Actions)
+- `netlify.toml` (Netlify build)
+- `package.json` (`build` script)
 
 ### First Release (One-Time Setup)
 
@@ -54,54 +173,35 @@ This will:
 
 ## 📝 Adding New Practices
 
-### Step 1: Create Data Migration File
-
-Copy the template:
+**Quick Start:**
 
 ```bash
-cp db/data/002_example_new_practice.sql db/data/003_my_new_practice.sql
-```
+# 1. Copy template
+cp db/data/002_example_new_practice.sql db/data/004_my_practice.sql
 
-### Step 2: Edit the Migration
+# 2. Edit migration file
+vim db/data/004_my_practice.sql
 
-```sql
-INSERT INTO practices (id, name, type, category, description, requirements, benefits)
-VALUES (
-  'my-new-practice',
-  'My New Practice',
-  'practice',
-  'tooling',
-  'Description of the new practice',
-  '["Requirement 1", "Requirement 2"]'::jsonb,
-  '["Benefit 1", "Benefit 2"]'::jsonb
-);
+# 3. Test locally (applies automatically)
+npm run dev
 
--- Add dependencies
-INSERT INTO practice_dependencies (practice_id, depends_on_id)
-VALUES ('my-new-practice', 'version-control');
-```
-
-### Step 3: Test Locally
-
-```bash
-# Apply to local database
-psql $DATABASE_URL -f db/data/003_my_new_practice.sql
-
-# Verify
-psql $DATABASE_URL -c "SELECT * FROM practices WHERE id = 'my-new-practice';"
-```
-
-### Step 4: Commit and Deploy
-
-```bash
-git add db/data/003_my_new_practice.sql
-git commit -m "Add new practice: My New Practice"
+# 4. Commit and push
+git add db/data/004_my_practice.sql
+git commit -m "feat: add practice: My Practice Name"
 git push
-
-# Deploy to production
-netlify deploy --prod
-./db/deploy-updates.sh
 ```
+
+**📖 For detailed instructions, examples, and best practices:**
+
+👉 **[Complete Migration Guide](../docs/ADDING-NEW-PRACTICES.md)**
+
+The guide covers:
+- Step-by-step walkthrough with examples
+- Field descriptions and validation rules
+- Advanced patterns (multiple practices, hierarchies, updates)
+- Common pitfalls and how to avoid them
+- Testing checklist
+- Rollback procedures
 
 ## 🗂️ File Descriptions
 
@@ -113,6 +213,7 @@ netlify deploy --prod
 | `migrations/001_*.sql` | Initial tables and indexes   | First deployment only |
 | `migrations/002_*.sql` | Database functions           | First deployment only |
 | `migrations/003_*.sql` | Database views               | First deployment only |
+| `migrations/004_*.sql` | 🆕 Migration tracking table  | Auto-applied          |
 
 ### Data Files
 
@@ -125,10 +226,13 @@ netlify deploy --prod
 
 ### Deployment Scripts
 
-| Script              | Purpose          | Usage              |
-| ------------------- | ---------------- | ------------------ |
-| `deploy-initial.sh` | First-time setup | Run once           |
-| `deploy-updates.sh` | Apply new data   | Run on each deploy |
+| Script                  | Purpose                        | Usage              |
+| ----------------------- | ------------------------------ | ------------------ |
+| `migrate-local.sh`      | 🆕 Automated local migrations  | Auto on `npm dev`  |
+| `check-migrations.sh`   | 🆕 Check migration status      | `npm run db:check` |
+| `deploy-initial.sh`     | First-time setup               | Run once           |
+| `deploy-updates.sh`     | Apply new data manually        | Manual updates     |
+| `deploy-migrations.sh`  | CI/CD automated migrations     | Auto in CI/CD      |
 
 ### Application Files
 
@@ -169,6 +273,7 @@ Examples:
 - **practices** - Core practices (id, name, type, category, description, requirements, benefits)
 - **practice_dependencies** - Junction table (practice_id, depends_on_id)
 - **metadata** - Version and source info
+- **schema_migrations** - 🆕 Migration tracking (migration_name, migration_type, applied_at, success)
 
 ### Functions
 

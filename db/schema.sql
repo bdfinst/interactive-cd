@@ -59,6 +59,22 @@ CREATE TABLE metadata (
 );
 
 -- ============================================================================
+-- SCHEMA_MIGRATIONS TABLE
+-- ============================================================================
+-- Track which database migrations have been applied
+-- Used by automated migration scripts for local development and CI/CD
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS schema_migrations (
+  id SERIAL PRIMARY KEY,
+  migration_name VARCHAR(255) NOT NULL UNIQUE,
+  migration_type VARCHAR(10) NOT NULL CHECK (migration_type IN ('schema', 'data')),
+  applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  success BOOLEAN DEFAULT TRUE,
+  error_message TEXT
+);
+
+-- ============================================================================
 -- INDEXES
 -- ============================================================================
 -- Optimize common queries
@@ -87,6 +103,14 @@ CREATE INDEX idx_practices_requirements
 -- GIN index for efficient JSONB queries on benefits
 CREATE INDEX idx_practices_benefits
   ON practices USING GIN(benefits);
+
+-- Index for fast lookups of applied migrations
+CREATE INDEX IF NOT EXISTS idx_schema_migrations_name
+  ON schema_migrations(migration_name);
+
+-- Index for filtering migrations by type and date
+CREATE INDEX IF NOT EXISTS idx_schema_migrations_type_applied
+  ON schema_migrations(migration_type, applied_at);
 
 -- ============================================================================
 -- TRIGGERS
@@ -370,6 +394,7 @@ WHERE p.type = 'root';
 COMMENT ON TABLE practices IS 'Core table storing all Continuous Delivery practices';
 COMMENT ON TABLE practice_dependencies IS 'Junction table representing dependency relationships between practices';
 COMMENT ON TABLE metadata IS 'Metadata about the dataset version and source';
+COMMENT ON TABLE schema_migrations IS 'Tracks which database migrations have been applied';
 
 COMMENT ON COLUMN practices.id IS 'Unique identifier for the practice (kebab-case)';
 COMMENT ON COLUMN practices.name IS 'Human-readable name of the practice';
@@ -380,3 +405,9 @@ COMMENT ON COLUMN practices.benefits IS 'JSON array of benefits gained from this
 
 COMMENT ON COLUMN practice_dependencies.practice_id IS 'The practice that has dependencies';
 COMMENT ON COLUMN practice_dependencies.depends_on_id IS 'The practice that is depended upon';
+
+COMMENT ON COLUMN schema_migrations.migration_name IS 'Filename of the migration (e.g., 001_initial_schema.sql)';
+COMMENT ON COLUMN schema_migrations.migration_type IS 'Type of migration: schema (DDL) or data (DML)';
+COMMENT ON COLUMN schema_migrations.applied_at IS 'Timestamp when migration was successfully applied';
+COMMENT ON COLUMN schema_migrations.success IS 'Whether the migration completed successfully';
+COMMENT ON COLUMN schema_migrations.error_message IS 'Error message if migration failed (NULL if successful)';
