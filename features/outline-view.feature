@@ -68,11 +68,12 @@ Feature: Display CD Practices in Hierarchical Outline
 
   # User Experience Scenarios
 
-  Scenario: Complete outline is immediately accessible
+  Scenario: Initial view shows root practice and direct dependencies
     When accessing the home page
-    Then all 23 practices are visible
-    And no interaction is required to view any practice
-    And no practices are hidden or collapsed
+    Then "Continuous Delivery" is visible as the root practice
+    And its 6 direct dependencies are visible
+    And the root practice is auto-selected
+    And nested dependencies can be viewed by drilling down or expanding the full tree
 
   Scenario: Outline is readable on mobile devices
     When viewing the outline on a mobile device
@@ -119,12 +120,13 @@ Feature: Display CD Practices in Hierarchical Outline
 
   # Data Accuracy Scenarios
 
-  Scenario: All practices from the system are displayed
+  Scenario: All practices are displayed in full tree mode
     Given the system contains 23 practices
-    When viewing the outline
+    And I have expanded the full tree view
+    When viewing the complete practice tree
     Then exactly 23 unique practices are shown
     And no practices are omitted
-    And no practices are duplicated
+    And each practice appears exactly once at its deepest level
 
   Scenario: Practice information matches source data
     Given "Continuous Integration" exists in the system
@@ -147,21 +149,8 @@ Feature: Display CD Practices in Hierarchical Outline
     Then the outline appears without noticeable delay
     And the initial view is immediately usable
 
-  # Out of Scope for First Release
-
-  @not-implemented
-  Scenario: Expand and collapse dependencies
-    # This functionality is NOT in the first release
-    # All practices are visible by default
+  # Out of Scope for Current Release
 
   @not-implemented
   Scenario: Search and filter practices
-    # Search functionality is NOT in the first release
-
-  @not-implemented
-  Scenario: Interactive dependency graph
-    # Graph view is NOT in the first release
-
-  @not-implemented
-  Scenario: View detailed practice information
-    # Modal/detail view is NOT in the first release
+    # Search functionality is NOT in the current release

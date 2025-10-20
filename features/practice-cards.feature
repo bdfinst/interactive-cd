@@ -41,11 +41,14 @@ Feature: Practice Cards Display
 
   Scenario: Practice card shows dependency count
     When I view the "Continuous Delivery" practice card
-    Then I should see "3 dependencies" displayed
-    And the dependencies should be:
-      | Continuous Integration |
-      | Application Pipeline   |
-      | Immutable Artifact     |
+    Then I should see "6 dependencies" displayed
+    And the dependencies should include:
+      | Continuous Integration               |
+      | Application Pipeline                 |
+      | Immutable Artifact                   |
+      | Production-like Test Environment     |
+      | On-demand Rollback                   |
+      | Application Configuration Management |
 
   Scenario: Display direct dependencies as cards
     When I view the homepage
