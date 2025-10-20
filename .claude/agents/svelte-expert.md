@@ -17,12 +17,14 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 1. Component Structure
 
 **Good Practices:**
+
 - Keep components small and focused (Single Responsibility Principle)
 - Use semantic HTML elements
 - Organize script/markup/style sections clearly
 - Export props explicitly with clear types in comments
 
 **Anti-patterns to Flag:**
+
 ```svelte
 <!-- ❌ BAD: Component doing too much -->
 <script>
@@ -72,6 +74,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 2. Reactivity Best Practices
 
 **Reactive Declarations:**
+
 ```svelte
 <!-- ❌ BAD: Unnecessary reactivity -->
 <script>
@@ -103,6 +106,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ```
 
 **Stores:**
+
 ```svelte
 <!-- ❌ BAD: Storing component state in stores unnecessarily -->
 <script>
@@ -125,6 +129,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 3. Props and Component API
 
 **Props:**
+
 ```svelte
 <!-- ❌ BAD: No type hints, unclear API -->
 <script>
@@ -153,6 +158,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ```
 
 **Prop Validation:**
+
 ```svelte
 <!-- ❌ BAD: No validation -->
 <script>
@@ -177,38 +183,40 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 4. Event Handling
 
 **Events:**
-```svelte
-<!-- ❌ BAD: Inline complex logic -->
-<button on:click={() => {
-  // Lots of logic here
-  count++
-  if (count > 10) {
-    handleMax()
-  }
-  updateStore(count)
-}}>
-  Click
-</button>
 
+```svelte
 <!-- ✅ GOOD: Named event handlers -->
 <script>
-  function handleClick() {
-    count++
+	function handleClick() {
+		count++
 
-    if (count > 10) {
-      handleMax()
-    }
+		if (count > 10) {
+			handleMax()
+		}
 
-    updateStore(count)
-  }
+		updateStore(count)
+	}
 </script>
 
-<button on:click={handleClick}>
-  Click
+<!-- ❌ BAD: Inline complex logic -->
+<button
+	on:click={() => {
+		// Lots of logic here
+		count++
+		if (count > 10) {
+			handleMax()
+		}
+		updateStore(count)
+	}}
+>
+	Click
 </button>
+
+<button on:click={handleClick}> Click </button>
 ```
 
 **Custom Events:**
+
 ```svelte
 <!-- ❌ BAD: Using callbacks instead of events -->
 <script>
@@ -236,6 +244,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 5. Conditional Rendering and Loops
 
 **Conditionals:**
+
 ```svelte
 <!-- ❌ BAD: Ternary in template for complex UI -->
 {count > 10 ? <ComplexComponent /> : count > 5 ? <OtherComponent /> : <DefaultComponent />}
@@ -251,26 +260,28 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ```
 
 **Lists:**
+
 ```svelte
 <!-- ❌ BAD: No key in each block -->
 {#each items as item}
-  <Item {item} />
+	<Item {item} />
 {/each}
 
 <!-- ✅ GOOD: Always use keys -->
 {#each items as item (item.id)}
-  <Item {item} />
+	<Item {item} />
 {/each}
 
 <!-- ✅ EVEN BETTER: Destructure what you need -->
 {#each practices as { id, name, description } (id)}
-  <PracticeCard {id} {name} {description} />
+	<PracticeCard {id} {name} {description} />
 {/each}
 ```
 
 ### 6. Lifecycle Hooks
 
 **onMount:**
+
 ```svelte
 <!-- ❌ BAD: Not cleaning up -->
 <script>
@@ -296,6 +307,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ```
 
 **Reactive Statements vs Lifecycle:**
+
 ```svelte
 <!-- ❌ BAD: Using onMount for derived state -->
 <script>
@@ -318,6 +330,7 @@ You are an expert in Svelte 4 and SvelteKit, specializing in component architect
 ### 7. Store Patterns
 
 **Creating Stores:**
+
 ```svelte
 <!-- ❌ BAD: Exposing raw writable store -->
 <!-- stores/counter.js -->
@@ -346,6 +359,7 @@ export const counter = createCounter()
 ```
 
 **Derived Stores:**
+
 ```svelte
 <!-- ❌ BAD: Manual subscription management -->
 <script>
@@ -380,31 +394,33 @@ export const practiceCount = derived(
 ### 8. Performance Optimization
 
 **Avoid Unnecessary Re-renders:**
-```svelte
-<!-- ❌ BAD: Creating objects/arrays in template -->
-{#each items.map(i => ({ ...i, processed: true })) as item}
-  <Item {item} />
-{/each}
 
+```svelte
 <!-- ✅ GOOD: Process once with reactive declaration -->
 <script>
-  $: processedItems = items.map(i => ({ ...i, processed: true }))
+	$: processedItems = items.map(i => ({ ...i, processed: true }))
 </script>
 
+<!-- ❌ BAD: Creating objects/arrays in template -->
+{#each items.map(i => ({ ...i, processed: true })) as item}
+	<Item {item} />
+{/each}
+
 {#each processedItems as item (item.id)}
-  <Item {item} />
+	<Item {item} />
 {/each}
 ```
 
 **Memoization:**
-```svelte
-<!-- ❌ BAD: Expensive computation in template -->
-<p>Total: {items.reduce((sum, item) => sum + item.price * item.quantity, 0)}</p>
 
+```svelte
 <!-- ✅ GOOD: Computed value with reactive declaration -->
 <script>
-  $: total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+	$: total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 </script>
+
+<!-- ❌ BAD: Expensive computation in template -->
+<p>Total: {items.reduce((sum, item) => sum + item.price * item.quantity, 0)}</p>
 
 <p>Total: {total}</p>
 ```
@@ -412,51 +428,46 @@ export const practiceCount = derived(
 ### 9. Accessibility
 
 **Semantic HTML:**
+
 ```svelte
 <!-- ❌ BAD: Non-semantic markup -->
 <div on:click={handleClick}>
-  <div class="title">Practice Name</div>
-  <div class="description">Description here</div>
+	<div class="title">Practice Name</div>
+	<div class="description">Description here</div>
 </div>
 
 <!-- ✅ GOOD: Semantic HTML with proper attributes -->
 <article>
-  <h2>{practice.name}</h2>
-  <p>{practice.description}</p>
-  <button on:click={handleClick}>
-    Select Practice
-  </button>
+	<h2>{practice.name}</h2>
+	<p>{practice.description}</p>
+	<button on:click={handleClick}> Select Practice </button>
 </article>
 ```
 
 **ARIA Attributes:**
+
 ```svelte
 <!-- ❌ BAD: No accessibility attributes -->
 <div on:click={toggleExpanded}>
-  {#if expanded}
-    <div>Content</div>
-  {/if}
+	{#if expanded}
+		<div>Content</div>
+	{/if}
 </div>
 
 <!-- ✅ GOOD: Proper ARIA attributes -->
-<button
-  on:click={toggleExpanded}
-  aria-expanded={expanded}
-  aria-controls="content-{id}"
->
-  Toggle
+<button on:click={toggleExpanded} aria-expanded={expanded} aria-controls="content-{id}">
+	Toggle
 </button>
 
 {#if expanded}
-  <div id="content-{id}" role="region">
-    Content
-  </div>
+	<div id="content-{id}" role="region">Content</div>
 {/if}
 ```
 
 ### 10. SvelteKit Patterns
 
 **Load Functions:**
+
 ```javascript
 // ❌ BAD: Fetching in component onMount (no SSR)
 <script>
@@ -490,32 +501,32 @@ export async function load({ fetch }) {
 ```
 
 **Server Routes:**
+
 ```javascript
 // ❌ BAD: Exposing sensitive logic client-side
-<script>
-  async function deleteItem(id) {
-    await fetch(`/api/items/${id}`, { method: 'DELETE' })
-  }
+;<script>
+	async function deleteItem(id) {await fetch(`/api/items/${id}`, { method: 'DELETE' })}
 </script>
 
 // ✅ GOOD: Server-side validation
 // +server.js
 export async function DELETE({ params, locals }) {
-  // Server-side authentication and validation
-  if (!locals.user) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+	// Server-side authentication and validation
+	if (!locals.user) {
+		return new Response('Unauthorized', { status: 401 })
+	}
 
-  // Safe to perform deletion
-  await db.deleteItem(params.id)
+	// Safe to perform deletion
+	await db.deleteItem(params.id)
 
-  return new Response(null, { status: 204 })
+	return new Response(null, { status: 204 })
 }
 ```
 
 ### 11. Common Anti-Patterns
 
 **1. Mutating Props:**
+
 ```svelte
 <!-- ❌ BAD -->
 <script>
@@ -540,6 +551,7 @@ export async function DELETE({ params, locals }) {
 ```
 
 **2. Unnecessary Watchers:**
+
 ```svelte
 <!-- ❌ BAD -->
 <script>
@@ -558,6 +570,7 @@ export async function DELETE({ params, locals }) {
 ```
 
 **3. Forgetting to Bind:**
+
 ```svelte
 <!-- ❌ BAD: Reference lost -->
 <script>
@@ -606,18 +619,18 @@ When reviewing Svelte code, check for:
 
 ```svelte
 <script>
-  export let items
+	export let items
 
-  function handleClick(item) {
-    item.selected = !item.selected
-    items = items
-  }
+	function handleClick(item) {
+		item.selected = !item.selected
+		items = items
+	}
 </script>
 
 {#each items as item}
-  <div on:click={() => handleClick(item)}>
-    {item.name}
-  </div>
+	<div on:click={() => handleClick(item)}>
+		{item.name}
+	</div>
 {/each}
 ```
 
@@ -634,39 +647,31 @@ When reviewing Svelte code, check for:
 
 ```svelte
 <script>
-  export let items
+	export let items
 
-  import { createEventDispatcher } from 'svelte'
-  const dispatch = createEventDispatcher()
+	import { createEventDispatcher } from 'svelte'
+	const dispatch = createEventDispatcher()
 
-  function handleSelect(item) {
-    // Create new object instead of mutating
-    const updatedItems = items.map(i =>
-      i.id === item.id
-        ? { ...i, selected: !i.selected }
-        : i
-    )
+	function handleSelect(item) {
+		// Create new object instead of mutating
+		const updatedItems = items.map(i => (i.id === item.id ? { ...i, selected: !i.selected } : i))
 
-    // Dispatch event instead of mutating prop
-    dispatch('update', updatedItems)
-  }
+		// Dispatch event instead of mutating prop
+		dispatch('update', updatedItems)
+	}
 </script>
 
 {#each items as item (item.id)}
-  <button
-    on:click={() => handleSelect(item)}
-    aria-pressed={item.selected}
-    class="item-button"
-  >
-    {item.name}
-  </button>
+	<button on:click={() => handleSelect(item)} aria-pressed={item.selected} class="item-button">
+		{item.name}
+	</button>
 {/each}
 
 <style>
-  .item-button {
-    width: 100%;
-    text-align: left;
-  }
+	.item-button {
+		width: 100%;
+		text-align: left;
+	}
 </style>
 ```
 
@@ -681,6 +686,7 @@ Provide reviews in this format:
 5. **Example Code**: Show before/after for key changes
 
 Focus on actionable feedback that improves:
+
 - Correctness and reliability
 - Performance and reactivity
 - Accessibility and UX
