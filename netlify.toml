@@ -7,11 +7,7 @@
   [build.environment]
     NODE_VERSION = "24.8.0"
     # Database migrations run automatically via npm run build
-    # which calls db:migrate before building the app
-
-  # Use custom build image with PostgreSQL client pre-installed
-  # This is the recommended approach for Netlify
-  # See: https://docs.netlify.com/configure-builds/get-started/#build-image-selection
+    # which calls db:migrate:node (Node.js script using pg package)
 
 # Security headers
 [[headers]]
