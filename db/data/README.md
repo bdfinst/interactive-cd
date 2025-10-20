@@ -81,6 +81,55 @@ npm run db:migrate:local
 psql $DATABASE_URL -f db/data/003_add_deterministic_tests.sql
 ```
 
+### Production Deployments
+
+#### Incremental Updates (Default)
+
+For normal deployments, migrations run automatically during build:
+
+```bash
+npm run build  # Calls db:migrate:node internally
+```
+
+Or manually for production:
+
+```bash
+export DATABASE_URL="postgresql://..."
+npm run db:migrate:node
+```
+
+This applies only NEW migrations (skips 001) and is recommended for ongoing deployments.
+
+#### Full Data Refresh (Replace ALL Data)
+
+⚠️ **DESTRUCTIVE OPERATION** - Deletes all existing data before applying repository data:
+
+```bash
+export DATABASE_URL="postgresql://..."
+npm run db:refresh
+```
+
+**What it does:**
+
+1. **Deletes ALL existing data** (practices, dependencies, metadata)
+2. Applies ALL data migrations from repository (001, 003, 004, etc.)
+3. Database becomes exact copy of repository data
+
+**When to use:**
+
+- Ensure production exactly matches repository (source of truth)
+- Remove orphaned or stale data
+- Clean slate after data inconsistencies
+- Deploy repository as single source of truth
+- Remove any manually added data
+
+**Warning:**
+
+- ⚠️ **Permanently deletes all existing data**
+- ⚠️ **Any data not in repository migrations will be lost**
+- ⚠️ **Use with caution in production**
+- ✅ Repository becomes the single source of truth
+
 ---
 
 ## Verification
