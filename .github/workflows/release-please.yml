@@ -24,6 +24,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           # No target-branch: creates Release PR on main
 
+      # Checkout repository for subsequent steps
+      - name: Checkout
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
+
       # Update release branch when Release PR is merged
       - name: Update release branch
         if: ${{ steps.release.outputs.release_created }}
@@ -38,11 +45,6 @@ jobs:
           # Force update release branch to match main
           git checkout -B release origin/main
           git push origin release --force
-
-      # Build and deploy on release (when Release PR is merged)
-      - name: Checkout
-        if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v4
 
       - name: Setup Node.js
         if: ${{ steps.release.outputs.release_created }}
