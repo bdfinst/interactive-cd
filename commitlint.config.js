@@ -1,39 +1,74 @@
 /**
  * Commitlint Configuration
  *
- * Enforces Conventional Commits specification
- * https://www.conventionalcommits.org/
+ * Enforces Conventional Commits format:
+ * <type>[optional scope]: <description>
  *
- * Valid commit types:
- * - feat: A new feature
- * - fix: A bug fix
- * - docs: Documentation only changes
- * - style: Changes that don't affect code meaning (white-space, formatting, etc)
- * - refactor: Code change that neither fixes a bug nor adds a feature
- * - perf: Code change that improves performance
- * - test: Adding missing tests or correcting existing tests
- * - build: Changes that affect the build system or external dependencies
- * - ci: Changes to CI configuration files and scripts
- * - chore: Other changes that don't modify src or test files
- * - revert: Reverts a previous commit
+ * Valid types:
+ * - feat: New feature (minor version bump)
+ * - fix: Bug fix (patch version bump)
+ * - docs: Documentation changes
+ * - style: Code style changes (formatting, no logic change)
+ * - refactor: Code refactoring
+ * - perf: Performance improvements
+ * - test: Adding or updating tests
+ * - build: Build system changes
+ * - ci: CI/CD changes
+ * - chore: Other changes (dependencies, config, etc.)
+ * - revert: Revert a previous commit
  *
- * Format: <type>(<scope>): <subject>
- * Example: feat(api): add endpoint for practice dependencies
+ * Breaking changes:
+ * - Add "!" after type: feat!: breaking change
+ * - Or add "BREAKING CHANGE:" in footer
  */
-
 export default {
 	extends: ['@commitlint/config-conventional'],
+
 	rules: {
+		// Enforce lowercase type
+		'type-case': [2, 'always', 'lower-case'],
+
+		// Enforce type is required
+		'type-empty': [2, 'never'],
+
+		// Allowed types
 		'type-enum': [
 			2,
 			'always',
-			['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'chore', 'revert']
+			[
+				'feat', // New feature
+				'fix', // Bug fix
+				'docs', // Documentation
+				'style', // Formatting
+				'refactor', // Code restructuring
+				'perf', // Performance
+				'test', // Tests
+				'build', // Build system
+				'ci', // CI/CD
+				'chore', // Maintenance
+				'revert' // Revert commit
+			]
 		],
-		'subject-case': [2, 'never', ['upper-case', 'pascal-case']],
+
+		// Subject must not be empty
 		'subject-empty': [2, 'never'],
+
+		// Subject must be lowercase
+		'subject-case': [2, 'never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']],
+
+		// Subject must not end with period
 		'subject-full-stop': [2, 'never', '.'],
-		'type-case': [2, 'always', 'lower-case'],
-		'type-empty': [2, 'never'],
+
+		// Header (type + subject) max length
+		'header-max-length': [2, 'always', 100],
+
+		// Body should have blank line before it
+		'body-leading-blank': [1, 'always'],
+
+		// Footer should have blank line before it
+		'footer-leading-blank': [1, 'always'],
+
+		// Scope must be lowercase
 		'scope-case': [2, 'always', 'lower-case']
 	}
 }
