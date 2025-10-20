@@ -30,21 +30,28 @@ interactive-cd/
 │   ├── seed.sql                 # All practice data
 │   ├── deploy-initial.sh        # First deployment script
 │   ├── deploy-updates.sh        # Ongoing deployment script
+│   ├── deploy-migrations.js     # CI/CD deployment script
+│   ├── deploy-full-refresh.js   # ⚠️ Destructive data refresh
 │   ├── migrations/              # Schema migrations
 │   │   ├── 001_initial_schema.sql
 │   │   ├── 002_add_functions.sql
-│   │   └── 003_add_views.sql
+│   │   ├── 003_add_views.sql
+│   │   └── 004_add_migration_tracking.sql
 │   └── data/                    # Data-only migrations
-│       ├── 001_initial_data.sql
-│       └── 002_example_new_practice.sql
+│       ├── README.md            # Data migration guide
+│       ├── 001_initial_data.sql # Initial 23 practices
+│       ├── 002_example_new_practice.sql  # Template
+│       └── 003_add_deterministic_tests.sql  # +2 practices
 │
 ├── 📂 docs/                     # Documentation
-│   ├── PLAN.md                  # Implementation plan
+│   ├── DOCS-STATUS.md           # Documentation status tracking
+│   ├── PLAN.md                  # Historical implementation plan
 │   ├── DATABASE.md              # Database schema docs
 │   ├── DATABASE-QUICKSTART.md   # Quick reference
 │   ├── DEPLOYMENT.md            # Netlify deployment guide
 │   ├── DATA-STRUCTURE.md        # Data model documentation
-│   ├── OOP-vs-FP-comparison.md  # Architecture comparison
+│   ├── TESTING-GUIDE.md         # Testing documentation
+│   ├── ADDING-NEW-PRACTICES.md  # Guide for adding practices
 │   └── features/                # BDD feature files (Gherkin)
 │       └── outline-view.feature
 │

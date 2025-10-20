@@ -174,6 +174,30 @@ This will:
 3. Skip already-applied migrations
 4. Show updated statistics
 
+### Full Data Refresh (Replace ALL Data)
+
+⚠️ **DESTRUCTIVE OPERATION** - To ensure production exactly matches repository data:
+
+```bash
+export DATABASE_URL="postgresql://..."
+npm run db:refresh
+```
+
+**What it does:**
+
+1. **Deletes ALL existing data** (practices, dependencies, metadata)
+2. Applies ALL data migrations from repository
+3. Database becomes exact copy of repository
+
+**Use when you need to:**
+
+- Make repository the single source of truth
+- Remove orphaned or manually-added data
+- Clean slate after data inconsistencies
+- Ensure production exactly matches repository
+
+**Warning:** This permanently deletes all existing data. Any data not in repository migrations will be lost.
+
 ## 📝 Adding New Practices
 
 **Quick Start:**
@@ -230,13 +254,14 @@ The guide covers:
 
 ### Deployment Scripts
 
-| Script                 | Purpose                       | Usage              |
-| ---------------------- | ----------------------------- | ------------------ |
-| `migrate-local.sh`     | 🆕 Automated local migrations | Auto on `npm dev`  |
-| `check-migrations.sh`  | 🆕 Check migration status     | `npm run db:check` |
-| `deploy-initial.sh`    | First-time setup              | Run once           |
-| `deploy-updates.sh`    | Apply new data manually       | Manual updates     |
-| `deploy-migrations.sh` | CI/CD automated migrations    | Auto in CI/CD      |
+| Script                   | Purpose                                     | Usage                |
+| ------------------------ | ------------------------------------------- | -------------------- |
+| `migrate-local.sh`       | 🆕 Automated local migrations               | Auto on `npm dev`    |
+| `check-migrations.sh`    | 🆕 Check migration status                   | `npm run db:check`   |
+| `deploy-initial.sh`      | First-time setup                            | Run once             |
+| `deploy-updates.sh`      | Apply new data manually                     | Manual updates       |
+| `deploy-migrations.sh`   | CI/CD automated migrations                  | Auto in CI/CD        |
+| `deploy-full-refresh.js` | ⚠️ Delete all data & reload from repository | `npm run db:refresh` |
 
 ### Application Files
 
