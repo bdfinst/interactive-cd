@@ -1,12 +1,12 @@
 <script>
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 
-	let showGithubTooltip = false
-	let showMinimumCDTooltip = false
-	let showSupportTooltip = false
+	let showGithubTooltip = $state(false)
+	let showMinimumCDTooltip = $state(false)
+	let showSupportTooltip = $state(false)
 
 	function toggleFullTree() {
-		isFullTreeExpanded.update(value => !value)
+		isFullTreeExpanded.toggle()
 	}
 </script>
 
@@ -17,7 +17,7 @@
 			<!-- Left: Expand button -->
 			<div class="flex items-center justify-start">
 				<button
-					on:click={toggleFullTree}
+					onclick={toggleFullTree}
 					class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
 						? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
 						: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
@@ -45,8 +45,8 @@
 						rel="noopener noreferrer"
 						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 						aria-label="View on GitHub"
-						on:mouseenter={() => (showGithubTooltip = true)}
-						on:mouseleave={() => (showGithubTooltip = false)}
+						onmouseenter={() => (showGithubTooltip = true)}
+						onmouseleave={() => (showGithubTooltip = false)}
 					>
 						<svg
 							width="29"
@@ -78,8 +78,8 @@
 						rel="noopener noreferrer"
 						class="flex items-center px-2 py-1 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 						aria-label="MinimumCD.org"
-						on:mouseenter={() => (showMinimumCDTooltip = true)}
-						on:mouseleave={() => (showMinimumCDTooltip = false)}
+						onmouseenter={() => (showMinimumCDTooltip = true)}
+						onmouseleave={() => (showMinimumCDTooltip = false)}
 					>
 						<img
 							src="/images/minimumCD-logo-sm.png"
@@ -104,8 +104,8 @@
 						rel="noopener noreferrer"
 						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl md:text-3xl leading-none hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 						aria-label="Support this project"
-						on:mouseenter={() => (showSupportTooltip = true)}
-						on:mouseleave={() => (showSupportTooltip = false)}
+						onmouseenter={() => (showSupportTooltip = true)}
+						onmouseleave={() => (showSupportTooltip = false)}
 					>
 						🥃
 					</a>
@@ -134,7 +134,7 @@
 			<div class="flex items-center justify-center gap-3">
 				<!-- Expand Button -->
 				<button
-					on:click={toggleFullTree}
+					onclick={toggleFullTree}
 					class="px-3 py-1.5 rounded-lg font-semibold text-xs border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
 						? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
 						: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"

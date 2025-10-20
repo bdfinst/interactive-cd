@@ -235,10 +235,15 @@ test.describe('Visual Elements', () => {
 			const svg = page.locator('svg[aria-hidden="true"]')
 			await expect(svg).toBeVisible()
 
-			// Verify it has line elements
-			const lines = page.locator('svg line')
-			const lineCount = await lines.count()
-			expect(lineCount).toBeGreaterThan(0)
+			// Verify it has path elements (curved connection lines)
+			const paths = page.locator('svg path')
+			const pathCount = await paths.count()
+			expect(pathCount).toBeGreaterThan(0)
+
+			// Verify it has circle elements (connection terminators)
+			const circles = page.locator('svg circle')
+			const circleCount = await circles.count()
+			expect(circleCount).toBeGreaterThan(0)
 		}
 	})
 })

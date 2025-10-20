@@ -7,35 +7,49 @@
 	import { CATEGORIES } from '$lib/constants/categories.js'
 	import { categorizeRequirement } from '$lib/utils/categorizeRequirement.js'
 
-	export let practice
-	export let isRoot = false
-	export let isSelected = false
-	export let isExpanded = false
-	export let onClick = () => {}
-	export let onExpand = null
-	export let compact = false
+	const {
+		practice,
+		isRoot = false,
+		isSelected = false,
+		isExpanded = false,
+		compact = false,
+		onclick = () => {},
+		onexpand = () => {}
+	} = $props()
 
-	let hoveredCategory = null
+	let hoveredCategory = $state(null)
 
-	$: categories =
+	const categories = $derived(
 		practice.categories && practice.categories.length > 0
 			? practice.categories
 			: Array.isArray(practice.category)
 				? practice.category
 				: [practice.category]
+	)
 
-	$: borderClass = isSelected
-		? compact
-			? 'border-2 border-blue-600'
-			: 'border-4 border-blue-600'
-		: compact
-			? 'border border-black hover:border-gray-600'
-			: 'border-2 border-black hover:border-gray-600'
+	const borderClass = $derived(
+		isSelected
+			? compact
+				? 'border-2 border-blue-600'
+				: 'border-4 border-blue-600'
+			: compact
+				? 'border border-black hover:border-gray-600'
+				: 'border-2 border-black hover:border-gray-600'
+	)
+
+	function handleClick() {
+		onclick({ practiceId: practice.id })
+	}
 
 	function handleExpand(event) {
 		event.stopPropagation()
-		if (onExpand) {
-			onExpand()
+		onexpand({ practiceId: practice.id })
+	}
+
+	function handleExpandKeydown(event) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault()
+			handleExpand(event)
 		}
 	}
 </script>
@@ -47,7 +61,7 @@
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
-	on:click={onClick}
+	onclick={handleClick}
 >
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
@@ -59,7 +73,7 @@
 			role="img"
 			aria-label="Category: {categories.join(', ')}"
 		>
-			{#each categories as category, index}
+			{#each categories as category, index (category)}
 				<div class="relative inline-flex">
 					<span
 						class="{compact ? 'w-1.5 h-1.5' : 'w-3.5 h-3.5'} rounded-full flex-shrink-0 cursor-help"
@@ -67,8 +81,8 @@
 						class:bg-[#f59e0b]={category === 'culture'}
 						class:bg-[#8b5cf6]={category === 'tooling'}
 						class:bg-gray-500={!CATEGORIES[category]}
-						on:mouseenter={() => (hoveredCategory = index)}
-						on:mouseleave={() => (hoveredCategory = null)}
+						onmouseenter={() => (hoveredCategory = index)}
+						onmouseleave={() => (hoveredCategory = null)}
 						role="tooltip"
 						aria-label={CATEGORIES[category]?.label || category}
 					></span>
@@ -101,13 +115,13 @@
 						? 'text-[0.45rem]'
 						: 'text-xs'} text-gray-700 list-none"
 				>
-					{#each practice.requirements as requirement}
+					{#each practice.requirements as requirement (requirement)}
 						{@const categories = categorizeRequirement(requirement)}
 						<li class="flex items-start {compact ? 'gap-1' : 'gap-2'}">
 							<span class="flex-shrink-0 text-gray-400">•</span>
 							<div class="flex items-center {compact ? 'gap-1' : 'gap-1.5'} flex-1">
 								<div class="flex items-center {compact ? 'gap-0.5' : 'gap-1'}">
-									{#each categories as category}
+									{#each categories as category (category)}
 										<span
 											class="{compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} rounded-full flex-shrink-0"
 											class:bg-[#10b981]={category === 'behavior'}
@@ -138,7 +152,7 @@
 						? 'text-[0.45rem]'
 						: 'text-xs'} text-gray-700 list-none"
 				>
-					{#each practice.benefits as benefit}
+					{#each practice.benefits as benefit (benefit)}
 						<li class="flex items-start {compact ? 'gap-0.5' : 'gap-2'}">
 							<span class="flex-shrink-0 text-green-600">→</span>
 							<span>{benefit}</span>
@@ -149,9 +163,12 @@
 		{/if}
 
 		<!-- Expand Button -->
-		{#if onExpand && practice.dependencyCount > 0 && !isRoot}
-			<button
-				on:click={handleExpand}
+		{#if practice.dependencyCount > 0 && !isRoot}
+			<div
+				role="button"
+				tabindex="0"
+				onclick={handleExpand}
+				onkeydown={handleExpandKeydown}
 				class="w-full {compact
 					? 'px-1 py-0.5 text-[0.5rem]'
 					: 'px-3 py-2 text-sm'} rounded-md font-semibold border-none cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isExpanded
@@ -159,7 +176,7 @@
 					: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'}"
 			>
 				{isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
-			</button>
+			</div>
 		{/if}
 	{:else}
 		<!-- Show dependency count when not selected -->

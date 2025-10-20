@@ -1,6 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Tailwind v4 theme configuration using @theme */
+@theme {
+	/* Custom heights - for h-{name} utilities */
+	--height-logo-sm: 60px;
+	--height-logo-md: 66px;
+	--height-logo-lg: 72px;
+
+	/* Custom font sizes - for text-{name} utilities */
+	--text-title-sm: 2.1rem;
+	--text-title-md: 2.4rem;
+	--text-title-lg: 2.7rem;
+}
 
 @layer base {
 	:root {

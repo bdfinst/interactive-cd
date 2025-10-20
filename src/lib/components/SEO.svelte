@@ -4,18 +4,18 @@
 	 *
 	 * Manages all SEO metadata, Open Graph, and Twitter card tags
 	 */
-	export let title = 'CD Dependency Tree - Interactive Continuous Delivery Practices Explorer'
-	export let description =
-		'Explore Continuous Delivery practices and their dependencies through an interactive dependency graph. Understand the requirements and benefits of each CD practice.'
-	export let keywords =
-		'continuous delivery, continuous deployment, CD, DevOps, practices, dependencies, software development, agile, deployment pipeline'
-	export let author = 'Bryan Finster'
-	export let url = 'https://practices.minimumcd.org/'
-	export let image = 'https://practices.minimumcd.org/images/og-image.png'
-	export let siteName = 'CD Dependency Tree'
-	export let twitterCreator = '@bdfinst'
-	export let themeColor = '#cbd5e1'
-	export let canonical = 'https://practices.minimumcd.org/'
+	const {
+		title = 'CD Dependency Tree - Interactive Continuous Delivery Practices Explorer',
+		description = 'Explore Continuous Delivery practices and their dependencies through an interactive dependency graph. Understand the requirements and benefits of each CD practice.',
+		keywords = 'continuous delivery, continuous deployment, CD, DevOps, practices, dependencies, software development, agile, deployment pipeline',
+		author = 'Bryan Finster',
+		url = 'https://practices.minimumcd.org/',
+		image = 'https://practices.minimumcd.org/images/og-image.png',
+		siteName = 'CD Dependency Tree',
+		twitterCreator = '@bdfinst',
+		themeColor = '#cbd5e1',
+		canonical = 'https://practices.minimumcd.org/'
+	} = $props()
 </script>
 
 <svelte:head>

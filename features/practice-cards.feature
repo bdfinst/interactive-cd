@@ -11,7 +11,7 @@ Feature: Practice Cards Display
     When I visit the homepage
     Then I should see a card for "Continuous Delivery"
     And the card should display the practice name
-    And the card should show the category icon "🔄"
+    And the card should show category indicators
     And the card should list all requirements
     And the card should list all benefits
     And the card should show the number of direct dependencies
@@ -41,11 +41,14 @@ Feature: Practice Cards Display
 
   Scenario: Practice card shows dependency count
     When I view the "Continuous Delivery" practice card
-    Then I should see "3 dependencies" displayed
-    And the dependencies should be:
-      | Continuous Integration |
-      | Application Pipeline   |
-      | Immutable Artifact     |
+    Then I should see "6 dependencies" displayed
+    And the dependencies should include:
+      | Continuous Integration               |
+      | Application Pipeline                 |
+      | Immutable Artifact                   |
+      | Production-like Test Environment     |
+      | On-demand Rollback                   |
+      | Application Configuration Management |
 
   Scenario: Display direct dependencies as cards
     When I view the homepage
@@ -56,13 +59,6 @@ Feature: Practice Cards Display
     And each card should show requirements
     And each card should show benefits
     And each card should show dependency count
-
-  Scenario: Cards are visually distinct by category
-    When I view the practice cards
-    Then "Continuous Delivery" should have icon "🔄" for practice category
-    And "Continuous Integration" should have icon "🔄" for practice category
-    And "Application Pipeline" should have icon "🛠️" for tooling category
-    And "Immutable Artifact" should have icon "🛠️" for tooling category
 
   Scenario: Practice card displays description
     When I view the "Continuous Delivery" practice card
@@ -111,5 +107,5 @@ Feature: Practice Cards Display
     Then the heading should use semantic HTML (h2 or h3)
     And the requirements list should use proper list markup
     And the benefits list should use proper list markup
-    And the category icon should have alt text
+    And the category indicators should have accessible labels
     And color should not be the only means of conveying information
