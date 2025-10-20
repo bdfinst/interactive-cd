@@ -1,17 +1,19 @@
 # Release Workflow
 
 **Strategy:** main (demo) → auto PR to release (production)  
-**Automation:** release-please monitors main, creates PR to release
+**Automation:** release-please monitors main, creates PR to release  
+**Safety:** Waits for CI tests to pass before creating release PR
 
 ---
 
 ## Workflow Overview
 
 ```
-Feature Branch → main (demo) → release-please → PR (main→release) → merge → release (production)
-                   ↓              ↓                  ↓                ↓
-               Auto-deploy    Analyzes          Version bump     GitHub Release
-               to preview     commits           + CHANGELOG       + deployment
+Feature → main → CI Tests → release-please → PR (main→release) → merge → Production
+           ↓        ↓            ↓               ↓                 ↓
+       Auto-deploy Pass?    Analyzes        Version bump      GitHub Release
+       to preview   ↓       commits         + CHANGELOG       + deployment
+                   ✅
 ```
 
 ---
@@ -33,22 +35,70 @@ git commit -m "feat: add user dashboard"
 git push origin feat/new-feature
 
 # After approval, merge to main
-# ✅ Demo environment deploys automatically
-# ✅ release-please analyzes the new commits
 ```
 
-### 2. release-please Automatically Creates PR (main → release)
+**What happens:**
 
-**What happens automatically when you merge to main:**
+- ✅ Demo environment deploys automatically
+- ✅ CI workflow runs (tests + build)
 
-1. **release-please triggers** (monitors main branch)
-2. **Analyzes commits** since last release
-3. **Determines version bump** based on conventional commits
-4. **Creates a PR** from main to release branch with:
+### 2. CI Workflow Runs (Automatic)
+
+**Workflow:** `.github/workflows/ci.yml`
+
+```yaml
+name: Run Tests
+on:
+  push:
+    branches: [main]
+```
+
+**Steps:**
+
+1. ✅ Checkout code
+2. ✅ Setup Node.js
+3. ✅ Install dependencies
+4. ✅ Run tests (`npm test`)
+5. ✅ Build application (`npm run build`)
+
+**If CI fails:**
+
+- ❌ release-please WILL NOT run
+- ❌ No release PR created
+- 💡 Fix the issues on main, push again
+
+**If CI succeeds:**
+
+- ✅ CI workflow completes successfully
+- ✅ release-please workflow triggers
+
+### 3. release-please Creates PR (Automatic)
+
+**Only runs if CI passes!**
+
+**Workflow:** `.github/workflows/release-please.yml`
+
+```yaml
+name: Release Please
+on:
+  workflow_run:
+    workflows: ['Run Tests'] # Waits for CI
+    types: [completed]
+    branches: [main]
+
+jobs:
+  release-please:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+```
+
+**What it does:**
+
+1. ✅ Analyzes commits since last release
+2. ✅ Determines version bump (feat → minor, fix → patch)
+3. ✅ Creates PR from main to release with:
    - Updated version in package.json
-   - Updated CHANGELOG.md with new entries
-   - Updated .release-please-manifest.json
-   - Title: `chore(main): release <version>`
+   - Updated CHANGELOG.md
+   - Title: `chore(main): release X.Y.Z`
 
 **Example PR created by release-please:**
 
@@ -60,15 +110,14 @@ Base: release ← Head: main
 Files changed:
 - package.json: 0.5.1 → 0.6.0
 - CHANGELOG.md: Added Features section
-- .release-please-manifest.json: Updated version
+- .release-please-manifest.json: Updated
 
 Commits included:
 - feat: add user dashboard
 - fix: resolve navigation bug
-- perf: optimize tree rendering
 ```
 
-### 3. Review the Release PR
+### 4. Review the Release PR (Manual)
 
 **Your job:** Review the automatically created PR
 
@@ -77,10 +126,9 @@ Commits included:
 - ✅ Version bump is correct (feat → minor, fix → patch)
 - ✅ CHANGELOG includes all changes
 - ✅ All commits are accounted for
-- ✅ Tests pass in CI
 - ✅ No unexpected changes
 
-### 4. Merge the Release PR
+### 5. Merge the Release PR (Manual)
 
 **When you merge the PR (main → release):**
 
@@ -109,21 +157,36 @@ git push origin feat/csv-export
 ```bash
 # Create PR: feat/csv-export → main
 # Get approval, merge PR
-# ✅ Demo deploys with new feature
 ```
 
-**Step 3: release-please Automatically Creates PR**
-
-Within seconds of merging to main, release-please:
+**Step 3: CI Workflow Runs (Automatic)**
 
 ```
-✅ Analyzes: "feat: add CSV export..."
-✅ Determines: Minor version bump (0.5.1 → 0.6.0)
-✅ Creates PR: main → release
+✅ Checkout code
+✅ Setup Node.js
+✅ Install dependencies
+✅ Run tests (186/186 passing)
+✅ Build application
+✅ CI workflow succeeded!
+```
 
-PR Details:
+**Step 4: release-please Triggers (Automatic)**
+
+```
+Waiting for "Run Tests" workflow...
+✅ "Run Tests" succeeded!
+✅ Analyzing commits on main...
+✅ Found: "feat: add CSV export..."
+✅ Determined: Minor bump (0.5.1 → 0.6.0)
+✅ Creating PR: main → release
+```
+
+**Step 5: Release PR Created (Automatic)**
+
+```
+PR: main → release
+
 Title: chore(main): release 0.6.0
-Base: release ← Head: main
 
 Changes:
 - package.json: version 0.6.0
@@ -135,25 +198,62 @@ Changes:
   - add CSV export tests
 ```
 
-**Step 4: Review and Merge Release PR**
+**Step 6: Review and Merge Release PR (Manual)**
 
 ```bash
 # Go to GitHub
 # Review the PR created by release-please
 # Merge the PR (main → release)
+```
 
-# Automatically happens:
-# ✅ release branch updated to 0.6.0
-# ✅ GitHub Release v0.6.0 created
-# ✅ Tag v0.6.0 pushed
-# ✅ Production deploys
+**Step 7: Production Release (Automatic)**
+
+```
+✅ release branch updated to v0.6.0
+✅ GitHub Release v0.6.0 created
+✅ Tag v0.6.0 pushed
+✅ Production deployment triggered
 ```
 
 ---
 
-## Version Bumping Rules
+## Safety Features
 
-release-please determines version bumps based on conventional commits:
+### 1. CI Must Pass
+
+```
+Feature merged → CI runs → Tests fail ❌
+                          ↓
+                   release-please BLOCKED
+                   No release PR created
+```
+
+**Why:** Ensures broken code never reaches production
+
+### 2. Manual Review Required
+
+```
+CI passes → release-please creates PR → You review → You merge
+                                           ↓
+                                    Check version ✅
+                                    Check changelog ✅
+                                    Verify changes ✅
+```
+
+**Why:** Human oversight before production release
+
+### 3. Branch Protection
+
+**Recommended settings for `release` branch:**
+
+- ✅ Require pull request before merging
+- ✅ Require status checks to pass
+- ✅ Require 2 approvals
+- ❌ Do not allow force pushes
+
+---
+
+## Version Bumping Rules
 
 | Commit Type                         | Version Bump         | Example         |
 | ----------------------------------- | -------------------- | --------------- |
@@ -166,221 +266,158 @@ release-please determines version bumps based on conventional commits:
 
 ---
 
-## Hotfix Process
-
-For urgent production fixes:
-
-**Option 1: Via Main (Recommended)**
-
-```bash
-# 1. Create hotfix branch from main
-git checkout -b hotfix/critical-bug main
-
-# 2. Fix the bug
-git commit -m "fix: resolve critical payment processing bug"
-
-# 3. Create PR: hotfix → main
-git push origin hotfix/critical-bug
-
-# 4. Merge to main
-# ✅ release-please creates patch release PR (0.6.0 → 0.6.1)
-
-# 5. Merge the Release PR
-# ✅ v0.6.1 released to production
-```
-
-**Option 2: Direct to Release (Emergency Only)**
-
-```bash
-# 1. Create hotfix branch from release
-git checkout -b hotfix/critical-bug release
-
-# 2. Fix the bug
-git commit -m "fix: critical security issue"
-
-# 3. Push and merge directly to release
-git push origin hotfix/critical-bug
-# Create PR: hotfix → release
-# Merge (bypassing main)
-
-# 4. Backport to main
-git checkout main
-git cherry-pick <commit-sha>
-git push origin main
-```
-
----
-
-## Key Configuration
-
-### Workflow Trigger
-
-```yaml
-# .github/workflows/release-please.yml
-on:
-  push:
-    branches:
-      - main # Triggers when you merge to main
-```
-
-### Target Branch
-
-```yaml
-# .github/workflows/release-please.yml
-- uses: googleapis/release-please-action@v4
-  with:
-    token: ${{ secrets.GITHUB_TOKEN }}
-    target-branch: release # Creates PR targeting release branch
-```
-
----
-
 ## Troubleshooting
 
-### PR Not Created After Merging to Main
+### Release PR Not Created After Merging to Main
 
-**Problem:** Merged to main, but no PR appeared from main to release
+**Problem:** Merged to main, CI passed, but no release PR appeared
 
 **Solutions:**
 
-1. **Check GitHub Actions tab:**
-   - Go to Actions → Release Please workflow
-   - Look for errors or failures
+1. **Check if CI actually passed:**
 
-2. **Verify commit format:**
-
-   ```bash
-   # Check your commit messages follow conventional format
-   git log --oneline -5
-
-   # Should see: feat:, fix:, etc.
-   # Not: "add feature", "bug fix"
+   ```
+   Go to GitHub → Actions → "Run Tests" workflow
+   Verify it shows green checkmark ✅
    ```
 
-3. **Check if PR already exists:**
+2. **Check release-please workflow:**
+
+   ```
+   Go to GitHub → Actions → "Release Please" workflow
+   Should show: "Waiting for workflow 'Run Tests'"
+   Then: "Workflow completed successfully"
+   ```
+
+3. **Verify commit format:**
+
+   ```bash
+   git log --oneline -5
+   # Should see: feat:, fix:, perf:, etc.
+   ```
+
+4. **Check if PR already exists:**
    - Look for existing PR from main to release
    - release-please updates existing PR instead of creating new ones
 
-4. **Manually trigger workflow:**
-   ```bash
-   # Push an empty commit to main
-   git commit --allow-empty -m "chore: trigger release-please"
-   git push origin main
-   ```
+### CI Fails, What Happens?
 
-### Wrong Version Bump
+**Scenario:** Tests fail after merge to main
 
-**Problem:** Expected minor bump (feat), got patch
+**Result:**
 
-**Solution:** Verify commit message format:
+- ❌ CI workflow fails
+- ❌ release-please does NOT run
+- ❌ No release PR created
 
-```bash
-# Wrong
-git commit -m "add new feature"  # Missing type
-
-# Right
-git commit -m "feat: add new feature"
-```
-
-### Multiple Release PRs Open
-
-**Problem:** Several release PRs exist
-
-**Solution:**
-
-1. Close old/stale PRs
-2. Push to main again
-3. release-please creates fresh PR
-
-### Release PR Conflicts
-
-**Problem:** PR from main to release has merge conflicts
-
-**Solution:**
+**Fix:**
 
 ```bash
-# 1. Checkout release
-git checkout release
-git pull origin release
+# Fix the issue on main
+git checkout main
+git pull
+# Make fixes
+git commit -m "fix: resolve test failures"
+git push origin main
 
-# 2. Merge main into release locally
-git merge main
-
-# 3. Resolve conflicts
-# Edit conflicting files
-
-# 4. Commit and push
-git add .
-git commit -m "chore: resolve merge conflicts"
-git push origin release
-
-# release-please PR will update automatically
+# CI runs again
+# If it passes, release-please triggers
 ```
+
+### Release PR Was Created But CI Failed Later
+
+**Problem:** release-please created PR, but you discover CI actually failed
+
+**Solution:**
+This shouldn't happen! The workflow is configured to only run if CI succeeds.
+
+But if it does:
+
+1. Close the release PR
+2. Fix issues on main
+3. Push to main
+4. CI runs and passes
+5. release-please creates fresh PR
+
+---
+
+## Configuration Files
+
+| File                                   | Purpose                              |
+| -------------------------------------- | ------------------------------------ |
+| `.github/workflows/ci.yml`             | Runs tests and build on push to main |
+| `.github/workflows/release-please.yml` | Creates release PR after CI passes   |
+| `release-please-config.json`           | release-please configuration         |
+| `.release-please-manifest.json`        | Current version tracking             |
+| `CHANGELOG.md`                         | Auto-generated changelog             |
 
 ---
 
 ## FAQ
 
-### Q: When does release-please create the PR?
+### Q: What if CI is slow? Will release-please wait?
 
-**A:** Immediately after you merge to main (within seconds to minutes)
+**A:** Yes! release-please uses `workflow_run` which waits for CI to complete (no timeout).
 
-### Q: Can I control which commits trigger a release?
+### Q: Can I merge to main without triggering a release?
 
-**A:** Yes! Use commit types:
-
-- `feat:`, `fix:`, `perf:` → Create release
-- `chore:`, `ci:`, `style:` → No release (hidden from changelog)
-
-### Q: What if I don't want to release yet?
-
-**A:** Don't merge the PR! release-please will keep updating it as you merge more to main.
-
-### Q: Can I batch multiple features into one release?
-
-**A:** Yes! Merge multiple features to main, then merge the single Release PR when ready.
-
-### Q: How do I force a specific version?
-
-**A:** Add to commit body:
+**A:** Yes! Use commit types that don't trigger releases:
 
 ```bash
-git commit -m "feat: new feature
-
-Release-As: 2.0.0"
+git commit -m "chore: update dependencies"  # No release
+git commit -m "docs: update README"         # Included in next release
+git commit -m "feat: new feature"           # Triggers release
 ```
 
-### Q: Does this work with protected branches?
+### Q: What if I want to release even though CI failed?
 
-**A:** Yes! release-please creates PRs, so it works with any branch protection rules.
+**A:** Don't! Fix CI first. Broken code should never reach production.
+
+If absolutely necessary (emergency):
+
+1. Fix CI on main
+2. Create manual PR: main → release
+3. Manually update version and CHANGELOG
+4. Not recommended!
+
+### Q: Can I see what will be released before CI runs?
+
+**A:** The release PR is created AFTER CI passes, so you can't preview it before CI.
+
+But you can check what commits will be included:
+
+```bash
+git log --oneline $(git describe --tags --abbrev=0)..HEAD
+```
 
 ---
 
 ## Summary
 
-**The Automated Workflow:**
+**The Safe, Automated Workflow:**
 
 1. ✅ Developer merges feature → `main`
 2. ✅ Demo environment deploys
-3. ✅ release-please analyzes commits
-4. ✅ release-please creates PR: main → release
-5. ✅ Team reviews PR
-6. ✅ Team merges PR
-7. ✅ `release` branch gets new version
-8. ✅ GitHub Release created
-9. ✅ Production deploys
+3. ✅ CI workflow runs (tests + build)
+4. ⏸️ **CI must pass** before proceeding
+5. ✅ release-please analyzes commits (only if CI passed)
+6. ✅ release-please creates PR: main → release
+7. 👤 Team reviews PR
+8. 👤 Team merges PR
+9. ✅ `release` branch gets new version
+10. ✅ GitHub Release created
+11. ✅ Production deploys
 
-**Key Benefits:**
+**Key Safety Features:**
 
-- ✅ Automatic version bumping
+- ✅ CI must pass before release PR is created
+- ✅ Human review required before production
+- ✅ Conventional commits enforce semantic versioning
 - ✅ Automatic changelog generation
-- ✅ Automatic PR creation (main → release)
-- ✅ Clear separation: main (demo) vs release (production)
-- ✅ No manual version management
-- ✅ Semantic versioning enforced
+- ✅ Branch protection prevents accidents
 
 ---
 
 **Last Updated:** 2025-10-20  
-**Workflow:** main (demo) → auto PR → release (production)  
-**Automation:** release-please monitors main, targets release
+**Workflow:** main (demo) → CI → auto PR → release (production)  
+**Safety:** CI must pass before release-please runs

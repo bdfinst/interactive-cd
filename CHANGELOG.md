@@ -2,15 +2,13 @@
 
 ## [0.5.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.1...interactive-cd-v0.5.2) (2025-10-20)
 
-
 ### Features
 
-* add version display and UI improvements ([#8](https://github.com/bdfinst/interactive-cd/issues/8)) ([79c9cfc](https://github.com/bdfinst/interactive-cd/commit/79c9cfcebdfa4874b01bb3ab4661b7c6e863be28))
-
+- add version display and UI improvements ([#8](https://github.com/bdfinst/interactive-cd/issues/8)) ([79c9cfc](https://github.com/bdfinst/interactive-cd/commit/79c9cfcebdfa4874b01bb3ab4661b7c6e863be28))
 
 ### Performance Improvements
 
-* migrate to file-based static site generation ([#9](https://github.com/bdfinst/interactive-cd/issues/9)) ([014e9bf](https://github.com/bdfinst/interactive-cd/commit/014e9bf30bda9f9e60be9d9a8a247bab4b85dd97))
+- migrate to file-based static site generation ([#9](https://github.com/bdfinst/interactive-cd/issues/9)) ([014e9bf](https://github.com/bdfinst/interactive-cd/commit/014e9bf30bda9f9e60be9d9a8a247bab4b85dd97))
 
 ## [0.5.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.0...interactive-cd-v0.5.1) (2025-10-20)
 
