@@ -363,7 +363,9 @@
 				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level (level)}
 					<div class="space-y-4">
 						<!-- Cards at this level in horizontal grid -->
-						<div class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12">
+						<div
+							class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12 justify-items-center"
+						>
 							{#each groupedByLevel[level] as practice (practice.id)}
 								{@const isSelected = selectedNodeId === practice.id}
 								<div
