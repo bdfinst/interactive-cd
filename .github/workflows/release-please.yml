@@ -3,7 +3,7 @@ name: Release Please
 on:
   push:
     branches:
-      - main
+      - main # Trigger on main branch pushes
 
 permissions:
   contents: write
@@ -16,20 +16,10 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          # All configuration is in release-please-config.json
-          # Only need to specify the token
           token: ${{ secrets.GITHUB_TOKEN }}
+          target-branch: release # Create release PR targeting release branch
 
-      # Tag the release
-      - name: Tag Release
-        if: ${{ steps.release.outputs.release_created }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a ${{ steps.release.outputs.tag_name }} -m "Release ${{ steps.release.outputs.tag_name }}"
-          git push origin ${{ steps.release.outputs.tag_name }}
-
-      # Build and deploy on release (optional - configure for your deployment target)
+      # Build and deploy on release (when Release PR is merged)
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v4
@@ -47,6 +37,4 @@ jobs:
 
       - name: Build
         if: ${{ steps.release.outputs.release_created }}
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run build
