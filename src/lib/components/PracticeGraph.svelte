@@ -315,17 +315,19 @@
 	<!-- Header spacer to prevent content from being hidden under fixed header -->
 	<div class="h-20 sm:h-24" aria-hidden="true"></div>
 
-	<!-- Expand/Collapse Button - Fixed in upper left corner -->
-	<button
-		onclick={toggleFullTree}
-		class="fixed top-[6.5rem] left-4 z-[1100] px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
-			? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-			: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
-		data-testid="toggle-full-tree"
-		aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
-	>
-		{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
-	</button>
+	<!-- Expand/Collapse Button - Upper left corner of tree view -->
+	<div class="relative mb-4">
+		<button
+			onclick={toggleFullTree}
+			class="absolute top-0 left-0 px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
+				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
+				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+			data-testid="toggle-full-tree"
+			aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
+		>
+			{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
+		</button>
+	</div>
 
 	{#if loading}
 		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
