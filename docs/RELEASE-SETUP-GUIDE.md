@@ -158,6 +158,7 @@ git push origin release
 6. Save settings
 
 Now:
+
 - Pushes to `main` → Deploy to preview URL
 - Releases on `release` → Deploy to production URL
 
@@ -213,12 +214,14 @@ git push origin release
 ### Release PR Not Created
 
 **Check:**
+
 1. Are commits using conventional format? (`feat:`, `fix:`, etc.)
 2. Is the release-please workflow enabled?
 3. Check GitHub Actions logs for errors
 4. Verify `.release-please-manifest.json` exists
 
 **Fix:**
+
 ```bash
 # Ensure conventional commits
 git commit --amend -m "feat: your feature description"
@@ -231,12 +234,14 @@ cat .github/workflows/release-please.yml
 ### Wrong Version Bump
 
 **Check:**
+
 1. Commit type: `feat:` = minor, `fix:` = patch
 2. Breaking change: `BREAKING CHANGE:` in footer = major
 3. `.release-please-manifest.json` for overrides
 
 **Fix:**
 Update commit message or add breaking change footer:
+
 ```bash
 git commit --amend -m "feat: new feature
 
@@ -246,12 +251,14 @@ BREAKING CHANGE: This changes the API"
 ### Build Failing
 
 **Check:**
+
 1. Database migrations applied
 2. Environment variables set
 3. Dependencies installed
 4. Tests passing locally
 
 **Fix:**
+
 ```bash
 # Test locally first
 npm ci
@@ -266,6 +273,7 @@ npm run build
 ## Support
 
 For issues:
+
 1. Check [Release Process Documentation](./RELEASE-PROCESS.md)
 2. Review [release-please docs](https://github.com/googleapis/release-please)
 3. Open issue with `release` label
@@ -283,6 +291,7 @@ You've now set up:
 ✅ **GitHub Releases** with tags
 
 **Next Steps:**
+
 1. Start using conventional commits
 2. Merge features to main for demo
 3. Merge main to release when ready

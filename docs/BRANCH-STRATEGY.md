@@ -6,13 +6,13 @@ This document describes the branching strategy and GitHub branch protection rule
 
 ## Branch Overview
 
-| Branch | Purpose | Deployment | Auto-Deploy | Protection |
-|--------|---------|------------|-------------|------------|
-| **main** | Demo/Development | Netlify Preview | ✅ Yes | Medium |
-| **release** | Production | Netlify Production | ✅ Yes (on release) | High |
-| **feat/\*** | Feature development | None | ❌ No | None |
-| **fix/\*** | Bug fixes | None | ❌ No | None |
-| **hotfix/\*** | Production hotfixes | None | ❌ No | None |
+| Branch        | Purpose             | Deployment         | Auto-Deploy         | Protection |
+| ------------- | ------------------- | ------------------ | ------------------- | ---------- |
+| **main**      | Demo/Development    | Netlify Preview    | ✅ Yes              | Medium     |
+| **release**   | Production          | Netlify Production | ✅ Yes (on release) | High       |
+| **feat/\***   | Feature development | None               | ❌ No               | None       |
+| **fix/\***    | Bug fixes           | None               | ❌ No               | None       |
+| **hotfix/\*** | Production hotfixes | None               | ❌ No               | None       |
 
 ---
 
@@ -27,16 +27,19 @@ fix/bug-fix ───────┘
 ### Development Flow
 
 1. **Create feature branch** from `main`
+
    ```bash
    git checkout -b feat/new-feature main
    ```
 
 2. **Make changes** with conventional commits
+
    ```bash
    git commit -m "feat: add user profile page"
    ```
 
 3. **Push and create PR** to `main`
+
    ```bash
    git push origin feat/new-feature
    ```
@@ -58,6 +61,7 @@ fix/bug-fix ───────┘
 ### Main Branch (Demo)
 
 **Settings:**
+
 - ✅ Require pull request before merging
   - Required reviewers: 1
   - Dismiss stale reviews: ✅ Yes
@@ -74,6 +78,7 @@ fix/bug-fix ───────┘
 - ❌ Do not allow deletions
 
 **Rationale:**
+
 - Demo branch should be stable enough for stakeholder review
 - Single reviewer sufficient for faster iteration
 - All checks must pass to maintain quality
@@ -81,6 +86,7 @@ fix/bug-fix ───────┘
 ### Release Branch (Production)
 
 **Settings:**
+
 - ✅ Require pull request before merging
   - Required reviewers: 2
   - Dismiss stale reviews: ✅ Yes
@@ -103,6 +109,7 @@ fix/bug-fix ───────┘
 - ✅ Require deployments to succeed before merging (optional)
 
 **Rationale:**
+
 - Production branch requires higher scrutiny
 - Two reviewers reduce risk of production issues
 - All tests must pass including E2E
@@ -185,6 +192,7 @@ feat/<short-description>
 ```
 
 Examples:
+
 - `feat/user-profile`
 - `feat/csv-export`
 - `feat/dark-mode`
@@ -196,6 +204,7 @@ fix/<issue-number>-<short-description>
 ```
 
 Examples:
+
 - `fix/123-navigation-bug`
 - `fix/login-error`
 - `fix/database-connection`
@@ -207,6 +216,7 @@ hotfix/<version>-<short-description>
 ```
 
 Examples:
+
 - `hotfix/1.3.2-critical-security`
 - `hotfix/1.4.1-database-migration`
 
@@ -217,6 +227,7 @@ docs/<short-description>
 ```
 
 Examples:
+
 - `docs/api-guide`
 - `docs/setup-instructions`
 
@@ -227,6 +238,7 @@ chore/<short-description>
 ```
 
 Examples:
+
 - `chore/update-dependencies`
 - `chore/cleanup-tests`
 
@@ -282,17 +294,20 @@ git commit -m "feat(auth): add OAuth2 support"
 ### Creating a PR
 
 1. **Create feature branch**
+
    ```bash
    git checkout -b feat/new-feature main
    ```
 
 2. **Make changes with conventional commits**
+
    ```bash
    git add .
    git commit -m "feat: implement new feature"
    ```
 
 3. **Push to GitHub**
+
    ```bash
    git push origin feat/new-feature
    ```
@@ -309,9 +324,11 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 
 ```markdown
 ## Description
+
 <!-- Describe what this PR does and why -->
 
 ## Type of Change
+
 - [ ] feat: New feature
 - [ ] fix: Bug fix
 - [ ] docs: Documentation update
@@ -320,13 +337,16 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 - [ ] chore: Other changes
 
 ## Testing
+
 <!-- How was this tested? -->
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] E2E tests added/updated
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows project style guidelines
 - [ ] Tests pass locally
 - [ ] Conventional commit format used
@@ -334,6 +354,7 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 - [ ] No breaking changes (or documented)
 
 ## Screenshots (if applicable)
+
 <!-- Add screenshots for UI changes -->
 ```
 
@@ -449,6 +470,7 @@ See [Release Process - Rollback](./RELEASE-PROCESS.md#rollback-process)
 ### "Branch is out of date"
 
 **Solution:** Update your branch with latest changes:
+
 ```bash
 git pull origin main --rebase
 git push --force-with-lease

@@ -4,16 +4,16 @@
 	 *
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
-	import { onMount, tick } from 'svelte'
-	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
-	import GraphNode from './GraphNode.svelte'
+	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
 	import {
 		expandPractice as expandPracticeLogic,
-		navigateToAncestor as navigateToAncestorLogic,
-		isPracticeExpanded as isPracticeExpandedLogic
+		isPracticeExpanded as isPracticeExpandedLogic,
+		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
-	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
+	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { onMount, tick } from 'svelte'
+	import GraphNode from './GraphNode.svelte'
 
 	let containerRef = $state()
 	const ancestorRefs = $state([])
@@ -176,6 +176,9 @@
 			const parentX = parentRect.left - containerRect.left + parentRect.width / 2
 			const parentY = parentRect.bottom - containerRect.top
 
+			// Check if this practice is selected
+			const isSelected = selectedNodeId === practice.id
+
 			practice.dependencies.forEach(dep => {
 				// Dependencies are full objects, not just IDs
 				const childRef = treeNodeRefs[dep.id]
@@ -190,7 +193,8 @@
 					y1: parentY,
 					x2: childX,
 					y2: childY,
-					type: 'tree'
+					type: 'tree',
+					highlighted: isSelected
 				})
 			})
 		})
@@ -300,6 +304,10 @@
 			recalculateAllConnections()
 		})
 	})
+
+	function toggleFullTree() {
+		isFullTreeExpanded.toggle()
+	}
 </script>
 
 <div
@@ -308,6 +316,23 @@
 	role="main"
 	aria-label="Practice dependency graph"
 >
+	<!-- Header spacer to prevent content from being hidden under fixed header -->
+	<div class="h-20 sm:h-24" aria-hidden="true"></div>
+
+	<!-- Expand/Collapse Button - Upper left corner of tree view -->
+	<div class="mt-8">
+		<button
+			onclick={toggleFullTree}
+			class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
+				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
+				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+			data-testid="toggle-full-tree"
+			aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
+		>
+			{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
+		</button>
+	</div>
+
 	{#if loading}
 		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
 			<div class="text-center">
@@ -324,15 +349,27 @@
 			{#each treeConnections as conn}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#93c5fd"
-					stroke-width="2"
-					opacity="0.7"
+					stroke={conn.highlighted ? '#eab308' : '#93c5fd'}
+					stroke-width={conn.highlighted ? '3' : '2'}
+					opacity={conn.highlighted ? '1' : '0.7'}
 					fill="none"
 				/>
 				<!-- Start point (parent) -->
-				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x1}
+					cy={conn.y1}
+					r={conn.highlighted ? '7' : '6'}
+					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 				<!-- End point (child) -->
-				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x2}
+					cy={conn.y2}
+					r={conn.highlighted ? '7' : '6'}
+					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 			{/each}
 		</svg>
 
@@ -342,7 +379,9 @@
 				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level (level)}
 					<div class="space-y-4">
 						<!-- Cards at this level in horizontal grid -->
-						<div class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12">
+						<div
+							class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12 justify-items-center"
+						>
 							{#each groupedByLevel[level] as practice (practice.id)}
 								{@const isSelected = selectedNodeId === practice.id}
 								<div

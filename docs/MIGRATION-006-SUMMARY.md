@@ -22,6 +22,7 @@ unified-team-backlog → product-goals
 ```
 
 **Rationale:** Without clear product goals, teams cannot effectively determine:
+
 - What work should be in the backlog
 - What work is out of scope
 - How to filter feature requests
@@ -61,11 +62,11 @@ This creates a **diamond dependency pattern**, which is valid and represents the
 
 ## Statistics
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| **Total Practices** | 52 | 52 | 0 |
-| **Total Dependencies** | ~114 | ~115 | +1 |
-| **Database Version** | 1.3.0 | 1.3.1 | +0.0.1 (patch) |
+| Metric                 | Before | After | Change         |
+| ---------------------- | ------ | ----- | -------------- |
+| **Total Practices**    | 52     | 52    | 0              |
+| **Total Dependencies** | ~114   | ~115  | +1             |
+| **Database Version**   | 1.3.0  | 1.3.1 | +0.0.1 (patch) |
 
 ---
 
@@ -91,6 +92,7 @@ This creates a **diamond dependency pattern**, which is valid and represents the
 ### The Problem
 
 Without product goals, a unified team backlog becomes:
+
 - **Unfocused** - Everything gets added "just in case"
 - **Unfiltered** - No clear criteria for inclusion
 - **Unaligned** - Work doesn't support product strategy
@@ -99,6 +101,7 @@ Without product goals, a unified team backlog becomes:
 ### The Solution
 
 With product goals as a dependency:
+
 - ✅ **Focused** - Only work aligned with goals enters backlog
 - ✅ **Filtered** - Goals provide clear inclusion criteria
 - ✅ **Aligned** - All backlog items support product strategy
@@ -107,6 +110,7 @@ With product goals as a dependency:
 ### Example
 
 **Product Goals:**
+
 ```
 Goal 1: Increase user retention by 20% in Q1
 Goal 2: Reduce time-to-value for new users from 30 to 10 minutes
@@ -115,11 +119,13 @@ Goal 2: Reduce time-to-value for new users from 30 to 10 minutes
 **Backlog Items (Filtered by Goals):**
 
 ✅ **IN SCOPE:**
+
 - Onboarding tutorial → Supports Goal 2
 - Email reminder system → Supports Goal 1
 - User progress dashboard → Supports Goal 1
 
 ❌ **OUT OF SCOPE:**
+
 - Dark mode → Nice-to-have, no goal alignment
 - Advanced analytics → Future goal, not current
 - Social media sharing → Doesn't support current goals
@@ -181,10 +187,12 @@ Scenario: Backlog items are filtered by product goals
 ## Files Created/Modified
 
 ### New Files
+
 1. **`db/data/006_add_backlog_product_goals_dependency.sql`** - Migration file
 2. **`docs/MIGRATION-006-SUMMARY.md`** - This summary
 
 ### Modified Files
+
 - Database: `practice_dependencies` table (+1 row)
 - Database: `metadata` table (version updated to 1.3.1)
 
@@ -256,6 +264,7 @@ SELECT * FROM practices p WHERE exists(
 - **Minor (1.4.0):** New feature or practice added
 
 This is a **patch** because:
+
 - No new practices added
 - Fixes incomplete dependency modeling from migration 004
 - Corrects the logical relationship that should have existed
@@ -266,16 +275,19 @@ This is a **patch** because:
 ## Alignment with Project Philosophy
 
 ### BDD Principles
+
 ✅ Describes behavior (how backlog depends on goals)
 ✅ Focus on outcomes (focused, aligned backlog)
 ✅ Testable (can verify goals filter backlog)
 
 ### Functional Programming
+
 ✅ Pure dependency relationship (immutable)
 ✅ Clear input (goals) → function (backlog filtering) → output (focused backlog)
 ✅ Composable with prioritized-features
 
 ### Domain-Driven Design
+
 ✅ Models real-world relationship accurately
 ✅ Product goals are a foundational domain concept
 ✅ Backlog is aggregate dependent on goals
@@ -285,10 +297,12 @@ This is a **patch** because:
 ## Related Practices
 
 ### Practices That Depend on Product Goals (Now 2)
+
 1. **prioritized-features** - Uses goals to prioritize by value
 2. **unified-team-backlog** - Uses goals to filter scope (NEW)
 
 ### Practices That Depend on Unified Team Backlog
+
 1. **prioritized-features** - Prioritizes items from backlog
 
 ---
@@ -296,17 +310,20 @@ This is a **patch** because:
 ## Next Steps
 
 ### Immediate (Completed)
+
 ✅ Create migration file
 ✅ Test migration locally
 ✅ Verify dependency added
 ✅ Document migration
 
 ### Short Term
+
 - [ ] Update UI to show dependency graph correctly
 - [ ] Add example product goals to documentation
 - [ ] Create backlog filtering guide based on goals
 
 ### Medium Term
+
 - [ ] Add practice detail pages showing dependencies
 - [ ] Create interactive dependency visualization
 - [ ] Add tooltips explaining diamond dependencies
@@ -324,6 +341,7 @@ Migration 006 successfully added the missing dependency from **unified-team-back
 ✅ Uses patch version bump appropriately
 
 The dependency structure now correctly models that:
+
 1. Product goals filter what's in the backlog (scope)
 2. Product goals inform how to prioritize the backlog (value)
 3. Both dependencies are necessary and complementary
