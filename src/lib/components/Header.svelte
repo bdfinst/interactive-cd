@@ -6,7 +6,7 @@
 	let showSupportTooltip = false
 
 	function toggleFullTree() {
-		isFullTreeExpanded.update(value => !value)
+		isFullTreeExpanded.toggle()
 	}
 </script>
 

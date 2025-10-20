@@ -141,6 +141,40 @@ This project uses specialized expert agents to ensure quality at each stage of d
 6. Ensure accessibility and performance
 ```
 
+#### 5. Svelte Expert (`.claude/agents/svelte-expert.md`)
+
+**Use for:**
+
+- Reviewing Svelte component architecture and structure
+- Optimizing reactivity patterns and reactive declarations
+- Ensuring proper store usage and patterns
+- Validating lifecycle hook usage and cleanup
+- Improving component props and event handling
+- Identifying performance issues and anti-patterns
+- Ensuring accessibility in Svelte components
+- Reviewing SvelteKit patterns (load functions, server routes)
+
+**When to use:**
+
+- After writing or updating Svelte components
+- When experiencing reactivity issues or unexpected re-renders
+- When components feel too complex or hard to maintain
+- During component refactoring
+- When stores are being misused for local state
+- Before finalizing component APIs (props/events)
+- When troubleshooting SvelteKit SSR issues
+
+**Example workflow:**
+
+```
+1. Write Svelte component following TDD
+2. Run Svelte Expert agent to review
+3. Apply recommendations (reactivity, structure, accessibility)
+4. Refactor for performance and maintainability
+5. Verify proper SSR behavior if using SvelteKit
+6. Ensure all tests still pass
+```
+
 ### Agent Integration in Development Workflow
 
 The agents enhance each phase of the BDD → ATDD → TDD workflow:
@@ -170,9 +204,10 @@ The agents enhance each phase of the BDD → ATDD → TDD workflow:
 ├─────────────────────────────────────────────────────────────┤
 │ 1. Write failing unit tests                                │
 │ 2. Implement code (Red → Green)                            │
-│ 3. → RUN TEST QUALITY REVIEWER AGENT                       │
-│ 4. Refactor tests and code                                 │
-│ 5. Ensure all tests pass                                   │
+│ 3. → RUN SVELTE EXPERT AGENT (for components)             │
+│ 4. → RUN TEST QUALITY REVIEWER AGENT                       │
+│ 5. Refactor tests and code                                 │
+│ 6. Ensure all tests pass                                   │
 └─────────────────────────────────────────────────────────────┘
 ```
 

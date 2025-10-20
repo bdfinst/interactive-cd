@@ -107,7 +107,7 @@ describe('GraphNode', () => {
 		it('shows expand button when selected and has dependencies', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onExpand: vi.fn() }
+				props: { practice, isSelected: true }
 			})
 
 			expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
@@ -116,7 +116,7 @@ describe('GraphNode', () => {
 		it('hides expand button when not selected', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const { queryByText } = render(GraphNode, {
-				props: { practice, isSelected: false, onExpand: vi.fn() }
+				props: { practice, isSelected: false }
 			})
 
 			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
@@ -125,7 +125,7 @@ describe('GraphNode', () => {
 		it('hides expand button when has no dependencies', () => {
 			const practice = buildMinimalPractice()
 			const { queryByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onExpand: vi.fn() }
+				props: { practice, isSelected: true }
 			})
 
 			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
@@ -134,7 +134,7 @@ describe('GraphNode', () => {
 		it('hides expand button when isRoot is true', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const { queryByText } = render(GraphNode, {
-				props: { practice, isSelected: true, isRoot: true, onExpand: vi.fn() }
+				props: { practice, isSelected: true, isRoot: true }
 			})
 
 			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
@@ -143,7 +143,7 @@ describe('GraphNode', () => {
 		it('shows correct button text when expanded', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, isExpanded: true, onExpand: vi.fn() }
+				props: { practice, isSelected: true, isExpanded: true }
 			})
 
 			expect(getByText(/Collapse Dependencies/)).toBeInTheDocument()
@@ -152,7 +152,7 @@ describe('GraphNode', () => {
 		it('shows dependency count in button text', () => {
 			const practice = buildPractice({ dependencyCount: 5 })
 			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onExpand: vi.fn() }
+				props: { practice, isSelected: true }
 			})
 
 			expect(getByText('Expand Dependencies (5)')).toBeInTheDocument()
@@ -160,42 +160,56 @@ describe('GraphNode', () => {
 	})
 
 	describe('user interactions', () => {
-		it('calls onClick when clicked', async () => {
+		it('dispatches click event when clicked', async () => {
 			const practice = buildPractice()
 			const handleClick = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, onClick: handleClick }
+			const { component, getByTestId } = render(GraphNode, {
+				props: { practice }
 			})
 
+			component.$on('click', handleClick)
 			await fireEvent.click(getByTestId('graph-node'))
 
 			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleClick).toHaveBeenCalledWith(
+				expect.objectContaining({
+					detail: { practiceId: practice.id }
+				})
+			)
 		})
 
-		it('calls onExpand when expand button is clicked', async () => {
+		it('dispatches expand event when expand button is clicked', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleExpand = vi.fn()
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onExpand: handleExpand }
+			const { component, getByText } = render(GraphNode, {
+				props: { practice, isSelected: true }
 			})
 
+			component.$on('expand', handleExpand)
 			await fireEvent.click(getByText(/Expand Dependencies/))
 
 			expect(handleExpand).toHaveBeenCalledOnce()
+			expect(handleExpand).toHaveBeenCalledWith(
+				expect.objectContaining({
+					detail: { practiceId: practice.id }
+				})
+			)
 		})
 
 		it('prevents event propagation when expand button is clicked', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onClick: handleClick, onExpand: handleExpand }
+			const { component, getByText } = render(GraphNode, {
+				props: { practice, isSelected: true }
 			})
 
+			component.$on('click', handleClick)
+			component.$on('expand', handleExpand)
 			await fireEvent.click(getByText(/Expand Dependencies/))
 
 			expect(handleExpand).toHaveBeenCalledOnce()
-			// onClick should not be called when expand button is clicked
+			// click event should not be dispatched when expand button is clicked
 			expect(handleClick).not.toHaveBeenCalled()
 		})
 	})
@@ -247,14 +261,14 @@ describe('GraphNode', () => {
 			expect(categoryDots.length).toBeGreaterThan(0)
 		})
 
-		it('renders without onExpand handler', () => {
+		it('shows expand button even without event listener', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
-			const { queryByText } = render(GraphNode, {
+			const { getByText } = render(GraphNode, {
 				props: { practice, isSelected: true }
 			})
 
-			// Should not show expand button if onExpand is not provided
-			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
+			// Expand button should show if there are dependencies, regardless of event listeners
+			expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
 		})
 	})
 })

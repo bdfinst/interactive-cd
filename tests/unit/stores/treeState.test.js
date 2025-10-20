@@ -1,40 +1,37 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { get } from 'svelte/store'
-import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+import { isFullTreeExpanded, treeState } from '$lib/stores/treeState.js'
 
 describe('treeState Store', () => {
 	beforeEach(() => {
-		// Reset store before each test
-		isFullTreeExpanded.set(false)
+		// Reset store before each test using collapse()
+		treeState.collapse()
 	})
 
 	it('initializes with false', () => {
 		expect(get(isFullTreeExpanded)).toBe(false)
 	})
 
-	it('can be set to true', () => {
-		isFullTreeExpanded.set(true)
+	it('can be expanded', () => {
+		treeState.expand()
 		expect(get(isFullTreeExpanded)).toBe(true)
 	})
 
-	it('can be set back to false', () => {
-		isFullTreeExpanded.set(true)
-		isFullTreeExpanded.set(false)
+	it('can be collapsed', () => {
+		treeState.expand()
+		treeState.collapse()
 		expect(get(isFullTreeExpanded)).toBe(false)
 	})
 
-	it('can be updated with function', () => {
-		isFullTreeExpanded.set(false)
-		isFullTreeExpanded.update(value => !value)
+	it('can be toggled from false to true', () => {
+		treeState.collapse()
+		treeState.toggle()
 		expect(get(isFullTreeExpanded)).toBe(true)
 	})
 
-	it('update function receives current value', () => {
-		isFullTreeExpanded.set(true)
-		isFullTreeExpanded.update(value => {
-			expect(value).toBe(true)
-			return false
-		})
+	it('can be toggled from true to false', () => {
+		treeState.expand()
+		treeState.toggle()
 		expect(get(isFullTreeExpanded)).toBe(false)
 	})
 
@@ -45,8 +42,8 @@ describe('treeState Store', () => {
 			values.push(value)
 		})
 
-		isFullTreeExpanded.set(true)
-		isFullTreeExpanded.set(false)
+		treeState.expand()
+		treeState.collapse()
 
 		expect(values).toEqual([false, true, false])
 	})
