@@ -160,56 +160,44 @@ describe('GraphNode', () => {
 	})
 
 	describe('user interactions', () => {
-		it('dispatches click event when clicked', async () => {
+		it('calls onclick callback when clicked', async () => {
 			const practice = buildPractice()
 			const handleClick = vi.fn()
-			const { component, getByTestId } = render(GraphNode, {
-				props: { practice }
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, onclick: handleClick }
 			})
 
-			component.$on('click', handleClick)
 			await fireEvent.click(getByTestId('graph-node'))
 
 			expect(handleClick).toHaveBeenCalledOnce()
-			expect(handleClick).toHaveBeenCalledWith(
-				expect.objectContaining({
-					detail: { practiceId: practice.id }
-				})
-			)
+			expect(handleClick).toHaveBeenCalledWith({ practiceId: practice.id })
 		})
 
-		it('dispatches expand event when expand button is clicked', async () => {
+		it('calls onexpand callback when expand button is clicked', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleExpand = vi.fn()
-			const { component, getByText } = render(GraphNode, {
-				props: { practice, isSelected: true }
+			const { getByText } = render(GraphNode, {
+				props: { practice, isSelected: true, onexpand: handleExpand }
 			})
 
-			component.$on('expand', handleExpand)
 			await fireEvent.click(getByText(/Expand Dependencies/))
 
 			expect(handleExpand).toHaveBeenCalledOnce()
-			expect(handleExpand).toHaveBeenCalledWith(
-				expect.objectContaining({
-					detail: { practiceId: practice.id }
-				})
-			)
+			expect(handleExpand).toHaveBeenCalledWith({ practiceId: practice.id })
 		})
 
 		it('prevents event propagation when expand button is clicked', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { component, getByText } = render(GraphNode, {
-				props: { practice, isSelected: true }
+			const { getByText } = render(GraphNode, {
+				props: { practice, isSelected: true, onclick: handleClick, onexpand: handleExpand }
 			})
 
-			component.$on('click', handleClick)
-			component.$on('expand', handleExpand)
 			await fireEvent.click(getByText(/Expand Dependencies/))
 
 			expect(handleExpand).toHaveBeenCalledOnce()
-			// click event should not be dispatched when expand button is clicked
+			// onclick callback should not be called when expand button is clicked
 			expect(handleClick).not.toHaveBeenCalled()
 		})
 	})

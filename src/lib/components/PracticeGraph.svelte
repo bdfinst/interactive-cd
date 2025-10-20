@@ -4,7 +4,7 @@
 	 *
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
-	import { onMount, afterUpdate, tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import GraphNode from './GraphNode.svelte'
 	import {
@@ -15,22 +15,22 @@
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
 	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
 
-	let containerRef
-	const ancestorRefs = []
-	let currentRef
-	const dependencyRefs = []
-	let connections = []
-	let selectedNodeId = null
+	let containerRef = $state()
+	const ancestorRefs = $state([])
+	let currentRef = $state()
+	const dependencyRefs = $state([])
+	let connections = $state([])
+	let selectedNodeId = $state(null)
 
 	// Navigation state
-	let navigationPath = ['continuous-delivery'] // Stack of practice IDs
-	let ancestorPractices = [] // All ancestors in the path
-	let currentPractice = null
-	let dependencies = []
-	let loading = false
+	let navigationPath = $state(['continuous-delivery']) // Stack of practice IDs
+	let ancestorPractices = $state([]) // All ancestors in the path
+	let currentPractice = $state(null)
+	let dependencies = $state([])
+	let loading = $state(false)
 
 	// Full tree data
-	let fullTreeData = null
+	let fullTreeData = $state(null)
 
 	// Initialize with provided practices
 	onMount(async () => {
@@ -41,11 +41,13 @@
 	})
 
 	// React to expand/collapse changes from store
-	$: if ($isFullTreeExpanded) {
-		handleExpand()
-	} else {
-		handleCollapse()
-	}
+	$effect(() => {
+		if ($isFullTreeExpanded) {
+			handleExpand()
+		} else {
+			handleCollapse()
+		}
+	})
 
 	async function handleExpand() {
 		if (!fullTreeData) {
@@ -142,18 +144,20 @@
 		}
 	}
 
-	let flattenedTree = []
-	const treeNodeRefs = {}
-	let treeConnections = []
+	let flattenedTree = $state([])
+	const treeNodeRefs = $state({})
+	let treeConnections = $state([])
 
 	// Group practices by hierarchy level for horizontal display
-	$: groupedByLevel = flattenedTree.reduce((acc, practice) => {
-		if (!acc[practice.level]) {
-			acc[practice.level] = []
-		}
-		acc[practice.level].push(practice)
-		return acc
-	}, {})
+	const groupedByLevel = $derived(
+		flattenedTree.reduce((acc, practice) => {
+			if (!acc[practice.level]) {
+				acc[practice.level] = []
+			}
+			acc[practice.level].push(practice)
+			return acc
+		}, {})
+	)
 
 	function calculateTreeConnections() {
 		if (!containerRef || flattenedTree.length === 0) return
@@ -281,8 +285,20 @@
 		}
 	}
 
-	afterUpdate(() => {
-		recalculateAllConnections()
+	// Recalculate connections whenever state changes that affect DOM layout
+	$effect(() => {
+		// Track dependencies that affect rendering
+		ancestorPractices
+		currentPractice
+		dependencies
+		selectedNodeId
+		flattenedTree
+		$isFullTreeExpanded
+
+		// Use tick() to ensure DOM has updated before calculating positions
+		tick().then(() => {
+			recalculateAllConnections()
+		})
 	})
 </script>
 
@@ -339,8 +355,8 @@
 										{practice}
 										isRoot={practice.level === 0}
 										{isSelected}
-										on:click={() => selectNode(practice.id)}
-										on:expand={null}
+										onclick={() => selectNode(practice.id)}
+										onexpand={null}
 										compact={true}
 									/>
 								</div>
@@ -380,8 +396,8 @@
 								practice={ancestor}
 								isRoot={i === 0}
 								isSelected={false}
-								on:click={() => navigateToAncestor(i)}
-								on:expand={() => navigateToAncestor(i)}
+								onclick={() => navigateToAncestor(i)}
+								onexpand={() => navigateToAncestor(i)}
 							/>
 						</div>
 					</div>
@@ -397,8 +413,8 @@
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
 							isExpanded={isPracticeExpanded(currentPractice.id)}
-							on:click={() => selectNode(currentPractice.id)}
-							on:expand={() => expandPractice(currentPractice.id)}
+							onclick={() => selectNode(currentPractice.id)}
+							onexpand={() => expandPractice(currentPractice.id)}
 						/>
 					</div>
 				</div>
@@ -424,8 +440,8 @@
 								isRoot={false}
 								{isSelected}
 								isExpanded={isPracticeExpanded(dependency.id)}
-								on:click={() => selectNode(dependency.id)}
-								on:expand={() => expandPractice(dependency.id)}
+								onclick={() => selectNode(dependency.id)}
+								onexpand={() => expandPractice(dependency.id)}
 							/>
 						</div>
 					{/each}

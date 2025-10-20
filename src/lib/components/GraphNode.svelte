@@ -4,42 +4,53 @@
 	 *
 	 * Displays a practice as a node in the dependency graph
 	 */
-	import { createEventDispatcher } from 'svelte'
 	import { CATEGORIES } from '$lib/constants/categories.js'
 	import { categorizeRequirement } from '$lib/utils/categorizeRequirement.js'
 
-	const dispatch = createEventDispatcher()
+	const {
+		practice,
+		isRoot = false,
+		isSelected = false,
+		isExpanded = false,
+		compact = false,
+		onclick = () => {},
+		onexpand = () => {}
+	} = $props()
 
-	export let practice
-	export let isRoot = false
-	export let isSelected = false
-	export let isExpanded = false
-	export let compact = false
+	let hoveredCategory = $state(null)
 
-	let hoveredCategory = null
-
-	$: categories =
+	const categories = $derived(
 		practice.categories && practice.categories.length > 0
 			? practice.categories
 			: Array.isArray(practice.category)
 				? practice.category
 				: [practice.category]
+	)
 
-	$: borderClass = isSelected
-		? compact
-			? 'border-2 border-blue-600'
-			: 'border-4 border-blue-600'
-		: compact
-			? 'border border-black hover:border-gray-600'
-			: 'border-2 border-black hover:border-gray-600'
+	const borderClass = $derived(
+		isSelected
+			? compact
+				? 'border-2 border-blue-600'
+				: 'border-4 border-blue-600'
+			: compact
+				? 'border border-black hover:border-gray-600'
+				: 'border-2 border-black hover:border-gray-600'
+	)
 
 	function handleClick() {
-		dispatch('click', { practiceId: practice.id })
+		onclick({ practiceId: practice.id })
 	}
 
 	function handleExpand(event) {
 		event.stopPropagation()
-		dispatch('expand', { practiceId: practice.id })
+		onexpand({ practiceId: practice.id })
+	}
+
+	function handleExpandKeydown(event) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault()
+			handleExpand(event)
+		}
 	}
 </script>
 
@@ -50,7 +61,7 @@
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
-	on:click={handleClick}
+	onclick={handleClick}
 >
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
@@ -70,8 +81,8 @@
 						class:bg-[#f59e0b]={category === 'culture'}
 						class:bg-[#8b5cf6]={category === 'tooling'}
 						class:bg-gray-500={!CATEGORIES[category]}
-						on:mouseenter={() => (hoveredCategory = index)}
-						on:mouseleave={() => (hoveredCategory = null)}
+						onmouseenter={() => (hoveredCategory = index)}
+						onmouseleave={() => (hoveredCategory = null)}
 						role="tooltip"
 						aria-label={CATEGORIES[category]?.label || category}
 					></span>
@@ -153,8 +164,11 @@
 
 		<!-- Expand Button -->
 		{#if practice.dependencyCount > 0 && !isRoot}
-			<button
-				on:click={handleExpand}
+			<div
+				role="button"
+				tabindex="0"
+				onclick={handleExpand}
+				onkeydown={handleExpandKeydown}
 				class="w-full {compact
 					? 'px-1 py-0.5 text-[0.5rem]'
 					: 'px-3 py-2 text-sm'} rounded-md font-semibold border-none cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isExpanded
@@ -162,7 +176,7 @@
 					: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'}"
 			>
 				{isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
-			</button>
+			</div>
 		{/if}
 	{:else}
 		<!-- Show dependency count when not selected -->
