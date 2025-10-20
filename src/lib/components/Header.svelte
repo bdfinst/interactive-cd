@@ -1,9 +1,13 @@
 <script>
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { version } from '../../../package.json'
 
 	let showGithubTooltip = $state(false)
 	let showMinimumCDTooltip = $state(false)
 	let showSupportTooltip = $state(false)
+
+	// Determine if version is beta (< 1.0.0)
+	const isBeta = version.split('.')[0] === '0'
 
 	function toggleFullTree() {
 		isFullTreeExpanded.toggle()
@@ -30,9 +34,22 @@
 			<!-- Center: Logo and Title -->
 			<div class="flex items-center justify-center gap-4">
 				<img src="/images/logo.png" alt="Logo" class="h-logo-md md:h-logo-lg w-auto" />
-				<h1 class="text-title-md md:text-title-lg font-bold m-0 text-center whitespace-nowrap">
-					CD Dependency Tree
-				</h1>
+				<div class="flex flex-col items-center">
+					<h1 class="text-title-md md:text-title-lg font-bold m-0 text-center whitespace-nowrap">
+						CD Dependency Tree
+					</h1>
+					<div class="text-xs md:text-sm text-gray-600 mt-0.5">
+						{#if isBeta}
+							<span class="font-semibold">v{version}</span>
+							<span
+								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] md:text-xs font-bold uppercase"
+								>beta</span
+							>
+						{:else}
+							<span class="font-semibold">v{version}</span>
+						{/if}
+					</div>
+				</div>
 			</div>
 
 			<!-- Right: Menu buttons -->
@@ -125,9 +142,22 @@
 			<!-- Top: Logo and Title -->
 			<div class="flex items-center justify-center gap-4">
 				<img src="/images/logo.png" alt="Logo" class="h-logo-sm w-auto" />
-				<h1 class="text-title-sm font-bold m-0 text-center whitespace-nowrap">
-					CD Dependency Tree
-				</h1>
+				<div class="flex flex-col items-center">
+					<h1 class="text-title-sm font-bold m-0 text-center whitespace-nowrap">
+						CD Dependency Tree
+					</h1>
+					<div class="text-xs text-gray-600 mt-0.5">
+						{#if isBeta}
+							<span class="font-semibold">v{version}</span>
+							<span
+								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] font-bold uppercase"
+								>beta</span
+							>
+						{:else}
+							<span class="font-semibold">v{version}</span>
+						{/if}
+					</div>
+				</div>
 			</div>
 
 			<!-- Bottom: Expand button and menu buttons -->
