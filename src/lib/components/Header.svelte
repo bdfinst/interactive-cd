@@ -11,31 +11,33 @@
 
 <header class="fixed top-0 left-0 right-0 bg-slate-300 text-gray-800 z-[1000] shadow-md">
 	<div class="max-w-screen-xl mx-auto px-6 py-5">
-		<!-- Desktop: CSS Grid layout -->
-		<div class="hidden sm:flex items-center justify-center gap-4">
-			<!-- Logo and Title -->
-			<div class="flex items-center justify-center gap-4">
-				<img src="/images/logo.png" alt="Logo" class="h-logo-md md:h-logo-lg w-auto" />
-				<div class="flex flex-col items-center">
-					<h1 class="text-title-md md:text-title-lg font-bold m-0 text-center whitespace-nowrap">
-						CD Dependency Tree
-					</h1>
-					<div class="text-xs md:text-sm text-gray-600 mt-0.5">
-						{#if isBeta}
-							<span class="font-semibold">v{version}</span>
-							<span
-								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] md:text-xs font-bold uppercase"
-								>beta</span
-							>
-						{:else}
-							<span class="font-semibold">v{version}</span>
-						{/if}
-					</div>
+		<!-- Large screens: 3-column grid (logo left, title center, menu right) -->
+		<div class="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
+			<!-- Left: Logo -->
+			<div class="flex items-center justify-start">
+				<img src="/images/logo.png" alt="Logo" class="h-logo-lg w-auto" />
+			</div>
+
+			<!-- Center: Title -->
+			<div class="flex flex-col items-center">
+				<h1 class="text-title-lg font-bold m-0 text-center whitespace-nowrap">
+					CD Dependency Tree
+				</h1>
+				<div class="text-sm text-gray-600 mt-0.5">
+					{#if isBeta}
+						<span class="font-semibold">v{version}</span>
+						<span
+							class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-xs font-bold uppercase"
+							>beta</span
+						>
+					{:else}
+						<span class="font-semibold">v{version}</span>
+					{/if}
 				</div>
 			</div>
 
-			<!-- Menu buttons -->
-			<div class="flex items-center gap-2 md:gap-3">
+			<!-- Right: Menu buttons -->
+			<div class="flex items-center justify-end gap-3">
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
 					<a
@@ -119,31 +121,28 @@
 			</div>
 		</div>
 
-		<!-- Mobile: Stacked layout -->
-		<div class="flex sm:hidden flex-col gap-4">
-			<!-- Top: Logo and Title -->
-			<div class="flex items-center justify-center gap-4">
-				<img src="/images/logo.png" alt="Logo" class="h-logo-sm w-auto" />
-				<div class="flex flex-col items-center">
-					<h1 class="text-title-sm font-bold m-0 text-center whitespace-nowrap">
-						CD Dependency Tree
-					</h1>
-					<div class="text-xs text-gray-600 mt-0.5">
-						{#if isBeta}
-							<span class="font-semibold">v{version}</span>
-							<span
-								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] font-bold uppercase"
-								>beta</span
-							>
-						{:else}
-							<span class="font-semibold">v{version}</span>
-						{/if}
-					</div>
+		<!-- Medium and smaller: Stacked layout (no logo) -->
+		<div class="flex lg:hidden flex-col gap-4">
+			<!-- Top: Title (centered) -->
+			<div class="flex flex-col items-center">
+				<h1 class="text-title-sm md:text-title-md font-bold m-0 text-center whitespace-nowrap">
+					CD Dependency Tree
+				</h1>
+				<div class="text-xs md:text-sm text-gray-600 mt-0.5">
+					{#if isBeta}
+						<span class="font-semibold">v{version}</span>
+						<span
+							class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] md:text-xs font-bold uppercase"
+							>beta</span
+						>
+					{:else}
+						<span class="font-semibold">v{version}</span>
+					{/if}
 				</div>
 			</div>
 
-			<!-- Bottom: Menu buttons -->
-			<div class="flex items-center justify-center gap-2">
+			<!-- Bottom: Menu buttons (centered) -->
+			<div class="flex items-center justify-center gap-2 md:gap-3">
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
 					<a
