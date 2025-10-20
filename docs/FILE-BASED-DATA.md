@@ -16,11 +16,13 @@ The Interactive CD application now uses **JSON files** as the single source of t
 ## Data Source
 
 All practice data is stored in:
+
 ```
 src/lib/data/cd-practices.json
 ```
 
 This file contains:
+
 - **practices**: All 51 CD practices with descriptions, requirements, benefits
 - **dependencies**: All 89 practice dependencies
 - **metadata**: Version, changelog, etc.
@@ -36,10 +38,16 @@ This file contains:
 import data from '$lib/data/cd-practices.json'
 
 export const createFilePracticeRepository = () => ({
-  findById: async (practiceId) => { /* ... */ },
-  findAll: async () => { /* ... */ },
-  getTransitiveCategories: async (practiceId) => { /* ... */ }
-  // ... other methods
+	findById: async practiceId => {
+		/* ... */
+	},
+	findAll: async () => {
+		/* ... */
+	},
+	getTransitiveCategories: async practiceId => {
+		/* ... */
+	}
+	// ... other methods
 })
 ```
 
@@ -47,7 +55,7 @@ export const createFilePracticeRepository = () => ({
 
 ```javascript
 // src/routes/+page.js
-export const prerender = true  // ← Enables SSG
+export const prerender = true // ← Enables SSG
 ```
 
 All routes and API endpoints are pre-rendered at build time.
@@ -59,6 +67,7 @@ All routes and API endpoints are pre-rendered at build time.
 ### 1. Editing Practice Data
 
 **Option A: Edit JSON directly**
+
 ```bash
 # Edit the JSON file manually
 vim src/lib/data/cd-practices.json
@@ -69,6 +78,7 @@ git commit -m "feat: update practice descriptions"
 ```
 
 **Option B: Use database for editing, then export**
+
 ```bash
 # 1. Update database with migrations
 npm run db:migrate:local
@@ -107,6 +117,7 @@ npm run preview
 ### Build Output
 
 The build creates:
+
 - Pre-rendered HTML pages
 - Pre-rendered API JSON responses
 - Optimized JavaScript bundles
@@ -162,6 +173,7 @@ Total: ~270ms
 ### When to Export from Database
 
 Use the database → export workflow when you need:
+
 - Complex data validation
 - Referential integrity checks
 - Migration-based updates
@@ -170,6 +182,7 @@ Use the database → export workflow when you need:
 ### When to Edit JSON Directly
 
 Edit JSON directly for:
+
 - Simple text changes
 - Adding/removing single items
 - Quick fixes
@@ -184,6 +197,7 @@ npm run db:export
 ```
 
 This script:
+
 1. Connects to local PostgreSQL
 2. Exports all practices, dependencies, and metadata
 3. Formats as pretty JSON
@@ -198,13 +212,13 @@ This script:
 
 ```json
 {
-  "id": "continuous-delivery",
-  "name": "Continuous Delivery",
-  "type": "root",
-  "category": "practice",
-  "description": "...",
-  "requirements": ["...", "..."],
-  "benefits": ["...", "..."]
+	"id": "continuous-delivery",
+	"name": "Continuous Delivery",
+	"type": "root",
+	"category": "practice",
+	"description": "...",
+	"requirements": ["...", "..."],
+	"benefits": ["...", "..."]
 }
 ```
 
@@ -212,8 +226,8 @@ This script:
 
 ```json
 {
-  "practice_id": "continuous-delivery",
-  "depends_on_id": "continuous-integration"
+	"practice_id": "continuous-delivery",
+	"depends_on_id": "continuous-integration"
 }
 ```
 
@@ -221,10 +235,10 @@ This script:
 
 ```json
 {
-  "version": "1.5.0",
-  "source": "MinimumCD.org",
-  "lastUpdated": "2025-10-20",
-  "changelog": "..."
+	"version": "1.5.0",
+	"source": "MinimumCD.org",
+	"lastUpdated": "2025-10-20",
+	"changelog": "..."
 }
 ```
 
@@ -262,22 +276,23 @@ The migration has already been completed:
 
 ## Benefits Summary
 
-| Aspect | Before (Database) | After (File-Based) |
-|--------|------------------|-------------------|
-| **First load** | ~550ms | ~270ms (-50%) |
-| **Hosting cost** | $5-20/month | $0 |
-| **Environment vars** | DATABASE_URL needed | None |
-| **Local setup** | Requires PostgreSQL | Just `npm install` |
-| **Deployment** | Database + app | Static files only |
-| **Caching** | Complex | Automatic CDN |
-| **Scalability** | Limited by DB | Infinite (CDN) |
-| **Cold starts** | Yes (serverless) | None (static) |
+| Aspect               | Before (Database)   | After (File-Based) |
+| -------------------- | ------------------- | ------------------ |
+| **First load**       | ~550ms              | ~270ms (-50%)      |
+| **Hosting cost**     | $5-20/month         | $0                 |
+| **Environment vars** | DATABASE_URL needed | None               |
+| **Local setup**      | Requires PostgreSQL | Just `npm install` |
+| **Deployment**       | Database + app      | Static files only  |
+| **Caching**          | Complex             | Automatic CDN      |
+| **Scalability**      | Limited by DB       | Infinite (CDN)     |
+| **Cold starts**      | Yes (serverless)    | None (static)      |
 
 ---
 
 ## Future Enhancements
 
 Potential improvements:
+
 - GitHub Actions workflow to auto-export on DB changes
 - Validation schema for JSON file
 - TypeScript types generated from JSON
@@ -289,6 +304,7 @@ Potential improvements:
 ## Questions?
 
 For issues or questions, see:
+
 - Main README: `/README.md`
 - Netlify deploy logs: Netlify dashboard
 - Export script: `scripts/export-db-to-json.sh`

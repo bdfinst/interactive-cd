@@ -10,6 +10,7 @@
 ## Why Archived?
 
 The application now uses **file-based data** instead of a database:
+
 - Data stored in: `src/lib/data/cd-practices.json`
 - No database needed for production
 - Zero database hosting costs
@@ -21,16 +22,19 @@ The application now uses **file-based data** instead of a database:
 If you want to use the database for editing data (then export to JSON):
 
 1. **Setup PostgreSQL locally:**
+
    ```bash
    createdb interactive_cd
    ```
 
 2. **Run migrations:**
+
    ```bash
    bash archive/database/db/migrate-local.sh
    ```
 
 3. **Export to JSON:**
+
    ```bash
    bash archive/database/export-db-to-json.sh
    ```

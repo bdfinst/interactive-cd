@@ -12,10 +12,12 @@ All database-related code has been removed from the production codebase. The app
 ## What Was Removed
 
 ### 1. **Source Code**
+
 - ❌ `src/infrastructure/persistence/db.js` - PostgreSQL connection
 - ❌ `src/infrastructure/persistence/PostgresPracticeRepository.js` - Database repository
 
 ### 2. **Database Migrations & Scripts**
+
 - ✅ Moved to `archive/database/db/` (preserved for reference)
   - Schema migrations
   - Data migrations
@@ -23,14 +25,17 @@ All database-related code has been removed from the production codebase. The app
   - Migration utilities
 
 ### 3. **Export Script**
+
 - ✅ Moved to `archive/database/export-db-to-json.sh`
 
 ### 4. **Package Dependencies**
+
 - ❌ Removed from dependencies:
   - `@netlify/neon` - Neon database integration
   - `pg` - PostgreSQL client
 
 ### 5. **NPM Scripts**
+
 - ❌ Removed scripts:
   - `db:check` - Check migration status
   - `db:export` - Export database to JSON
@@ -43,6 +48,7 @@ All database-related code has been removed from the production codebase. The app
   - `dev:app` - Duplicate dev script
 
 ### 6. **Environment Configuration**
+
 - ✅ Moved `archive/database/.env.example` - Old database config
 - ✅ Created new `.env.example` - States no environment variables needed
 
@@ -70,17 +76,20 @@ archive/database/
 ## Current Architecture
 
 ### Data Source
+
 - **Location:** `src/lib/data/cd-practices.json`
 - **Size:** 46KB (51 practices, 89 dependencies)
 - **Format:** JSON
 - **Version Control:** Yes (Git)
 
 ### Repository
+
 - **Implementation:** `src/infrastructure/persistence/FilePracticeRepository.js`
 - **Type:** Synchronous file reads
 - **Performance:** Instant (no network calls)
 
 ### Build Process
+
 1. Read JSON file at build time
 2. Pre-render pages with data
 3. Output static files
@@ -90,16 +99,16 @@ archive/database/
 
 ## Benefits of Removal
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| **Production Dependencies** | 2 (`pg`, `@netlify/neon`) | 0 |
-| **Environment Variables** | `DATABASE_URL` required | None required |
-| **Local Development Setup** | Install PostgreSQL | Just `npm install` |
-| **Build Process** | Run migrations first | Direct build |
-| **Hosting Cost** | $5-20/month (database) | $0 |
-| **Deployment Complexity** | Database + app | Static files only |
-| **Cold Start Time** | ~500ms (connection) | 0ms (no connection) |
-| **Query Performance** | ~50-100ms | Instant (pre-loaded) |
+| Aspect                      | Before                    | After                |
+| --------------------------- | ------------------------- | -------------------- |
+| **Production Dependencies** | 2 (`pg`, `@netlify/neon`) | 0                    |
+| **Environment Variables**   | `DATABASE_URL` required   | None required        |
+| **Local Development Setup** | Install PostgreSQL        | Just `npm install`   |
+| **Build Process**           | Run migrations first      | Direct build         |
+| **Hosting Cost**            | $5-20/month (database)    | $0                   |
+| **Deployment Complexity**   | Database + app            | Static files only    |
+| **Cold Start Time**         | ~500ms (connection)       | 0ms (no connection)  |
+| **Query Performance**       | ~50-100ms                 | Instant (pre-loaded) |
 
 ---
 
@@ -145,12 +154,14 @@ git push
 ## Migration Verification
 
 ### Tests
+
 ```bash
 npm test
 # ✅ All 186 tests passing
 ```
 
 ### Build
+
 ```bash
 npm run build
 # ✅ Build successful (3.27s)
@@ -158,6 +169,7 @@ npm run build
 ```
 
 ### Dev Server
+
 ```bash
 npm run dev
 # ✅ No database connection needed
@@ -171,6 +183,7 @@ npm run dev
 If you need to restore database functionality:
 
 1. **Restore files from archive:**
+
    ```bash
    cp -r archive/database/db .
    cp archive/database/.env.example .
@@ -181,6 +194,7 @@ If you need to restore database functionality:
 2. **Restore package.json scripts** (manually from git history)
 
 3. **Install dependencies:**
+
    ```bash
    npm install pg @netlify/neon
    ```
@@ -196,12 +210,14 @@ If you need to restore database functionality:
 ### For Developers
 
 ❌ **No longer works:**
+
 - `npm run db:migrate`
 - `npm run db:status`
 - Database connection strings
 - PostgreSQL environment variables
 
 ✅ **Now use instead:**
+
 - Edit `src/lib/data/cd-practices.json` directly
 - Use `archive/database/export-db-to-json.sh` for bulk updates
 - Version control the JSON file
@@ -209,12 +225,14 @@ If you need to restore database functionality:
 ### For Deployment
 
 ❌ **No longer needed:**
+
 - `DATABASE_URL` environment variable
 - Database provisioning in Netlify
 - Database migration step in build
 - Connection pooling configuration
 
 ✅ **New deployment process:**
+
 1. Push to Git
 2. Netlify builds automatically
 3. Static site deployed
@@ -225,6 +243,7 @@ If you need to restore database functionality:
 ## Performance Impact
 
 ### Before (Database)
+
 ```
 Page Load:
 ├─ HTML sent (100ms)
@@ -236,6 +255,7 @@ Total: ~350ms + network
 ```
 
 ### After (File-Based)
+
 ```
 Page Load:
 ├─ Pre-rendered HTML sent (20ms)
@@ -250,18 +270,22 @@ Total: ~20ms (from CDN)
 ## Future Considerations
 
 ### Scaling
+
 - File-based approach scales infinitely via CDN
 - No database query limits
 - No connection pool limits
 - No database downtime
 
 ### Data Updates
+
 - Less frequent updates = perfect for file-based
 - Current update frequency: ~1-2x per month
 - File approach is ideal for this pattern
 
 ### CMS Integration (Future)
+
 If needed in the future, you could:
+
 1. Keep file-based for production
 2. Add admin UI that edits JSON directly
 3. Or use database in admin UI → export to JSON → deploy
