@@ -30,14 +30,14 @@ Following the project's BDD → ATDD → TDD approach:
 
 ## Test Files Created
 
-| File | Purpose | Type |
-|------|---------|------|
-| `/docs/features/data-migration.feature` | BDD scenarios for migration testing | Gherkin |
-| `/db/tests/pre-migration-validation.sql` | Pre-conditions verification | SQL |
-| `/db/tests/post-migration-validation.sql` | Success criteria validation | SQL |
-| `/db/tests/cycle-detection-tests.sql` | Dependency cycle prevention | SQL |
-| `/db/tests/idempotency-test-procedure.sql` | Multi-run safety verification | SQL |
-| `/db/tests/rollback-procedure.sql` | Rollback and recovery | SQL |
+| File                                       | Purpose                             | Type    |
+| ------------------------------------------ | ----------------------------------- | ------- |
+| `/docs/features/data-migration.feature`    | BDD scenarios for migration testing | Gherkin |
+| `/db/tests/pre-migration-validation.sql`   | Pre-conditions verification         | SQL     |
+| `/db/tests/post-migration-validation.sql`  | Success criteria validation         | SQL     |
+| `/db/tests/cycle-detection-tests.sql`      | Dependency cycle prevention         | SQL     |
+| `/db/tests/idempotency-test-procedure.sql` | Multi-run safety verification       | SQL     |
+| `/db/tests/rollback-procedure.sql`         | Rollback and recovery               | SQL     |
 
 ## Test Execution Workflow
 
@@ -56,6 +56,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/pre-migration-va
 ```
 
 **Key Validations:**
+
 - Schema structure verification
 - Existing data conflict detection
 - Dependency target existence
@@ -73,6 +74,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/post-migration-v
 ```
 
 **Expected Results:**
+
 - All new practices inserted
 - All dependencies created
 - No circular dependencies
@@ -90,6 +92,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/idempotency-test
 ```
 
 **Expected Behavior:**
+
 - No duplicate records created
 - No errors on second run
 - Data remains unchanged
@@ -103,6 +106,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/cycle-detection-
 ```
 
 **Tests Performed:**
+
 - Direct cycles (A → B → A)
 - Self-references (A → A)
 - Multi-hop cycles (A → B → C → A)
@@ -117,6 +121,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/rollback-procedu
 ```
 
 **Rollback Verification:**
+
 - All new records removed
 - Dependencies cleaned up
 - Metadata restored
@@ -128,6 +133,7 @@ psql $DATABASE_URL -f /Users/bryan/_git/interactive-cd/db/tests/rollback-procedu
 ### Critical Path Tests
 
 #### Scenario: First-time Migration Success
+
 ```gherkin
 Given no practices with IDs 'behavior-driven-development' or 'deterministic-tests' exist
 When I apply migration 003_add_deterministic_tests.sql
@@ -138,6 +144,7 @@ And no circular dependencies should exist
 ```
 
 #### Scenario: Idempotent Re-run
+
 ```gherkin
 Given migration 003 has already been applied
 When I apply migration 003 again
@@ -148,6 +155,7 @@ And no errors should occur
 ```
 
 #### Scenario: Cycle Prevention
+
 ```gherkin
 Given a migration that would create practice A depending on B and B depending on A
 When I attempt to apply the migration
@@ -226,13 +234,13 @@ SELECT COUNT(*) as cycles FROM cycle_check WHERE has_cycle;
 
 ### Successful Migration
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Practices | 23 | 25 | +2 |
-| Dependencies | 41 | 47 | +6 |
-| Version | 1.0.0 | 1.1.0 | Updated |
-| Cycles | 0 | 0 | None |
-| Migration Records | N | N+1 | +1 |
+| Metric            | Before | After | Change  |
+| ----------------- | ------ | ----- | ------- |
+| Practices         | 23     | 25    | +2      |
+| Dependencies      | 41     | 47    | +6      |
+| Version           | 1.0.0  | 1.1.0 | Updated |
+| Cycles            | 0      | 0     | None    |
+| Migration Records | N      | N+1   | +1      |
 
 ### Failed Migration Indicators
 
@@ -349,6 +357,7 @@ echo "✓ All migration tests passed!"
 ## Behavioral Test Coverage
 
 ### What We Test (Behavior)
+
 ✅ New practices appear in the system
 ✅ Dependencies are correctly established
 ✅ System prevents circular dependencies
@@ -357,6 +366,7 @@ echo "✓ All migration tests passed!"
 ✅ Migration history is accurately tracked
 
 ### What We Don't Test (Implementation)
+
 ❌ Specific SQL syntax used
 ❌ Internal PostgreSQL operations
 ❌ Transaction log details
@@ -378,12 +388,12 @@ The migration is considered successful when:
 
 ### Common Issues and Solutions
 
-| Issue | Diagnosis Query | Solution |
-|-------|-----------------|----------|
-| Duplicate key violation | `SELECT id, COUNT(*) FROM practices GROUP BY id HAVING COUNT(*) > 1` | Add ON CONFLICT clause |
-| Circular dependency | `SELECT would_create_cycle(practice_id, depends_on_id)` | Review dependency logic |
-| Orphaned dependencies | `SELECT pd.* FROM practice_dependencies pd LEFT JOIN practices p ON pd.practice_id = p.id WHERE p.id IS NULL` | Add CASCADE or fix order |
-| Migration not tracked | `SELECT * FROM schema_migrations WHERE migration_name LIKE '%003%'` | Check transaction commit |
+| Issue                   | Diagnosis Query                                                                                               | Solution                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| Duplicate key violation | `SELECT id, COUNT(*) FROM practices GROUP BY id HAVING COUNT(*) > 1`                                          | Add ON CONFLICT clause   |
+| Circular dependency     | `SELECT would_create_cycle(practice_id, depends_on_id)`                                                       | Review dependency logic  |
+| Orphaned dependencies   | `SELECT pd.* FROM practice_dependencies pd LEFT JOIN practices p ON pd.practice_id = p.id WHERE p.id IS NULL` | Add CASCADE or fix order |
+| Migration not tracked   | `SELECT * FROM schema_migrations WHERE migration_name LIKE '%003%'`                                           | Check transaction commit |
 
 ## Recommendations
 
@@ -398,6 +408,7 @@ The migration is considered successful when:
 ## Conclusion
 
 This comprehensive testing strategy ensures that data migrations:
+
 - Follow BDD principles focusing on behavior
 - Maintain database integrity and consistency
 - Can be safely applied multiple times

@@ -5,6 +5,11 @@ import path from 'path'
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
+	server: {
+		fs: {
+			allow: ['.']
+		}
+	},
 	resolve: {
 		alias: {
 			$domain: path.resolve('./src/domain'),
