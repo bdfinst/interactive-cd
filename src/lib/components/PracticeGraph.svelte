@@ -176,6 +176,9 @@
 			const parentX = parentRect.left - containerRect.left + parentRect.width / 2
 			const parentY = parentRect.bottom - containerRect.top
 
+			// Check if this practice is selected
+			const isSelected = selectedNodeId === practice.id
+
 			practice.dependencies.forEach(dep => {
 				// Dependencies are full objects, not just IDs
 				const childRef = treeNodeRefs[dep.id]
@@ -190,7 +193,8 @@
 					y1: parentY,
 					x2: childX,
 					y2: childY,
-					type: 'tree'
+					type: 'tree',
+					highlighted: isSelected
 				})
 			})
 		})
@@ -345,15 +349,27 @@
 			{#each treeConnections as conn}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#93c5fd"
-					stroke-width="2"
-					opacity="0.7"
+					stroke={conn.highlighted ? '#eab308' : '#93c5fd'}
+					stroke-width={conn.highlighted ? '3' : '2'}
+					opacity={conn.highlighted ? '1' : '0.7'}
 					fill="none"
 				/>
 				<!-- Start point (parent) -->
-				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x1}
+					cy={conn.y1}
+					r={conn.highlighted ? '7' : '6'}
+					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 				<!-- End point (child) -->
-				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x2}
+					cy={conn.y2}
+					r={conn.highlighted ? '7' : '6'}
+					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 			{/each}
 		</svg>
 
