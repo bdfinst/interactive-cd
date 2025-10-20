@@ -13,6 +13,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
+		"commit": "npx @commitlint/cli --help-url https://github.com/conventional-changelog/commitlint/#what-is-commitlint",
+		"commit:validate": "npx commitlint --edit",
 		"dev": "vite dev",
 		"format:fix": "prettier --write '**/*.{js,yml,yaml,json,css,scss,toml,md,svelte}'",
 		"lint": "eslint .",

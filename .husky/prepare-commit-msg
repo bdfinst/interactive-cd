@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+# Provide commit message template for new commits (not merge/amend)
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Only add template for regular commits (not merge, squash, amend, etc.)
+if [ -z "$COMMIT_SOURCE" ]; then
+  # Check if the commit message file is empty or only has comments
+  if ! grep -qv '^#' "$COMMIT_MSG_FILE" 2>/dev/null; then
+    cat > "$COMMIT_MSG_FILE" <<EOF
+# <type>[optional scope]: <description>
+#
+# [optional body]
+#
+# [optional footer(s)]
+#
+# Types:
+#   feat:     New feature (minor version bump)
+#   fix:      Bug fix (patch version bump)
+#   docs:     Documentation only changes
+#   style:    Code style (formatting, semicolons, etc.)
+#   refactor: Code refactoring (no feature/fix)
+#   perf:     Performance improvements
+#   test:     Adding or updating tests
+#   build:    Build system or dependencies
+#   ci:       CI/CD configuration
+#   chore:    Other maintenance tasks
+#   revert:   Revert previous commit
+#
+# Breaking Changes:
+#   feat!: breaking change description
+#   Or add "BREAKING CHANGE:" in footer
+#
+# Examples:
+#   feat: add user authentication
+#   fix(api): handle null response in user endpoint
+#   docs: update README with installation steps
+#   perf: optimize database queries for practice tree
+#
+# Remember:
+#   - Use lowercase for type and scope
+#   - Keep subject under 100 characters
+#   - Don't end subject with period
+#   - Use imperative mood ("add" not "adds" or "added")
+EOF
+  fi
+fi
