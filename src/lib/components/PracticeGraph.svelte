@@ -312,6 +312,9 @@
 	role="main"
 	aria-label="Practice dependency graph"
 >
+	<!-- Header spacer to prevent content from being hidden under fixed header -->
+	<div class="h-20 sm:h-24" aria-hidden="true"></div>
+
 	<!-- Expand/Collapse Button - Fixed in upper left corner -->
 	<button
 		onclick={toggleFullTree}
