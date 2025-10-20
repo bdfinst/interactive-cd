@@ -43,33 +43,33 @@
 	},
 	"dependencies": {
 		"@netlify/neon": "^0.1.0",
-		"pg": "^8.11.3"
+		"pg": "^8.16.3"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "^20.0.0",
-		"@playwright/test": "^1.40.0",
-		"@sveltejs/adapter-netlify": "^4.0.0",
-		"@sveltejs/kit": "^2.46.5",
+		"@playwright/test": "^1.56.1",
+		"@sveltejs/adapter-netlify": "^5.2.4",
+		"@sveltejs/kit": "^2.47.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
-		"@testing-library/jest-dom": "^6.1.5",
-		"@testing-library/svelte": "^5.2.3",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/svelte": "^5.2.8",
 		"@typescript-eslint/eslint-plugin": "^8.46.1",
 		"@typescript-eslint/parser": "^8.46.1",
 		"eslint": "^9.38.0",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-svelte": "^3.12.4",
+		"eslint-plugin-svelte": "^3.12.5",
 		"globals": "^16.4.0",
 		"husky": "^9.1.7",
-		"jsdom": "^23.0.1",
+		"jsdom": "^27.0.1",
 		"lint-staged": "^16.2.4",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
-		"svelte": "^5.40.2",
-		"svelte-eslint-parser": "^1.3.3",
-		"@tailwindcss/vite": "^4.0.0",
-		"tailwindcss": "^4.0.0",
-		"vite": "^6.0.0",
-		"vitest": "^3.0.0"
+		"svelte": "^5.41.0",
+		"svelte-eslint-parser": "^1.4.0",
+		"@tailwindcss/vite": "^4.1.14",
+		"tailwindcss": "^4.1.14",
+		"vite": "^7.1.10",
+		"vitest": "^3.2.4"
 	}
 }
