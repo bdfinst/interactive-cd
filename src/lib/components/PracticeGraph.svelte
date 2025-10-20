@@ -316,10 +316,10 @@
 	<div class="h-20 sm:h-24" aria-hidden="true"></div>
 
 	<!-- Expand/Collapse Button - Upper left corner of tree view -->
-	<div class="relative mb-4">
+	<div class="mb-8">
 		<button
 			onclick={toggleFullTree}
-			class="absolute top-0 left-0 px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
+			class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
 				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
 				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
 			data-testid="toggle-full-tree"
