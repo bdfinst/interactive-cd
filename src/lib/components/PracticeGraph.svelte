@@ -315,7 +315,7 @@
 	<!-- Expand/Collapse Button - Fixed in upper left corner -->
 	<button
 		onclick={toggleFullTree}
-		class="fixed top-[6rem] left-4 z-50 px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
+		class="fixed top-[6.5rem] left-4 z-[1100] px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
 			? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
 			: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
 		data-testid="toggle-full-tree"
