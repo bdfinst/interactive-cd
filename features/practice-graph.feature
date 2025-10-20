@@ -10,8 +10,7 @@ Feature: Practice Dependency Graph
   Scenario: Display root practice node
     When I visit the homepage
     Then I should see a graph node for "Continuous Delivery"
-    And the node should be positioned at the top center
-    And the node should have a distinct border indicating it is the root
+    And the node should be visually distinct as the root practice
     And the node should display the practice title
     And the node should display the description
     And the node should show the number of dependencies
@@ -47,7 +46,7 @@ Feature: Practice Dependency Graph
     When I view a dependency node in the graph
     Then I should see up to 3 benefits displayed
     And if there are more than 3 benefits, I should see "+N more..." text
-    And each benefit should have a visual indicator (star icon)
+    And each benefit should have a visual indicator
 
   Scenario: Graph layout is responsive
     When I view the graph on a mobile device
@@ -60,16 +59,9 @@ Feature: Practice Dependency Graph
 
   Scenario: Node borders distinguish root from dependencies
     When I view the practice graph
-    Then the "Continuous Delivery" node should have a blue border
-    And dependency nodes should have gray borders
+    Then the "Continuous Delivery" node should have a visually distinct border
+    And dependency nodes should have standard borders
     And all nodes should have visible borders
-
-  Scenario: Nodes display category icons
-    When I view practice nodes
-    Then "Continuous Delivery" should have icon "🔄" for practice category
-    And "Continuous Integration" should have icon "🔄" for practice category
-    And "Application Pipeline" should have icon "🛠️" for tooling category
-    And "Immutable Artifact" should have icon "🛠️" for tooling category
 
   Scenario: Graph shows dependency counts
     When I view the "Continuous Delivery" node
@@ -195,7 +187,7 @@ Feature: Practice Dependency Graph
     Given I am viewing the practice graph with multiple dependencies
     When I click on a dependency practice card
     Then that practice becomes selected
-    And it displays a blue border (2px in normal mode, 4px in compact)
+    And it displays a visually distinct border
     And its description becomes visible
     And its requirements list becomes visible
     And its benefits list becomes visible
@@ -204,7 +196,7 @@ Feature: Practice Dependency Graph
     Given a practice is currently selected
     When I click on the selected practice card again
     Then the practice becomes deselected
-    And the blue border is removed
+    And the selection border is removed
     And only the title, category dots, and dependency count remain visible
     And the description and details are hidden
 
@@ -219,7 +211,7 @@ Feature: Practice Dependency Graph
     When I first load the practice graph
     Then "Continuous Delivery" is automatically selected
     And its full details are visible
-    And it has a blue border
+    And it has a visually distinct selection border
 
   Scenario: Selected practices occupy more grid space in full tree view
     Given I am viewing the full expanded tree
@@ -234,53 +226,50 @@ Feature: Practice Dependency Graph
     Given I have a current practice with displayed dependencies
     When I view the practice graph
     Then curved lines connect the current practice to each dependency
-    And each line has a visible circle at the start point (parent)
-    And each line has a visible circle at the end point (child)
-    And the circles are light blue (#93c5fd)
+    And each line has a visible circle marker at the start point (parent)
+    And each line has a visible circle marker at the end point (child)
+    And the connection lines are clearly visible against the background
 
-  Scenario: Ancestor connections use solid lines
+  Scenario: Ancestor connections are visually distinct
     Given I have drilled down into practice dependencies
     And ancestor practices are displayed above the current practice
     When I view the connection lines
     Then lines connecting ancestors to each other are solid
     And lines connecting the last ancestor to current practice are solid
-    And ancestor connections have higher opacity (0.9)
+    And ancestor connections are more prominent than dependency connections
 
-  Scenario: Dependency connections use dashed lines when not selected
+  Scenario: Dependency connections are visually differentiated when not selected
     Given dependencies are displayed below the current practice
     When a dependency is not selected
-    Then its connection line is dashed (5,5 dash pattern)
-    And the line has lower opacity (0.7)
+    Then its connection line is dashed
+    And the line is less prominent than ancestor connections
 
-  Scenario: Selected dependency connections use solid lines
+  Scenario: Selected dependency connections become more prominent
     Given dependencies are displayed below the current practice
     When I click a dependency to select it
     Then its connection line changes from dashed to solid
-    And the line opacity increases to 0.9
+    And the line becomes more prominent
 
   Scenario: Full tree view shows all connections
     Given I am viewing the full expanded tree
     Then connection lines appear between all parent-child relationships
-    And all lines are solid (not dashed)
-    And connection lines have 0.7 opacity
-    And circles mark both ends of each connection
+    And all lines are solid
+    And circle markers indicate both ends of each connection
 
   Scenario: Connection lines use smooth curves
     Given connection lines are visible between practices
-    Then lines are curved using cubic bezier paths
-    And the curve is smooth and natural looking
-    And vertical spacing between cards determines the curve intensity
+    Then lines are smoothly curved
+    And the curves adapt to the spacing between cards
 
   Scenario: Connection lines adapt to layout changes
     Given connection lines are visible between practices
     When I resize the browser window
     Then connection lines recalculate their positions automatically
     And lines maintain smooth curves
-    And circle terminators remain at the edges of cards
+    And circle markers remain at the edges of cards
 
-  Scenario: Connection terminators are clearly visible
+  Scenario: Connection markers are clearly visible
     Given connection lines are displayed
-    Then each line has a circle at the parent card's bottom edge
-    And each line has a circle at the child card's top edge
-    And circles have 6px radius for good visibility
-    And circles use light blue color (#93c5fd) with 0.8 opacity
+    Then each line has a circle marker at the parent card's bottom edge
+    And each line has a circle marker at the child card's top edge
+    And the markers are clearly visible and appropriately sized

@@ -110,7 +110,7 @@ Feature: Display CD Practices in Hierarchical Outline
     When navigating the outline with keyboard only
     Then all practices are accessible
     And the navigation order is logical
-    And no mouse interaction is required
+    And all features are accessible via keyboard alone
 
   Scenario: Outline can be printed
     When printing the practice outline

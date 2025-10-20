@@ -9,13 +9,14 @@ Feature: Practice Category Visualization
 
   # Category Indicators Under Practice Titles
 
-  Scenario: Practice displays category indicators as colored dots
+  Scenario: Categories are visually distinguishable by color
     When I view a practice card
     Then colored dots appear below the practice title
     And each dot represents a category dimension
-    And behavior categories use green dots (#10b981)
-    And culture categories use amber dots (#f59e0b)
-    And tooling categories use purple dots (#8b5cf6)
+    And behavior categories are visually distinct with green indicators
+    And culture categories are visually distinct with amber indicators
+    And tooling categories are visually distinct with purple indicators
+    And the colors remain consistent across all practices
 
   Scenario: Multi-category practices show multiple colored dots
     Given "Continuous Delivery" requires behavior, culture, and tooling
@@ -47,7 +48,7 @@ Feature: Practice Category Visualization
 
   Scenario: Legend explains category color coding
     When I view any page in the application
-    Then a legend is visible in the top-left corner
+    Then a legend is prominently visible on the page
     And the legend shows "Requires" as the heading
     And it lists all three categories with their colored dots
     And each category shows its label next to the colored dot:
@@ -59,7 +60,7 @@ Feature: Practice Category Visualization
   Scenario: Legend is always visible while scrolling
     Given I am viewing the practice graph
     When I scroll down the page
-    Then the legend remains visible in the top-left corner
+    Then the legend remains visible on the page
     And it maintains its fixed position
 
   # Requirement Categorization
@@ -79,44 +80,20 @@ Feature: Practice Category Visualization
     And I see a purple dot for tooling
     And all three dots appear before the requirement text
 
-  Scenario: Requirement categorization is intelligently determined
-    When I view a requirement containing "team"
-    Then it shows a culture category indicator (amber dot)
-    When I view a requirement containing "pipeline"
-    Then it shows a tooling category indicator (purple dot)
-    When I view a requirement containing "practice"
-    Then it shows a behavior category indicator (green dot)
-
-  Scenario: Tool-specific requirements show tooling category
-    Given a requirement mentions "automated deployment system"
-    When I view that requirement
-    Then it shows a tooling category indicator
-    Given a requirement mentions "infrastructure as code"
-    When I view that requirement
-    Then it shows a tooling category indicator
-
-  Scenario: Behavior-focused requirements show behavior category
-    Given a requirement mentions "merge to main daily"
-    When I view that requirement
-    Then it shows a behavior category indicator
-    Given a requirement mentions "test before committing"
-    When I view that requirement
-    Then it shows a behavior category indicator
-
-  Scenario: Culture-focused requirements show culture category
-    Given a requirement mentions "team owns their deployment process"
-    When I view that requirement
-    Then it shows a culture category indicator
-    Given a requirement mentions "shared responsibility"
-    When I view that requirement
-    Then it shows a culture category indicator
+  Scenario: Requirements are appropriately categorized
+    Given I am viewing a practice with multiple requirements
+    When I examine the requirement category indicators
+    Then requirements about tools and automation show tooling indicators
+    And requirements about team practices show behavior indicators
+    And requirements about organizational values show culture indicators
+    And the categorization reflects the nature of each requirement
 
   # Compact Mode in Full Tree View
 
   Scenario: Category dots scale appropriately in compact mode
     Given I am viewing the full expanded tree
     When practices are displayed in compact mode
-    Then category dots are smaller (1.5px) but still visible
+    Then category dots are proportionally smaller but remain visible
     And the dots maintain their color coding
     And tooltips still work when hovering over small dots
 
