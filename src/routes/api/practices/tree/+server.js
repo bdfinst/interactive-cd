@@ -5,7 +5,7 @@
  * (default: continuous-delivery)
  */
 import { json } from '@sveltejs/kit'
-import { createPostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js'
+import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { createGetPracticeTreeService } from '$application/practice-catalog/GetPracticeTreeService.js'
 
 /** @type {import('./$types').RequestHandler} */
@@ -15,7 +15,7 @@ export async function GET({ url }) {
 		const rootId = url.searchParams.get('root') || 'continuous-delivery'
 
 		// Create repository and service (dependency injection)
-		const repository = createPostgresPracticeRepository()
+		const repository = createFilePracticeRepository()
 		const service = createGetPracticeTreeService(repository)
 
 		// Execute use case

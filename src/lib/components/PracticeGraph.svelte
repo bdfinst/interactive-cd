@@ -15,6 +15,9 @@
 	import { onMount, tick } from 'svelte'
 	import GraphNode from './GraphNode.svelte'
 
+	// Accept initial server data
+	const { initialData = null } = $props()
+
 	let containerRef = $state()
 	const ancestorRefs = $state([])
 	let currentRef = $state()
@@ -34,7 +37,15 @@
 
 	// Initialize with provided practices
 	onMount(async () => {
-		await loadCurrentView()
+		// Use server data if available, otherwise fetch
+		if (initialData?.initialPractices) {
+			const practices = initialData.initialPractices
+			currentPractice = practices[0] // First is always the root/current
+			dependencies = practices.slice(1) // Rest are dependencies
+			selectedNodeId = currentPractice.id
+		} else {
+			await loadCurrentView()
+		}
 		recalculateAllConnections()
 		window.addEventListener('resize', recalculateAllConnections)
 		return () => window.removeEventListener('resize', recalculateAllConnections)
@@ -339,7 +350,7 @@
 				<div
 					class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"
 					aria-hidden="true"
-				/>
+				></div>
 				<p class="text-gray-300">Loading dependencies...</p>
 			</div>
 		</div>
@@ -463,7 +474,6 @@
 			{#if dependencies.length > 0}
 				<section
 					class="grid gap-x-8 gap-y-12 max-w-screen-xl mx-auto grid-cols-12"
-					role="region"
 					aria-label="Practice dependencies"
 				>
 					{#each dependencies as dependency, i (dependency.id)}

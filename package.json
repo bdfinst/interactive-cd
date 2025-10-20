@@ -12,21 +12,12 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "npm run db:migrate:node && vite build",
-		"build:app": "vite build",
-		"db:check": "bash db/check-migrations.sh",
-		"db:migrate": "bash db/deploy-migrations.sh",
-		"db:migrate:node": "node db/deploy-migrations.js",
-		"db:migrate:local": "bash db/migrate-local.sh",
-		"db:refresh": "node db/deploy-full-refresh.js",
-		"db:status": "psql ${DATABASE_URL:-postgresql://localhost:5432/interactive_cd} -c 'SELECT migration_name, migration_type, applied_at, success FROM schema_migrations ORDER BY applied_at DESC LIMIT 20;'",
-		"dev": "npm run db:migrate:local && vite dev",
-		"dev:app": "vite dev",
+		"build": "vite build",
+		"dev": "vite dev",
 		"format:fix": "prettier --write '**/*.{js,yml,yaml,json,css,scss,toml,md,svelte}'",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"prepare": "husky",
-		"pretest": "npm run db:migrate:local",
 		"preview": "vite preview",
 		"start": "npm run dev",
 		"test": "vitest --run",
@@ -42,10 +33,7 @@
 			"npm run format:fix"
 		]
 	},
-	"dependencies": {
-		"@netlify/neon": "^0.1.0",
-		"pg": "^8.16.3"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "^20.0.0",

@@ -4,40 +4,13 @@
  * Returns Continuous Delivery practice and its direct dependencies as a flat array
  */
 import { json } from '@sveltejs/kit'
-import { createPostgresPracticeRepository } from '$infrastructure/persistence/PostgresPracticeRepository.js'
+import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
-
-/**
- * Recursively get all transitive categories for a practice
- */
-async function getTransitiveCategories(practiceId, repository, visited = new Set()) {
-	// Prevent infinite loops
-	if (visited.has(practiceId.toString())) {
-		return new Set()
-	}
-	visited.add(practiceId.toString())
-
-	const categories = new Set()
-	const prerequisites = await repository.findPracticePrerequisites(practiceId)
-
-	for (const { practice } of prerequisites) {
-		// Add this dependency's category
-		categories.add(practice.category.toString())
-
-		// Recursively get categories from this dependency's dependencies
-		const subCategories = await getTransitiveCategories(practice.id, repository, visited)
-		for (const cat of subCategories) {
-			categories.add(cat)
-		}
-	}
-
-	return categories
-}
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
 	try {
-		const repository = createPostgresPracticeRepository()
+		const repository = createFilePracticeRepository()
 
 		// Get root practice ID from query param, default to 'continuous-delivery'
 		const rootIdParam = url.searchParams.get('root') || 'continuous-delivery'
@@ -51,9 +24,8 @@ export async function GET({ url }) {
 		// Get direct dependencies
 		const prerequisites = await repository.findPracticePrerequisites(rootId)
 
-		// Get all transitive categories (including sub-dependencies)
-		const transitiveCategories = await getTransitiveCategories(rootId, repository)
-		const dependencyCategories = [...transitiveCategories].sort()
+		// Get all transitive categories (optimized - single pass)
+		const dependencyCategories = await repository.getTransitiveCategories(rootId)
 
 		// Format root practice for card display
 		const rootCard = {
@@ -74,9 +46,8 @@ export async function GET({ url }) {
 			prerequisites.map(async ({ practice }) => {
 				const deps = await repository.findPracticePrerequisites(practice.id)
 
-				// Get all transitive categories for this practice
-				const practiceTransitiveCategories = await getTransitiveCategories(practice.id, repository)
-				const practiceDepCategories = [...practiceTransitiveCategories].sort()
+				// Get all transitive categories for this practice (optimized)
+				const practiceDepCategories = await repository.getTransitiveCategories(practice.id)
 
 				return {
 					id: practice.id.toString(),
