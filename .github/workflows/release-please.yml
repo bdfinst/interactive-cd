@@ -22,7 +22,22 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target-branch: release # Create release PR targeting release branch
+          # No target-branch: creates Release PR on main
+
+      # Update release branch when Release PR is merged
+      - name: Update release branch
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Fetch latest
+          git fetch origin main
+          git fetch origin release || true
+
+          # Force update release branch to match main
+          git checkout -B release origin/main
+          git push origin release --force
 
       # Build and deploy on release (when Release PR is merged)
       - name: Checkout
