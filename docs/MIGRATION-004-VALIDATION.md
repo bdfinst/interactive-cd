@@ -7,6 +7,7 @@ This document provides validation queries to verify that migration `004_add_cd_d
 ## Quick Status Check
 
 The migration was successfully applied as indicated by the dev server output:
+
 ```
 ✅ Applied 1 migration(s) (0 schema, 1 data)
 ```
@@ -80,6 +81,7 @@ WHERE key IN ('version', 'lastUpdated', 'changelog');
 ```
 
 **Expected Result:**
+
 - version: "1.2.0"
 - lastUpdated: (current timestamp)
 - changelog: "Added 26 practices from CD diagram..."
@@ -202,6 +204,7 @@ ORDER BY p.name;
 ```
 
 **Expected Result:** Should include new practices like:
+
 - self-healing-services
 - automated-db-changes
 - continuous-testing
@@ -288,6 +291,7 @@ psql $DATABASE_URL -f db/tests/rollback-procedure.sql
 Migration 004 successfully added the complete CD diagram practice hierarchy to the database, expanding the catalog from 25 to 51 practices with comprehensive dependency mapping. The migration is idempotent and can be safely re-run.
 
 For questions or issues, refer to:
+
 - [Adding New Practices Guide](/docs/ADDING-NEW-PRACTICES.md)
 - [Database Documentation](/docs/DATABASE.md)
 - [Database Quick Start](/docs/DATABASE-QUICKSTART.md)

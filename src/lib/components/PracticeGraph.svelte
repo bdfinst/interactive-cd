@@ -4,16 +4,16 @@
 	 *
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
-	import { onMount, tick } from 'svelte'
-	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
-	import GraphNode from './GraphNode.svelte'
+	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
 	import {
 		expandPractice as expandPracticeLogic,
-		navigateToAncestor as navigateToAncestorLogic,
-		isPracticeExpanded as isPracticeExpandedLogic
+		isPracticeExpanded as isPracticeExpandedLogic,
+		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
-	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
+	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { onMount, tick } from 'svelte'
+	import GraphNode from './GraphNode.svelte'
 
 	let containerRef = $state()
 	const ancestorRefs = $state([])
@@ -316,7 +316,7 @@
 	<div class="h-20 sm:h-24" aria-hidden="true"></div>
 
 	<!-- Expand/Collapse Button - Upper left corner of tree view -->
-	<div class="mb-8">
+	<div class="mt-8">
 		<button
 			onclick={toggleFullTree}
 			class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded

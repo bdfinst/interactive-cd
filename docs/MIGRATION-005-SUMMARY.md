@@ -18,11 +18,13 @@ Added the foundational **Product Goals** practice to the database to establish t
 ### 1 New Practice
 
 **product-goals** - Product Goals
+
 - **Category:** behavior
 - **Type:** practice
 - **Description:** Clearly defined, measurable product goals that align team effort and provide direction for feature prioritization.
 
 ### Requirements
+
 1. Clear product vision and mission
 2. Measurable objectives and key results (OKRs)
 3. Stakeholder alignment on goals
@@ -32,6 +34,7 @@ Added the foundational **Product Goals** practice to the database to establish t
 7. Time-bound goal setting
 
 ### Benefits
+
 1. Better feature prioritization decisions
 2. Team alignment on what matters most
 3. Focused effort on high-impact work
@@ -66,6 +69,7 @@ continuous-integration
 ```
 
 This creates a logical flow:
+
 1. **Product Goals** - Define what we're trying to achieve
 2. **Unified Team Backlog** - Single place to track all work
 3. **Prioritized Features** - Order work by business value aligned with goals
@@ -75,12 +79,12 @@ This creates a logical flow:
 
 ## Statistics
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| **Total Practices** | 51 | 52 | +1 |
-| **Total Dependencies** | ~113 | ~114 | +1 |
-| **Database Version** | 1.2.0 | 1.3.0 | +0.1.0 |
-| **Behavior Practices** | 12 | 13 | +1 |
+| Metric                 | Before | After | Change |
+| ---------------------- | ------ | ----- | ------ |
+| **Total Practices**    | 51     | 52    | +1     |
+| **Total Dependencies** | ~113   | ~114  | +1     |
+| **Database Version**   | 1.2.0  | 1.3.0 | +0.1.0 |
+| **Behavior Practices** | 12     | 13    | +1     |
 
 ---
 
@@ -150,6 +154,7 @@ Without the input (goals), the function (prioritization) cannot produce meaningf
 ### Before Product Goals
 
 **Problem:** Team prioritizes features by:
+
 - Whoever shouts loudest
 - Technical complexity (easier first)
 - Personal preferences
@@ -160,6 +165,7 @@ Without the input (goals), the function (prioritization) cannot produce meaningf
 ### After Product Goals
 
 **Example Goals:**
+
 ```
 Goal 1: Increase user retention by 20% in Q1
 Goal 2: Reduce time-to-value for new users from 30 to 10 minutes
@@ -167,6 +173,7 @@ Goal 3: Achieve 95% uptime SLA
 ```
 
 **Feature Prioritization:**
+
 1. ✅ Onboarding tutorial → Supports Goal 2
 2. ✅ Email reminders → Supports Goal 1
 3. ✅ Auto-scaling → Supports Goal 3
@@ -201,10 +208,12 @@ Scenario: Features are prioritized based on product goals
 ## Files Created/Modified
 
 ### New Files
+
 1. **`db/data/005_add_product_goals.sql`** - Migration file
 2. **`docs/MIGRATION-005-SUMMARY.md`** - This summary
 
 ### Modified Files
+
 - Database: `practices` table (+1 row)
 - Database: `practice_dependencies` table (+1 row)
 - Database: `metadata` table (version updated)
@@ -262,18 +271,21 @@ SELECT * FROM practices p WHERE exists(
 ## Next Steps
 
 ### Immediate (Completed)
+
 ✅ Create migration file
 ✅ Test migration locally
 ✅ Verify practice and dependency added
 ✅ Document migration
 
 ### Short Term
+
 - [ ] Update UI to display product-goals practice
 - [ ] Add practice to documentation
 - [ ] Create example product goals in docs
 - [ ] Add to practice comparison tools
 
 ### Medium Term
+
 - [ ] Create template for defining product goals
 - [ ] Add practice detail page with examples
 - [ ] Link to OKR frameworks and resources
@@ -283,11 +295,13 @@ SELECT * FROM practices p WHERE exists(
 ## Related Practices
 
 ### Upstream (Enables Product Goals)
+
 - Stakeholder collaboration (not yet in catalog)
 - Product vision (not yet in catalog)
 - Market research (not yet in catalog)
 
 ### Downstream (Enabled by Product Goals)
+
 - **prioritized-features** - Uses goals for prioritization
 - **unified-team-backlog** - Aligned with goals
 - **continuous-integration** - Work integrated supports goals
@@ -297,16 +311,19 @@ SELECT * FROM practices p WHERE exists(
 ## Alignment with Project Philosophy
 
 ### BDD Principles
+
 ✅ Practice describes behavior (how teams work with goals)
 ✅ Focus on outcomes (aligned features, focused effort)
 ✅ Testable (can verify goals exist and are used)
 
 ### Functional Programming
+
 ✅ Pure dependency relationship (immutable)
 ✅ Clear input/output (goals → prioritization)
 ✅ Composable with other practices
 
 ### Domain-Driven Design
+
 ✅ Practice is an entity in the practice catalog domain
 ✅ Dependencies form aggregates
 ✅ Behavior category captures team interaction

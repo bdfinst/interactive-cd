@@ -78,17 +78,17 @@ Update `.github/workflows/release-please.yml`:
 - uses: googleapis/release-please-action@v4
   id: release
   with:
-    token: ${{ secrets.RELEASE_PLEASE_TOKEN }}  # Use PAT instead of GITHUB_TOKEN
+    token: ${{ secrets.RELEASE_PLEASE_TOKEN }} # Use PAT instead of GITHUB_TOKEN
 ```
 
 ---
 
 ## Comparison
 
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Workflow Permissions** | ✅ Simple<br>✅ No token management<br>✅ Works for all workflows | ⚠️ Applies to all workflows |
-| **Personal Access Token** | ✅ More control<br>✅ Specific to release-please | ⚠️ Token expiration<br>⚠️ Manual rotation |
+| Approach                  | Pros                                                              | Cons                                      |
+| ------------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
+| **Workflow Permissions**  | ✅ Simple<br>✅ No token management<br>✅ Works for all workflows | ⚠️ Applies to all workflows               |
+| **Personal Access Token** | ✅ More control<br>✅ Specific to release-please                  | ⚠️ Token expiration<br>⚠️ Manual rotation |
 
 ---
 
@@ -107,6 +107,7 @@ For most cases, enabling workflow permissions is the simplest solution:
 Once permissions are updated:
 
 1. **Manual trigger** (if workflow already ran):
+
    ```bash
    git commit --allow-empty -m "chore: trigger release-please"
    git push origin main
@@ -137,11 +138,13 @@ After applying the fix, the workflow should succeed with output like:
 ## Security Note
 
 ### Workflow Permissions Approach
+
 - GitHub Actions has write access to repository
 - Can create PRs but cannot merge without approval
 - Follows repository branch protection rules
 
 ### PAT Approach
+
 - Token has your user permissions
 - Can bypass some restrictions
 - Needs rotation before expiration

@@ -49,6 +49,7 @@ git push origin feat/new-feature
 ### 3. Release PR (Automated)
 
 **release-please automatically:**
+
 - Analyzes conventional commits on main
 - Creates a "Release PR" on main with:
   - Bumped version in package.json
@@ -56,6 +57,7 @@ git push origin feat/new-feature
   - Release notes
 
 **You review the Release PR:**
+
 - Check version bump is correct
 - Review changelog entries
 - Verify all changes are documented
@@ -119,6 +121,7 @@ git push origin feat/csv-export
 release-please detects the `feat:` commit and automatically:
 
 **Creates PR on main:**
+
 ```
 Title: chore(main): release 1.4.0
 
@@ -153,13 +156,13 @@ Changes:
 
 ## Comparison: Old vs New Strategy
 
-| Aspect | Old Strategy | New Strategy |
-|--------|-------------|--------------|
-| **Trigger** | Push to release | Push to main |
-| **Release PR** | On release branch | On main branch |
-| **Demo deploys** | From main | From main |
-| **Prod deploys** | From release | From tags/releases |
-| **Version source** | release branch | main branch |
+| Aspect                | Old Strategy            | New Strategy        |
+| --------------------- | ----------------------- | ------------------- |
+| **Trigger**           | Push to release         | Push to main        |
+| **Release PR**        | On release branch       | On main branch      |
+| **Demo deploys**      | From main               | From main           |
+| **Prod deploys**      | From release            | From tags/releases  |
+| **Version source**    | release branch          | main branch         |
 | **Release frequency** | Manual merge to release | Every merge to main |
 
 ---
@@ -169,6 +172,7 @@ Changes:
 ### Workflow File
 
 **Before:**
+
 ```yaml
 on:
   push:
@@ -177,6 +181,7 @@ on:
 ```
 
 **After:**
+
 ```yaml
 on:
   push:
@@ -207,16 +212,19 @@ on:
 ### For Hotfixes
 
 1. **Create hotfix branch from latest release tag**
+
    ```bash
    git checkout -b hotfix/critical-fix v1.4.0
    ```
 
 2. **Fix and commit**
+
    ```bash
    git commit -m "fix: critical security issue"
    ```
 
 3. **Merge to main**
+
    ```bash
    git checkout main
    git merge hotfix/critical-fix
@@ -258,6 +266,7 @@ Add to `.github/workflows/release-please.yml`:
 ### Option 3: Don't Use Release Branch
 
 Just deploy from tags:
+
 - v1.4.0 → Production
 - main → Demo
 
@@ -269,21 +278,23 @@ For release-please to work correctly:
 
 ### Version Bumps
 
-| Commit Type | Version Bump | Example |
-|-------------|--------------|---------|
-| `feat:` | Minor (1.x.0) | `feat: add export feature` |
-| `fix:` | Patch (1.0.x) | `fix: navigation bug` |
-| `feat!:` or `BREAKING CHANGE:` | Major (x.0.0) | `feat!: redesign API` |
+| Commit Type                    | Version Bump  | Example                    |
+| ------------------------------ | ------------- | -------------------------- |
+| `feat:`                        | Minor (1.x.0) | `feat: add export feature` |
+| `fix:`                         | Patch (1.0.x) | `fix: navigation bug`      |
+| `feat!:` or `BREAKING CHANGE:` | Major (x.0.0) | `feat!: redesign API`      |
 
 ### Non-Release Commits
 
 These don't trigger releases but appear in changelog:
+
 - `docs:` - Documentation
 - `test:` - Tests
 - `refactor:` - Refactoring
 - `perf:` - Performance
 
 These don't appear in changelog:
+
 - `chore:` - Maintenance
 - `ci:` - CI/CD changes
 - `build:` - Build system
@@ -304,6 +315,7 @@ These don't appear in changelog:
 ### Q: Can I force a specific version?
 
 **A:** Yes, add to commit message:
+
 ```
 feat: new feature
 
@@ -313,6 +325,7 @@ Release-As: 2.0.0
 ### Q: How do I skip a release?
 
 **A:** Use `chore:` commits - they don't trigger releases:
+
 ```bash
 git commit -m "chore: update dependencies"
 ```
@@ -345,6 +358,7 @@ The release strategy is now:
 ✅ **Production** - Deploy from tags or optional release branch
 
 This is the standard release-please pattern and provides:
+
 - Continuous releases
 - Automated versioning
 - Clear changelog
