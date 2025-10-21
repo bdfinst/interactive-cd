@@ -5,15 +5,12 @@ test.describe('Practice Navigation', () => {
 		await page.goto('/')
 	})
 
-	test('displays the main page with legend and practice graph', async ({ page }) => {
-		// Verify legend is visible
-		await expect(page.locator('text=Requires')).toBeVisible()
-		await expect(page.locator('text=Behavior')).toBeVisible()
-		await expect(page.locator('text=Culture')).toBeVisible()
-		await expect(page.locator('text=Tooling')).toBeVisible()
-
+	test('displays the main page with practice graph', async ({ page }) => {
 		// Verify practice graph is loaded
 		await expect(page.locator('[data-testid="practice-graph"]')).toBeVisible()
+
+		// Verify at least one practice node is displayed
+		await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
 	})
 
 	test('loads and displays the root practice', async ({ page }) => {

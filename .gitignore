@@ -41,3 +41,5 @@ yarn-error.log*
 !.vscode/extensions.json
 .idea
 .hive-mind/
+test-results/
+playwright-report/
