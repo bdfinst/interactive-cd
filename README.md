@@ -400,4 +400,5 @@ MIT
 
 ## 🔗 Resources
 
-- **MinimumCD.org**: <https://minimumcd.org>
+- [**MinimumCD.org**](https://minimumcd.org)
+- [**2015 Bryan Finster CD Dependency Tree**](./docs/cd-depedency-diagram.md)
