@@ -4,7 +4,7 @@
 			"id": "api-management",
 			"name": "API Management",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Governance and lifecycle management of APIs including versioning, documentation, security, and monitoring.",
 			"requirements": [
 				"API gateway infrastructure",
@@ -25,7 +25,7 @@
 			"id": "configuration-management",
 			"name": "Application Configuration Management",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Manage application configuration separately from code, versioned and deployed alongside artifacts.",
 			"requirements": [
 				"Configuration versioned in source control",
@@ -45,7 +45,7 @@
 			"id": "application-pipeline",
 			"name": "Application Pipeline",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Automated pipeline that is the only path to production, validating every change through build, test, and deployment stages.",
 			"requirements": [
 				"Only path to production",
@@ -66,7 +66,7 @@
 			"id": "artifact-repository",
 			"name": "Artifact Repository",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Central storage for build artifacts, ensuring traceability and enabling artifact promotion across environments.",
 			"requirements": [
 				"Version all artifacts",
@@ -86,7 +86,7 @@
 			"id": "automated-artifact-versioning",
 			"name": "Automated Artifact Versioning",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Automatically generating and managing semantic version numbers for build artifacts based on commits.",
 			"requirements": [
 				"Versioning scheme (semantic versioning)",
@@ -107,7 +107,7 @@
 			"id": "automated-build",
 			"name": "Automated Build",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code.",
 			"requirements": [
 				"CI/CD build pipeline configuration",
@@ -129,7 +129,7 @@
 			"id": "automated-db-changes",
 			"name": "Automated DB Changes",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "Database schema and data changes are automated and applied through CI/CD pipeline with version control.",
 			"requirements": [
 				"Database migration tools (Flyway, Liquibase)",
@@ -150,7 +150,7 @@
 			"id": "automated-environment-provisioning",
 			"name": "Automated Environment Provisioning",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Infrastructure and environments created automatically through code (IaC) on-demand.",
 			"requirements": [
 				"Infrastructure as Code tools (Terraform, Pulumi)",
@@ -171,7 +171,7 @@
 			"id": "automated-testing",
 			"name": "Automated Testing",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Comprehensive automated test suite that runs on every code change to ensure quality and catch regressions.",
 			"requirements": [
 				"Run on every commit",
@@ -218,7 +218,7 @@
 			"id": "build-automation",
 			"name": "Build Automation",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Fully automated build process that compiles, packages, and validates code without manual intervention.",
 			"requirements": [
 				"One-command build",
@@ -280,7 +280,7 @@
 			"id": "component-ownership",
 			"name": "Component Ownership",
 			"type": "practice",
-			"category": "culture",
+			"category": "behavior",
 			"description": "Clear accountability for each component with a designated team responsible for its entire lifecycle.",
 			"requirements": [
 				"Ownership registry and documentation",
@@ -301,7 +301,7 @@
 			"id": "continuous-delivery",
 			"name": "Continuous Delivery",
 			"type": "root",
-			"category": "behavior",
+			"category": "core",
 			"description": "Continuous delivery improves both delivery performance and quality, and also helps improve culture and reduce burnout and deployment pain.",
 			"requirements": [
 				"Use Continuous Integration",
@@ -325,7 +325,7 @@
 			"id": "continuous-deployment",
 			"name": "Continuous Deployment",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "Fully automated deployment to production where every change that passes the automated pipeline is released to users without manual intervention.",
 			"requirements": [
 				"Fully automated deployment pipeline",
@@ -368,7 +368,7 @@
 			"id": "continuous-testing",
 			"name": "Continuous Testing",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "Testing throughout the development lifecycle with automated feedback at every stage of the pipeline.",
 			"requirements": [
 				"Test automation framework and tooling",
@@ -430,7 +430,7 @@
 			"id": "dependency-management",
 			"name": "Dependency Management",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Systematic approach to managing third-party libraries and dependencies.",
 			"requirements": [
 				"Declare all dependencies",
@@ -471,7 +471,7 @@
 			"id": "deployment-automation",
 			"name": "Deployment Automation",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Automated deployment process that can push artifacts to any environment without manual steps.",
 			"requirements": [
 				"No manual deployment steps",
@@ -520,7 +520,7 @@
 			"id": "developer-driven-support",
 			"name": "Developer Driven Support",
 			"type": "practice",
-			"category": "culture",
+			"category": "behavior",
 			"description": "Development teams take ownership of supporting their services in production with on-call rotations.",
 			"requirements": [
 				"On-call rotation schedule for developers",
@@ -562,7 +562,7 @@
 			"id": "evolutionary-database",
 			"name": "Evolutionary Database",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "Database design evolves incrementally through small, reversible, backward-compatible changes.",
 			"requirements": [
 				"Backward compatible schema changes",
@@ -604,7 +604,7 @@
 			"id": "feature-flags",
 			"name": "Feature Flags",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Runtime toggles that allow features to be deployed to production but not yet enabled for users.",
 			"requirements": [
 				"Decouple deployment from release",
@@ -645,7 +645,7 @@
 			"id": "immutable-artifact",
 			"name": "Immutable Artifact",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Build artifacts once and promote the same artifact through all environments without rebuilding.",
 			"requirements": [
 				"Build once, deploy many times",
@@ -665,7 +665,7 @@
 			"id": "infrastructure-automation",
 			"name": "Infrastructure Automation",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Infrastructure provisioned and configured through code, enabling repeatable and consistent environments.",
 			"requirements": [
 				"Infrastructure as Code (IaC)",
@@ -706,7 +706,7 @@
 			"id": "logging-infrastructure",
 			"name": "Logging Infrastructure",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Centralized logging system that aggregates logs from all application components and infrastructure.",
 			"requirements": [
 				"Centralized log storage",
@@ -726,7 +726,7 @@
 			"id": "modular-system",
 			"name": "Modular System",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "System architecture based on loosely coupled, independently deployable modules with clear boundaries.",
 			"requirements": [
 				"Clear module boundaries and interfaces",
@@ -747,7 +747,7 @@
 			"id": "monitoring",
 			"name": "Monitoring & Observability",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Comprehensive monitoring of application and infrastructure health to detect and diagnose issues quickly.",
 			"requirements": [
 				"Application metrics",
@@ -768,7 +768,7 @@
 			"id": "monitoring-and-alerting",
 			"name": "Monitoring and Alerting",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Comprehensive observability of system behavior with proactive alerting on anomalies and SLA violations.",
 			"requirements": [
 				"Metrics collection infrastructure (Prometheus, DataDog)",
@@ -789,7 +789,7 @@
 			"id": "rollback-capability",
 			"name": "On-demand Rollback",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Ability to quickly rollback to a previous known-good version if issues are detected in production.",
 			"requirements": [
 				"Rollback mechanism in place",
@@ -830,7 +830,7 @@
 			"id": "pipeline-visibility",
 			"name": "Pipeline Visibility",
 			"type": "practice",
-			"category": "culture",
+			"category": "behavior",
 			"description": "Make pipeline status and results visible to the entire team to encourage collaboration and quick response to failures.",
 			"requirements": [
 				"Real-time status display",
@@ -917,7 +917,7 @@
 			"id": "test-environment",
 			"name": "Production-like Test Environment",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Maintain test environments that closely mirror production to catch environment-specific issues early.",
 			"requirements": [
 				"Mirrors production infrastructure",
@@ -958,7 +958,7 @@
 			"id": "secret-management",
 			"name": "Secret Management",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Secure storage and access control for secrets like passwords, API keys, and certificates.",
 			"requirements": [
 				"Encrypted at rest",
@@ -1020,7 +1020,7 @@
 			"id": "static-analysis",
 			"name": "Static Analysis",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Automated analysis of code without executing it to find bugs, security issues, and code quality problems.",
 			"requirements": [
 				"Static analysis tools (ESLint, SonarQube)",
@@ -1041,7 +1041,7 @@
 			"id": "stop-the-line",
 			"name": "Stop-the-Line for Failed Builds",
 			"type": "practice",
-			"category": "culture",
+			"category": "behavior",
 			"description": "Team immediately stops all feature work when the build fails and prioritizes fixing the build before continuing development.",
 			"requirements": [
 				"Team commitment to stop feature work on build failure",
@@ -1062,7 +1062,7 @@
 			"id": "test-automation-framework",
 			"name": "Test Automation Framework",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Framework and tools that enable writing and executing automated tests efficiently.",
 			"requirements": [
 				"Support multiple test types",
@@ -1082,7 +1082,7 @@
 			"id": "test-data-management",
 			"name": "Test Data Management",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "Strategy for creating, managing, and maintaining test data that supports automated testing.",
 			"requirements": [
 				"Representative data sets",
@@ -1164,14 +1164,13 @@
 			"id": "version-control",
 			"name": "Version Control",
 			"type": "practice",
-			"category": "tooling",
+			"category": "automation",
 			"description": "All code, configuration, and infrastructure definitions stored in version control system.",
 			"requirements": [
 				"Single source of truth",
 				"All team members have access",
 				"Commit frequently",
-				"Meaningful commit messages",
-				"Protected main branch"
+				"Meaningful commit messages"
 			],
 			"benefits": [
 				"Complete change history",
@@ -1184,7 +1183,7 @@
 			"id": "versioned-database",
 			"name": "Versioned Database",
 			"type": "practice",
-			"category": "practice",
+			"category": "behavior-enabled-automation",
 			"description": "Database schemas are version controlled and changes are tracked over time with full history.",
 			"requirements": [
 				"Version control system for schema",
@@ -1641,10 +1640,10 @@
 		}
 	],
 	"metadata": {
-		"changelog": "Added 6 missing practices from 2015 CD model (continuous-deployment, deploy-on-commit, compliance-testing, security-testing, smoke-testing, stop-the-line) and 23 missing dependencies to align with authoritative mermaid diagram",
+		"changelog": "Refactored category system to match 2015 CD model: automation (red), behavior (blue), behavior-enabled-automation (green), core (yellow). Categories now drive background colors instead of icon dots.",
 		"source": "MinimumCD.org",
 		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"version": "1.6.0",
+		"version": "1.7.0",
 		"lastUpdated": "2025-10-21"
 	}
 }

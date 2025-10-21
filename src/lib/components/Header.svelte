@@ -1,5 +1,6 @@
 <script>
 	import { version } from '../../../package.json'
+	import { headerHeight } from '$lib/stores/headerHeight.js'
 
 	let showGithubTooltip = $state(false)
 	let showMinimumCDTooltip = $state(false)
@@ -7,9 +8,24 @@
 
 	// Determine if version is beta (< 1.0.0)
 	const isBeta = version.split('.')[0] === '0'
+
+	// Track header height
+	let headerElement = $state()
+	let currentHeight = $state(0)
+
+	// Update store when height changes
+	$effect(() => {
+		if (headerElement) {
+			currentHeight = headerElement.offsetHeight
+			headerHeight.set(currentHeight)
+		}
+	})
 </script>
 
-<header class="fixed top-0 left-0 right-0 bg-slate-300 text-gray-800 z-[1000] shadow-md">
+<header
+	bind:this={headerElement}
+	class="fixed top-0 left-0 right-0 bg-slate-300 text-gray-800 z-[1000] shadow-md"
+>
 	<div class="max-w-screen-xl mx-auto px-6 py-5">
 		<!-- Large screens: 3-column grid (logo left, title center, menu right) -->
 		<div class="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
