@@ -390,27 +390,34 @@
 				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level (level)}
 					<div class="space-y-4">
 						<!-- Cards at this level in horizontal grid -->
-						<div
-							class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12 justify-items-center"
-						>
-							{#each groupedByLevel[level] as practice (practice.id)}
-								{@const isSelected = selectedNodeId === practice.id}
-								<div
-									bind:this={treeNodeRefs[practice.id]}
-									class="col-span-6 {isSelected
-										? 'sm:col-span-6 md:col-span-4 lg:col-span-3'
-										: 'sm:col-span-4 md:col-span-3 lg:col-span-2'}"
-								>
-									<GraphNode
-										{practice}
-										isRoot={practice.level === 0}
-										{isSelected}
-										onclick={() => selectNode(practice.id)}
-										onexpand={null}
-										compact={true}
-									/>
-								</div>
-							{/each}
+						<div class="flex justify-center">
+							<div
+								class="grid gap-x-4 gap-y-4 max-w-screen-xl grid-cols-12 justify-items-center"
+								style="width: fit-content;"
+							>
+								{#each groupedByLevel[level] as practice (practice.id)}
+									{@const isSelected = selectedNodeId === practice.id}
+									{@const isSingleItem = groupedByLevel[level].length === 1}
+									<div
+										bind:this={treeNodeRefs[practice.id]}
+										class={isSingleItem
+											? 'col-span-12'
+											: isSelected
+												? 'col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3'
+												: 'col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2'}
+										style={isSelected ? '' : 'max-width: 150px;'}
+									>
+										<GraphNode
+											{practice}
+											isRoot={practice.level === 0}
+											{isSelected}
+											onclick={() => selectNode(practice.id)}
+											onexpand={null}
+											compact={true}
+										/>
+									</div>
+								{/each}
+							</div>
 						</div>
 					</div>
 				{/each}

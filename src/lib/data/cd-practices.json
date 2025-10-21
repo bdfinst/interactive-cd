@@ -256,6 +256,27 @@
 			]
 		},
 		{
+			"id": "compliance-testing",
+			"name": "Compliance Testing and Checking",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Automated testing and validation to ensure compliance with regulatory requirements, industry standards, and organizational policies.",
+			"requirements": [
+				"Automated compliance checking tools",
+				"Compliance test suite in CI/CD pipeline",
+				"Regular compliance audits",
+				"Documentation of compliance requirements",
+				"Automated policy enforcement"
+			],
+			"benefits": [
+				"Continuous compliance validation",
+				"Reduced audit preparation time",
+				"Early detection of compliance violations",
+				"Audit trail for regulatory requirements",
+				"Lower compliance risk"
+			]
+		},
+		{
 			"id": "component-ownership",
 			"name": "Component Ownership",
 			"type": "practice",
@@ -298,6 +319,28 @@
 				"Better team culture",
 				"Reduced burnout",
 				"Less deployment pain"
+			]
+		},
+		{
+			"id": "continuous-deployment",
+			"name": "Continuous Deployment",
+			"type": "practice",
+			"category": "practice",
+			"description": "Fully automated deployment to production where every change that passes the automated pipeline is released to users without manual intervention.",
+			"requirements": [
+				"Fully automated deployment pipeline",
+				"Comprehensive automated test coverage",
+				"Automated rollback capability",
+				"Real-time monitoring and alerting",
+				"Feature flags for risk mitigation",
+				"High confidence in automated quality gates"
+			],
+			"benefits": [
+				"Fastest time to market for features",
+				"Immediate user feedback on changes",
+				"Reduced deployment risk through frequency",
+				"Eliminates deployment bottlenecks",
+				"Improved team productivity"
 			]
 		},
 		{
@@ -401,6 +444,27 @@
 				"Security awareness",
 				"Reduced conflicts",
 				"Easy upgrades"
+			]
+		},
+		{
+			"id": "deploy-on-commit",
+			"name": "Deploy on Commit to Trunk",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Every successful commit to trunk triggers an automated deployment to production after passing all quality gates.",
+			"requirements": [
+				"Fully automated deployment pipeline",
+				"All quality gates automated in pipeline",
+				"Fast pipeline execution (typically < 30 minutes)",
+				"Automated rollback on deployment failure",
+				"Real-time deployment notifications"
+			],
+			"benefits": [
+				"Maximum deployment frequency",
+				"Minimal lead time for changes",
+				"Immediate feedback on production issues",
+				"Eliminates manual deployment process",
+				"Enforces deployment discipline"
 			]
 		},
 		{
@@ -911,6 +975,48 @@
 			]
 		},
 		{
+			"id": "security-testing",
+			"name": "Security Testing",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Automated security testing integrated into the CI/CD pipeline to identify vulnerabilities early.",
+			"requirements": [
+				"Static Application Security Testing (SAST)",
+				"Dynamic Application Security Testing (DAST)",
+				"Dependency vulnerability scanning",
+				"Security testing in pipeline",
+				"Regular security scans and audits"
+			],
+			"benefits": [
+				"Early vulnerability detection",
+				"Reduced security risks",
+				"Compliance with security standards",
+				"Prevents vulnerable code in production",
+				"Continuous security validation"
+			]
+		},
+		{
+			"id": "smoke-testing",
+			"name": "Smoke and Component Acceptance Testing",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Quick validation tests after deployment to ensure critical functionality works and the system is stable.",
+			"requirements": [
+				"Automated smoke test suite",
+				"Tests run immediately after deployment",
+				"Tests critical user journeys",
+				"Fast execution (< 5 minutes)",
+				"Clear pass/fail criteria"
+			],
+			"benefits": [
+				"Immediate deployment validation",
+				"Fast feedback on critical failures",
+				"Prevents broken deployments from persisting",
+				"Builds confidence in deployments",
+				"Early warning system for production issues"
+			]
+		},
+		{
 			"id": "static-analysis",
 			"name": "Static Analysis",
 			"type": "practice",
@@ -929,6 +1035,27 @@
 				"Improves security posture",
 				"Reduces technical debt",
 				"Faster code reviews"
+			]
+		},
+		{
+			"id": "stop-the-line",
+			"name": "Stop-the-Line for Failed Builds",
+			"type": "practice",
+			"category": "culture",
+			"description": "Team immediately stops all feature work when the build fails and prioritizes fixing the build before continuing development.",
+			"requirements": [
+				"Team commitment to stop feature work on build failure",
+				"Clear build failure notifications to entire team",
+				"Designated responsibility for build failures",
+				"Build status visible to all team members",
+				"Fast build feedback (< 10 minutes)"
+			],
+			"benefits": [
+				"Maintains always-releasable trunk",
+				"Prevents cascading build failures",
+				"Enforces quality discipline",
+				"Reduces time to fix integration issues",
+				"Builds team ownership of quality"
 			]
 		},
 		{
@@ -1157,6 +1284,14 @@
 			"depends_on_id": "automated-build"
 		},
 		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "automated-testing"
+		},
+		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "security-testing"
+		},
+		{
 			"practice_id": "component-ownership",
 			"depends_on_id": "monitoring"
 		},
@@ -1185,8 +1320,20 @@
 			"depends_on_id": "automated-db-changes"
 		},
 		{
+			"practice_id": "continuous-deployment",
+			"depends_on_id": "continuous-delivery"
+		},
+		{
+			"practice_id": "continuous-deployment",
+			"depends_on_id": "deploy-on-commit"
+		},
+		{
 			"practice_id": "continuous-delivery",
 			"depends_on_id": "automated-environment-provisioning"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "configuration-management"
 		},
 		{
 			"practice_id": "continuous-delivery",
@@ -1222,6 +1369,10 @@
 		},
 		{
 			"practice_id": "continuous-integration",
+			"depends_on_id": "build-on-commit"
+		},
+		{
+			"practice_id": "continuous-integration",
 			"depends_on_id": "component-ownership"
 		},
 		{
@@ -1251,6 +1402,10 @@
 		{
 			"practice_id": "database-migration-strategy",
 			"depends_on_id": "version-control"
+		},
+		{
+			"practice_id": "deploy-on-commit",
+			"depends_on_id": "continuous-integration"
 		},
 		{
 			"practice_id": "deployment-automation",
@@ -1302,6 +1457,10 @@
 		},
 		{
 			"practice_id": "functional-testing",
+			"depends_on_id": "automated-testing"
+		},
+		{
+			"practice_id": "functional-testing",
 			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
@@ -1330,6 +1489,14 @@
 		},
 		{
 			"practice_id": "integration-testing",
+			"depends_on_id": "test-automation-framework"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "test-data-management"
+		},
+		{
+			"practice_id": "integration-testing",
 			"depends_on_id": "test-environment"
 		},
 		{
@@ -1354,6 +1521,14 @@
 		},
 		{
 			"practice_id": "performance-testing",
+			"depends_on_id": "test-automation-framework"
+		},
+		{
+			"practice_id": "performance-testing",
+			"depends_on_id": "test-data-management"
+		},
+		{
+			"practice_id": "performance-testing",
 			"depends_on_id": "test-environment"
 		},
 		{
@@ -1367,6 +1542,10 @@
 		{
 			"practice_id": "pre-commit-test-automation",
 			"depends_on_id": "version-control"
+		},
+		{
+			"practice_id": "prioritized-features",
+			"depends_on_id": "product-goals"
 		},
 		{
 			"practice_id": "prioritized-features",
@@ -1385,11 +1564,31 @@
 			"depends_on_id": "monitoring"
 		},
 		{
+			"practice_id": "resilience-testing",
+			"depends_on_id": "test-automation-framework"
+		},
+		{
+			"practice_id": "resilience-testing",
+			"depends_on_id": "test-data-management"
+		},
+		{
 			"practice_id": "rollback-capability",
 			"depends_on_id": "database-migration-strategy"
 		},
 		{
 			"practice_id": "rollback-capability",
+			"depends_on_id": "deployment-automation"
+		},
+		{
+			"practice_id": "security-testing",
+			"depends_on_id": "automated-testing"
+		},
+		{
+			"practice_id": "security-testing",
+			"depends_on_id": "static-analysis"
+		},
+		{
+			"practice_id": "smoke-testing",
 			"depends_on_id": "deployment-automation"
 		},
 		{
@@ -1401,12 +1600,20 @@
 			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
+			"practice_id": "stop-the-line",
+			"depends_on_id": "continuous-integration"
+		},
+		{
 			"practice_id": "test-environment",
 			"depends_on_id": "infrastructure-automation"
 		},
 		{
 			"practice_id": "test-environment",
 			"depends_on_id": "test-data-management"
+		},
+		{
+			"practice_id": "trunk-based-development",
+			"depends_on_id": "build-on-commit"
 		},
 		{
 			"practice_id": "trunk-based-development",
@@ -1434,10 +1641,10 @@
 		}
 	],
 	"metadata": {
-		"changelog": "Removed 28 redundant transitive dependencies to simplify the dependency graph",
+		"changelog": "Added 6 missing practices from 2015 CD model (continuous-deployment, deploy-on-commit, compliance-testing, security-testing, smoke-testing, stop-the-line) and 23 missing dependencies to align with authoritative mermaid diagram",
 		"source": "MinimumCD.org",
 		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"version": "1.5.0",
-		"lastUpdated": "2025-10-20 11:21:43.299379-05"
+		"version": "1.6.0",
+		"lastUpdated": "2025-10-21"
 	}
 }
