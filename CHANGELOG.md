@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.4](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.3...interactive-cd-v0.5.4) (2025-10-21)
+
+
+### Features
+
+* Auto-expand dependencies and add category legend ([#18](https://github.com/bdfinst/interactive-cd/issues/18)) ([bb7e1d9](https://github.com/bdfinst/interactive-cd/commit/bb7e1d9a03d799ed90fbc75f230aa0842702c9fc))
+
+
+### Bug Fixes
+
+* improve full tree view and add missing practices ([be6012a](https://github.com/bdfinst/interactive-cd/commit/be6012a0a612189f35caa53d564de16b4a3e82a9))
+
 ## [0.5.3](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.2...interactive-cd-v0.5.3) (2025-10-20)
 
 ### Bug Fixes
