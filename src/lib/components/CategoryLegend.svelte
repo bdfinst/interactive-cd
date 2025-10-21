@@ -38,7 +38,7 @@
 		{#each categories as category, index}
 			<div class="relative inline-flex">
 				<div
-					class="px-2 py-1 rounded-lg border border-gray-300 shadow-sm cursor-help"
+					class="px-2 rounded-sm border border-gray-300 shadow-sm cursor-help"
 					style="background-color: {category.color};"
 					data-testid="legend-item"
 					onmouseenter={() => handleMouseEnter(index)}

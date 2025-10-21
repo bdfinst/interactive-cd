@@ -11,7 +11,6 @@
 		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
-	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { onMount, tick } from 'svelte'
 	import CategoryLegend from './CategoryLegend.svelte'
@@ -329,10 +328,6 @@
 	role="main"
 	aria-label="Practice dependency graph"
 >
-	<!-- Header spacer to prevent content from being hidden under fixed header -->
-	<!-- Dynamically matches the actual header height across all screen sizes -->
-	<div style="height: {$headerHeight}px;" aria-hidden="true" data-testid="header-spacer"></div>
-
 	<!-- Expand/Collapse Button and Legend Container -->
 	<div class="relative flex flex-col gap-4 mb-4">
 		<!-- Expand/Collapse Button - positioned on the left -->

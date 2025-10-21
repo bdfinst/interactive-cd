@@ -3,8 +3,10 @@
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 
 	let showGithubTooltip = $state(false)
+	let showHelpTooltip = $state(false)
 	let showMinimumCDTooltip = $state(false)
 	let showSupportTooltip = $state(false)
+	let showVersionTooltip = $state(false)
 
 	// Determine if version is beta (< 1.0.0)
 	const isBeta = version.split('.')[0] === '0'
@@ -31,23 +33,50 @@
 		<div class="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
 			<!-- Left: Logo -->
 			<div class="flex items-center justify-start">
-				<img src="/images/logo.png" alt="Logo" class="h-logo-lg w-auto" />
+				<a
+					href="/"
+					class="rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+					aria-label="Return to home page"
+				>
+					<img src="/images/logo.png" alt="Logo" class="h-logo-lg w-auto" />
+				</a>
 			</div>
 
 			<!-- Center: Title -->
 			<div class="flex flex-col items-center">
 				<h1 class="text-title-lg font-bold m-0 text-center whitespace-nowrap">
-					CD Dependency Tree
+					<a
+						href="/"
+						class="text-gray-800 hover:text-gray-600 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="CD Dependency Tree - Return to home page"
+					>
+						CD Dependency Tree
+					</a>
 				</h1>
-				<div class="text-sm text-gray-600 mt-0.5">
-					{#if isBeta}
-						<span class="font-semibold">v{version}</span>
-						<span
-							class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-xs font-bold uppercase"
-							>beta</span
+				<div class="relative inline-flex">
+					<a
+						href="/help"
+						class="text-sm text-gray-800 mt-0.5 px-2 py-1 rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+						aria-label="View capabilities and help"
+						onmouseenter={() => (showVersionTooltip = true)}
+						onmouseleave={() => (showVersionTooltip = false)}
+					>
+						{#if isBeta}
+							<span class="font-semibold">v{version}</span>
+							<span
+								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-xs font-bold uppercase"
+								>beta</span
+							>
+						{:else}
+							<span class="font-semibold">v{version}</span>
+						{/if}
+					</a>
+					{#if showVersionTooltip}
+						<div
+							class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90"
 						>
-					{:else}
-						<span class="font-semibold">v{version}</span>
+							View capabilities & help
+						</div>
 					{/if}
 				</div>
 			</div>
@@ -134,6 +163,39 @@
 						</div>
 					{/if}
 				</div>
+
+				<!-- Info Icon -->
+				<div class="relative inline-flex">
+					<a
+						href="/help"
+						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="View help and capabilities"
+						onmouseenter={() => (showHelpTooltip = true)}
+						onmouseleave={() => (showHelpTooltip = false)}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 sm:w-7 md:w-7"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+							/>
+						</svg>
+					</a>
+					{#if showHelpTooltip}
+						<div
+							class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
+						>
+							Help & Capabilities
+						</div>
+					{/if}
+				</div>
 			</div>
 		</div>
 
@@ -142,18 +204,30 @@
 			<!-- Top: Title (centered) -->
 			<div class="flex flex-col items-center">
 				<h1 class="text-title-sm md:text-title-md font-bold m-0 text-center whitespace-nowrap">
-					CD Dependency Tree
+					<a
+						href="/"
+						class="text-gray-800 hover:text-gray-600 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="CD Dependency Tree - Return to home page"
+					>
+						CD Dependency Tree
+					</a>
 				</h1>
-				<div class="text-xs md:text-sm text-gray-600 mt-0.5">
-					{#if isBeta}
-						<span class="font-semibold">v{version}</span>
-						<span
-							class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] md:text-xs font-bold uppercase"
-							>beta</span
-						>
-					{:else}
-						<span class="font-semibold">v{version}</span>
-					{/if}
+				<div class="relative inline-flex">
+					<a
+						href="/help"
+						class="text-xs md:text-sm text-gray-800 mt-0.5 px-2 py-1 rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+						aria-label="View capabilities and help"
+					>
+						{#if isBeta}
+							<span class="font-semibold">v{version}</span>
+							<span
+								class="ml-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] md:text-xs font-bold uppercase"
+								>beta</span
+							>
+						{:else}
+							<span class="font-semibold">v{version}</span>
+						{/if}
+					</a>
 				</div>
 			</div>
 
@@ -206,6 +280,30 @@
 						aria-label="Support this project"
 					>
 						🥃
+					</a>
+				</div>
+
+				<!-- Info Icon -->
+				<div class="relative inline-flex">
+					<a
+						href="/help"
+						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="View help and capabilities"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+							/>
+						</svg>
 					</a>
 				</div>
 			</div>
