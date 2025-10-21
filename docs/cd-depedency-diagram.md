@@ -8,13 +8,13 @@ flowchart TD
 %% Top practices
 CDD["Contract Driven Development"]:::behavior
 BDD["Behavior Driven Development"]:::behavior
-SA["Static Analysis"]:::auto
-EDBC["Evolutionary Database Change"]:::auto
+SA["Static Analysis"]:::automation
+EDBC["Evolutionary Database Change"]:::automation
 
 %% Testing path
-CT["Contract Testing"]:::enabled
-FT["Functional Testing"]:::enabled
-DT["Deterministic Tests"]:::enabled
+CT["Contract Testing"]:::behavior_enabled
+FT["Functional Testing"]:::behavior_enabled
+DT["Deterministic Tests"]:::behavior_enabled
 TBD["Trunk Based Development"]:::behavior
 
 %% Team/backlog path
@@ -22,30 +22,30 @@ UTB["Unified Team Backlog"]:::behavior
 PF["Prioritized Features"]:::behavior
 ED["Evolutionary Development"]:::behavior
 DCI["Daily Code Integration"]:::behavior
-VD["Versioned Database"]:::auto
+VD["Versioned Database"]:::automation
 
 %% Build/CI/CD core
-BoC["Build on Commit"]:::auto
-ABD["Automated Build & Deploy"]:::auto
-CI["Continuous Integration"]:::enabled
+BoC["Build on Commit"]:::automation
+ABD["automationmated Build & Deploy"]:::automation
+CI["Continuous Integration"]:::behavior_enabled
 CD["Continuous Delivery"]:::core
 
 %% CD capability areas
-AAV["Automated Artifact Versioning"]:::auto
-AEV["Automated Environment Versioning"]:::auto
-ADP["Automated Database Provisioning"]:::auto
-CTG["Continuous Testing"]:::enabled
-MS["Modular System"]:::enabled
-SHS["Self-healing Services"]:::enabled
+AAV["automationmated Artifact Versioning"]:::automation
+AEV["automationmated Environment Versioning"]:::automation
+ADP["automationmated Database Provisioning"]:::automation
+CTG["Continuous Testing"]:::behavior_enabled
+MS["Modular System"]:::behavior_enabled
+SHS["Self-healing Services"]:::behavior_enabled
 
 %% Testing specializations
-PT["Performance Testing"]:::enabled
-IT["Integration Testing"]:::enabled
-ST["Security Testing"]:::enabled
-CTC["Compliance Testing"]:::enabled
+PT["Performance Testing"]:::behavior_enabled
+IT["Integration Testing"]:::behavior_enabled
+ST["Security Testing"]:::behavior_enabled
+CTC["Compliance Testing"]:::behavior_enabled
 
 %% Ops/ownership/catalog
-AMA["Automated Monitoring & Alerting"]:::auto
+AMA["automationmated Monitoring & Alerting"]:::automation
 DDO["Developer Driven Operations"]:::behavior
 CO["Component Ownership"]:::behavior
 SCAT["Service Catalog"]:::behavior
@@ -82,7 +82,7 @@ AEV --> CD
 ADP --> CD
 CTG --> CD
 MS --> CD
-SHS --> CD
+DDO --> CD
 
 %% Capability fan-ins (still make sense hierarchically)
 PT --> CTG
@@ -97,8 +97,8 @@ AMA --> SHS
 SHS --> DDO
 
 %% ========= Styling =========
-classDef auto fill:#f9d5d3,stroke:#333,stroke-width:1px,color:#111;
-classDef enabled fill:#d7f8d7,stroke:#333,stroke-width:1px,color:#111;
+classDef automation fill:#f9d5d3,stroke:#333,stroke-width:1px,color:#111;
+classDef behavior_enabled fill:#d7f8d7,stroke:#333,stroke-width:1px,color:#111;
 classDef behavior fill:#d7e6ff,stroke:#333,stroke-width:1px,color:#111;
 classDef core fill:#ffe66a,stroke:#333,stroke-width:1px,color:#111;
 ```
