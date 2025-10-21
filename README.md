@@ -171,15 +171,15 @@ See [docs/RELEASE-WORKFLOW.md](./docs/RELEASE-WORKFLOW.md) for automated release
 
 ## 📖 Documentation
 
-| File                                                    | Description                             |
-| ------------------------------------------------------- | --------------------------------------- |
-| [CLAUDE.md](./CLAUDE.md)                                | Development guidelines (BDD/TDD/FP)     |
-| [docs/practices/](./docs/practices/)                    | **Comprehensive practices guide**       |
-| [docs/TESTING-GUIDE.md](./docs/TESTING-GUIDE.md)        | **Complete testing practices**          |
-| [docs/FILE-BASED-DATA.md](./docs/FILE-BASED-DATA.md)    | File-based architecture documentation   |
-| [docs/RELEASE-WORKFLOW.md](./docs/RELEASE-WORKFLOW.md)  | Automated release process               |
-| [docs/COMMIT-CONVENTIONS.md](./docs/COMMIT-CONVENTIONS.md) | Commit message format                |
-| [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)          | Contributor guidelines and Git workflow |
+| File                                                       | Description                             |
+| ---------------------------------------------------------- | --------------------------------------- |
+| [CLAUDE.md](./CLAUDE.md)                                   | Development guidelines (BDD/TDD/FP)     |
+| [docs/practices/](./docs/practices/)                       | **Comprehensive practices guide**       |
+| [docs/TESTING-GUIDE.md](./docs/TESTING-GUIDE.md)           | **Complete testing practices**          |
+| [docs/FILE-BASED-DATA.md](./docs/FILE-BASED-DATA.md)       | File-based architecture documentation   |
+| [docs/RELEASE-WORKFLOW.md](./docs/RELEASE-WORKFLOW.md)     | Automated release process               |
+| [docs/COMMIT-CONVENTIONS.md](./docs/COMMIT-CONVENTIONS.md) | Commit message format                   |
+| [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)             | Contributor guidelines and Git workflow |
 
 ## 🔧 Available Scripts
 

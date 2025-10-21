@@ -2,10 +2,9 @@
 
 ## [0.5.3](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.2...interactive-cd-v0.5.3) (2025-10-20)
 
-
 ### Bug Fixes
 
-* cleanup docs ([#13](https://github.com/bdfinst/interactive-cd/issues/13)) ([3948d57](https://github.com/bdfinst/interactive-cd/commit/3948d5745802583eb67c1ac35e86007f79d69acd))
+- cleanup docs ([#13](https://github.com/bdfinst/interactive-cd/issues/13)) ([3948d57](https://github.com/bdfinst/interactive-cd/commit/3948d5745802583eb67c1ac35e86007f79d69acd))
 
 ## [0.5.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.1...interactive-cd-v0.5.2) (2025-10-20)
 

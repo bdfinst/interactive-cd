@@ -274,18 +274,18 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 
 ## Quick Reference
 
-| When you need...               | Consult...                                                              |
-| ------------------------------ | ----------------------------------------------------------------------- |
-| To understand development workflow | [CLAUDE.md](/CLAUDE.md)                                             |
-| To write tests                     | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)                          |
-| To make a commit                   | [CONTRIBUTING.md](/docs/CONTRIBUTING.md)                            |
-| To understand release process  | [RELEASE-WORKFLOW.md](/docs/RELEASE-WORKFLOW.md)                        |
-| To understand data architecture| [FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md)                          |
-| To understand domain model     | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)                            |
-| To review feature files        | [BDD Expert Agent](/.claude/agents/bdd-expert.md)                       |
-| To review tests                | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
-| To model domain                | [DDD Expert Agent](/.claude/agents/ddd-expert.md)                       |
-| To style components            | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md)             |
+| When you need...                   | Consult...                                                              |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| To understand development workflow | [CLAUDE.md](/CLAUDE.md)                                                 |
+| To write tests                     | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)                              |
+| To make a commit                   | [CONTRIBUTING.md](/docs/CONTRIBUTING.md)                                |
+| To understand release process      | [RELEASE-WORKFLOW.md](/docs/RELEASE-WORKFLOW.md)                        |
+| To understand data architecture    | [FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md)                          |
+| To understand domain model         | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)                            |
+| To review feature files            | [BDD Expert Agent](/.claude/agents/bdd-expert.md)                       |
+| To review tests                    | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
+| To model domain                    | [DDD Expert Agent](/.claude/agents/ddd-expert.md)                       |
+| To style components                | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md)             |
 
 ---
 
