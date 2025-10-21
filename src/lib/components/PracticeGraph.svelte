@@ -11,8 +11,10 @@
 		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { onMount, tick } from 'svelte'
+	import CategoryLegend from './CategoryLegend.svelte'
 	import GraphNode from './GraphNode.svelte'
 
 	// Accept initial server data
@@ -328,20 +330,27 @@
 	aria-label="Practice dependency graph"
 >
 	<!-- Header spacer to prevent content from being hidden under fixed header -->
-	<div class="h-20 sm:h-24" aria-hidden="true"></div>
+	<!-- Dynamically matches the actual header height across all screen sizes -->
+	<div style="height: {$headerHeight}px;" aria-hidden="true" data-testid="header-spacer"></div>
 
-	<!-- Expand/Collapse Button - Upper left corner of tree view -->
-	<div class="mt-8">
-		<button
-			onclick={toggleFullTree}
-			class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
-				? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-				: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
-			data-testid="toggle-full-tree"
-			aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
-		>
-			{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
-		</button>
+	<!-- Expand/Collapse Button and Legend Container -->
+	<div class="relative flex flex-col gap-4 mb-4">
+		<!-- Expand/Collapse Button - positioned on the left -->
+		<div class="lg:absolute lg:left-0 lg:top-0">
+			<button
+				onclick={toggleFullTree}
+				class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
+					? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
+					: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+				data-testid="toggle-full-tree"
+				aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
+			>
+				{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
+			</button>
+		</div>
+
+		<!-- Category Legend - centered -->
+		<CategoryLegend />
 	</div>
 
 	{#if loading}
@@ -480,16 +489,15 @@
 			<!-- Dependencies -->
 			{#if dependencies.length > 0}
 				<section
-					class="grid gap-x-8 gap-y-12 max-w-screen-xl mx-auto grid-cols-12"
+					class="flex flex-wrap justify-center gap-8 max-w-screen-xl mx-auto"
 					aria-label="Practice dependencies"
 				>
 					{#each dependencies as dependency, i (dependency.id)}
 						{@const isSelected = selectedNodeId === dependency.id}
 						<div
 							bind:this={dependencyRefs[i]}
-							class="col-span-12 {isSelected
-								? 'md:col-span-8 lg:col-span-6'
-								: 'md:col-span-6 lg:col-span-4'}"
+							class="w-full {isSelected ? 'md:w-2/3 lg:w-1/2' : ''}"
+							style={isSelected ? '' : 'max-width: 250px;'}
 						>
 							<GraphNode
 								practice={dependency}

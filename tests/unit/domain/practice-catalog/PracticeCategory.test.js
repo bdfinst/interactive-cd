@@ -3,9 +3,9 @@ import { PracticeCategory } from '$domain/practice-catalog/value-objects/Practic
 
 describe('PracticeCategory', () => {
 	describe('predefined categories', () => {
-		it('has PRACTICE category', () => {
-			expect(PracticeCategory.PRACTICE).toBeDefined()
-			expect(PracticeCategory.is(PracticeCategory.PRACTICE)).toBe(true)
+		it('has AUTOMATION category', () => {
+			expect(PracticeCategory.AUTOMATION).toBeDefined()
+			expect(PracticeCategory.is(PracticeCategory.AUTOMATION)).toBe(true)
 		})
 
 		it('has BEHAVIOR category', () => {
@@ -13,70 +13,70 @@ describe('PracticeCategory', () => {
 			expect(PracticeCategory.is(PracticeCategory.BEHAVIOR)).toBe(true)
 		})
 
-		it('has CULTURE category', () => {
-			expect(PracticeCategory.CULTURE).toBeDefined()
-			expect(PracticeCategory.is(PracticeCategory.CULTURE)).toBe(true)
+		it('has BEHAVIOR_ENABLED_AUTOMATION category', () => {
+			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION).toBeDefined()
+			expect(PracticeCategory.is(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION)).toBe(true)
 		})
 
-		it('has TOOLING category', () => {
-			expect(PracticeCategory.TOOLING).toBeDefined()
-			expect(PracticeCategory.is(PracticeCategory.TOOLING)).toBe(true)
+		it('has CORE category', () => {
+			expect(PracticeCategory.CORE).toBeDefined()
+			expect(PracticeCategory.is(PracticeCategory.CORE)).toBe(true)
 		})
 
 		it('each category has unique name', () => {
 			const names = [
-				PracticeCategory.PRACTICE.toString(),
+				PracticeCategory.AUTOMATION.toString(),
 				PracticeCategory.BEHAVIOR.toString(),
-				PracticeCategory.CULTURE.toString(),
-				PracticeCategory.TOOLING.toString()
+				PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.toString(),
+				PracticeCategory.CORE.toString()
 			]
 
 			const uniqueNames = new Set(names)
 			expect(uniqueNames.size).toBe(4)
 		})
 
-		it('each category has an icon', () => {
-			expect(PracticeCategory.PRACTICE.icon).toBeDefined()
-			expect(PracticeCategory.BEHAVIOR.icon).toBeDefined()
-			expect(PracticeCategory.CULTURE.icon).toBeDefined()
-			expect(PracticeCategory.TOOLING.icon).toBeDefined()
+		it('each category has a color', () => {
+			expect(PracticeCategory.AUTOMATION.color).toBeDefined()
+			expect(PracticeCategory.BEHAVIOR.color).toBeDefined()
+			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.color).toBeDefined()
+			expect(PracticeCategory.CORE.color).toBeDefined()
 		})
 
 		it('all static instances are properly frozen', () => {
-			expect(Object.isFrozen(PracticeCategory.PRACTICE)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.AUTOMATION)).toBe(true)
 			expect(Object.isFrozen(PracticeCategory.BEHAVIOR)).toBe(true)
-			expect(Object.isFrozen(PracticeCategory.CULTURE)).toBe(true)
-			expect(Object.isFrozen(PracticeCategory.TOOLING)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.CORE)).toBe(true)
 		})
 	})
 
 	describe('from', () => {
 		it('only allows predefined categories through factory method', () => {
 			// Verify we can get valid categories
-			const practice = PracticeCategory.from('practice')
-			expect(practice).toBe(PracticeCategory.PRACTICE)
+			const automation = PracticeCategory.from('automation')
+			expect(automation).toBe(PracticeCategory.AUTOMATION)
 
 			const behavior = PracticeCategory.from('behavior')
 			expect(behavior).toBe(PracticeCategory.BEHAVIOR)
 
-			const culture = PracticeCategory.from('culture')
-			expect(culture).toBe(PracticeCategory.CULTURE)
+			const behaviorEnabledAutomation = PracticeCategory.from('behavior-enabled-automation')
+			expect(behaviorEnabledAutomation).toBe(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION)
 
-			const tooling = PracticeCategory.from('tooling')
-			expect(tooling).toBe(PracticeCategory.TOOLING)
+			const core = PracticeCategory.from('core')
+			expect(core).toBe(PracticeCategory.CORE)
 
 			// Verify invalid categories are rejected
 			expect(() => PracticeCategory.from('custom-category')).toThrow('Invalid practice category')
 
 			// Verify all valid categories are accessible
-			const validCategories = ['practice', 'behavior', 'culture', 'tooling']
+			const validCategories = ['automation', 'behavior', 'behavior-enabled-automation', 'core']
 			validCategories.forEach(cat => {
 				expect(() => PracticeCategory.from(cat)).not.toThrow()
 			})
 		})
 
 		it('throws error for invalid inputs', () => {
-			const invalidInputs = [null, undefined, '', 'invalid', 'PRACTICE', 123, {}, []]
+			const invalidInputs = [null, undefined, '', 'invalid', 'AUTOMATION', 123, {}, []]
 
 			invalidInputs.forEach(input => {
 				expect(() => PracticeCategory.from(input)).toThrow('Invalid practice category')
@@ -84,70 +84,76 @@ describe('PracticeCategory', () => {
 		})
 
 		it('is case-sensitive', () => {
-			expect(() => PracticeCategory.from('PRACTICE')).toThrow('Invalid practice category')
-			expect(() => PracticeCategory.from('Practice')).toThrow('Invalid practice category')
+			expect(() => PracticeCategory.from('AUTOMATION')).toThrow('Invalid practice category')
+			expect(() => PracticeCategory.from('Automation')).toThrow('Invalid practice category')
 			expect(() => PracticeCategory.from('BEHAVIOR')).toThrow('Invalid practice category')
 		})
 	})
 
 	describe('equals', () => {
 		it('returns true for same category', () => {
-			const cat1 = PracticeCategory.PRACTICE
-			const cat2 = PracticeCategory.PRACTICE
+			const cat1 = PracticeCategory.AUTOMATION
+			const cat2 = PracticeCategory.AUTOMATION
 
 			expect(cat1.equals(cat2)).toBe(true)
 		})
 
 		it('returns false for different categories', () => {
-			const cat1 = PracticeCategory.PRACTICE
+			const cat1 = PracticeCategory.AUTOMATION
 			const cat2 = PracticeCategory.BEHAVIOR
 
 			expect(cat1.equals(cat2)).toBe(false)
 		})
 
 		it('returns false when comparing with null', () => {
-			expect(PracticeCategory.PRACTICE.equals(null)).toBe(false)
+			expect(PracticeCategory.AUTOMATION.equals(null)).toBe(false)
 		})
 	})
 
 	describe('toString', () => {
-		it('returns "practice" for PRACTICE', () => {
-			expect(PracticeCategory.PRACTICE.toString()).toBe('practice')
+		it('returns "automation" for AUTOMATION', () => {
+			expect(PracticeCategory.AUTOMATION.toString()).toBe('automation')
 		})
 
 		it('returns "behavior" for BEHAVIOR', () => {
 			expect(PracticeCategory.BEHAVIOR.toString()).toBe('behavior')
 		})
 
-		it('returns "culture" for CULTURE', () => {
-			expect(PracticeCategory.CULTURE.toString()).toBe('culture')
+		it('returns "behavior-enabled-automation" for BEHAVIOR_ENABLED_AUTOMATION', () => {
+			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.toString()).toBe(
+				'behavior-enabled-automation'
+			)
+		})
+
+		it('returns "core" for CORE', () => {
+			expect(PracticeCategory.CORE.toString()).toBe('core')
 		})
 	})
 
-	describe('icon property', () => {
-		it('PRACTICE has 🔄 icon', () => {
-			expect(PracticeCategory.PRACTICE.icon).toBe('🔄')
+	describe('color property', () => {
+		it('AUTOMATION has red/pink color #f9d5d3', () => {
+			expect(PracticeCategory.AUTOMATION.color).toBe('#f9d5d3')
 		})
 
-		it('BEHAVIOR has 👥 icon', () => {
-			expect(PracticeCategory.BEHAVIOR.icon).toBe('👥')
+		it('BEHAVIOR has blue color #d7e6ff', () => {
+			expect(PracticeCategory.BEHAVIOR.color).toBe('#d7e6ff')
 		})
 
-		it('CULTURE has 🌟 icon', () => {
-			expect(PracticeCategory.CULTURE.icon).toBe('🌟')
+		it('BEHAVIOR_ENABLED_AUTOMATION has green color #d7f8d7', () => {
+			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.color).toBe('#d7f8d7')
 		})
 
-		it('TOOLING has 🛠️ icon', () => {
-			expect(PracticeCategory.TOOLING.icon).toBe('🛠️')
+		it('CORE has pale yellow color #fff9e6', () => {
+			expect(PracticeCategory.CORE.color).toBe('#fff9e6')
 		})
 	})
 
 	describe('immutability', () => {
 		it('all categories are frozen', () => {
-			expect(Object.isFrozen(PracticeCategory.PRACTICE)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.AUTOMATION)).toBe(true)
 			expect(Object.isFrozen(PracticeCategory.BEHAVIOR)).toBe(true)
-			expect(Object.isFrozen(PracticeCategory.CULTURE)).toBe(true)
-			expect(Object.isFrozen(PracticeCategory.TOOLING)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION)).toBe(true)
+			expect(Object.isFrozen(PracticeCategory.CORE)).toBe(true)
 		})
 
 		it('PracticeCategory namespace is frozen', () => {
