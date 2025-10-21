@@ -2,7 +2,7 @@ name: Release Please
 
 on:
   workflow_run:
-    workflows: ['Run Tests'] # Wait for CI workflow to complete
+    workflows: ['CI Flow']
     types:
       - completed
     branches:
@@ -15,7 +15,7 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    # Only run if CI workflow succeeded
+    # Only run if tests passed
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: googleapis/release-please-action@v4
