@@ -45,8 +45,8 @@
 			"id": "application-pipeline",
 			"name": "Application Pipeline",
 			"type": "practice",
-			"category": "automation",
-			"description": "Automated pipeline that is the only path to production, validating every change through build, test, and deployment stages.",
+			"category": "behavior-enabled-automation",
+			"description": "The automated pipeline is the only path to production, validating every change through build, test, and deployment stages.",
 			"requirements": [
 				"Only path to production",
 				"Determines production readiness",
@@ -1297,10 +1297,6 @@
 		{
 			"practice_id": "component-ownership",
 			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "configuration-management",
-			"depends_on_id": "deployment-automation"
 		},
 		{
 			"practice_id": "configuration-management",

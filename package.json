@@ -12,7 +12,7 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
+		"build": "npm run validate:data && vite build",
 		"commit": "npx @commitlint/cli --help-url https://github.com/conventional-changelog/commitlint/#what-is-commitlint",
 		"commit:validate": "npx commitlint --edit",
 		"dev": "vite dev",
@@ -27,7 +27,8 @@
 		"test:e2e:ui": "playwright test --ui",
 		"test:ui": "vitest --ui",
 		"test:watch": "vitest --watch",
-		"update": "npx npm-check-updates -u"
+		"update": "npx npm-check-updates -u",
+		"validate:data": "node scripts/validate-cd-practices.js"
 	},
 	"lint-staged": {
 		"*.{js,svelte}": [
@@ -36,9 +37,12 @@
 		],
 		"*.{json,md,yml,yaml,css,scss}": [
 			"prettier --write"
+		],
+		"src/lib/data/cd-practices.json": [
+			"prettier --write",
+			"npm run validate:data"
 		]
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "^20.0.0",
@@ -51,6 +55,8 @@
 		"@testing-library/svelte": "^5.2.8",
 		"@typescript-eslint/eslint-plugin": "^8.46.1",
 		"@typescript-eslint/parser": "^8.46.1",
+		"ajv": "^8.17.1",
+		"ajv-formats": "^3.0.1",
 		"eslint": "^9.38.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.12.5",

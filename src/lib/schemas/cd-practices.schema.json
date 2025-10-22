@@ -1,0 +1,139 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://minimumcd.org/schemas/cd-practices.schema.json",
+	"title": "Continuous Delivery Practices",
+	"description": "Schema for validating CD practices data structure",
+	"type": "object",
+	"required": ["practices", "dependencies", "metadata"],
+	"additionalProperties": false,
+	"properties": {
+		"practices": {
+			"type": "array",
+			"description": "Array of CD practice definitions",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/definitions/practice"
+			},
+			"uniqueItems": true
+		},
+		"dependencies": {
+			"type": "array",
+			"description": "Array of practice dependencies",
+			"items": {
+				"$ref": "#/definitions/dependency"
+			},
+			"uniqueItems": true
+		},
+		"metadata": {
+			"$ref": "#/definitions/metadata"
+		}
+	},
+	"definitions": {
+		"practice": {
+			"type": "object",
+			"required": ["id", "name", "type", "category", "description", "requirements", "benefits"],
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Unique kebab-case identifier for the practice",
+					"pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+					"minLength": 2,
+					"maxLength": 100
+				},
+				"name": {
+					"type": "string",
+					"description": "Human-readable name of the practice",
+					"minLength": 3,
+					"maxLength": 200
+				},
+				"type": {
+					"type": "string",
+					"description": "Type of practice in the hierarchy",
+					"enum": ["root", "practice"]
+				},
+				"category": {
+					"type": "string",
+					"description": "Category determining the background color and classification",
+					"enum": ["automation", "behavior", "behavior-enabled-automation", "core"]
+				},
+				"description": {
+					"type": "string",
+					"description": "Detailed description of what the practice entails",
+					"minLength": 10,
+					"maxLength": 1000
+				},
+				"requirements": {
+					"type": "array",
+					"description": "List of requirements to implement this practice",
+					"minItems": 1,
+					"maxItems": 50,
+					"items": {
+						"type": "string",
+						"minLength": 5,
+						"maxLength": 500
+					}
+				},
+				"benefits": {
+					"type": "array",
+					"description": "List of benefits from implementing this practice",
+					"minItems": 1,
+					"maxItems": 50,
+					"items": {
+						"type": "string",
+						"minLength": 5,
+						"maxLength": 500
+					}
+				}
+			}
+		},
+		"dependency": {
+			"type": "object",
+			"required": ["practice_id", "depends_on_id"],
+			"additionalProperties": false,
+			"properties": {
+				"practice_id": {
+					"type": "string",
+					"description": "ID of the practice that has a dependency",
+					"pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+				},
+				"depends_on_id": {
+					"type": "string",
+					"description": "ID of the practice that is depended upon",
+					"pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+				}
+			}
+		},
+		"metadata": {
+			"type": "object",
+			"required": ["source", "description", "version", "lastUpdated"],
+			"additionalProperties": true,
+			"properties": {
+				"source": {
+					"type": "string",
+					"description": "Source of the data",
+					"minLength": 1
+				},
+				"description": {
+					"type": "string",
+					"description": "Description of the data structure",
+					"minLength": 10
+				},
+				"version": {
+					"type": "string",
+					"description": "Semantic version of the data schema",
+					"pattern": "^\\d+\\.\\d+\\.\\d+$"
+				},
+				"lastUpdated": {
+					"type": "string",
+					"description": "Date of last update in ISO format (YYYY-MM-DD)",
+					"pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+				},
+				"changelog": {
+					"type": "string",
+					"description": "Optional changelog entry for latest version"
+				}
+			}
+		}
+	}
+}
