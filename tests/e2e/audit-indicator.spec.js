@@ -324,7 +324,7 @@ test.describe('Audit Indicator - Visual Regression', () => {
 			// When I take a screenshot
 			// Then it should match the expected visual appearance
 			await expect(nodeWithIndicator).toHaveScreenshot('practice-with-audit-indicator.png', {
-				maxDiffPixels: 100
+				maxDiffPixels: 800 // Allow for font rendering differences between macOS and Linux
 			})
 		}
 	})
