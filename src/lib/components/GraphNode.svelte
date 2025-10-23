@@ -163,19 +163,19 @@
 			</div>
 		{/if}
 	{:else}
-		<!-- Show dependency count when not selected -->
-		{#if practice.dependencyCount > 0}
+		<!-- Show dependency count only in collapsed view -->
+		{#if !isTreeExpanded && practice.dependencyCount > 0}
 			<div
 				class="text-center {compact
 					? 'mt-1 pt-1 text-[0.45rem]'
 					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
 			>
-				{#if !isTreeExpanded && practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
+				{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
 					<!-- Collapsed view: show both direct and total -->
 					<div class="font-semibold">{practice.directDependencyCount} direct</div>
 					<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
 				{:else}
-					<!-- Expanded view or fallback: show only direct count -->
+					<!-- Fallback: show only dependency count -->
 					{practice.dependencyCount}
 					{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
 				{/if}

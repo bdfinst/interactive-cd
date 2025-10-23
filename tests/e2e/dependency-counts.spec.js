@@ -92,36 +92,32 @@ test.describe('Dependency Counts Display', () => {
 	})
 
 	test.describe('Expanded Tree View', () => {
-		test('shows traditional dependency count in expanded tree view', async ({ page }) => {
+		test('does not show dependency counts in expanded tree view', async ({ page }) => {
 			// Click the tree expand button
-			const expandButton = await page.locator('button:has-text("Expand Full Tree")')
+			const expandButton = await page.locator('button:has-text("Expand")')
 			if ((await expandButton.count()) > 0) {
 				await expandButton.click()
 				await page.waitForTimeout(1000) // Wait for tree to load and expand
 
-				// In expanded view, should show traditional "X dependencies" format
+				// In expanded view, should NOT show any dependency counts
 				const practiceNodes = await page
 					.locator('[data-testid="graph-node"][data-selected="false"]')
 					.all()
 
-				let foundTraditionalFormat = false
 				for (const node of practiceNodes) {
+					// Should NOT show "X dependencies" format
 					const traditionalText = await node
 						.locator('text=/\\d+ (dependency|dependencies)/')
 						.count()
-					if (traditionalText > 0) {
-						foundTraditionalFormat = true
-						// Should NOT show "direct" and "total" in expanded view
-						const hasDirectText = await node.locator('text=/\\d+ direct/').count()
-						const hasTotalText = await node.locator('text=/\\d+ total/').count()
+					expect(traditionalText).toBe(0)
 
-						expect(hasDirectText).toBe(0)
-						expect(hasTotalText).toBe(0)
-						break
-					}
+					// Should NOT show "direct" and "total"
+					const hasDirectText = await node.locator('text=/\\d+ direct/').count()
+					const hasTotalText = await node.locator('text=/\\d+ total/').count()
+
+					expect(hasDirectText).toBe(0)
+					expect(hasTotalText).toBe(0)
 				}
-
-				expect(foundTraditionalFormat).toBe(true)
 			}
 		})
 	})
