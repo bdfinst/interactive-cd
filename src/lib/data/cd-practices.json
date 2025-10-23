@@ -709,8 +709,7 @@
 				"Fast environment creation",
 				"Disaster recovery",
 				"Documentation through code"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "integration-testing",
