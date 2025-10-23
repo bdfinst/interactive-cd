@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.5](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.4...interactive-cd-v0.5.5) (2025-10-23)
+
+
+### Tests
+
+* add chromium-linux snapshot for audit indicator ([1a5a6cc](https://github.com/bdfinst/interactive-cd/commit/1a5a6ccb63042f245736f319fe4e43c0f1ebf60a))
+* increase visual regression tolerance for cross-platform rendering ([0467c9a](https://github.com/bdfinst/interactive-cd/commit/0467c9a54913da0c9b2bde23b6e79f4c624cb6c8))
+
 ## [0.5.4](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v0.5.3...interactive-cd-v0.5.4) (2025-10-21)
 
 
