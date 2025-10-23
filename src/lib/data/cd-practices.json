@@ -177,15 +177,15 @@
 			"name": "Behavior-Driven Development (BDD)",
 			"type": "practice",
 			"category": "behavior",
-			"description": "Define software behavior using structured, human-readable scenarios (Gherkin) that serve as executable specifications and living documentation.",
+			"description": "Define software behavior using a structured, human-readable DSL that serves as executable specifications and living documentation.",
 			"requirements": [
-				"Write features using Gherkin syntax (Given/When/Then)",
-				"Scenarios focus on user behavior, not implementation",
+				"Scenarios relate to a single feature",
+				"Scenarios focus on behavior and interactions, not implementation",
 				"Use specific, testable acceptance criteria",
 				"Include explicit data values in scenarios",
 				"Scenarios are declarative (what, not how)",
+				"Scenarios are defined in a collaborative process with product, quality, and development points of view",
 				"Features reviewed with stakeholders",
-				"Scenarios converted to automated tests",
 				"Features serve as living documentation"
 			],
 			"benefits": [
@@ -196,8 +196,7 @@
 				"Foundation for deterministic tests",
 				"Enables collaboration",
 				"Clear definition of done"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "build-automation",
@@ -873,11 +872,9 @@
 			"category": "behavior",
 			"description": "Features are ranked by business value and worked on in strict priority order to maximize ROI.",
 			"requirements": [
-				"Prioritization framework (RICE, MoSCoW)",
 				"Stakeholder collaboration process",
-				"Clear acceptance criteria for features",
 				"Value metrics and success criteria",
-				"Regular reprioritization cadence"
+				"Regular review of priorities cadence"
 			],
 			"benefits": [
 				"Maximizes business value delivery",
@@ -885,8 +882,7 @@
 				"Clearer team focus and alignment",
 				"Stakeholder satisfaction",
 				"Data-driven decision making"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "product-goals",
@@ -1110,12 +1106,11 @@
 			"name": "Unified Team Backlog",
 			"type": "practice",
 			"category": "behavior",
-			"description": "Single shared backlog for the entire team with transparent priorities and clear ownership.",
+			"description": "Single shared backlog of work items (features, defects, maintenance) for the entire team with transparent priorities.",
 			"requirements": [
-				"Backlog management tool",
 				"Regular backlog refinement sessions",
 				"Team access and visibility",
-				"Clear ownership and accountability",
+				"Team ownership and accountability",
 				"Priority ordering by business value"
 			],
 			"benefits": [
@@ -1124,8 +1119,7 @@
 				"Reduced silos and handoffs",
 				"Shared understanding of priorities",
 				"Faster decision making"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "usability-testing",
@@ -1189,6 +1183,30 @@
 				"Environment parity"
 			],
 			"audited": false
+		},
+		{
+			"id": "atdd",
+			"name": "Acceptance Test-Driven Development (ATDD",
+			"category": "behavior",
+			"description": "Development approach where acceptance tests are written before implementation, derived from BDD scenarios, ensuring the system meets business requirements and user expectations.",
+			"requirements": [
+				"BDD scenarios to guide acceptance test creation",
+				"Acceptance tests written before implementation",
+				"Clear definition of done based on passing acceptance tests",
+				"Automated acceptance test execution",
+				"Tests focus on user-visible behavior, not implementation details",
+				"Fast feedback from acceptance test runs"
+			],
+			"benefits": [
+				"Implementation guided by concrete acceptance criteria",
+				"Verification that features meet business requirements",
+				"Prevention of scope creep through clear boundaries",
+				"Confidence in refactoring with comprehensive acceptance coverage",
+				"Reduced manual testing effort",
+				"Early validation of architectural decisions",
+				"Executable specification of system behavior"
+			],
+			"type": "practice"
 		}
 	],
 	"dependencies": [
@@ -1373,8 +1391,8 @@
 			"depends_on_id": "monitoring"
 		},
 		{
-			"practice_id": "deterministic-tests",
-			"depends_on_id": "automated-testing"
+			"practice_id": "automated-testing",
+			"depends_on_id": "deterministic-tests"
 		},
 		{
 			"practice_id": "deterministic-tests",
@@ -1431,6 +1449,10 @@
 		{
 			"practice_id": "integration-testing",
 			"depends_on_id": "behavior-driven-development"
+		},
+		{
+			"practice_id": "behavior-driven-development",
+			"depends_on_id": "prioritized-features"
 		},
 		{
 			"practice_id": "integration-testing",
@@ -1538,6 +1560,10 @@
 		},
 		{
 			"practice_id": "trunk-based-development",
+			"depends_on_id": "continuous-testing"
+		},
+		{
+			"practice_id": "trunk-based-development",
 			"depends_on_id": "deterministic-tests"
 		},
 		{
@@ -1603,6 +1629,38 @@
 		{
 			"practice_id": "smoke-testing",
 			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "atdd",
+			"depends_on_id": "behavior-driven-development"
+		},
+		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "contract-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "deterministic-tests",
+			"depends_on_id": "atdd"
+		},
+		{
+			"practice_id": "functional-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "smoke-testing",
+			"depends_on_id": "deterministic-tests"
 		}
 	],
 	"metadata": {
