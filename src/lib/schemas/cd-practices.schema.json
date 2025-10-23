@@ -89,6 +89,14 @@
 						"minLength": 5,
 						"maxLength": 500
 					}
+				},
+				"quickStartGuide": {
+					"type": "string",
+					"description": "URL to a quick-start guide for this practice (typically from minimumcd.org)",
+					"format": "uri",
+					"pattern": "^https?://",
+					"minLength": 10,
+					"maxLength": 500
 				}
 			}
 		},

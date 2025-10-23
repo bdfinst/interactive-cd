@@ -162,6 +162,37 @@
 				</ul>
 			</div>
 		{/if}
+
+		<!-- Quick-Start Guide Link -->
+		{#if practice.quickStartGuide}
+			<div class="mt-3 pt-3 border-t border-gray-200">
+				<a
+					href={practice.quickStartGuide}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+					data-testid="quick-start-guide-link"
+					onclick={e => e.stopPropagation()}
+				>
+					<span>📚</span>
+					<span>More Info</span>
+					<svg
+						class="w-4 h-4"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+						/>
+					</svg>
+				</a>
+			</div>
+		{/if}
 	{:else}
 		<!-- Show dependency count only in collapsed view -->
 		{#if !isTreeExpanded && practice.dependencyCount > 0}
