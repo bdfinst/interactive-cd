@@ -229,9 +229,8 @@
 			"name": "Build Automation",
 			"type": "practice",
 			"category": "automation",
-			"description": "Fully automated build process that compiles, packages, and validates code without manual intervention.",
+			"description": "Fully automated build process used during continuous integration that compiles, packages, and validates code without manual intervention.",
 			"requirements": [
-				"One-command build",
 				"Repeatable builds",
 				"Fast execution",
 				"Runs in CI environment",
@@ -242,8 +241,7 @@
 				"Reduced human error",
 				"Fast feedback",
 				"Easy onboarding"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "build-on-commit",
@@ -652,7 +650,7 @@
 			"id": "functional-testing",
 			"name": "Functional Testing",
 			"type": "practice",
-			"category": "behavior",
+			"category": "behavior-enabled-automation",
 			"description": "Testing that verifies the system behaves according to functional requirements and user expectations.",
 			"requirements": [
 				"Test automation framework",
@@ -667,8 +665,7 @@
 				"Documents expected behavior",
 				"Builds stakeholder confidence",
 				"Executable specifications"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "immutable-artifact",
@@ -993,8 +990,7 @@
 				"Compliance",
 				"Centralized management",
 				"Reduced secret sprawl"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "security-testing",
@@ -1081,27 +1077,6 @@
 				"Enforces quality discipline",
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
-			],
-			"audited": false
-		},
-		{
-			"id": "test-automation-framework",
-			"name": "Test Automation Framework",
-			"type": "practice",
-			"category": "automation",
-			"description": "Framework and tools that enable writing and executing automated tests efficiently.",
-			"requirements": [
-				"Support multiple test types",
-				"Easy to write tests",
-				"Fast execution",
-				"Clear reporting",
-				"CI/CD integration"
-			],
-			"benefits": [
-				"Faster test development",
-				"Consistent test execution",
-				"Better test maintainability",
-				"Scalable test suite"
 			],
 			"audited": false
 		},
@@ -1286,12 +1261,8 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "test-automation-framework"
-		},
-		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "functional-testing"
+			"practice_id": "functional-testing",
+			"depends_on_id": "behavior-driven-development"
 		},
 		{
 			"practice_id": "build-automation",
@@ -1499,7 +1470,7 @@
 		},
 		{
 			"practice_id": "integration-testing",
-			"depends_on_id": "test-automation-framework"
+			"depends_on_id": "behavior-driven-development"
 		},
 		{
 			"practice_id": "integration-testing",
@@ -1528,10 +1499,6 @@
 		{
 			"practice_id": "performance-testing",
 			"depends_on_id": "monitoring"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "test-automation-framework"
 		},
 		{
 			"practice_id": "performance-testing",
@@ -1564,10 +1531,6 @@
 		{
 			"practice_id": "resilience-testing",
 			"depends_on_id": "monitoring"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "test-automation-framework"
 		},
 		{
 			"practice_id": "resilience-testing",
