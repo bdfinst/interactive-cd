@@ -176,7 +176,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: dist/
+          path: build/
           retention-days: 7
 
   # Quality gate that ensures all checks pass before marking CI as successful

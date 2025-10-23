@@ -154,7 +154,7 @@ quality-gate:
   uses: actions/upload-artifact@v4
   with:
     name: build-output
-    path: dist/
+    path: build/
     retention-days: 7
 ```
 
