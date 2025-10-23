@@ -40,8 +40,7 @@
 				"Environment parity",
 				"Secure secret management",
 				"Easy configuration rollback"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "application-pipeline",
@@ -735,8 +734,7 @@
 				"Compliance",
 				"Performance analysis",
 				"Security monitoring"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "modular-system",
