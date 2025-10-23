@@ -214,6 +214,18 @@ export const createFilePracticeRepository = () => ({
 	},
 
 	/**
+	 * Count total dependencies for a practice (direct + indirect/transitive)
+	 * @param {PracticeId} practiceId
+	 * @returns {Promise<number>}
+	 */
+	countTotalDependencies: async practiceId => {
+		const practiceIdStr = practiceId.toString()
+		const reachableIds = getReachablePractices(practiceIdStr, data.dependencies)
+		// Subtract 1 to exclude the practice itself
+		return reachableIds.length - 1
+	},
+
+	/**
 	 * Save a practice
 	 * @param {CDPractice} _practice
 	 * @returns {Promise<void>}

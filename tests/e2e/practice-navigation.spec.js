@@ -238,6 +238,70 @@ test.describe('Visual Elements', () => {
 		expect(count).toBeGreaterThan(0)
 	})
 
+	test('legend items are centered on screen', async ({ page }) => {
+		await page.goto('/')
+		await page.waitForSelector('[data-testid="graph-node"]')
+
+		const legend = page.locator('[data-testid="category-legend"]')
+		await expect(legend).toBeVisible()
+
+		// Get the legend items container (has data-testid="legend-items")
+		const legendItemsContainer = page.locator('[data-testid="legend-items"]')
+		const itemsBox = await legendItemsContainer.boundingBox()
+		const viewportSize = page.viewportSize()
+
+		// Calculate if items are centered (allowing small tolerance)
+		const expectedCenter = viewportSize.width / 2
+		const actualCenter = itemsBox.x + itemsBox.width / 2
+		const tolerance = 50 // 50px tolerance for centering
+
+		expect(Math.abs(actualCenter - expectedCenter)).toBeLessThan(tolerance)
+	})
+
+	test('expand button in legend toggles tree view', async ({ page }) => {
+		await page.goto('/')
+		await page.waitForSelector('[data-testid="graph-node"]')
+
+		// Verify expand button is in the legend
+		const legend = page.locator('[data-testid="category-legend"]')
+		const expandButton = legend.locator('[data-testid="toggle-full-tree"]')
+		await expect(expandButton).toBeVisible()
+
+		// Get initial state and node count
+		const initialText = await expandButton.textContent()
+		const initialNodeCount = await page.locator('[data-testid="graph-node"]').count()
+
+		// Click the expand button
+		await expandButton.click()
+		await page.waitForTimeout(500)
+
+		// Verify button text changed
+		const newText = await expandButton.textContent()
+		expect(newText).not.toBe(initialText)
+
+		// Verify node count changed (expanded should show more, collapsed should show fewer)
+		const newNodeCount = await page.locator('[data-testid="graph-node"]').count()
+		if (initialText === 'Expand') {
+			// Was collapsed, now expanded
+			expect(newNodeCount).toBeGreaterThanOrEqual(initialNodeCount)
+			expect(newText).toBe('Collapse')
+		} else {
+			// Was expanded, now collapsed
+			expect(newNodeCount).toBeLessThanOrEqual(initialNodeCount)
+			expect(newText).toBe('Expand')
+		}
+
+		// Toggle back and verify it returns to original state
+		await expandButton.click()
+		await page.waitForTimeout(500)
+
+		const finalText = await expandButton.textContent()
+		const finalNodeCount = await page.locator('[data-testid="graph-node"]').count()
+
+		expect(finalText).toBe(initialText)
+		expect(finalNodeCount).toBe(initialNodeCount)
+	})
+
 	test('shows connection lines between practices', async ({ page }) => {
 		await page.goto('/')
 		await page.waitForSelector('[data-testid="graph-node"]')

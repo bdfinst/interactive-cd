@@ -27,6 +27,10 @@ export async function GET({ url }) {
 		// Get all transitive categories (optimized - single pass)
 		const dependencyCategories = await repository.getTransitiveCategories(rootId)
 
+		// Get dependency counts for root practice
+		const rootDirectCount = prerequisites.length
+		const rootTotalCount = await repository.countTotalDependencies(rootId)
+
 		// Format root practice for card display
 		const rootCard = {
 			id: rootPractice.id.toString(),
@@ -39,7 +43,9 @@ export async function GET({ url }) {
 			benefits: rootPractice.benefits || [],
 			requirementCount: rootPractice.requirements?.length || 0,
 			benefitCount: rootPractice.benefits?.length || 0,
-			dependencyCount: prerequisites.length
+			dependencyCount: rootDirectCount,
+			directDependencyCount: rootDirectCount,
+			totalDependencyCount: rootTotalCount
 		}
 
 		// Format dependency practices for card display
@@ -49,6 +55,10 @@ export async function GET({ url }) {
 
 				// Get all transitive categories for this practice (optimized)
 				const practiceDepCategories = await repository.getTransitiveCategories(practice.id)
+
+				// Get dependency counts
+				const directCount = deps.length
+				const totalCount = await repository.countTotalDependencies(practice.id)
 
 				return {
 					id: practice.id.toString(),
@@ -61,7 +71,9 @@ export async function GET({ url }) {
 					benefits: practice.benefits || [],
 					requirementCount: practice.requirements?.length || 0,
 					benefitCount: practice.benefits?.length || 0,
-					dependencyCount: deps.length
+					dependencyCount: directCount,
+					directDependencyCount: directCount,
+					totalDependencyCount: totalCount
 				}
 			})
 		)

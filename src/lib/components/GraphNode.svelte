@@ -11,6 +11,7 @@
 		isRoot = false,
 		isSelected = false,
 		compact = false,
+		isTreeExpanded = false, // Add prop to know if we're in tree view
 		onclick = () => {},
 		onexpand = () => {}
 	} = $props()
@@ -23,10 +24,43 @@
 		automation: '#fffacd',
 		'behavior-enabled-automation': '#d7f8d7',
 		behavior: '#d7e6ff',
-		core: '#fff9e6'
+		core: '#e9d5ff' // light purple
 	}
 
-	const bgColor = $derived(categoryColors[practice.category] || '#ffffff')
+	/**
+	 * Calculate color intensity based on total dependency count
+	 * Higher dependency count = more saturated/darker color
+	 */
+	const calculateColorIntensity = (baseColor, totalDeps) => {
+		if (!totalDeps || totalDeps === 0) return baseColor
+
+		// Parse hex color
+		const hex = baseColor.replace('#', '')
+		const r = parseInt(hex.substr(0, 2), 16)
+		const g = parseInt(hex.substr(2, 2), 16)
+		const b = parseInt(hex.substr(4, 2), 16)
+
+		// Calculate intensity factor (0.5 to 1.0)
+		// Max out at 50 dependencies for reasonable saturation
+		const maxDeps = 50
+		const factor = 1 - Math.min(totalDeps / maxDeps, 0.5)
+
+		// Darken by moving toward middle intensity
+		const newR = Math.floor(r * factor + r * (1 - factor) * 0.7)
+		const newG = Math.floor(g * factor + g * (1 - factor) * 0.7)
+		const newB = Math.floor(b * factor + b * (1 - factor) * 0.7)
+
+		return `rgb(${newR}, ${newG}, ${newB})`
+	}
+
+	const bgColor = $derived.by(() => {
+		const baseColor = categoryColors[practice.category] || '#ffffff'
+		// Only apply intensity in collapsed view (not expanded tree view)
+		if (!isTreeExpanded && practice.totalDependencyCount) {
+			return calculateColorIntensity(baseColor, practice.totalDependencyCount)
+		}
+		return baseColor
+	})
 
 	const borderClass = $derived(
 		isSelected
@@ -136,8 +170,15 @@
 					? 'mt-1 pt-1 text-[0.45rem]'
 					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
 			>
-				{practice.dependencyCount}
-				{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+				{#if !isTreeExpanded && practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
+					<!-- Collapsed view: show both direct and total -->
+					<div class="font-semibold">{practice.directDependencyCount} direct</div>
+					<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
+				{:else}
+					<!-- Expanded view or fallback: show only direct count -->
+					{practice.dependencyCount}
+					{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+				{/if}
 			</div>
 		{/if}
 	{/if}

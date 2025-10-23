@@ -11,12 +11,12 @@
 		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
-	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { flattenTree, enrichWithDependencyCounts } from '$lib/domain/practice-graph/tree.js'
 	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
 	import { onMount, tick } from 'svelte'
-	import CategoryLegend from './CategoryLegend.svelte'
 	import GraphNode from './GraphNode.svelte'
 
 	// Accept initial server data
@@ -53,6 +53,21 @@
 		recalculateAllConnections()
 		window.addEventListener('resize', recalculateAllConnections)
 		return () => window.removeEventListener('resize', recalculateAllConnections)
+	})
+
+	// Set expand button renderer on mount, clear on unmount
+	$effect(() => {
+		const expanded = $isFullTreeExpanded // Track reactively
+
+		expandButtonRenderer.set({
+			type: 'expand-button',
+			toggleFullTree,
+			isExpanded: expanded
+		})
+
+		return () => {
+			expandButtonRenderer.set(null)
+		}
 	})
 
 	// React to expand/collapse changes from store
@@ -148,7 +163,8 @@
 			const result = await response.json()
 
 			if (result.success) {
-				fullTreeData = result.data
+				// Enrich tree with dependency counts
+				fullTreeData = enrichWithDependencyCounts(result.data)
 				// Flatten the tree for easier rendering
 				flattenedTree = flattenTree(fullTreeData)
 			}
@@ -352,26 +368,6 @@
 	role="main"
 	aria-label="Practice dependency graph"
 >
-	<!-- Expand/Collapse Button and Legend Container -->
-	<div class="relative flex flex-col gap-4 mb-4">
-		<!-- Expand/Collapse Button - positioned on the left -->
-		<div class="lg:absolute lg:left-0 lg:top-0">
-			<button
-				onclick={toggleFullTree}
-				class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
-					? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-					: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
-				data-testid="toggle-full-tree"
-				aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
-			>
-				{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
-			</button>
-		</div>
-
-		<!-- Category Legend - centered -->
-		<CategoryLegend />
-	</div>
-
 	{#if loading}
 		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
 			<div class="text-center">
@@ -444,6 +440,7 @@
 											{practice}
 											isRoot={practice.level === 0}
 											{isSelected}
+											isTreeExpanded={$isFullTreeExpanded}
 											onclick={() => selectNode(practice.id)}
 											onexpand={null}
 											compact={true}
@@ -507,6 +504,7 @@
 								practice={ancestor}
 								isRoot={i === 0}
 								isSelected={false}
+								isTreeExpanded={false}
 								onclick={() => navigateToAncestor(i)}
 								onexpand={() => navigateToAncestor(i)}
 							/>
@@ -524,6 +522,7 @@
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
 							isExpanded={isPracticeExpanded(currentPractice.id)}
+							isTreeExpanded={false}
 							onclick={() => selectNode(currentPractice.id)}
 							onexpand={() => expandPractice(currentPractice.id)}
 						/>
@@ -549,6 +548,7 @@
 								isRoot={false}
 								{isSelected}
 								isExpanded={isPracticeExpanded(dependency.id)}
+								isTreeExpanded={false}
 								onclick={() => selectNode(dependency.id)}
 								onexpand={() => expandPractice(dependency.id)}
 							/>
