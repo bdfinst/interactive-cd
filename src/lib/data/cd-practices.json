@@ -1232,8 +1232,7 @@
 				"Collaboration enabled",
 				"Rollback capability",
 				"Code review workflows"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "versioned-database",
@@ -1322,10 +1321,6 @@
 		{
 			"practice_id": "behavior-driven-development",
 			"depends_on_id": "functional-testing"
-		},
-		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "version-control"
 		},
 		{
 			"practice_id": "build-automation",
@@ -1590,10 +1585,6 @@
 		{
 			"practice_id": "pre-commit-test-automation",
 			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "pre-commit-test-automation",
-			"depends_on_id": "version-control"
 		},
 		{
 			"practice_id": "prioritized-features",
