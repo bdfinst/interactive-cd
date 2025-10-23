@@ -1,4 +1,6 @@
 <script>
+	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
+
 	/**
 	 * GraphNode Component
 	 *
@@ -12,6 +14,9 @@
 		onclick = () => {},
 		onexpand = () => {}
 	} = $props()
+
+	// Dev mode audit indicator visibility
+	const showAuditIndicator = $derived(shouldShowAuditIndicators() && practice.audited === false)
 
 	// Category background colors from mermaid diagram
 	const categoryColors = {
@@ -57,6 +62,21 @@
 		<h3 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900">
 			{practice.name}
 		</h3>
+
+		<!-- Dev Mode: Audit Status Indicator -->
+		{#if showAuditIndicator}
+			<div
+				class="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-800 {compact
+					? 'text-[0.5rem]'
+					: 'text-xs'} font-semibold"
+				role="status"
+				aria-label="This practice has not been audited yet"
+				data-testid="audit-indicator-false"
+			>
+				<span aria-hidden="true">⚠️</span>
+				<span>NOT AUDITED</span>
+			</div>
+		{/if}
 	</div>
 
 	{#if isSelected}

@@ -30,6 +30,7 @@ export async function load() {
 		category: rootPractice.category.toString(),
 		categories: dependencyCategories,
 		description: rootPractice.description,
+		audited: rootPractice.audited !== undefined ? rootPractice.audited : true, // Default to true
 		requirements: rootPractice.requirements || [],
 		benefits: rootPractice.benefits || [],
 		requirementCount: rootPractice.requirements?.length || 0,
@@ -49,6 +50,7 @@ export async function load() {
 				category: practice.category.toString(),
 				categories: practiceDepCategories,
 				description: practice.description,
+				audited: practice.audited !== undefined ? practice.audited : true, // Default to true
 				requirements: practice.requirements || [],
 				benefits: practice.benefits || [],
 				requirementCount: practice.requirements?.length || 0,

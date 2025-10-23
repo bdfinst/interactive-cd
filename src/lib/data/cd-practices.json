@@ -19,7 +19,8 @@
 				"Controlled access and security",
 				"Version management and deprecation",
 				"Usage analytics and insights"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "configuration-management",
@@ -39,7 +40,8 @@
 				"Environment parity",
 				"Secure secret management",
 				"Easy configuration rollback"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "application-pipeline",
@@ -60,7 +62,8 @@
 				"Automated quality gates",
 				"Reduced human error",
 				"Fast feedback on changes"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "artifact-repository",
@@ -80,7 +83,8 @@
 				"Consistent deployments",
 				"Audit trail",
 				"Easy rollback"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-artifact-versioning",
@@ -101,7 +105,8 @@
 				"Better dependency management",
 				"Simplified rollbacks to known versions",
 				"Automated release notes"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-build",
@@ -123,7 +128,8 @@
 				"Fast feedback to developers",
 				"Easy onboarding for new team members",
 				"Build reproducibility and traceability"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-db-changes",
@@ -144,7 +150,8 @@
 				"Faster deployments and releases",
 				"Better audit trail of changes",
 				"Simplified database versioning"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-environment-provisioning",
@@ -165,7 +172,8 @@
 				"Reduced configuration drift issues",
 				"Better disaster recovery capability",
 				"Cost optimization through automation"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-testing",
@@ -186,7 +194,8 @@
 				"Refactoring confidence",
 				"Living documentation",
 				"Reduced manual testing effort"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "behavior-driven-development",
@@ -212,7 +221,8 @@
 				"Foundation for deterministic tests",
 				"Enables collaboration",
 				"Clear definition of done"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "build-automation",
@@ -232,7 +242,8 @@
 				"Reduced human error",
 				"Fast feedback",
 				"Easy onboarding"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "build-on-commit",
@@ -253,7 +264,8 @@
 				"Enforces quality gates automatically",
 				"Maintains always-green build status",
 				"Reduces integration issues"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "compliance-testing",
@@ -274,7 +286,8 @@
 				"Early detection of compliance violations",
 				"Audit trail for regulatory requirements",
 				"Lower compliance risk"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "component-ownership",
@@ -295,7 +308,8 @@
 				"Better code and system quality",
 				"Reduced cross-team dependencies and handoffs",
 				"Stronger team autonomy"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-delivery",
@@ -319,7 +333,8 @@
 				"Better team culture",
 				"Reduced burnout",
 				"Less deployment pain"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-deployment",
@@ -341,7 +356,8 @@
 				"Reduced deployment risk through frequency",
 				"Eliminates deployment bottlenecks",
 				"Improved team productivity"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-integration",
@@ -362,7 +378,8 @@
 				"Reduced merge conflicts",
 				"Always-releasable codebase",
 				"Faster feedback cycles"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-testing",
@@ -383,7 +400,8 @@
 				"Higher confidence in changes and releases",
 				"Reduced manual testing effort",
 				"Living documentation of system behavior"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "contract-testing",
@@ -404,7 +422,8 @@
 				"Better API stability and reliability",
 				"Faster feedback on incompatibilities",
 				"Reduced integration testing needs"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "database-migration-strategy",
@@ -424,7 +443,8 @@
 				"Rollback capability",
 				"Reduced deployment risk",
 				"Schema version control"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "dependency-management",
@@ -444,7 +464,8 @@
 				"Security awareness",
 				"Reduced conflicts",
 				"Easy upgrades"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "deploy-on-commit",
@@ -465,7 +486,8 @@
 				"Immediate feedback on production issues",
 				"Eliminates manual deployment process",
 				"Enforces deployment discipline"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "deployment-automation",
@@ -485,7 +507,8 @@
 				"Reduced deployment time",
 				"Lower error rates",
 				"Deployable at any time"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "deterministic-tests",
@@ -514,7 +537,8 @@
 				"Fast, confident merging to trunk",
 				"Reduces investigation time",
 				"Enables parallel test execution"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "developer-driven-support",
@@ -535,7 +559,8 @@
 				"Improved system design from operational feedback",
 				"Stronger ownership mindset in teams",
 				"Reduced reliance on separate operations team"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "evolutionary-coding",
@@ -556,7 +581,8 @@
 				"Easier maintenance and modification",
 				"Continuous improvement mindset",
 				"Adaptable to changing requirements"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "evolutionary-database",
@@ -577,7 +603,8 @@
 				"Better adaptability to change",
 				"Reduced downtime during migrations",
 				"Safer deployments"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "exploratory-testing",
@@ -598,7 +625,8 @@
 				"Complements automated testing",
 				"Provides creative feedback on features",
 				"Finds issues automation misses"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "feature-flags",
@@ -618,7 +646,8 @@
 				"Enable A/B testing",
 				"Fast feature rollback",
 				"Gradual rollouts"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "functional-testing",
@@ -639,7 +668,8 @@
 				"Documents expected behavior",
 				"Builds stakeholder confidence",
 				"Executable specifications"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "immutable-artifact",
@@ -659,7 +689,8 @@
 				"Confidence in what's being deployed",
 				"Faster deployments",
 				"Simplified rollback"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "infrastructure-automation",
@@ -679,7 +710,8 @@
 				"Fast environment creation",
 				"Disaster recovery",
 				"Documentation through code"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "integration-testing",
@@ -700,7 +732,8 @@
 				"Verifies end-to-end behavior",
 				"Reduces integration risks in production",
 				"Tests with real dependencies"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "logging-infrastructure",
@@ -720,7 +753,8 @@
 				"Compliance",
 				"Performance analysis",
 				"Security monitoring"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "modular-system",
@@ -741,7 +775,8 @@
 				"Easier maintenance and evolution",
 				"Team autonomy and ownership",
 				"Parallel development capability"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "monitoring",
@@ -762,7 +797,8 @@
 				"Faster troubleshooting",
 				"Performance insights",
 				"Informed decision making"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "monitoring-and-alerting",
@@ -783,7 +819,8 @@
 				"Better system understanding and insights",
 				"Data-driven operational decisions",
 				"Proactive issue resolution"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "rollback-capability",
@@ -803,7 +840,8 @@
 				"Faster incident recovery",
 				"Increased deployment confidence",
 				"Lower MTTR (Mean Time To Recovery)"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "performance-testing",
@@ -824,7 +862,8 @@
 				"Validates scalability requirements",
 				"Optimizes resource usage and costs",
 				"Ensures SLA compliance"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "pipeline-visibility",
@@ -844,7 +883,8 @@
 				"Team accountability",
 				"Transparency",
 				"Improved collaboration"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "pre-commit-test-automation",
@@ -865,7 +905,8 @@
 				"Higher code quality at integration",
 				"Reduced CI pipeline load",
 				"Encourages test-first development"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "prioritized-features",
@@ -886,7 +927,8 @@
 				"Clearer team focus and alignment",
 				"Stakeholder satisfaction",
 				"Data-driven decision making"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "product-goals",
@@ -911,7 +953,8 @@
 				"Measurable progress tracking",
 				"Reduced waste on low-value features",
 				"Strategic product direction"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "test-environment",
@@ -931,7 +974,8 @@
 				"Reduce production surprises",
 				"Accurate performance testing",
 				"Confident deployments"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "resilience-testing",
@@ -952,7 +996,8 @@
 				"Builds confidence in disaster recovery",
 				"Identifies architectural weak points",
 				"Reduces MTTR in production incidents"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "secret-management",
@@ -972,7 +1017,8 @@
 				"Compliance",
 				"Centralized management",
 				"Reduced secret sprawl"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "security-testing",
@@ -993,7 +1039,8 @@
 				"Compliance with security standards",
 				"Prevents vulnerable code in production",
 				"Continuous security validation"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "smoke-testing",
@@ -1014,7 +1061,8 @@
 				"Prevents broken deployments from persisting",
 				"Builds confidence in deployments",
 				"Early warning system for production issues"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "static-analysis",
@@ -1035,7 +1083,8 @@
 				"Improves security posture",
 				"Reduces technical debt",
 				"Faster code reviews"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "stop-the-line",
@@ -1056,7 +1105,8 @@
 				"Enforces quality discipline",
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "test-automation-framework",
@@ -1076,7 +1126,8 @@
 				"Consistent test execution",
 				"Better test maintainability",
 				"Scalable test suite"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "test-data-management",
@@ -1096,7 +1147,8 @@
 				"Faster test execution",
 				"Compliance with regulations",
 				"Easier debugging"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "trunk-based-development",
@@ -1116,7 +1168,8 @@
 				"Faster integration",
 				"Simplified branching model",
 				"Encourages small, frequent commits"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "unified-team-backlog",
@@ -1137,7 +1190,8 @@
 				"Reduced silos and handoffs",
 				"Shared understanding of priorities",
 				"Faster decision making"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "usability-testing",
@@ -1158,7 +1212,8 @@
 				"Identifies UX issues early",
 				"Reduces support and training costs",
 				"Informs design decisions with data"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "version-control",
@@ -1177,7 +1232,8 @@
 				"Collaboration enabled",
 				"Rollback capability",
 				"Code review workflows"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "versioned-database",
@@ -1198,7 +1254,8 @@
 				"Clear change history and audit trail",
 				"Simplified rollbacks and recovery",
 				"Environment parity"
-			]
+			],
+			"audited": false
 		}
 	],
 	"dependencies": [
