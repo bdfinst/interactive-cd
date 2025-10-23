@@ -133,7 +133,7 @@ quality-gate:
 ```yaml
 - name: Upload Playwright report on failure
   if: failure()
-  uses: actions/upload-artifact@v3
+  uses: actions/upload-artifact@v4
   with:
     name: playwright-report
     path: playwright-report/
@@ -151,7 +151,7 @@ quality-gate:
 
 ```yaml
 - name: Upload build artifacts
-  uses: actions/upload-artifact@v3
+  uses: actions/upload-artifact@v4
   with:
     name: build-output
     path: dist/
