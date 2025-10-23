@@ -41,6 +41,11 @@
 					"minLength": 2,
 					"maxLength": 100
 				},
+				"audited": {
+					"type": "boolean",
+					"description": "Indicates whether this practice has been audited for accuracy and completeness",
+					"default": false
+				},
 				"name": {
 					"type": "string",
 					"description": "Human-readable name of the practice",

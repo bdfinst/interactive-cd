@@ -137,6 +137,7 @@ export const createGetPracticeTreeService = practiceRepository => {
 			...node,
 			category: categoryString,
 			categories: categoriesArray, // Transitive categories from all dependencies
+			audited: node.audited !== undefined ? node.audited : true, // Default to true
 			requirementCount: node.requirements?.length || 0,
 			benefitCount: node.benefits?.length || 0,
 			practicePrerequisites: [],

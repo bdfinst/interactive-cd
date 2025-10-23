@@ -54,8 +54,8 @@ SCAT["Service Catalog"]:::behavior
 %% Foundations -> Tests
 CDD --> CT
 BDD --> FT
-CT --> DT
-FT --> DT
+CT --> TBD
+FT --> TBD
 
 %% Testing -> Trunk -> CI
 DT --> TBD

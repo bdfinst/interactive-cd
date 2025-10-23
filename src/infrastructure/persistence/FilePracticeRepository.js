@@ -26,6 +26,7 @@ const toDomainModel = practiceData => {
 		PracticeCategory.from(practiceData.category),
 		practiceData.description,
 		{
+			audited: practiceData.audited !== undefined ? practiceData.audited : true, // Default to true
 			requirements: practiceData.requirements || [],
 			benefits: practiceData.benefits || []
 		}
@@ -49,6 +50,7 @@ const buildTreeWithDependencies = (practices, dependencies, rootId) => {
 			name: practice.name,
 			category: practice.category,
 			description: practice.description,
+			audited: practice.audited !== undefined ? practice.audited : true, // Default to true
 			requirements: practice.requirements || [],
 			benefits: practice.benefits || [],
 			level: practice.level || 0,
@@ -209,6 +211,18 @@ export const createFilePracticeRepository = () => ({
 
 		collectCategories(practiceId.toString())
 		return Array.from(categories).sort()
+	},
+
+	/**
+	 * Count total dependencies for a practice (direct + indirect/transitive)
+	 * @param {PracticeId} practiceId
+	 * @returns {Promise<number>}
+	 */
+	countTotalDependencies: async practiceId => {
+		const practiceIdStr = practiceId.toString()
+		const reachableIds = getReachablePractices(practiceIdStr, data.dependencies)
+		// Subtract 1 to exclude the practice itself
+		return reachableIds.length - 1
 	},
 
 	/**

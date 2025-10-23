@@ -19,7 +19,8 @@
 				"Controlled access and security",
 				"Version management and deprecation",
 				"Usage analytics and insights"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "configuration-management",
@@ -60,7 +61,8 @@
 				"Automated quality gates",
 				"Reduced human error",
 				"Fast feedback on changes"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "artifact-repository",
@@ -80,7 +82,8 @@
 				"Consistent deployments",
 				"Audit trail",
 				"Easy rollback"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-artifact-versioning",
@@ -101,29 +104,8 @@
 				"Better dependency management",
 				"Simplified rollbacks to known versions",
 				"Automated release notes"
-			]
-		},
-		{
-			"id": "automated-build",
-			"name": "Automated Build",
-			"type": "practice",
-			"category": "automation",
-			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code.",
-			"requirements": [
-				"CI/CD build pipeline configuration",
-				"One-command build from any commit",
-				"Repeatable builds with same inputs",
-				"Fast execution with caching strategies",
-				"Fail fast on errors with clear messages",
-				"Parallel build stages where possible"
 			],
-			"benefits": [
-				"Consistency across all builds",
-				"Reduced human error in build process",
-				"Fast feedback to developers",
-				"Easy onboarding for new team members",
-				"Build reproducibility and traceability"
-			]
+			"audited": false
 		},
 		{
 			"id": "automated-db-changes",
@@ -144,7 +126,8 @@
 				"Faster deployments and releases",
 				"Better audit trail of changes",
 				"Simplified database versioning"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-environment-provisioning",
@@ -165,7 +148,8 @@
 				"Reduced configuration drift issues",
 				"Better disaster recovery capability",
 				"Cost optimization through automation"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "automated-testing",
@@ -193,15 +177,15 @@
 			"name": "Behavior-Driven Development (BDD)",
 			"type": "practice",
 			"category": "behavior",
-			"description": "Define software behavior using structured, human-readable scenarios (Gherkin) that serve as executable specifications and living documentation.",
+			"description": "Define software behavior using a structured, human-readable DSL that serves as executable specifications and living documentation.",
 			"requirements": [
-				"Write features using Gherkin syntax (Given/When/Then)",
-				"Scenarios focus on user behavior, not implementation",
+				"Scenarios relate to a single feature",
+				"Scenarios focus on behavior and interactions, not implementation",
 				"Use specific, testable acceptance criteria",
 				"Include explicit data values in scenarios",
 				"Scenarios are declarative (what, not how)",
+				"Scenarios are defined in a collaborative process with product, quality, and development points of view",
 				"Features reviewed with stakeholders",
-				"Scenarios converted to automated tests",
 				"Features serve as living documentation"
 			],
 			"benefits": [
@@ -219,19 +203,29 @@
 			"name": "Build Automation",
 			"type": "practice",
 			"category": "automation",
-			"description": "Fully automated build process that compiles, packages, and validates code without manual intervention.",
+			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
 			"requirements": [
-				"One-command build",
 				"Repeatable builds",
 				"Fast execution",
 				"Runs in CI environment",
-				"Fail fast on errors"
+				"Fail fast on errors",
+				"CI/CD build pipeline configuration",
+				"One-command build from any commit",
+				"Repeatable builds with same inputs",
+				"Fast execution with caching strategies",
+				"Fail fast on errors with clear messages",
+				"Parallel build stages where possible"
 			],
 			"benefits": [
 				"Consistency across builds",
 				"Reduced human error",
 				"Fast feedback",
-				"Easy onboarding"
+				"Easy onboarding",
+				"Consistency across all builds",
+				"Reduced human error in build process",
+				"Fast feedback to developers",
+				"Easy onboarding for new team members",
+				"Build reproducibility and traceability"
 			]
 		},
 		{
@@ -253,7 +247,8 @@
 				"Enforces quality gates automatically",
 				"Maintains always-green build status",
 				"Reduces integration issues"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "compliance-testing",
@@ -274,7 +269,8 @@
 				"Early detection of compliance violations",
 				"Audit trail for regulatory requirements",
 				"Lower compliance risk"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "component-ownership",
@@ -341,7 +337,8 @@
 				"Reduced deployment risk through frequency",
 				"Eliminates deployment bottlenecks",
 				"Improved team productivity"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-integration",
@@ -362,14 +359,15 @@
 				"Reduced merge conflicts",
 				"Always-releasable codebase",
 				"Faster feedback cycles"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "continuous-testing",
 			"name": "Continuous Testing",
 			"type": "practice",
 			"category": "behavior-enabled-automation",
-			"description": "Testing throughout the development lifecycle with automated feedback at every stage of the pipeline.",
+			"description": "Testing throughout the development lifecycle with automated feedback at every stage of the pipeline plus continuous exploration and validation of look and feel.",
 			"requirements": [
 				"Test automation framework and tooling",
 				"CI/CD pipeline integration",
@@ -392,9 +390,8 @@
 			"category": "behavior",
 			"description": "Testing API contracts between services to ensure compatibility and prevent breaking changes.",
 			"requirements": [
-				"Contract testing framework (Pact, Spring Cloud Contract)",
-				"Service contract definitions",
-				"Consumer-driven contract approach",
+				"Contract testing tools (static mocks, virtual services, etc.)",
+				"Machine readable service contract definitions (OpenAPI, RAML, GraphQL, AsyncApi, etc.)",
 				"Contract versioning strategy",
 				"Contract broker for sharing"
 			],
@@ -465,7 +462,8 @@
 				"Immediate feedback on production issues",
 				"Eliminates manual deployment process",
 				"Enforces deployment discipline"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "deployment-automation",
@@ -485,13 +483,14 @@
 				"Reduced deployment time",
 				"Lower error rates",
 				"Deployable at any time"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "deterministic-tests",
 			"name": "Deterministic Tests",
 			"type": "practice",
-			"category": "behavior",
+			"category": "behavior-enabled-automation",
 			"description": "Tests that produce the same result every time they run, eliminating flakiness and enabling reliable trunk-based development.",
 			"requirements": [
 				"Same input produces same output every time",
@@ -535,7 +534,8 @@
 				"Improved system design from operational feedback",
 				"Stronger ownership mindset in teams",
 				"Reduced reliance on separate operations team"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "evolutionary-coding",
@@ -556,7 +556,8 @@
 				"Easier maintenance and modification",
 				"Continuous improvement mindset",
 				"Adaptable to changing requirements"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "evolutionary-database",
@@ -577,7 +578,8 @@
 				"Better adaptability to change",
 				"Reduced downtime during migrations",
 				"Safer deployments"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "exploratory-testing",
@@ -598,7 +600,8 @@
 				"Complements automated testing",
 				"Provides creative feedback on features",
 				"Finds issues automation misses"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "feature-flags",
@@ -618,13 +621,14 @@
 				"Enable A/B testing",
 				"Fast feature rollback",
 				"Gradual rollouts"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "functional-testing",
 			"name": "Functional Testing",
 			"type": "practice",
-			"category": "behavior",
+			"category": "behavior-enabled-automation",
 			"description": "Testing that verifies the system behaves according to functional requirements and user expectations.",
 			"requirements": [
 				"Test automation framework",
@@ -659,7 +663,8 @@
 				"Confidence in what's being deployed",
 				"Faster deployments",
 				"Simplified rollback"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "infrastructure-automation",
@@ -741,11 +746,12 @@
 				"Easier maintenance and evolution",
 				"Team autonomy and ownership",
 				"Parallel development capability"
-			]
+			],
+			"audited": false
 		},
 		{
-			"id": "monitoring",
-			"name": "Monitoring & Observability",
+			"id": "telemetry-observability",
+			"name": "Telemetry & Observability",
 			"type": "practice",
 			"category": "automation",
 			"description": "Comprehensive monitoring of application and infrastructure health to detect and diagnose issues quickly.",
@@ -783,7 +789,8 @@
 				"Better system understanding and insights",
 				"Data-driven operational decisions",
 				"Proactive issue resolution"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "rollback-capability",
@@ -824,7 +831,8 @@
 				"Validates scalability requirements",
 				"Optimizes resource usage and costs",
 				"Ensures SLA compliance"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "pipeline-visibility",
@@ -844,28 +852,8 @@
 				"Team accountability",
 				"Transparency",
 				"Improved collaboration"
-			]
-		},
-		{
-			"id": "pre-commit-test-automation",
-			"name": "Pre-Commit Test Automation",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Automated tests that run locally before code is committed to prevent broken commits and maintain trunk stability.",
-			"requirements": [
-				"Local test execution environment",
-				"Pre-commit hooks (git hooks, husky)",
-				"Fast test suite execution (< 5 minutes)",
-				"Test framework with watch mode",
-				"Clear error messages and feedback"
 			],
-			"benefits": [
-				"Prevents broken commits to trunk",
-				"Faster feedback during development",
-				"Higher code quality at integration",
-				"Reduced CI pipeline load",
-				"Encourages test-first development"
-			]
+			"audited": false
 		},
 		{
 			"id": "prioritized-features",
@@ -874,11 +862,9 @@
 			"category": "behavior",
 			"description": "Features are ranked by business value and worked on in strict priority order to maximize ROI.",
 			"requirements": [
-				"Prioritization framework (RICE, MoSCoW)",
 				"Stakeholder collaboration process",
-				"Clear acceptance criteria for features",
 				"Value metrics and success criteria",
-				"Regular reprioritization cadence"
+				"Regular review of priorities cadence"
 			],
 			"benefits": [
 				"Maximizes business value delivery",
@@ -952,7 +938,8 @@
 				"Builds confidence in disaster recovery",
 				"Identifies architectural weak points",
 				"Reduces MTTR in production incidents"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "secret-management",
@@ -993,7 +980,8 @@
 				"Compliance with security standards",
 				"Prevents vulnerable code in production",
 				"Continuous security validation"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "smoke-testing",
@@ -1014,7 +1002,8 @@
 				"Prevents broken deployments from persisting",
 				"Builds confidence in deployments",
 				"Early warning system for production issues"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "static-analysis",
@@ -1035,7 +1024,8 @@
 				"Improves security posture",
 				"Reduces technical debt",
 				"Faster code reviews"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "stop-the-line",
@@ -1056,34 +1046,15 @@
 				"Enforces quality discipline",
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
-			]
-		},
-		{
-			"id": "test-automation-framework",
-			"name": "Test Automation Framework",
-			"type": "practice",
-			"category": "automation",
-			"description": "Framework and tools that enable writing and executing automated tests efficiently.",
-			"requirements": [
-				"Support multiple test types",
-				"Easy to write tests",
-				"Fast execution",
-				"Clear reporting",
-				"CI/CD integration"
 			],
-			"benefits": [
-				"Faster test development",
-				"Consistent test execution",
-				"Better test maintainability",
-				"Scalable test suite"
-			]
+			"audited": false
 		},
 		{
 			"id": "test-data-management",
 			"name": "Test Data Management",
 			"type": "practice",
 			"category": "automation",
-			"description": "Strategy for creating, managing, and maintaining test data that supports automated testing.",
+			"description": "System for creating, managing, and maintaining test data that supports automated testing.",
 			"requirements": [
 				"Representative data sets",
 				"Data privacy compliance",
@@ -1116,19 +1087,19 @@
 				"Faster integration",
 				"Simplified branching model",
 				"Encourages small, frequent commits"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "unified-team-backlog",
 			"name": "Unified Team Backlog",
 			"type": "practice",
 			"category": "behavior",
-			"description": "Single shared backlog for the entire team with transparent priorities and clear ownership.",
+			"description": "Single shared backlog of work items (features, defects, maintenance) for the entire team with transparent priorities.",
 			"requirements": [
-				"Backlog management tool",
 				"Regular backlog refinement sessions",
 				"Team access and visibility",
-				"Clear ownership and accountability",
+				"Team ownership and accountability",
 				"Priority ordering by business value"
 			],
 			"benefits": [
@@ -1158,7 +1129,8 @@
 				"Identifies UX issues early",
 				"Reduces support and training costs",
 				"Informs design decisions with data"
-			]
+			],
+			"audited": false
 		},
 		{
 			"id": "version-control",
@@ -1198,13 +1170,65 @@
 				"Clear change history and audit trail",
 				"Simplified rollbacks and recovery",
 				"Environment parity"
+			],
+			"audited": false
+		},
+		{
+			"id": "atdd",
+			"name": "Acceptance Test-Driven Development (ATDD",
+			"category": "behavior",
+			"description": "Development approach where acceptance tests are written before implementation, derived from BDD scenarios, ensuring the system meets business requirements and user expectations.",
+			"requirements": [
+				"BDD scenarios to guide acceptance test creation",
+				"Acceptance tests written before implementation",
+				"Clear definition of done based on passing acceptance tests",
+				"Automated acceptance test execution",
+				"Tests focus on user-visible behavior, not implementation details",
+				"Fast feedback from acceptance test runs"
+			],
+			"benefits": [
+				"Implementation guided by concrete acceptance criteria",
+				"Verification that features meet business requirements",
+				"Prevention of scope creep through clear boundaries",
+				"Confidence in refactoring with comprehensive acceptance coverage",
+				"Reduced manual testing effort",
+				"Early validation of architectural decisions",
+				"Executable specification of system behavior"
+			],
+			"type": "practice"
+		},
+		{
+			"id": "cross-functional-product-team",
+			"name": "Cross-Functional Product Team",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Highly cohesive, autonomous teams with all skills necessary to deliver business capabilities end-to-end, owning a subset of the product and working together continuously.",
+			"requirements": [
+				"Team includes all necessary roles: developers, testers, UX, product owner",
+				"Team has authority to make decisions within their scope",
+				"Team owns a clear subset of business capabilities or product features",
+				"Team works together in the same space (physical or virtual)",
+				"Stable team membership over time",
+				"Team has direct access to stakeholders and users",
+				"Team operates what they build in production",
+				"Clear boundaries of team responsibility and autonomy"
+			],
+			"benefits": [
+				"Faster delivery through reduced handoffs and dependencies",
+				"Better collaboration and shared understanding",
+				"Improved quality through collective ownership",
+				"Higher team morale and engagement",
+				"Reduced communication overhead",
+				"Better alignment between business needs and technical implementation",
+				"Stronger accountability and ownership of outcomes",
+				"More effective feedback loops with stakeholders"
 			]
 		}
 	],
 	"dependencies": [
 		{
 			"practice_id": "api-management",
-			"depends_on_id": "monitoring"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "api-management",
@@ -1231,10 +1255,6 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "automated-build",
-			"depends_on_id": "build-automation"
-		},
-		{
 			"practice_id": "automated-db-changes",
 			"depends_on_id": "automated-testing"
 		},
@@ -1255,20 +1275,8 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "test-automation-framework"
-		},
-		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "test-data-management"
-		},
-		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "functional-testing"
-		},
-		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "version-control"
+			"practice_id": "functional-testing",
+			"depends_on_id": "behavior-driven-development"
 		},
 		{
 			"practice_id": "build-automation",
@@ -1277,10 +1285,6 @@
 		{
 			"practice_id": "build-automation",
 			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "build-on-commit",
-			"depends_on_id": "automated-build"
 		},
 		{
 			"practice_id": "compliance-testing",
@@ -1292,7 +1296,11 @@
 		},
 		{
 			"practice_id": "component-ownership",
-			"depends_on_id": "monitoring"
+			"depends_on_id": "telemetry-observability"
+		},
+		{
+			"practice_id": "component-ownership",
+			"depends_on_id": "cross-functional-product-team"
 		},
 		{
 			"practice_id": "component-ownership",
@@ -1356,10 +1364,6 @@
 		},
 		{
 			"practice_id": "continuous-integration",
-			"depends_on_id": "automated-build"
-		},
-		{
-			"practice_id": "continuous-integration",
 			"depends_on_id": "automated-testing"
 		},
 		{
@@ -1387,14 +1391,6 @@
 			"depends_on_id": "integration-testing"
 		},
 		{
-			"practice_id": "contract-testing",
-			"depends_on_id": "pre-commit-test-automation"
-		},
-		{
-			"practice_id": "database-migration-strategy",
-			"depends_on_id": "automated-testing"
-		},
-		{
 			"practice_id": "database-migration-strategy",
 			"depends_on_id": "version-control"
 		},
@@ -1412,11 +1408,11 @@
 		},
 		{
 			"practice_id": "deployment-automation",
-			"depends_on_id": "monitoring"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
-			"practice_id": "deterministic-tests",
-			"depends_on_id": "automated-testing"
+			"practice_id": "automated-testing",
+			"depends_on_id": "deterministic-tests"
 		},
 		{
 			"practice_id": "deterministic-tests",
@@ -1424,19 +1420,11 @@
 		},
 		{
 			"practice_id": "developer-driven-support",
-			"depends_on_id": "monitoring"
-		},
-		{
-			"practice_id": "evolutionary-coding",
-			"depends_on_id": "automated-testing"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "evolutionary-coding",
 			"depends_on_id": "trunk-based-development"
-		},
-		{
-			"practice_id": "evolutionary-database",
-			"depends_on_id": "automated-testing"
 		},
 		{
 			"practice_id": "evolutionary-database",
@@ -1453,10 +1441,6 @@
 		{
 			"practice_id": "functional-testing",
 			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
 			"practice_id": "functional-testing",
@@ -1484,7 +1468,11 @@
 		},
 		{
 			"practice_id": "integration-testing",
-			"depends_on_id": "test-automation-framework"
+			"depends_on_id": "behavior-driven-development"
+		},
+		{
+			"practice_id": "behavior-driven-development",
+			"depends_on_id": "prioritized-features"
 		},
 		{
 			"practice_id": "integration-testing",
@@ -1499,12 +1487,12 @@
 			"depends_on_id": "api-management"
 		},
 		{
-			"practice_id": "monitoring",
+			"practice_id": "telemetry-observability",
 			"depends_on_id": "logging-infrastructure"
 		},
 		{
 			"practice_id": "monitoring-and-alerting",
-			"depends_on_id": "monitoring"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "performance-testing",
@@ -1512,11 +1500,7 @@
 		},
 		{
 			"practice_id": "performance-testing",
-			"depends_on_id": "monitoring"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "test-automation-framework"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "performance-testing",
@@ -1529,14 +1513,6 @@
 		{
 			"practice_id": "pipeline-visibility",
 			"depends_on_id": "application-pipeline"
-		},
-		{
-			"practice_id": "pre-commit-test-automation",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "pre-commit-test-automation",
-			"depends_on_id": "version-control"
 		},
 		{
 			"practice_id": "prioritized-features",
@@ -1556,11 +1532,7 @@
 		},
 		{
 			"practice_id": "resilience-testing",
-			"depends_on_id": "monitoring"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "test-automation-framework"
+			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "resilience-testing",
@@ -1591,10 +1563,6 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "static-analysis",
-			"depends_on_id": "pre-commit-test-automation"
-		},
-		{
 			"practice_id": "stop-the-line",
 			"depends_on_id": "continuous-integration"
 		},
@@ -1612,15 +1580,15 @@
 		},
 		{
 			"practice_id": "trunk-based-development",
+			"depends_on_id": "continuous-testing"
+		},
+		{
+			"practice_id": "trunk-based-development",
 			"depends_on_id": "deterministic-tests"
 		},
 		{
 			"practice_id": "trunk-based-development",
 			"depends_on_id": "feature-flags"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
 			"practice_id": "unified-team-backlog",
@@ -1633,6 +1601,94 @@
 		{
 			"practice_id": "versioned-database",
 			"depends_on_id": "database-migration-strategy"
+		},
+		{
+			"practice_id": "build-on-commit",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "functional-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "continuous-integration",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "contract-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "deterministic-tests",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "contract-testing"
+		},
+		{
+			"practice_id": "performance-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "resilience-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "security-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "smoke-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "atdd",
+			"depends_on_id": "behavior-driven-development"
+		},
+		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "contract-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "deterministic-tests",
+			"depends_on_id": "atdd"
+		},
+		{
+			"practice_id": "functional-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "smoke-testing",
+			"depends_on_id": "deterministic-tests"
+		},
+		{
+			"practice_id": "behavior-driven-development",
+			"depends_on_id": "cross-functional-product-team"
 		}
 	],
 	"metadata": {

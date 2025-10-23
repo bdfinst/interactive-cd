@@ -10,10 +10,13 @@
 		isPracticeExpanded as isPracticeExpandedLogic,
 		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
-	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
+	import { flattenTree, enrichWithDependencyCounts } from '$lib/domain/practice-graph/tree.js'
+	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
 	import { onMount, tick } from 'svelte'
-	import CategoryLegend from './CategoryLegend.svelte'
 	import GraphNode from './GraphNode.svelte'
 
 	// Accept initial server data
@@ -50,6 +53,21 @@
 		recalculateAllConnections()
 		window.addEventListener('resize', recalculateAllConnections)
 		return () => window.removeEventListener('resize', recalculateAllConnections)
+	})
+
+	// Set expand button renderer on mount, clear on unmount
+	$effect(() => {
+		const expanded = $isFullTreeExpanded // Track reactively
+
+		expandButtonRenderer.set({
+			type: 'expand-button',
+			toggleFullTree,
+			isExpanded: expanded
+		})
+
+		return () => {
+			expandButtonRenderer.set(null)
+		}
 	})
 
 	// React to expand/collapse changes from store
@@ -145,7 +163,8 @@
 			const result = await response.json()
 
 			if (result.success) {
-				fullTreeData = result.data
+				// Enrich tree with dependency counts
+				fullTreeData = enrichWithDependencyCounts(result.data)
 				// Flatten the tree for easier rendering
 				flattenedTree = flattenTree(fullTreeData)
 			}
@@ -160,25 +179,36 @@
 	const treeNodeRefs = $state({})
 	let treeConnections = $state([])
 
+	// Filter the tree based on selected practice in expanded view
+	const filteredTree = $derived.by(() => {
+		if ($isFullTreeExpanded && selectedNodeId) {
+			return filterTreeBySelection(flattenedTree, selectedNodeId)
+		}
+		return flattenedTree
+	})
+
 	// Group practices by hierarchy level for horizontal display
-	const groupedByLevel = $derived(
-		flattenedTree.reduce((acc, practice) => {
+	const groupedByLevel = $derived.by(() => {
+		const grouped = filteredTree.reduce((acc, practice) => {
 			if (!acc[practice.level]) {
 				acc[practice.level] = []
 			}
 			acc[practice.level].push(practice)
 			return acc
 		}, {})
-	)
+
+		// Optimize ordering to minimize connection line lengths
+		return optimizeLayerOrdering(grouped, 3)
+	})
 
 	function calculateTreeConnections() {
-		if (!containerRef || flattenedTree.length === 0) return
+		if (!containerRef || filteredTree.length === 0) return
 
 		const containerRect = containerRef.getBoundingClientRect()
 		treeConnections = []
 
 		// Draw connections from each practice to its dependencies
-		flattenedTree.forEach(practice => {
+		filteredTree.forEach(practice => {
 			if (!practice.dependencies || practice.dependencies.length === 0) return
 
 			const parentRef = treeNodeRefs[practice.id]
@@ -200,13 +230,17 @@
 				const childX = childRect.left - containerRect.left + childRect.width / 2
 				const childY = childRect.top - containerRect.top
 
+				// Check if dependency is audited (for dev mode red lines)
+				const isUnaudited = dep.audited === false
+
 				treeConnections.push({
 					x1: parentX,
 					y1: parentY,
 					x2: childX,
 					y2: childY,
 					type: 'tree',
-					highlighted: isSelected
+					highlighted: isSelected,
+					unaudited: isUnaudited
 				})
 			})
 		})
@@ -238,7 +272,8 @@
 						y1,
 						x2,
 						y2,
-						type: 'ancestor' // Solid line
+						type: 'ancestor', // Solid line
+						unaudited: false // Ancestor connections are not treated as unaudited
 					})
 				}
 			}
@@ -261,7 +296,8 @@
 					y1: ancestorY,
 					x2: currentX,
 					y2: currentY,
-					type: 'ancestor' // Solid line
+					type: 'ancestor', // Solid line
+					unaudited: false // Ancestor connections are not treated as unaudited
 				})
 			}
 		}
@@ -282,12 +318,16 @@
 					// Check if this dependency is selected
 					const isSelected = dependencies[index] && selectedNodeId === dependencies[index].id
 
+					// Check if dependency is audited (for dev mode red lines)
+					const isUnaudited = dependencies[index] && dependencies[index].audited === false
+
 					connections.push({
 						x1: currentX,
 						y1: currentY,
 						x2: depX,
 						y2: depY,
-						type: isSelected ? 'selected' : 'dependency' // Solid if selected, dashed otherwise
+						type: isSelected ? 'selected' : 'dependency', // Solid if selected, dashed otherwise
+						unaudited: isUnaudited
 					})
 				})
 		}
@@ -328,26 +368,6 @@
 	role="main"
 	aria-label="Practice dependency graph"
 >
-	<!-- Expand/Collapse Button and Legend Container -->
-	<div class="relative flex flex-col gap-4 mb-4">
-		<!-- Expand/Collapse Button - positioned on the left -->
-		<div class="lg:absolute lg:left-0 lg:top-0">
-			<button
-				onclick={toggleFullTree}
-				class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$isFullTreeExpanded
-					? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-					: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
-				data-testid="toggle-full-tree"
-				aria-label={$isFullTreeExpanded ? 'Collapse tree view' : 'Expand tree view'}
-			>
-				{$isFullTreeExpanded ? 'Collapse' : 'Expand'}
-			</button>
-		</div>
-
-		<!-- Category Legend - centered -->
-		<CategoryLegend />
-	</div>
-
 	{#if loading}
 		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
 			<div class="text-center">
@@ -362,28 +382,33 @@
 		<!-- SVG Layer for Tree Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each treeConnections as conn}
+				{@const showDevIndicators = shouldShowAuditIndicators()}
+				{@const isUnaudited = showDevIndicators && conn.unaudited}
+				{@const strokeColor = isUnaudited ? '#ef4444' : conn.highlighted ? '#eab308' : '#93c5fd'}
+				{@const fillColor = isUnaudited ? '#ef4444' : conn.highlighted ? '#eab308' : '#93c5fd'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke={conn.highlighted ? '#eab308' : '#93c5fd'}
+					stroke={strokeColor}
 					stroke-width={conn.highlighted ? '3' : '2'}
-					opacity={conn.highlighted ? '1' : '0.7'}
+					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.7'}
 					fill="none"
+					data-audited={isUnaudited ? 'false' : 'true'}
 				/>
 				<!-- Start point (parent) -->
 				<circle
 					cx={conn.x1}
 					cy={conn.y1}
 					r={conn.highlighted ? '7' : '6'}
-					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
-					opacity={conn.highlighted ? '1' : '0.8'}
+					fill={fillColor}
+					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.8'}
 				/>
 				<!-- End point (child) -->
 				<circle
 					cx={conn.x2}
 					cy={conn.y2}
 					r={conn.highlighted ? '7' : '6'}
-					fill={conn.highlighted ? '#eab308' : '#93c5fd'}
-					opacity={conn.highlighted ? '1' : '0.8'}
+					fill={fillColor}
+					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.8'}
 				/>
 			{/each}
 		</svg>
@@ -415,6 +440,7 @@
 											{practice}
 											isRoot={practice.level === 0}
 											{isSelected}
+											isTreeExpanded={$isFullTreeExpanded}
 											onclick={() => selectNode(practice.id)}
 											onexpand={null}
 											compact={true}
@@ -431,18 +457,39 @@
 		<!-- SVG Layer for Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each connections as conn}
+				{@const showDevIndicators = shouldShowAuditIndicators()}
+				{@const isUnaudited = showDevIndicators && conn.unaudited}
+				{@const strokeColor = isUnaudited ? '#ef4444' : '#93c5fd'}
+				{@const fillColor = isUnaudited ? '#ef4444' : '#93c5fd'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#93c5fd"
+					stroke={strokeColor}
 					stroke-width="2"
 					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
-					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '0.9' : '0.7'}
+					opacity={isUnaudited
+						? '0.9'
+						: conn.type === 'ancestor' || conn.type === 'selected'
+							? '0.9'
+							: '0.7'}
 					fill="none"
+					data-audited={isUnaudited ? 'false' : 'true'}
 				/>
 				<!-- Start point (parent) -->
-				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x1}
+					cy={conn.y1}
+					r="6"
+					fill={fillColor}
+					opacity={isUnaudited ? '0.9' : '0.8'}
+				/>
 				<!-- End point (child) -->
-				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x2}
+					cy={conn.y2}
+					r="6"
+					fill={fillColor}
+					opacity={isUnaudited ? '0.9' : '0.8'}
+				/>
 			{/each}
 		</svg>
 
@@ -457,6 +504,7 @@
 								practice={ancestor}
 								isRoot={i === 0}
 								isSelected={false}
+								isTreeExpanded={false}
 								onclick={() => navigateToAncestor(i)}
 								onexpand={() => navigateToAncestor(i)}
 							/>
@@ -474,6 +522,7 @@
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
 							isExpanded={isPracticeExpanded(currentPractice.id)}
+							isTreeExpanded={false}
 							onclick={() => selectNode(currentPractice.id)}
 							onexpand={() => expandPractice(currentPractice.id)}
 						/>
@@ -499,6 +548,7 @@
 								isRoot={false}
 								{isSelected}
 								isExpanded={isPracticeExpanded(dependency.id)}
+								isTreeExpanded={false}
 								onclick={() => selectNode(dependency.id)}
 								onexpand={() => expandPractice(dependency.id)}
 							/>

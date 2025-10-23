@@ -23,6 +23,10 @@ export async function load() {
 	// Get all transitive categories (optimized - single pass)
 	const dependencyCategories = await repository.getTransitiveCategories(rootId)
 
+	// Get dependency counts for root practice
+	const rootDirectCount = prerequisites.length
+	const rootTotalCount = await repository.countTotalDependencies(rootId)
+
 	// Format root practice for card display
 	const rootCard = {
 		id: rootPractice.id.toString(),
@@ -30,11 +34,14 @@ export async function load() {
 		category: rootPractice.category.toString(),
 		categories: dependencyCategories,
 		description: rootPractice.description,
+		audited: rootPractice.audited !== undefined ? rootPractice.audited : true, // Default to true
 		requirements: rootPractice.requirements || [],
 		benefits: rootPractice.benefits || [],
 		requirementCount: rootPractice.requirements?.length || 0,
 		benefitCount: rootPractice.benefits?.length || 0,
-		dependencyCount: prerequisites.length
+		dependencyCount: rootDirectCount,
+		directDependencyCount: rootDirectCount,
+		totalDependencyCount: rootTotalCount
 	}
 
 	// Format dependency practices for card display
@@ -43,17 +50,24 @@ export async function load() {
 			const deps = await repository.findPracticePrerequisites(practice.id)
 			const practiceDepCategories = await repository.getTransitiveCategories(practice.id)
 
+			// Get dependency counts
+			const directCount = deps.length
+			const totalCount = await repository.countTotalDependencies(practice.id)
+
 			return {
 				id: practice.id.toString(),
 				name: practice.name,
 				category: practice.category.toString(),
 				categories: practiceDepCategories,
 				description: practice.description,
+				audited: practice.audited !== undefined ? practice.audited : true, // Default to true
 				requirements: practice.requirements || [],
 				benefits: practice.benefits || [],
 				requirementCount: practice.requirements?.length || 0,
 				benefitCount: practice.benefits?.length || 0,
-				dependencyCount: deps.length
+				dependencyCount: directCount,
+				directDependencyCount: directCount,
+				totalDependencyCount: totalCount
 			}
 		})
 	)
