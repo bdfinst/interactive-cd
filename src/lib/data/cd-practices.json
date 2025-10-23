@@ -40,7 +40,8 @@
 				"Environment parity",
 				"Secure secret management",
 				"Easy configuration rollback"
-			]
+			],
+			"quickStartGuide": "https://minimumcd.org/minimumcd/application-configuration/"
 		},
 		{
 			"id": "application-pipeline",
@@ -360,7 +361,8 @@
 				"Always-releasable codebase",
 				"Faster feedback cycles"
 			],
-			"audited": false
+			"audited": false,
+			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/"
 		},
 		{
 			"id": "continuous-testing",
@@ -513,7 +515,8 @@
 				"Fast, confident merging to trunk",
 				"Reduces investigation time",
 				"Enables parallel test execution"
-			]
+			],
+			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/"
 		},
 		{
 			"id": "developer-driven-support",
@@ -664,7 +667,8 @@
 				"Faster deployments",
 				"Simplified rollback"
 			],
-			"audited": false
+			"audited": false,
+			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/"
 		},
 		{
 			"id": "infrastructure-automation",
@@ -810,7 +814,8 @@
 				"Faster incident recovery",
 				"Increased deployment confidence",
 				"Lower MTTR (Mean Time To Recovery)"
-			]
+			],
+			"quickStartGuide": "https://minimumcd.org/minimumcd/rollback/"
 		},
 		{
 			"id": "performance-testing",
@@ -917,7 +922,8 @@
 				"Reduce production surprises",
 				"Accurate performance testing",
 				"Confident deployments"
-			]
+			],
+			"quickStartGuide": "https://minimumcd.org/minimumcd/production-like-test-environment/"
 		},
 		{
 			"id": "resilience-testing",
@@ -1088,7 +1094,8 @@
 				"Simplified branching model",
 				"Encourages small, frequent commits"
 			],
-			"audited": false
+			"audited": false,
+			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/"
 		},
 		{
 			"id": "unified-team-backlog",
