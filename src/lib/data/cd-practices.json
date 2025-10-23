@@ -464,8 +464,7 @@
 				"Security awareness",
 				"Reduced conflicts",
 				"Easy upgrades"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "deploy-on-commit",
@@ -883,28 +882,6 @@
 				"Team accountability",
 				"Transparency",
 				"Improved collaboration"
-			],
-			"audited": false
-		},
-		{
-			"id": "pre-commit-test-automation",
-			"name": "Pre-Commit Test Automation",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Automated tests that run locally before code is committed to prevent broken commits and maintain trunk stability.",
-			"requirements": [
-				"Local test execution environment",
-				"Pre-commit hooks (git hooks, husky)",
-				"Fast test suite execution (< 5 minutes)",
-				"Test framework with watch mode",
-				"Clear error messages and feedback"
-			],
-			"benefits": [
-				"Prevents broken commits to trunk",
-				"Faster feedback during development",
-				"Higher code quality at integration",
-				"Reduced CI pipeline load",
-				"Encourages test-first development"
 			],
 			"audited": false
 		},
@@ -1439,10 +1416,6 @@
 			"depends_on_id": "integration-testing"
 		},
 		{
-			"practice_id": "contract-testing",
-			"depends_on_id": "pre-commit-test-automation"
-		},
-		{
 			"practice_id": "database-migration-strategy",
 			"depends_on_id": "automated-testing"
 		},
@@ -1505,10 +1478,6 @@
 		{
 			"practice_id": "functional-testing",
 			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
 			"practice_id": "functional-testing",
@@ -1583,10 +1552,6 @@
 			"depends_on_id": "application-pipeline"
 		},
 		{
-			"practice_id": "pre-commit-test-automation",
-			"depends_on_id": "automated-testing"
-		},
-		{
 			"practice_id": "prioritized-features",
 			"depends_on_id": "product-goals"
 		},
@@ -1639,10 +1604,6 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "static-analysis",
-			"depends_on_id": "pre-commit-test-automation"
-		},
-		{
 			"practice_id": "stop-the-line",
 			"depends_on_id": "continuous-integration"
 		},
@@ -1665,10 +1626,6 @@
 		{
 			"practice_id": "trunk-based-development",
 			"depends_on_id": "feature-flags"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "pre-commit-test-automation"
 		},
 		{
 			"practice_id": "unified-team-backlog",
