@@ -1110,7 +1110,7 @@
 			"name": "Test Data Management",
 			"type": "practice",
 			"category": "automation",
-			"description": "Strategy for creating, managing, and maintaining test data that supports automated testing.",
+			"description": "System for creating, managing, and maintaining test data that supports automated testing.",
 			"requirements": [
 				"Representative data sets",
 				"Data privacy compliance",
@@ -1123,8 +1123,7 @@
 				"Faster test execution",
 				"Compliance with regulations",
 				"Easier debugging"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "trunk-based-development",
@@ -1289,10 +1288,6 @@
 		{
 			"practice_id": "automated-testing",
 			"depends_on_id": "test-automation-framework"
-		},
-		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "test-data-management"
 		},
 		{
 			"practice_id": "behavior-driven-development",
