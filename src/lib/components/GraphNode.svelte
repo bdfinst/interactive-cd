@@ -175,7 +175,7 @@
 					onclick={e => e.stopPropagation()}
 				>
 					<span>📚</span>
-					<span>Quick-Start Guide</span>
+					<span>More Info</span>
 					<svg
 						class="w-4 h-4"
 						fill="none"
