@@ -7,7 +7,7 @@
 
 	// Category colors and labels from mermaid diagram (excluding Core)
 	const categories = [
-		{ name: 'Automation', color: '#f9d5d3', description: 'Tools and automation platforms' },
+		{ name: 'Automation', color: '#fffacd', description: 'Tools and automation platforms' },
 		{ name: 'Behavior', color: '#d7e6ff', description: 'Team behaviors and processes' },
 		{
 			name: 'Behavior Enabled',

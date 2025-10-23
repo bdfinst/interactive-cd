@@ -20,7 +20,7 @@
 
 	// Category background colors from mermaid diagram
 	const categoryColors = {
-		automation: '#f9d5d3',
+		automation: '#fffacd',
 		'behavior-enabled-automation': '#d7f8d7',
 		behavior: '#d7e6ff',
 		core: '#fff9e6'

@@ -12,6 +12,7 @@
 	} from '$lib/domain/practice-graph/navigation.js'
 	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
 	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
 	import { onMount, tick } from 'svelte'
@@ -162,9 +163,17 @@
 	const treeNodeRefs = $state({})
 	let treeConnections = $state([])
 
+	// Filter the tree based on selected practice in expanded view
+	const filteredTree = $derived.by(() => {
+		if ($isFullTreeExpanded && selectedNodeId) {
+			return filterTreeBySelection(flattenedTree, selectedNodeId)
+		}
+		return flattenedTree
+	})
+
 	// Group practices by hierarchy level for horizontal display
 	const groupedByLevel = $derived.by(() => {
-		const grouped = flattenedTree.reduce((acc, practice) => {
+		const grouped = filteredTree.reduce((acc, practice) => {
 			if (!acc[practice.level]) {
 				acc[practice.level] = []
 			}
@@ -177,13 +186,13 @@
 	})
 
 	function calculateTreeConnections() {
-		if (!containerRef || flattenedTree.length === 0) return
+		if (!containerRef || filteredTree.length === 0) return
 
 		const containerRect = containerRef.getBoundingClientRect()
 		treeConnections = []
 
 		// Draw connections from each practice to its dependencies
-		flattenedTree.forEach(practice => {
+		filteredTree.forEach(practice => {
 			if (!practice.dependencies || practice.dependencies.length === 0) return
 
 			const parentRef = treeNodeRefs[practice.id]

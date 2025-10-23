@@ -109,29 +109,6 @@
 			"audited": false
 		},
 		{
-			"id": "automated-build",
-			"name": "Automated Build",
-			"type": "practice",
-			"category": "automation",
-			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code.",
-			"requirements": [
-				"CI/CD build pipeline configuration",
-				"One-command build from any commit",
-				"Repeatable builds with same inputs",
-				"Fast execution with caching strategies",
-				"Fail fast on errors with clear messages",
-				"Parallel build stages where possible"
-			],
-			"benefits": [
-				"Consistency across all builds",
-				"Reduced human error in build process",
-				"Fast feedback to developers",
-				"Easy onboarding for new team members",
-				"Build reproducibility and traceability"
-			],
-			"audited": false
-		},
-		{
 			"id": "automated-db-changes",
 			"name": "Automated DB Changes",
 			"type": "practice",
@@ -194,8 +171,7 @@
 				"Refactoring confidence",
 				"Living documentation",
 				"Reduced manual testing effort"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "behavior-driven-development",
@@ -229,18 +205,29 @@
 			"name": "Build Automation",
 			"type": "practice",
 			"category": "automation",
-			"description": "Fully automated build process used during continuous integration that compiles, packages, and validates code without manual intervention.",
+			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
 			"requirements": [
 				"Repeatable builds",
 				"Fast execution",
 				"Runs in CI environment",
-				"Fail fast on errors"
+				"Fail fast on errors",
+				"CI/CD build pipeline configuration",
+				"One-command build from any commit",
+				"Repeatable builds with same inputs",
+				"Fast execution with caching strategies",
+				"Fail fast on errors with clear messages",
+				"Parallel build stages where possible"
 			],
 			"benefits": [
 				"Consistency across builds",
 				"Reduced human error",
 				"Fast feedback",
-				"Easy onboarding"
+				"Easy onboarding",
+				"Consistency across all builds",
+				"Reduced human error in build process",
+				"Fast feedback to developers",
+				"Easy onboarding for new team members",
+				"Build reproducibility and traceability"
 			]
 		},
 		{
@@ -926,8 +913,7 @@
 				"Measurable progress tracking",
 				"Reduced waste on low-value features",
 				"Strategic product direction"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "test-environment",
@@ -1237,10 +1223,6 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "automated-build",
-			"depends_on_id": "build-automation"
-		},
-		{
 			"practice_id": "automated-db-changes",
 			"depends_on_id": "automated-testing"
 		},
@@ -1271,10 +1253,6 @@
 		{
 			"practice_id": "build-automation",
 			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "build-on-commit",
-			"depends_on_id": "automated-build"
 		},
 		{
 			"practice_id": "compliance-testing",
@@ -1350,10 +1328,6 @@
 		},
 		{
 			"practice_id": "continuous-integration",
-			"depends_on_id": "automated-build"
-		},
-		{
-			"practice_id": "continuous-integration",
 			"depends_on_id": "automated-testing"
 		},
 		{
@@ -1379,10 +1353,6 @@
 		{
 			"practice_id": "continuous-testing",
 			"depends_on_id": "integration-testing"
-		},
-		{
-			"practice_id": "database-migration-strategy",
-			"depends_on_id": "automated-testing"
 		},
 		{
 			"practice_id": "database-migration-strategy",
@@ -1418,15 +1388,7 @@
 		},
 		{
 			"practice_id": "evolutionary-coding",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "evolutionary-coding",
 			"depends_on_id": "trunk-based-development"
-		},
-		{
-			"practice_id": "evolutionary-database",
-			"depends_on_id": "automated-testing"
 		},
 		{
 			"practice_id": "evolutionary-database",
@@ -1595,6 +1557,54 @@
 		{
 			"practice_id": "versioned-database",
 			"depends_on_id": "database-migration-strategy"
+		},
+		{
+			"practice_id": "build-on-commit",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "functional-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "continuous-integration",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "compliance-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "contract-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "deterministic-tests",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "integration-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "performance-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "resilience-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "security-testing",
+			"depends_on_id": "build-automation"
+		},
+		{
+			"practice_id": "smoke-testing",
+			"depends_on_id": "build-automation"
 		}
 	],
 	"metadata": {

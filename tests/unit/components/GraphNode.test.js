@@ -17,7 +17,7 @@ describe('GraphNode', () => {
 			const { getByTestId } = render(GraphNode, { props: { practice } })
 
 			const node = getByTestId('graph-node')
-			expect(node.style.backgroundColor).toBe('rgb(249, 213, 211)') // #f9d5d3
+			expect(node.style.backgroundColor).toBe('rgb(255, 250, 205)') // #fffacd (light yellow)
 		})
 
 		it('renders as a button element', () => {
