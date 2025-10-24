@@ -19,8 +19,7 @@
 				"Controlled access and security",
 				"Version management and deprecation",
 				"Usage analytics and insights"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "configuration-management",
@@ -62,8 +61,7 @@
 				"Automated quality gates",
 				"Reduced human error",
 				"Fast feedback on changes"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "artifact-repository",
@@ -83,8 +81,7 @@
 				"Consistent deployments",
 				"Audit trail",
 				"Easy rollback"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "automated-artifact-versioning",
@@ -105,8 +102,7 @@
 				"Better dependency management",
 				"Simplified rollbacks to known versions",
 				"Automated release notes"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "automated-db-changes",
@@ -127,8 +123,7 @@
 				"Faster deployments and releases",
 				"Better audit trail of changes",
 				"Simplified database versioning"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "automated-environment-provisioning",
@@ -149,8 +144,7 @@
 				"Reduced configuration drift issues",
 				"Better disaster recovery capability",
 				"Cost optimization through automation"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "automated-testing",
@@ -248,8 +242,7 @@
 				"Enforces quality gates automatically",
 				"Maintains always-green build status",
 				"Reduces integration issues"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "compliance-testing",
@@ -270,8 +263,7 @@
 				"Early detection of compliance violations",
 				"Audit trail for regulatory requirements",
 				"Lower compliance risk"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "component-ownership",
@@ -319,29 +311,6 @@
 			]
 		},
 		{
-			"id": "continuous-deployment",
-			"name": "Continuous Deployment",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Fully automated deployment to production where every change that passes the automated pipeline is released to users without manual intervention.",
-			"requirements": [
-				"Fully automated deployment pipeline",
-				"Comprehensive automated test coverage",
-				"Automated rollback capability",
-				"Real-time monitoring and alerting",
-				"Feature flags for risk mitigation",
-				"High confidence in automated quality gates"
-			],
-			"benefits": [
-				"Fastest time to market for features",
-				"Immediate user feedback on changes",
-				"Reduced deployment risk through frequency",
-				"Eliminates deployment bottlenecks",
-				"Improved team productivity"
-			],
-			"audited": false
-		},
-		{
 			"id": "continuous-integration",
 			"name": "Continuous Integration",
 			"type": "practice",
@@ -361,7 +330,6 @@
 				"Always-releasable codebase",
 				"Faster feedback cycles"
 			],
-			"audited": false,
 			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/"
 		},
 		{
@@ -446,28 +414,6 @@
 			]
 		},
 		{
-			"id": "deploy-on-commit",
-			"name": "Deploy on Commit to Trunk",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Every successful commit to trunk triggers an automated deployment to production after passing all quality gates.",
-			"requirements": [
-				"Fully automated deployment pipeline",
-				"All quality gates automated in pipeline",
-				"Fast pipeline execution (typically < 30 minutes)",
-				"Automated rollback on deployment failure",
-				"Real-time deployment notifications"
-			],
-			"benefits": [
-				"Maximum deployment frequency",
-				"Minimal lead time for changes",
-				"Immediate feedback on production issues",
-				"Eliminates manual deployment process",
-				"Enforces deployment discipline"
-			],
-			"audited": false
-		},
-		{
 			"id": "deployment-automation",
 			"name": "Deployment Automation",
 			"type": "practice",
@@ -485,8 +431,7 @@
 				"Reduced deployment time",
 				"Lower error rates",
 				"Deployable at any time"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "deterministic-tests",
@@ -537,8 +482,7 @@
 				"Improved system design from operational feedback",
 				"Stronger ownership mindset in teams",
 				"Reduced reliance on separate operations team"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "evolutionary-coding",
@@ -559,8 +503,7 @@
 				"Easier maintenance and modification",
 				"Continuous improvement mindset",
 				"Adaptable to changing requirements"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "evolutionary-database",
@@ -581,8 +524,7 @@
 				"Better adaptability to change",
 				"Reduced downtime during migrations",
 				"Safer deployments"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "exploratory-testing",
@@ -603,8 +545,7 @@
 				"Complements automated testing",
 				"Provides creative feedback on features",
 				"Finds issues automation misses"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "feature-flags",
@@ -625,7 +566,7 @@
 				"Fast feature rollback",
 				"Gradual rollouts"
 			],
-			"audited": false
+			"quickStartGuide": "https://minimumcd.org/recommendations/feature-flags/"
 		},
 		{
 			"id": "functional-testing",
@@ -667,7 +608,6 @@
 				"Faster deployments",
 				"Simplified rollback"
 			],
-			"audited": false,
 			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/"
 		},
 		{
@@ -750,8 +690,7 @@
 				"Easier maintenance and evolution",
 				"Team autonomy and ownership",
 				"Parallel development capability"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "telemetry-observability",
@@ -793,11 +732,10 @@
 				"Better system understanding and insights",
 				"Data-driven operational decisions",
 				"Proactive issue resolution"
-			],
-			"audited": false
+			]
 		},
 		{
-			"id": "rollback-capability",
+			"id": "on-demand-rollback",
 			"name": "On-demand Rollback",
 			"type": "practice",
 			"category": "automation",
@@ -836,14 +774,13 @@
 				"Validates scalability requirements",
 				"Optimizes resource usage and costs",
 				"Ensures SLA compliance"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "pipeline-visibility",
 			"name": "Pipeline Visibility",
 			"type": "practice",
-			"category": "behavior",
+			"category": "automation",
 			"description": "Make pipeline status and results visible to the entire team to encourage collaboration and quick response to failures.",
 			"requirements": [
 				"Real-time status display",
@@ -857,8 +794,7 @@
 				"Team accountability",
 				"Transparency",
 				"Improved collaboration"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "prioritized-features",
@@ -944,8 +880,7 @@
 				"Builds confidence in disaster recovery",
 				"Identifies architectural weak points",
 				"Reduces MTTR in production incidents"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "secret-management",
@@ -986,12 +921,11 @@
 				"Compliance with security standards",
 				"Prevents vulnerable code in production",
 				"Continuous security validation"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "smoke-testing",
-			"name": "Smoke and Component Acceptance Testing",
+			"name": "Smoke Testing",
 			"type": "practice",
 			"category": "behavior",
 			"description": "Quick validation tests after deployment to ensure critical functionality works and the system is stable.",
@@ -1008,8 +942,7 @@
 				"Prevents broken deployments from persisting",
 				"Builds confidence in deployments",
 				"Early warning system for production issues"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "static-analysis",
@@ -1030,8 +963,7 @@
 				"Improves security posture",
 				"Reduces technical debt",
 				"Faster code reviews"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "stop-the-line",
@@ -1052,8 +984,7 @@
 				"Enforces quality discipline",
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "test-data-management",
@@ -1094,7 +1025,6 @@
 				"Simplified branching model",
 				"Encourages small, frequent commits"
 			],
-			"audited": false,
 			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/"
 		},
 		{
@@ -1136,8 +1066,7 @@
 				"Identifies UX issues early",
 				"Reduces support and training costs",
 				"Informs design decisions with data"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "version-control",
@@ -1177,8 +1106,7 @@
 				"Clear change history and audit trail",
 				"Simplified rollbacks and recovery",
 				"Environment parity"
-			],
-			"audited": false
+			]
 		},
 		{
 			"id": "atdd",
@@ -1235,10 +1163,6 @@
 	"dependencies": [
 		{
 			"practice_id": "api-management",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "api-management",
 			"depends_on_id": "version-control"
 		},
 		{
@@ -1271,7 +1195,11 @@
 		},
 		{
 			"practice_id": "automated-db-changes",
-			"depends_on_id": "versioned-database"
+			"depends_on_id": "database-migration-strategy"
+		},
+		{
+			"practice_id": "automated-db-changes",
+			"depends_on_id": "evolutionary-database"
 		},
 		{
 			"practice_id": "automated-environment-provisioning",
@@ -1330,14 +1258,6 @@
 			"depends_on_id": "automated-db-changes"
 		},
 		{
-			"practice_id": "continuous-deployment",
-			"depends_on_id": "continuous-delivery"
-		},
-		{
-			"practice_id": "continuous-deployment",
-			"depends_on_id": "deploy-on-commit"
-		},
-		{
 			"practice_id": "continuous-delivery",
 			"depends_on_id": "automated-environment-provisioning"
 		},
@@ -1363,7 +1283,7 @@
 		},
 		{
 			"practice_id": "continuous-delivery",
-			"depends_on_id": "rollback-capability"
+			"depends_on_id": "on-demand-rollback"
 		},
 		{
 			"practice_id": "continuous-delivery",
@@ -1395,6 +1315,14 @@
 		},
 		{
 			"practice_id": "continuous-testing",
+			"depends_on_id": "performance-testing"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "compliance-testing"
+		},
+		{
+			"practice_id": "continuous-testing",
 			"depends_on_id": "integration-testing"
 		},
 		{
@@ -1402,8 +1330,8 @@
 			"depends_on_id": "version-control"
 		},
 		{
-			"practice_id": "deploy-on-commit",
-			"depends_on_id": "continuous-integration"
+			"practice_id": "database-migration-strategy",
+			"depends_on_id": "evolutionary-database"
 		},
 		{
 			"practice_id": "deployment-automation",
@@ -1426,12 +1354,20 @@
 			"depends_on_id": "behavior-driven-development"
 		},
 		{
+			"practice_id": "unified-team-backlog",
+			"depends_on_id": "developer-driven-support"
+		},
+		{
 			"practice_id": "developer-driven-support",
 			"depends_on_id": "telemetry-observability"
 		},
 		{
-			"practice_id": "evolutionary-coding",
-			"depends_on_id": "trunk-based-development"
+			"practice_id": "developer-driven-support",
+			"depends_on_id": "monitoring-and-alerting"
+		},
+		{
+			"practice_id": "continuous-integration",
+			"depends_on_id": "evolutionary-coding"
 		},
 		{
 			"practice_id": "evolutionary-database",
@@ -1440,6 +1376,14 @@
 		{
 			"practice_id": "exploratory-testing",
 			"depends_on_id": "test-environment"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "exploratory-testing"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "usability-testing"
 		},
 		{
 			"practice_id": "feature-flags",
@@ -1494,6 +1438,10 @@
 			"depends_on_id": "api-management"
 		},
 		{
+			"practice_id": "modular-system",
+			"depends_on_id": "component-ownership"
+		},
+		{
 			"practice_id": "telemetry-observability",
 			"depends_on_id": "logging-infrastructure"
 		},
@@ -1522,12 +1470,20 @@
 			"depends_on_id": "application-pipeline"
 		},
 		{
+			"practice_id": "continuous-integration",
+			"depends_on_id": "pipeline-visibility"
+		},
+		{
 			"practice_id": "prioritized-features",
 			"depends_on_id": "product-goals"
 		},
 		{
 			"practice_id": "prioritized-features",
 			"depends_on_id": "unified-team-backlog"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "resilience-testing"
 		},
 		{
 			"practice_id": "resilience-testing",
@@ -1546,11 +1502,11 @@
 			"depends_on_id": "test-data-management"
 		},
 		{
-			"practice_id": "rollback-capability",
+			"practice_id": "on-demand-rollback",
 			"depends_on_id": "database-migration-strategy"
 		},
 		{
-			"practice_id": "rollback-capability",
+			"practice_id": "on-demand-rollback",
 			"depends_on_id": "deployment-automation"
 		},
 		{
@@ -1562,6 +1518,18 @@
 			"depends_on_id": "static-analysis"
 		},
 		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "static-analysis"
+		},
+		{
+			"practice_id": "on-demand-rollback",
+			"depends_on_id": "smoke-testing"
+		},
+		{
+			"practice_id": "continuous-testing",
+			"depends_on_id": "smoke-testing"
+		},
+		{
 			"practice_id": "smoke-testing",
 			"depends_on_id": "deployment-automation"
 		},
@@ -1570,8 +1538,8 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "stop-the-line",
-			"depends_on_id": "continuous-integration"
+			"practice_id": "continuous-integration",
+			"depends_on_id": "stop-the-line"
 		},
 		{
 			"practice_id": "test-environment",
@@ -1604,10 +1572,6 @@
 		{
 			"practice_id": "usability-testing",
 			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "versioned-database",
-			"depends_on_id": "database-migration-strategy"
 		},
 		{
 			"practice_id": "build-on-commit",

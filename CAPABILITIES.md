@@ -13,6 +13,8 @@
   - Benefits of adoption
   - Dependency count
 - **Category-Based Styling**: Color-coded practices by category
+- **Quick-Start Guides**: Direct links to minimumcd.org implementation guides for selected practices
+- **Category Legend**: Visual guide showing practice category colors and meanings
 
 ## Pending Work & Known Issues
 
