@@ -28,7 +28,8 @@ const toDomainModel = practiceData => {
 		{
 			audited: practiceData.audited !== undefined ? practiceData.audited : true, // Default to true
 			requirements: practiceData.requirements || [],
-			benefits: practiceData.benefits || []
+			benefits: practiceData.benefits || [],
+			quickStartGuide: practiceData.quickStartGuide
 		}
 	)
 
