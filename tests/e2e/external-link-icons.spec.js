@@ -136,14 +136,14 @@ test.describe('External Link Icons on Initial Load', () => {
 		await expect(ciCard).toBeVisible()
 
 		// Find the icon container in upper right corner
-		const iconContainer = ciCard.locator('div.absolute.top-2.right-2.text-blue-600')
+		const iconContainer = ciCard.locator('div.absolute.top-3.right-3.text-blue-600')
 		await expect(iconContainer).toBeVisible()
 
 		// Check that it has the correct CSS classes
 		const classes = await iconContainer.getAttribute('class')
 		expect(classes).toContain('absolute')
-		expect(classes).toContain('top-2')
-		expect(classes).toContain('right-2')
+		expect(classes).toContain('top-3')
+		expect(classes).toContain('right-3')
 		expect(classes).toContain('text-blue-600')
 
 		console.log('✓ External link icon is positioned in upper right corner and styled correctly')
