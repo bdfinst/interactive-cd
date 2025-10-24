@@ -1,5 +1,6 @@
 <script>
 	import SEO from '$lib/components/SEO.svelte'
+	import Button from '$lib/components/Button.svelte'
 
 	const { data } = $props()
 
@@ -76,10 +77,7 @@
 	<div class="max-w-4xl mx-auto px-4 py-8">
 		<!-- Back to Home Button -->
 		<nav aria-label="Breadcrumb navigation" class="mb-6">
-			<a
-				href="/"
-				class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors"
-			>
+			<Button href="/" variant="primary" size="lg">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
@@ -97,7 +95,7 @@
 					/>
 				</svg>
 				<span>Back to Interactive CD</span>
-			</a>
+			</Button>
 		</nav>
 
 		<!-- Main Content -->

@@ -1,7 +1,8 @@
 <script>
+	import Button from '$lib/components/Button.svelte'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
-	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 
 	/**
 	 * CategoryLegend Component
@@ -10,16 +11,41 @@
 	 * Floats below the header using fixed positioning
 	 */
 
-	// Category colors and labels from mermaid diagram
+	// Category definitions (excluding 'core' which isn't shown in legend)
+	// Colors defined in app.css @theme directive
 	const categories = [
-		{ name: 'Automation', color: '#fffacd', description: 'Tools and automation platforms' },
-		{ name: 'Behavior', color: '#d7e6ff', description: 'Team behaviors and processes' },
 		{
-			name: 'Behavior Enabled',
-			color: '#d7f8d7',
+			name: 'Automation',
+			key: 'automation',
+			description: 'Tools and automation platforms'
+		},
+		{
+			name: 'Behavior',
+			key: 'behavior',
+			description: 'Team behaviors and processes'
+		},
+		{
+			name: 'Automation & Behavior',
+			key: 'behavior-enabled-automation',
 			description: 'Automation that depends on behavioral practices'
 		}
 	]
+
+	// Get Tailwind background class for a category key
+	const getCategoryBgClass = key => {
+		switch (key) {
+			case 'automation':
+				return 'bg-category-automation'
+			case 'behavior':
+				return 'bg-category-behavior'
+			case 'behavior-enabled-automation':
+				return 'bg-category-behavior-enabled'
+			case 'core':
+				return 'bg-category-core'
+			default:
+				return 'bg-white'
+		}
+	}
 
 	// Track which tooltip is showing
 	let showTooltip = $state({})
@@ -52,7 +78,7 @@
 
 <div
 	bind:this={legendElement}
-	class="fixed left-0 right-0 bg-gray-800 border-b border-gray-700 shadow-md z-[999] py-2"
+	class="fixed left-0 right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2"
 	style="top: {$headerHeight}px;"
 	data-testid="category-legend"
 >
@@ -61,18 +87,17 @@
 			<!-- Left: Expand Button -->
 			<div class="flex justify-start">
 				{#if $expandButtonRenderer}
-					<button
+					<Button
 						onclick={$expandButtonRenderer.toggleFullTree}
-						class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$expandButtonRenderer.isExpanded
-							? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-							: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+						variant={$expandButtonRenderer.isExpanded ? 'gray' : 'primary'}
+						size="md"
 						data-testid="toggle-full-tree"
 						aria-label={$expandButtonRenderer.isExpanded
 							? 'Collapse tree view'
 							: 'Expand tree view'}
 					>
 						{$expandButtonRenderer.isExpanded ? 'Collapse' : 'Expand'}
-					</button>
+					</Button>
 				{/if}
 			</div>
 
@@ -81,8 +106,9 @@
 				{#each categories as category, index}
 					<div class="relative inline-flex">
 						<div
-							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help"
-							style="background-color: {category.color};"
+							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help {getCategoryBgClass(
+								category.key
+							)}"
 							data-testid="legend-item"
 							onmouseenter={() => handleMouseEnter(index)}
 							onmouseleave={() => handleMouseLeave(index)}

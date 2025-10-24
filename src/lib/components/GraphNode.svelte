@@ -1,5 +1,6 @@
 <script>
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
+	import Button from '$lib/components/Button.svelte'
 
 	/**
 	 * GraphNode Component
@@ -19,47 +20,21 @@
 	// Dev mode audit indicator visibility
 	const showAuditIndicator = $derived(shouldShowAuditIndicators() && practice.audited === false)
 
-	// Category background colors from mermaid diagram
-	const categoryColors = {
-		automation: '#fffacd',
-		'behavior-enabled-automation': '#d7f8d7',
-		behavior: '#d7e6ff',
-		core: '#e9d5ff' // light purple
-	}
-
-	/**
-	 * Calculate color intensity based on total dependency count
-	 * Higher dependency count = more saturated/darker color
-	 */
-	const calculateColorIntensity = (baseColor, totalDeps) => {
-		if (!totalDeps || totalDeps === 0) return baseColor
-
-		// Parse hex color
-		const hex = baseColor.replace('#', '')
-		const r = parseInt(hex.substr(0, 2), 16)
-		const g = parseInt(hex.substr(2, 2), 16)
-		const b = parseInt(hex.substr(4, 2), 16)
-
-		// Calculate intensity factor (0.5 to 1.0)
-		// Max out at 50 dependencies for reasonable saturation
-		const maxDeps = 50
-		const factor = 1 - Math.min(totalDeps / maxDeps, 0.5)
-
-		// Darken by moving toward middle intensity
-		const newR = Math.floor(r * factor + r * (1 - factor) * 0.7)
-		const newG = Math.floor(g * factor + g * (1 - factor) * 0.7)
-		const newB = Math.floor(b * factor + b * (1 - factor) * 0.7)
-
-		return `rgb(${newR}, ${newG}, ${newB})`
-	}
-
-	const bgColor = $derived.by(() => {
-		const baseColor = categoryColors[practice.category] || '#ffffff'
-		// Only apply intensity in collapsed view (not expanded tree view)
-		if (!isTreeExpanded && practice.totalDependencyCount) {
-			return calculateColorIntensity(baseColor, practice.totalDependencyCount)
+	// Determine background color class based on category
+	// Colors defined in app.css @theme directive
+	const bgClass = $derived.by(() => {
+		switch (practice.category) {
+			case 'automation':
+				return 'bg-category-automation'
+			case 'behavior':
+				return 'bg-category-behavior'
+			case 'behavior-enabled-automation':
+				return 'bg-category-behavior-enabled'
+			case 'core':
+				return 'bg-category-core'
+			default:
+				return 'bg-white'
 		}
-		return baseColor
 	})
 
 	const borderClass = $derived(
@@ -82,10 +57,9 @@
 </script>
 
 <button
-	class="block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
+	class="block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
 		? 'p-1.5'
 		: 'p-4'}"
-	style="background-color: {bgColor};"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
@@ -166,12 +140,13 @@
 		<!-- Quick-Start Guide Link -->
 		{#if practice.quickStartGuide}
 			<div class="mt-3 pt-3 border-t border-gray-200">
-				<a
+				<Button
 					href={practice.quickStartGuide}
+					variant="primary"
+					size="md"
+					data-testid="quick-start-guide-link"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-					data-testid="quick-start-guide-link"
 					onclick={e => e.stopPropagation()}
 				>
 					<span>📚</span>
@@ -190,27 +165,51 @@
 							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
 						/>
 					</svg>
-				</a>
+				</Button>
 			</div>
 		{/if}
 	{:else}
-		<!-- Show dependency count only in collapsed view -->
-		{#if !isTreeExpanded && practice.dependencyCount > 0}
-			<div
-				class="text-center {compact
-					? 'mt-1 pt-1 text-[0.45rem]'
-					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
-			>
-				{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
-					<!-- Collapsed view: show both direct and total -->
-					<div class="font-semibold">{practice.directDependencyCount} direct</div>
-					<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
-				{:else}
-					<!-- Fallback: show only dependency count -->
-					{practice.dependencyCount}
-					{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
-				{/if}
-			</div>
-		{/if}
+		<!-- Unselected view -->
+		<div class="flex flex-col gap-2">
+			<!-- External link icon for quickstart guide -->
+			{#if practice.quickStartGuide}
+				<div class="text-center {compact ? 'mt-1' : 'mt-2'}">
+					<svg
+						class="{compact ? 'w-4 h-4' : 'w-5 h-5'} mx-auto text-blue-600"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+						/>
+					</svg>
+				</div>
+			{/if}
+
+			<!-- Show dependency count only in collapsed view -->
+			{#if !isTreeExpanded && practice.dependencyCount > 0}
+				<div
+					class="text-center {compact
+						? 'mt-1 pt-1 text-[0.45rem]'
+						: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
+				>
+					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
+						<!-- Collapsed view: show both direct and total -->
+						<div class="font-semibold">{practice.directDependencyCount} direct</div>
+						<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
+					{:else}
+						<!-- Fallback: show only dependency count -->
+						{practice.dependencyCount}
+						{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+					{/if}
+				</div>
+			{/if}
+		</div>
 	{/if}
 </button>
