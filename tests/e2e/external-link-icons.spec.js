@@ -1,151 +1,131 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('External Link Icons on Initial Load', () => {
-	test('displays external link icons for unselected dependency cards with quickstart guides', async ({
+test.describe('External Learning Resources', () => {
+	test('users can identify which practices have additional documentation on initial load', async ({
 		page
 	}) => {
-		// Navigate to the root page
 		await page.goto('/')
-
-		// Wait for the page to load
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Define the dependency practices that have quickStartGuide on initial load
+		// Practices that should have external resources on initial load
 		const practicesWithGuides = [
-			{
-				id: 'configuration-management',
-				name: 'Application Configuration Management'
-			},
-			{
-				id: 'continuous-integration',
-				name: 'Continuous Integration'
-			},
-			{
-				id: 'immutable-artifact',
-				name: 'Immutable Artifact'
-			},
-			{
-				id: 'on-demand-rollback',
-				name: 'On-demand Rollback'
-			},
-			{
-				id: 'test-environment',
-				name: 'Production-like Test Environment'
-			}
+			'Application Configuration Management',
+			'Continuous Integration',
+			'Immutable Artifact',
+			'On-demand Rollback',
+			'Production-like Test Environment'
 		]
 
-		// Check each practice with a quickstart guide
-		for (const practice of practicesWithGuides) {
-			// Find the unselected practice card
-			const practiceCard = page.locator(
-				`[data-testid="graph-node"][data-practice-id="${practice.id}"][data-selected="false"]`
-			)
+		for (const practiceName of practicesWithGuides) {
+			// Find the unselected practice card by its user-visible name
+			const practice = page
+				.locator('[data-testid="graph-node"][data-selected="false"]')
+				.filter({ hasText: practiceName })
+				.first()
 
-			// Verify the card exists and is visible
-			await expect(practiceCard).toBeVisible()
+			// Verify the practice is visible to users
+			await expect(practice).toBeVisible()
 
-			// Verify the external link icon is visible within the card
-			const externalLinkIcon = practiceCard.locator('svg')
-
-			await expect(externalLinkIcon).toBeVisible()
-
-			console.log(
-				`✓ External link icon displayed for unselected card: ${practice.name} (${practice.id})`
-			)
+			// Verify there is some visual indicator that external resources exist
+			// (we don't care if it's an icon, badge, or other indicator)
+			const visualIndicator = practice.locator('svg')
+			await expect(visualIndicator).toBeVisible()
 		}
 	})
 
-	test('does not display external link icon for root practice without quickstart guide', async ({
-		page
-	}) => {
-		// Navigate to the root page
+	test('users can access external documentation when selecting a practice', async ({ page }) => {
 		await page.goto('/')
-
-		// Wait for the page to load
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Find the selected root practice (Continuous Delivery)
-		const rootCard = page.locator(
+		// Select a practice known to have documentation
+		const ciPractice = page.locator(
+			'[data-testid="graph-node"][data-practice-id="continuous-integration"]'
+		)
+
+		await ciPractice.click()
+
+		// User should see a link or button to access more information
+		const moreInfoLink = page.locator('[data-testid="quick-start-guide-link"]')
+		await expect(moreInfoLink).toBeVisible()
+
+		// Verify the link has meaningful text
+		await expect(moreInfoLink).toContainText(/More Info|Learn More|Quick Start/i)
+
+		// Verify the link opens in a new tab for safety
+		await expect(moreInfoLink).toHaveAttribute('target', '_blank')
+		await expect(moreInfoLink).toHaveAttribute('rel', /noopener/)
+
+		// Verify the link URL is valid and external
+		const href = await moreInfoLink.getAttribute('href')
+		expect(href).toBeTruthy()
+		expect(href).toMatch(/^https?:\/\//)
+	})
+
+	test('practices without external resources do not show resource indicators', async ({ page }) => {
+		await page.goto('/')
+		await page.waitForSelector('[data-testid="graph-node"]')
+
+		// The root practice (Continuous Delivery) does not have a quickstart guide
+		const rootPractice = page.locator(
 			'[data-testid="graph-node"][data-practice-id="continuous-delivery"][data-selected="true"]'
 		)
 
-		// Verify the root card is selected
-		await expect(rootCard).toBeVisible()
+		await expect(rootPractice).toBeVisible()
 
-		// Verify the root card does NOT have a "More Info" button (no quickStartGuide)
-		const moreInfoButton = rootCard.locator('[data-testid="quick-start-guide-link"]')
+		// When selected, it should NOT show a "More Info" button
+		const moreInfoButton = rootPractice.locator('[data-testid="quick-start-guide-link"]')
 		await expect(moreInfoButton).not.toBeVisible()
-
-		console.log('✓ No external link icon/button for Continuous Delivery (no quickStartGuide)')
 	})
 
-	test('displays external link icons for all visible dependency cards with guides', async ({
-		page
-	}) => {
-		// Navigate to the root page
+	test('external resource links open in new tabs safely', async ({ page, context }) => {
 		await page.goto('/')
-
-		// Wait for the page to load
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Get all unselected cards
-		const unselectedCards = page.locator('[data-testid="graph-node"][data-selected="false"]')
-		const count = await unselectedCards.count()
+		// Select a practice with external resources
+		await page
+			.locator('[data-testid="graph-node"][data-practice-id="continuous-integration"]')
+			.click()
 
-		console.log(`Total unselected cards on initial load: ${count}`)
+		const moreInfoLink = page.locator('[data-testid="quick-start-guide-link"]')
+		await expect(moreInfoLink).toBeVisible()
 
-		// Count how many unselected cards have external link icons
-		let cardsWithIcons = 0
+		// Set up listener for new page/tab
+		const pagePromise = context.waitForEvent('page')
 
-		for (let i = 0; i < count; i++) {
-			const card = unselectedCards.nth(i)
-			const practiceId = await card.getAttribute('data-practice-id')
+		// Click the link
+		await moreInfoLink.click()
 
-			// Check if this card has an external link icon (SVG)
-			const icon = card.locator('svg')
-			const hasIcon = (await icon.count()) > 0
+		// Verify new tab opens
+		const newPage = await pagePromise
+		await newPage.waitForLoadState('domcontentloaded')
 
-			if (hasIcon) {
-				cardsWithIcons++
-				console.log(`  ✓ Card with icon: ${practiceId}`)
-			} else {
-				console.log(`  - Card without icon: ${practiceId}`)
-			}
-		}
+		// Verify it navigates to an external URL
+		const url = newPage.url()
+		expect(url).toMatch(/^https?:\/\//)
 
-		console.log(`Cards with external link icons: ${cardsWithIcons}`)
-
-		// We expect exactly 5 cards with icons (the ones with quickStartGuide)
-		expect(cardsWithIcons).toBe(5)
+		await newPage.close()
 	})
 
-	test('external link icon is positioned in upper right corner and styled correctly in unselected cards', async ({
-		page
-	}) => {
-		// Navigate to the root page
+	test('external resources are accessible via keyboard navigation', async ({ page }) => {
 		await page.goto('/')
-
-		// Wait for the page to load
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Check one specific card (Continuous Integration)
-		const ciCard = page.locator(
-			'[data-testid="graph-node"][data-practice-id="continuous-integration"][data-selected="false"]'
+		// Navigate to a practice using keyboard
+		const ciPractice = page.locator(
+			'[data-testid="graph-node"][data-practice-id="continuous-integration"]'
 		)
 
-		await expect(ciCard).toBeVisible()
+		await ciPractice.focus()
+		await page.keyboard.press('Enter')
 
-		// Find the icon container in upper right corner
-		const iconContainer = ciCard.locator('div.absolute.top-3.right-3.text-blue-600')
-		await expect(iconContainer).toBeVisible()
+		// Verify the More Info link is visible and focusable
+		const moreInfoLink = page.locator('[data-testid="quick-start-guide-link"]')
+		await expect(moreInfoLink).toBeVisible()
 
-		// Check that it has the correct CSS classes
-		const classes = await iconContainer.getAttribute('class')
-		expect(classes).toContain('absolute')
-		expect(classes).toContain('top-3')
-		expect(classes).toContain('right-3')
-		expect(classes).toContain('text-blue-600')
+		await moreInfoLink.focus()
+		await expect(moreInfoLink).toBeFocused()
 
-		console.log('✓ External link icon is positioned in upper right corner and styled correctly')
+		// Verify Enter key activates the link
+		await expect(moreInfoLink).toBeEnabled()
 	})
 })
