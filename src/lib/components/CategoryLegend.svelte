@@ -2,6 +2,7 @@
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { CATEGORY_METADATA } from '$lib/constants/colors.js'
 
 	/**
 	 * CategoryLegend Component
@@ -10,16 +11,8 @@
 	 * Floats below the header using fixed positioning
 	 */
 
-	// Category colors and labels from mermaid diagram
-	const categories = [
-		{ name: 'Automation', color: '#fffacd', description: 'Tools and automation platforms' },
-		{ name: 'Behavior', color: '#d7e6ff', description: 'Team behaviors and processes' },
-		{
-			name: 'Behavior Enabled',
-			color: '#d7f8d7',
-			description: 'Automation that depends on behavioral practices'
-		}
-	]
+	// Filter out 'core' category as it's not shown in the legend
+	const categories = CATEGORY_METADATA.filter(cat => cat.key !== 'core')
 
 	// Track which tooltip is showing
 	let showTooltip = $state({})
@@ -81,8 +74,7 @@
 				{#each categories as category, index}
 					<div class="relative inline-flex">
 						<div
-							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help"
-							style="background-color: {category.color};"
+							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help {category.bgClass}"
 							data-testid="legend-item"
 							onmouseenter={() => handleMouseEnter(index)}
 							onmouseleave={() => handleMouseLeave(index)}

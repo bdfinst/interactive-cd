@@ -1,5 +1,6 @@
 <script>
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
+	import { CATEGORY_COLORS } from '$lib/constants/colors.js'
 
 	/**
 	 * GraphNode Component
@@ -18,14 +19,6 @@
 
 	// Dev mode audit indicator visibility
 	const showAuditIndicator = $derived(shouldShowAuditIndicators() && practice.audited === false)
-
-	// Category background colors from mermaid diagram
-	const categoryColors = {
-		automation: '#fffacd',
-		'behavior-enabled-automation': '#d7f8d7',
-		behavior: '#d7e6ff',
-		core: '#e9d5ff' // light purple
-	}
 
 	/**
 	 * Calculate color intensity based on total dependency count
@@ -54,7 +47,7 @@
 	}
 
 	const bgColor = $derived.by(() => {
-		const baseColor = categoryColors[practice.category] || '#ffffff'
+		const baseColor = CATEGORY_COLORS[practice.category] || '#ffffff'
 		// Only apply intensity in collapsed view (not expanded tree view)
 		if (!isTreeExpanded && practice.totalDependencyCount) {
 			return calculateColorIntensity(baseColor, practice.totalDependencyCount)

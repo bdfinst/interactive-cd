@@ -2,19 +2,22 @@
  * PracticeCategory - Value Object (Functional Enum)
  *
  * Represents the category of a CD practice based on the 2015 CD dependency model.
- * Categories indicate the type of practice and are visualized with background colors:
+ * Categories indicate the type of practice and are visualized with background colors.
  *
- * - AUTOMATION: Tools and automation platforms (red/pink background: #f9d5d3)
- * - BEHAVIOR: Team behaviors and processes (blue background: #d7e6ff)
- * - BEHAVIOR_ENABLED_AUTOMATION: Automation that depends on behavioral practices (green background: #d7f8d7)
- * - CORE: The core Continuous Delivery practice (yellow background: #ffe66a)
+ * Colors are centrally defined in $lib/constants/colors.js:
+ * - AUTOMATION: Primary yellow with 80% white (#ffffcc)
+ * - BEHAVIOR: Primary blue with 80% white (#ccccff)
+ * - BEHAVIOR_ENABLED_AUTOMATION: Green pastel (#d7f8d7)
+ * - CORE: Light purple (#e9d5ff)
  *
  * Usage:
  *   const category = PracticeCategory.BEHAVIOR
  *   const fromString = PracticeCategory.from('behavior')
  *   console.log(category.name)  // 'behavior'
- *   console.log(category.color) // '#d7e6ff'
+ *   console.log(category.color) // '#ccccff'
  */
+
+import { CATEGORY_COLORS } from '$lib/constants/colors.js'
 
 /**
  * Create an immutable category object
@@ -36,11 +39,14 @@ const createCategory = (name, color) =>
 		_type: 'PracticeCategory'
 	})
 
-// Predefined category instances (frozen) with colors from mermaid diagram
-const AUTOMATION = createCategory('automation', '#f9d5d3')
-const BEHAVIOR = createCategory('behavior', '#d7e6ff')
-const BEHAVIOR_ENABLED_AUTOMATION = createCategory('behavior-enabled-automation', '#d7f8d7')
-const CORE = createCategory('core', '#fff9e6')
+// Predefined category instances (frozen) with colors from central constants
+const AUTOMATION = createCategory('automation', CATEGORY_COLORS.automation)
+const BEHAVIOR = createCategory('behavior', CATEGORY_COLORS.behavior)
+const BEHAVIOR_ENABLED_AUTOMATION = createCategory(
+	'behavior-enabled-automation',
+	CATEGORY_COLORS['behavior-enabled-automation']
+)
+const CORE = createCategory('core', CATEGORY_COLORS.core)
 
 // Category lookup map
 const CATEGORIES = Object.freeze({

@@ -11,6 +11,19 @@
 	--text-title-sm: 2.1rem;
 	--text-title-md: 2.4rem;
 	--text-title-lg: 2.7rem;
+
+	/* Practice category colors - for bg-category-{name} utilities */
+	/* Primary yellow (255,255,0) with 80% white = RGB(255, 255, 204) */
+	--color-category-automation: #ffffcc;
+
+	/* Primary blue (0,0,255) with 80% white = RGB(204, 204, 255) */
+	--color-category-behavior: #ccccff;
+
+	/* Green pastel for behavior-enabled automation */
+	--color-category-behavior-enabled: #d7f8d7;
+
+	/* Light purple for core practice */
+	--color-category-core: #e9d5ff;
 }
 
 @layer base {

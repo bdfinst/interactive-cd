@@ -131,20 +131,20 @@ describe('PracticeCategory', () => {
 	})
 
 	describe('color property', () => {
-		it('AUTOMATION has red/pink color #f9d5d3', () => {
-			expect(PracticeCategory.AUTOMATION.color).toBe('#f9d5d3')
+		it('AUTOMATION has yellow color #ffffcc (primary yellow with 80% white)', () => {
+			expect(PracticeCategory.AUTOMATION.color).toBe('#ffffcc')
 		})
 
-		it('BEHAVIOR has blue color #d7e6ff', () => {
-			expect(PracticeCategory.BEHAVIOR.color).toBe('#d7e6ff')
+		it('BEHAVIOR has blue color #ccccff (primary blue with 80% white)', () => {
+			expect(PracticeCategory.BEHAVIOR.color).toBe('#ccccff')
 		})
 
 		it('BEHAVIOR_ENABLED_AUTOMATION has green color #d7f8d7', () => {
 			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.color).toBe('#d7f8d7')
 		})
 
-		it('CORE has pale yellow color #fff9e6', () => {
-			expect(PracticeCategory.CORE.color).toBe('#fff9e6')
+		it('CORE has light purple color #e9d5ff', () => {
+			expect(PracticeCategory.CORE.color).toBe('#e9d5ff')
 		})
 	})
 
