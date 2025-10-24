@@ -52,7 +52,6 @@ export const createCDPractice = (id, name, category, description, options = {}) 
 		name: name.trim(),
 		category,
 		description: description.trim(),
-		audited: options.audited !== undefined ? options.audited : true, // Default to true (audited)
 		practicePrerequisites: Object.freeze([...(options.practicePrerequisites || [])]),
 		capabilityPrerequisites: Object.freeze([...(options.capabilityPrerequisites || [])]),
 		requirements: Object.freeze([...(options.requirements || [])]),

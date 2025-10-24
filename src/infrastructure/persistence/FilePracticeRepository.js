@@ -26,7 +26,6 @@ const toDomainModel = practiceData => {
 		PracticeCategory.from(practiceData.category),
 		practiceData.description,
 		{
-			audited: practiceData.audited !== undefined ? practiceData.audited : true, // Default to true
 			requirements: practiceData.requirements || [],
 			benefits: practiceData.benefits || [],
 			quickStartGuide: practiceData.quickStartGuide
@@ -51,7 +50,6 @@ const buildTreeWithDependencies = (practices, dependencies, rootId) => {
 			name: practice.name,
 			category: practice.category,
 			description: practice.description,
-			audited: practice.audited !== undefined ? practice.audited : true, // Default to true
 			requirements: practice.requirements || [],
 			benefits: practice.benefits || [],
 			level: practice.level || 0,
