@@ -12,12 +12,12 @@ describe('GraphNode', () => {
 			expect(getByText('Continuous Integration')).toBeInTheDocument()
 		})
 
-		it('applies background color based on category', () => {
+		it('applies background color class based on category', () => {
 			const practice = buildPractice({ category: 'automation' })
 			const { getByTestId } = render(GraphNode, { props: { practice } })
 
 			const node = getByTestId('graph-node')
-			expect(node.style.backgroundColor).toBe('rgb(255, 255, 204)') // #ffffcc (primary yellow with 80% white)
+			expect(node.classList.contains('bg-category-automation')).toBe(true)
 		})
 
 		it('renders as a button element', () => {

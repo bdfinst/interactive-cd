@@ -1,6 +1,5 @@
 <script>
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
-	import { CATEGORY_COLORS } from '$lib/constants/colors.js'
 
 	/**
 	 * GraphNode Component
@@ -20,39 +19,21 @@
 	// Dev mode audit indicator visibility
 	const showAuditIndicator = $derived(shouldShowAuditIndicators() && practice.audited === false)
 
-	/**
-	 * Calculate color intensity based on total dependency count
-	 * Higher dependency count = more saturated/darker color
-	 */
-	const calculateColorIntensity = (baseColor, totalDeps) => {
-		if (!totalDeps || totalDeps === 0) return baseColor
-
-		// Parse hex color
-		const hex = baseColor.replace('#', '')
-		const r = parseInt(hex.substr(0, 2), 16)
-		const g = parseInt(hex.substr(2, 2), 16)
-		const b = parseInt(hex.substr(4, 2), 16)
-
-		// Calculate intensity factor (0.5 to 1.0)
-		// Max out at 50 dependencies for reasonable saturation
-		const maxDeps = 50
-		const factor = 1 - Math.min(totalDeps / maxDeps, 0.5)
-
-		// Darken by moving toward middle intensity
-		const newR = Math.floor(r * factor + r * (1 - factor) * 0.7)
-		const newG = Math.floor(g * factor + g * (1 - factor) * 0.7)
-		const newB = Math.floor(b * factor + b * (1 - factor) * 0.7)
-
-		return `rgb(${newR}, ${newG}, ${newB})`
-	}
-
-	const bgColor = $derived.by(() => {
-		const baseColor = CATEGORY_COLORS[practice.category] || '#ffffff'
-		// Only apply intensity in collapsed view (not expanded tree view)
-		if (!isTreeExpanded && practice.totalDependencyCount) {
-			return calculateColorIntensity(baseColor, practice.totalDependencyCount)
+	// Determine background color class based on category
+	// Colors defined in app.css @theme directive
+	const bgClass = $derived.by(() => {
+		switch (practice.category) {
+			case 'automation':
+				return 'bg-category-automation'
+			case 'behavior':
+				return 'bg-category-behavior'
+			case 'behavior-enabled-automation':
+				return 'bg-category-behavior-enabled'
+			case 'core':
+				return 'bg-category-core'
+			default:
+				return 'bg-white'
 		}
-		return baseColor
 	})
 
 	const borderClass = $derived(
@@ -75,10 +56,9 @@
 </script>
 
 <button
-	class="block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
+	class="block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
 		? 'p-1.5'
 		: 'p-4'}"
-	style="background-color: {bgColor};"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}

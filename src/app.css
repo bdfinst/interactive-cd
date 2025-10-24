@@ -13,17 +13,17 @@
 	--text-title-lg: 2.7rem;
 
 	/* Practice category colors - for bg-category-{name} utilities */
-	/* Primary yellow (255,255,0) with 80% white = RGB(255, 255, 204) */
-	--color-category-automation: #ffffcc;
+	/* Pale yellow with 30% white mixed in = RGB(255, 255, 219) */
+	--color-category-automation: rgba(255, 255, 219, 1);
 
-	/* Primary blue (0,0,255) with 80% white = RGB(204, 204, 255) */
-	--color-category-behavior: #ccccff;
+	/* Light cyan blue with 30% white mixed in = RGB(79, 210, 253) */
+	--color-category-behavior: rgba(79, 210, 253, 1);
 
-	/* Green pastel for behavior-enabled automation */
-	--color-category-behavior-enabled: #d7f8d7;
+	/* Light turquoise with 30% white mixed in = RGB(166, 255, 233) */
+	--color-category-behavior-enabled: rgba(166, 255, 233, 1);
 
-	/* Light purple for core practice */
-	--color-category-core: #e9d5ff;
+	/* Very light gray with 30% white mixed in = RGB(248, 248, 248) */
+	--color-category-core: rgba(248, 248, 248, 1);
 }
 
 @layer base {
@@ -34,7 +34,7 @@
 	}
 
 	body {
-		@apply m-0 p-0 bg-gray-800 text-gray-300;
+		@apply m-0 p-0 bg-black text-gray-300;
 	}
 }
 

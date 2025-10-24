@@ -2,7 +2,6 @@
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
-	import { CATEGORY_METADATA } from '$lib/constants/colors.js'
 
 	/**
 	 * CategoryLegend Component
@@ -11,8 +10,41 @@
 	 * Floats below the header using fixed positioning
 	 */
 
-	// Filter out 'core' category as it's not shown in the legend
-	const categories = CATEGORY_METADATA.filter(cat => cat.key !== 'core')
+	// Category definitions (excluding 'core' which isn't shown in legend)
+	// Colors defined in app.css @theme directive
+	const categories = [
+		{
+			name: 'Automation',
+			key: 'automation',
+			description: 'Tools and automation platforms'
+		},
+		{
+			name: 'Behavior',
+			key: 'behavior',
+			description: 'Team behaviors and processes'
+		},
+		{
+			name: 'Behavior Enabled',
+			key: 'behavior-enabled-automation',
+			description: 'Automation that depends on behavioral practices'
+		}
+	]
+
+	// Get Tailwind background class for a category key
+	const getCategoryBgClass = key => {
+		switch (key) {
+			case 'automation':
+				return 'bg-category-automation'
+			case 'behavior':
+				return 'bg-category-behavior'
+			case 'behavior-enabled-automation':
+				return 'bg-category-behavior-enabled'
+			case 'core':
+				return 'bg-category-core'
+			default:
+				return 'bg-white'
+		}
+	}
 
 	// Track which tooltip is showing
 	let showTooltip = $state({})
@@ -45,7 +77,7 @@
 
 <div
 	bind:this={legendElement}
-	class="fixed left-0 right-0 bg-gray-800 border-b border-gray-700 shadow-md z-[999] py-2"
+	class="fixed left-0 right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2"
 	style="top: {$headerHeight}px;"
 	data-testid="category-legend"
 >
@@ -74,7 +106,9 @@
 				{#each categories as category, index}
 					<div class="relative inline-flex">
 						<div
-							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help {category.bgClass}"
+							class="px-2 py-0.5 rounded-sm border border-gray-300 shadow-sm cursor-help {getCategoryBgClass(
+								category.key
+							)}"
 							data-testid="legend-item"
 							onmouseenter={() => handleMouseEnter(index)}
 							onmouseleave={() => handleMouseLeave(index)}

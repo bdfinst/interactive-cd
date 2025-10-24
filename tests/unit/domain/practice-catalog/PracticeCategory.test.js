@@ -35,13 +35,6 @@ describe('PracticeCategory', () => {
 			expect(uniqueNames.size).toBe(4)
 		})
 
-		it('each category has a color', () => {
-			expect(PracticeCategory.AUTOMATION.color).toBeDefined()
-			expect(PracticeCategory.BEHAVIOR.color).toBeDefined()
-			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.color).toBeDefined()
-			expect(PracticeCategory.CORE.color).toBeDefined()
-		})
-
 		it('all static instances are properly frozen', () => {
 			expect(Object.isFrozen(PracticeCategory.AUTOMATION)).toBe(true)
 			expect(Object.isFrozen(PracticeCategory.BEHAVIOR)).toBe(true)
@@ -127,24 +120,6 @@ describe('PracticeCategory', () => {
 
 		it('returns "core" for CORE', () => {
 			expect(PracticeCategory.CORE.toString()).toBe('core')
-		})
-	})
-
-	describe('color property', () => {
-		it('AUTOMATION has yellow color #ffffcc (primary yellow with 80% white)', () => {
-			expect(PracticeCategory.AUTOMATION.color).toBe('#ffffcc')
-		})
-
-		it('BEHAVIOR has blue color #ccccff (primary blue with 80% white)', () => {
-			expect(PracticeCategory.BEHAVIOR.color).toBe('#ccccff')
-		})
-
-		it('BEHAVIOR_ENABLED_AUTOMATION has green color #d7f8d7', () => {
-			expect(PracticeCategory.BEHAVIOR_ENABLED_AUTOMATION.color).toBe('#d7f8d7')
-		})
-
-		it('CORE has light purple color #e9d5ff', () => {
-			expect(PracticeCategory.CORE.color).toBe('#e9d5ff')
 		})
 	})
 
