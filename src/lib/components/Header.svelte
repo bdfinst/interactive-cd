@@ -1,8 +1,11 @@
 <script>
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { version } from '../../../package.json'
+	import Fa from 'svelte-fa'
+	import { faBug, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 	let showGithubTooltip = $state(false)
+	let showBugTooltip = $state(false)
 	let showHelpTooltip = $state(false)
 	let showMinimumCDTooltip = $state(false)
 	let showSupportTooltip = $state(false)
@@ -116,6 +119,28 @@
 					{/if}
 				</div>
 
+				<!-- Bug Report Link -->
+				<div class="relative inline-flex">
+					<a
+						href="https://github.com/bdfinst/interactive-cd/issues"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="Report a bug or request a feature"
+						onmouseenter={() => (showBugTooltip = true)}
+						onmouseleave={() => (showBugTooltip = false)}
+					>
+						<Fa icon={faBug} size="1.5x" />
+					</a>
+					{#if showBugTooltip}
+						<div
+							class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
+						>
+							Report Bug / Request Feature
+						</div>
+					{/if}
+				</div>
+
 				<!-- MinimumCD Logo -->
 				<div class="relative inline-flex">
 					<a
@@ -173,20 +198,7 @@
 						onmouseenter={() => (showHelpTooltip = true)}
 						onmouseleave={() => (showHelpTooltip = false)}
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6 sm:w-7 md:w-7"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-							/>
-						</svg>
+						<Fa icon={faCircleInfo} size="1.5x" />
 					</a>
 					{#if showHelpTooltip}
 						<div
@@ -257,6 +269,19 @@
 					</a>
 				</div>
 
+				<!-- Bug Report Link -->
+				<div class="relative inline-flex">
+					<a
+						href="https://github.com/bdfinst/interactive-cd/issues"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						aria-label="Report a bug or request a feature"
+					>
+						<Fa icon={faBug} size="lg" />
+					</a>
+				</div>
+
 				<!-- MinimumCD Logo -->
 				<div class="relative inline-flex">
 					<a
@@ -290,20 +315,7 @@
 						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 						aria-label="View help and capabilities"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-							/>
-						</svg>
+						<Fa icon={faCircleInfo} size="lg" />
 					</a>
 				</div>
 			</div>

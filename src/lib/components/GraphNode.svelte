@@ -1,5 +1,8 @@
 <script>
 	import Button from '$lib/components/Button.svelte'
+	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
+	import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+	import Fa from 'svelte-fa'
 
 	/**
 	 * GraphNode Component
@@ -45,15 +48,15 @@
 
 	function handleClick() {
 		onclick({ practiceId: practice.id })
-		// Auto-expand dependencies when selecting a practice
-		if (practice.dependencyCount > 0 && !isRoot) {
+		// Auto-expand dependencies when selecting a NON-ROOT practice with dependencies
+		if (!isRoot && practice.dependencyCount > 0 && onexpand) {
 			onexpand({ practiceId: practice.id })
 		}
 	}
 </script>
 
 <button
-	class="block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
+	class="relative block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
 		? 'p-1.5'
 		: 'p-4'}"
 	data-testid="graph-node"
@@ -61,6 +64,13 @@
 	data-selected={isSelected}
 	onclick={handleClick}
 >
+	<!-- External link icon in upper right corner (unselected view only) -->
+	{#if !isSelected && practice.quickStartGuide}
+		<div class="absolute top-3 right-3 text-blue-600">
+			<Fa icon={faExternalLinkAlt} size="sm" />
+		</div>
+	{/if}
+
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
 		<h3 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900">
@@ -80,18 +90,13 @@
 				<h4 class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-blue-700">
 					Requirements
 				</h4>
-				<ul
-					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
-						? 'text-[0.45rem]'
-						: 'text-xs'} text-gray-700 list-none"
-				>
-					{#each practice.requirements as requirement (requirement)}
-						<li class="flex items-start {compact ? 'gap-1' : 'gap-2'}">
-							<span class="flex-shrink-0 text-gray-400">•</span>
-							<span class="flex-1">{requirement}</span>
-						</li>
-					{/each}
-				</ul>
+				<ListWithIcons
+					items={practice.requirements}
+					icon="•"
+					iconColor="text-gray-400"
+					{compact}
+					textSize={compact ? 'text-[0.45rem]' : 'text-xs'}
+				/>
 			</div>
 		{/if}
 
@@ -103,18 +108,13 @@
 				>
 					Benefits
 				</h4>
-				<ul
-					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
-						? 'text-[0.45rem]'
-						: 'text-xs'} text-gray-700 list-none"
-				>
-					{#each practice.benefits as benefit (benefit)}
-						<li class="flex items-start {compact ? 'gap-0.5' : 'gap-2'}">
-							<span class="flex-shrink-0 text-green-600">→</span>
-							<span>{benefit}</span>
-						</li>
-					{/each}
-				</ul>
+				<ListWithIcons
+					items={practice.benefits}
+					icon="→"
+					iconColor="text-green-600"
+					{compact}
+					textSize={compact ? 'text-[0.45rem]' : 'text-xs'}
+				/>
 			</div>
 		{/if}
 
@@ -132,47 +132,13 @@
 				>
 					<span>📚</span>
 					<span>More Info</span>
-					<svg
-						class="w-4 h-4"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-						/>
-					</svg>
+					<Fa icon={faExternalLinkAlt} />
 				</Button>
 			</div>
 		{/if}
 	{:else}
 		<!-- Unselected view -->
 		<div class="flex flex-col gap-2">
-			<!-- External link icon for quickstart guide -->
-			{#if practice.quickStartGuide}
-				<div class="text-center {compact ? 'mt-1' : 'mt-2'}">
-					<svg
-						class="{compact ? 'w-4 h-4' : 'w-5 h-5'} mx-auto text-blue-600"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						aria-hidden="true"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-						/>
-					</svg>
-				</div>
-			{/if}
-
 			<!-- Show dependency count only in collapsed view -->
 			{#if !isTreeExpanded && practice.dependencyCount > 0}
 				<div

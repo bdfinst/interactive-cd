@@ -160,7 +160,7 @@ describe('GraphNode', () => {
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
 			const { getByTestId } = render(GraphNode, {
-				props: { practice, onclick: handleClick, onexpand: handleExpand }
+				props: { practice, isRoot: false, onclick: handleClick, onexpand: handleExpand }
 			})
 
 			await fireEvent.click(getByTestId('graph-node'))
@@ -170,12 +170,12 @@ describe('GraphNode', () => {
 			expect(handleExpand).toHaveBeenCalledWith({ practiceId: practice.id })
 		})
 
-		it('does not auto-expand when practice has no dependencies', async () => {
-			const practice = buildMinimalPractice()
+		it('does not auto-expand when practice is root', async () => {
+			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
 			const { getByTestId } = render(GraphNode, {
-				props: { practice, onclick: handleClick, onexpand: handleExpand }
+				props: { practice, isRoot: true, onclick: handleClick, onexpand: handleExpand }
 			})
 
 			await fireEvent.click(getByTestId('graph-node'))
@@ -184,12 +184,12 @@ describe('GraphNode', () => {
 			expect(handleExpand).not.toHaveBeenCalled()
 		})
 
-		it('does not auto-expand when practice is root', async () => {
-			const practice = buildPractice({ dependencyCount: 3 })
+		it('does not auto-expand when practice has no dependencies', async () => {
+			const practice = buildMinimalPractice()
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
 			const { getByTestId } = render(GraphNode, {
-				props: { practice, isRoot: true, onclick: handleClick, onexpand: handleExpand }
+				props: { practice, isRoot: false, onclick: handleClick, onexpand: handleExpand }
 			})
 
 			await fireEvent.click(getByTestId('graph-node'))

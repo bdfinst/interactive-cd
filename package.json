@@ -71,5 +71,11 @@
 		"tailwindcss": "^4.1.14",
 		"vite": "^7.1.10",
 		"vitest": "^3.2.4"
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^7.1.0",
+		"@fortawesome/free-brands-svg-icons": "^7.1.0",
+		"@fortawesome/free-solid-svg-icons": "^7.1.0",
+		"svelte-fa": "^4.0.4"
 	}
 }

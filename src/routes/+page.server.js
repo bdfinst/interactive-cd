@@ -40,7 +40,8 @@ export async function load() {
 		benefitCount: rootPractice.benefits?.length || 0,
 		dependencyCount: rootDirectCount,
 		directDependencyCount: rootDirectCount,
-		totalDependencyCount: rootTotalCount
+		totalDependencyCount: rootTotalCount,
+		quickStartGuide: rootPractice.quickStartGuide
 	}
 
 	// Format dependency practices for card display
@@ -65,7 +66,8 @@ export async function load() {
 				benefitCount: practice.benefits?.length || 0,
 				dependencyCount: directCount,
 				directDependencyCount: directCount,
-				totalDependencyCount: totalCount
+				totalDependencyCount: totalCount,
+				quickStartGuide: practice.quickStartGuide
 			}
 		})
 	)

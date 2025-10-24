@@ -17,6 +17,7 @@
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { onMount, tick } from 'svelte'
 	import GraphNode from './GraphNode.svelte'
+	import LoadingSpinner from './LoadingSpinner.svelte'
 
 	// Accept initial server data
 	const { initialData = null } = $props()
@@ -45,7 +46,7 @@
 			const practices = initialData.initialPractices
 			currentPractice = practices[0] // First is always the root/current
 			dependencies = practices.slice(1) // Rest are dependencies
-			selectedNodeId = currentPractice.id
+			selectedNodeId = currentPractice.id // Auto-select the root practice
 		} else {
 			await loadCurrentView()
 		}
@@ -105,8 +106,7 @@
 				currentPractice = result.data[0] // First is always the root/current
 				dependencies = result.data.slice(1) // Rest are dependencies
 
-				// Auto-select the current practice (root should always be selected)
-				selectedNodeId = currentPractice.id
+				selectedNodeId = currentPractice.id // Auto-select the current practice
 
 				// Load ALL ancestors if not at root
 				ancestorPractices = []
@@ -358,15 +358,7 @@
 	aria-label="Practice dependency graph"
 >
 	{#if loading}
-		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
-			<div class="text-center">
-				<div
-					class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"
-					aria-hidden="true"
-				></div>
-				<p class="text-gray-300">Loading dependencies...</p>
-			</div>
-		</div>
+		<LoadingSpinner />
 	{:else if $isFullTreeExpanded}
 		<!-- SVG Layer for Tree Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
