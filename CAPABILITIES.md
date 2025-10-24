@@ -1,6 +1,6 @@
 # Interactive CD - Capabilities & Roadmap
 
-## Current Capabilities
+## Current Capabilities (v1.0.0)
 
 ### Visualization & Navigation
 
@@ -11,12 +11,13 @@
   - Practice name and description
   - Requirements for implementation
   - Benefits of adoption
-  - Dependency count
-- **Category-Based Styling**: Color-coded practices by category
-- **Quick-Start Guides**: Direct links to minimumcd.org implementation guides for selected practices
+  - Direct and total dependency counts
+- **Category-Based Styling**: Color-coded practices by category (Automation, Behavior, Behavior-Enabled Automation)
+- **Quick-Start Guides**: Direct links to minimumcd.org implementation guides for all practices
 - **Category Legend**: Visual guide showing practice category colors and meanings
+- **Responsive Design**: Mobile-first layout that works across all device sizes
 
-## Pending Work & Known Issues
+## Future Enhancements
 
 ### High Priority
 
