@@ -15,7 +15,6 @@
 	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
-	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
 	import { onMount, tick } from 'svelte'
 	import GraphNode from './GraphNode.svelte'
 
@@ -230,17 +229,13 @@
 				const childX = childRect.left - containerRect.left + childRect.width / 2
 				const childY = childRect.top - containerRect.top
 
-				// Check if dependency is audited (for dev mode red lines)
-				const isUnaudited = dep.audited === false
-
 				treeConnections.push({
 					x1: parentX,
 					y1: parentY,
 					x2: childX,
 					y2: childY,
 					type: 'tree',
-					highlighted: isSelected,
-					unaudited: isUnaudited
+					highlighted: isSelected
 				})
 			})
 		})
@@ -272,8 +267,7 @@
 						y1,
 						x2,
 						y2,
-						type: 'ancestor', // Solid line
-						unaudited: false // Ancestor connections are not treated as unaudited
+						type: 'ancestor' // Solid line
 					})
 				}
 			}
@@ -296,8 +290,7 @@
 					y1: ancestorY,
 					x2: currentX,
 					y2: currentY,
-					type: 'ancestor', // Solid line
-					unaudited: false // Ancestor connections are not treated as unaudited
+					type: 'ancestor' // Solid line
 				})
 			}
 		}
@@ -318,16 +311,12 @@
 					// Check if this dependency is selected
 					const isSelected = dependencies[index] && selectedNodeId === dependencies[index].id
 
-					// Check if dependency is audited (for dev mode red lines)
-					const isUnaudited = dependencies[index] && dependencies[index].audited === false
-
 					connections.push({
 						x1: currentX,
 						y1: currentY,
 						x2: depX,
 						y2: depY,
-						type: isSelected ? 'selected' : 'dependency', // Solid if selected, dashed otherwise
-						unaudited: isUnaudited
+						type: isSelected ? 'selected' : 'dependency' // Solid if selected, dashed otherwise
 					})
 				})
 		}
@@ -382,17 +371,14 @@
 		<!-- SVG Layer for Tree Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each treeConnections as conn}
-				{@const showDevIndicators = shouldShowAuditIndicators()}
-				{@const isUnaudited = showDevIndicators && conn.unaudited}
-				{@const strokeColor = isUnaudited ? '#ef4444' : conn.highlighted ? '#eab308' : '#93c5fd'}
-				{@const fillColor = isUnaudited ? '#ef4444' : conn.highlighted ? '#eab308' : '#93c5fd'}
+				{@const strokeColor = conn.highlighted ? '#eab308' : '#93c5fd'}
+				{@const fillColor = conn.highlighted ? '#eab308' : '#93c5fd'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
 					stroke={strokeColor}
 					stroke-width={conn.highlighted ? '3' : '2'}
-					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.7'}
+					opacity={conn.highlighted ? '1' : '0.7'}
 					fill="none"
-					data-audited={isUnaudited ? 'false' : 'true'}
 				/>
 				<!-- Start point (parent) -->
 				<circle
@@ -400,7 +386,7 @@
 					cy={conn.y1}
 					r={conn.highlighted ? '7' : '6'}
 					fill={fillColor}
-					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.8'}
+					opacity={conn.highlighted ? '1' : '0.8'}
 				/>
 				<!-- End point (child) -->
 				<circle
@@ -408,7 +394,7 @@
 					cy={conn.y2}
 					r={conn.highlighted ? '7' : '6'}
 					fill={fillColor}
-					opacity={isUnaudited ? '0.9' : conn.highlighted ? '1' : '0.8'}
+					opacity={conn.highlighted ? '1' : '0.8'}
 				/>
 			{/each}
 		</svg>
@@ -457,39 +443,18 @@
 		<!-- SVG Layer for Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each connections as conn}
-				{@const showDevIndicators = shouldShowAuditIndicators()}
-				{@const isUnaudited = showDevIndicators && conn.unaudited}
-				{@const strokeColor = isUnaudited ? '#ef4444' : '#93c5fd'}
-				{@const fillColor = isUnaudited ? '#ef4444' : '#93c5fd'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke={strokeColor}
+					stroke="#93c5fd"
 					stroke-width="2"
 					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
-					opacity={isUnaudited
-						? '0.9'
-						: conn.type === 'ancestor' || conn.type === 'selected'
-							? '0.9'
-							: '0.7'}
+					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '0.9' : '0.7'}
 					fill="none"
-					data-audited={isUnaudited ? 'false' : 'true'}
 				/>
 				<!-- Start point (parent) -->
-				<circle
-					cx={conn.x1}
-					cy={conn.y1}
-					r="6"
-					fill={fillColor}
-					opacity={isUnaudited ? '0.9' : '0.8'}
-				/>
+				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
 				<!-- End point (child) -->
-				<circle
-					cx={conn.x2}
-					cy={conn.y2}
-					r="6"
-					fill={fillColor}
-					opacity={isUnaudited ? '0.9' : '0.8'}
-				/>
+				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
 			{/each}
 		</svg>
 
