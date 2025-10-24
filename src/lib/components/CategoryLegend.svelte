@@ -1,7 +1,8 @@
 <script>
+	import Button from '$lib/components/Button.svelte'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
-	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 
 	/**
 	 * CategoryLegend Component
@@ -24,7 +25,7 @@
 			description: 'Team behaviors and processes'
 		},
 		{
-			name: 'Behavior Enabled',
+			name: 'Automation & Behavior',
 			key: 'behavior-enabled-automation',
 			description: 'Automation that depends on behavioral practices'
 		}
@@ -86,18 +87,17 @@
 			<!-- Left: Expand Button -->
 			<div class="flex justify-start">
 				{#if $expandButtonRenderer}
-					<button
+					<Button
 						onclick={$expandButtonRenderer.toggleFullTree}
-						class="px-3 py-1.5 rounded-lg font-semibold text-sm border-2 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$expandButtonRenderer.isExpanded
-							? 'bg-gray-600 text-white border-gray-600 hover:bg-gray-700 focus:ring-gray-500'
-							: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-500'}"
+						variant={$expandButtonRenderer.isExpanded ? 'gray' : 'primary'}
+						size="md"
 						data-testid="toggle-full-tree"
 						aria-label={$expandButtonRenderer.isExpanded
 							? 'Collapse tree view'
 							: 'Expand tree view'}
 					>
 						{$expandButtonRenderer.isExpanded ? 'Collapse' : 'Expand'}
-					</button>
+					</Button>
 				{/if}
 			</div>
 

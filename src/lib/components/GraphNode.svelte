@@ -1,5 +1,6 @@
 <script>
 	import { shouldShowAuditIndicators } from '$lib/utils/devMode.js'
+	import Button from '$lib/components/Button.svelte'
 
 	/**
 	 * GraphNode Component
@@ -139,12 +140,13 @@
 		<!-- Quick-Start Guide Link -->
 		{#if practice.quickStartGuide}
 			<div class="mt-3 pt-3 border-t border-gray-200">
-				<a
+				<Button
 					href={practice.quickStartGuide}
+					variant="primary"
+					size="md"
+					data-testid="quick-start-guide-link"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-					data-testid="quick-start-guide-link"
 					onclick={e => e.stopPropagation()}
 				>
 					<span>📚</span>
@@ -163,27 +165,51 @@
 							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
 						/>
 					</svg>
-				</a>
+				</Button>
 			</div>
 		{/if}
 	{:else}
-		<!-- Show dependency count only in collapsed view -->
-		{#if !isTreeExpanded && practice.dependencyCount > 0}
-			<div
-				class="text-center {compact
-					? 'mt-1 pt-1 text-[0.45rem]'
-					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
-			>
-				{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
-					<!-- Collapsed view: show both direct and total -->
-					<div class="font-semibold">{practice.directDependencyCount} direct</div>
-					<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
-				{:else}
-					<!-- Fallback: show only dependency count -->
-					{practice.dependencyCount}
-					{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
-				{/if}
-			</div>
-		{/if}
+		<!-- Unselected view -->
+		<div class="flex flex-col gap-2">
+			<!-- External link icon for quickstart guide -->
+			{#if practice.quickStartGuide}
+				<div class="text-center {compact ? 'mt-1' : 'mt-2'}">
+					<svg
+						class="{compact ? 'w-4 h-4' : 'w-5 h-5'} mx-auto text-blue-600"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+						/>
+					</svg>
+				</div>
+			{/if}
+
+			<!-- Show dependency count only in collapsed view -->
+			{#if !isTreeExpanded && practice.dependencyCount > 0}
+				<div
+					class="text-center {compact
+						? 'mt-1 pt-1 text-[0.45rem]'
+						: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
+				>
+					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
+						<!-- Collapsed view: show both direct and total -->
+						<div class="font-semibold">{practice.directDependencyCount} direct</div>
+						<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
+					{:else}
+						<!-- Fallback: show only dependency count -->
+						{practice.dependencyCount}
+						{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+					{/if}
+				</div>
+			{/if}
+		</div>
 	{/if}
 </button>
