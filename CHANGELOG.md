@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.1...interactive-cd-v1.2.0) (2025-10-25)
+
+
+### Features
+
+* ad link buttons to expanded view ([dcaaa90](https://github.com/bdfinst/interactive-cd/commit/dcaaa90ca2c27a9ca6be023a1e5726060ac87ac2))
+* add connection calculator and memoize utilities (Sprint 2) ([21a4afa](https://github.com/bdfinst/interactive-cd/commit/21a4afae5b59c75c3e4216636e9243dccb30802d))
+
+
+### Bug Fixes
+
+* center the cards in the expanded view ([0bdd3cc](https://github.com/bdfinst/interactive-cd/commit/0bdd3ccca52e63aed3196223c335b69592f21af6))
+* switch back to ko-fi ([3d791f5](https://github.com/bdfinst/interactive-cd/commit/3d791f53843767a22409e7640a2d075d9c03b391))
+
 ## [1.1.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.0...interactive-cd-v1.1.1) (2025-10-25)
 
 
