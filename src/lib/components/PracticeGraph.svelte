@@ -422,45 +422,23 @@
 						<!-- Unselected cards in horizontal grid -->
 						{#each [groupedByLevel[level].filter(p => selectedNodeId !== p.id)] as unselectedPractices}
 							{#if unselectedPractices.length > 0}
-								<div class="flex justify-center">
-									<div
-										class="grid gap-x-4 gap-y-4 max-w-screen-xl grid-cols-12 justify-items-center"
-										style="width: fit-content;"
-									>
-										{#each unselectedPractices as practice (practice.id)}
-											{@const isSingleItem = unselectedPractices.length === 1}
-											<div
-												bind:this={treeNodeRefs[practice.id]}
-												class={isSingleItem
-													? 'col-span-12 flex justify-center'
-													: 'col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2 w-full min-w-[120px] max-w-[150px] min-h-[80px]'}
-											>
-												{#if isSingleItem}
-													<div class="w-full min-w-[120px] max-w-[150px] min-h-[80px]">
-														<GraphNode
-															{practice}
-															isRoot={practice.level === 0}
-															isSelected={false}
-															isTreeExpanded={$isFullTreeExpanded}
-															onclick={() => selectNode(practice.id)}
-															onexpand={null}
-															compact={true}
-														/>
-													</div>
-												{:else}
-													<GraphNode
-														{practice}
-														isRoot={practice.level === 0}
-														isSelected={false}
-														isTreeExpanded={$isFullTreeExpanded}
-														onclick={() => selectNode(practice.id)}
-														onexpand={null}
-														compact={true}
-													/>
-												{/if}
-											</div>
-										{/each}
-									</div>
+								<div class="flex flex-wrap justify-center gap-x-4 gap-y-4 max-w-screen-xl">
+									{#each unselectedPractices as practice (practice.id)}
+										<div
+											bind:this={treeNodeRefs[practice.id]}
+											class="w-full min-w-[120px] max-w-[150px] min-h-[80px]"
+										>
+											<GraphNode
+												{practice}
+												isRoot={practice.level === 0}
+												isSelected={false}
+												isTreeExpanded={$isFullTreeExpanded}
+												onclick={() => selectNode(practice.id)}
+												onexpand={null}
+												compact={true}
+											/>
+										</div>
+									{/each}
 								</div>
 							{/if}
 						{/each}
