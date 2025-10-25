@@ -1,8 +1,8 @@
 <script>
 	import { headerHeight } from '$lib/stores/headerHeight.js'
-	import { version } from '../../../package.json'
-	import Fa from 'svelte-fa'
 	import { faBug, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+	import Fa from 'svelte-fa'
+	import { version } from '../../../package.json'
 
 	let showGithubTooltip = $state(false)
 	let showBugTooltip = $state(false)
@@ -298,7 +298,7 @@
 				<!-- Ko-fi Button -->
 				<div class="relative inline-flex">
 					<a
-						href="https://buymeacoffee.com/sadmf"
+						href="https://Ko-fi.com/bryanfinster"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl leading-none hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
