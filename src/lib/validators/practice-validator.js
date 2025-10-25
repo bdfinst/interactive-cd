@@ -55,6 +55,14 @@ export const isValidRequirements = requirements => {
 	if (!Array.isArray(requirements)) return false
 	if (requirements.length === 0) return false // Empty array is invalid
 
+	// Protect against prototype pollution - verify array methods are available
+	if (typeof requirements.every !== 'function') return false
+
+	// Check for sparse arrays - all indices must have values (no undefined)
+	for (let i = 0; i < requirements.length; i++) {
+		if (requirements[i] === undefined) return false
+	}
+
 	// All items must be non-empty strings
 	return requirements.every(
 		req => typeof req === 'string' && req.trim() !== '' && req.length >= 3 && req.length <= 500
@@ -65,6 +73,14 @@ export const isValidRequirements = requirements => {
 export const isValidBenefits = benefits => {
 	if (!Array.isArray(benefits)) return false
 	if (benefits.length === 0) return false // Empty array is invalid
+
+	// Protect against prototype pollution - verify array methods are available
+	if (typeof benefits.every !== 'function') return false
+
+	// Check for sparse arrays - all indices must have values (no undefined)
+	for (let i = 0; i < benefits.length; i++) {
+		if (benefits[i] === undefined) return false
+	}
 
 	// All items must be non-empty strings
 	return benefits.every(

@@ -1,10 +1,10 @@
 # Interactive CD - Capabilities & Roadmap
 
-## Current Capabilities (v1.0.0)
+## Current Capabilities (v1.1.1)
 
 ### Visualization & Navigation
 
-- **Interactive Dependency Graph**: Explore Continuous Delivery practices and their dependencies
+- **Interactive Dependency Graph**: Explore Continuous Delivery practices and their dependencies with visual connection lines
 - **Auto-Expand on Selection**: Click any practice to automatically view its dependencies
 - **Full Tree View**: Expand/collapse entire dependency tree with single button
 - **Dynamic Practice Cards**: View detailed information about each practice including:
@@ -12,36 +12,41 @@
   - Requirements for implementation
   - Benefits of adoption
   - Direct and total dependency counts
-- **Category-Based Styling**: Color-coded practices by category (Automation, Behavior, Behavior-Enabled Automation)
-- **Quick-Start Guides**: Direct links to minimumcd.org implementation guides for all practices
+- **Category-Based Styling**: Color-coded practices by category (Automation, Behavior, Behavior-Enabled Automation, Core)
+- **More Info Links**: Direct links to MinimumCD.org implementation guides (where available)
 - **Category Legend**: Visual guide showing practice category colors and meanings
 - **Responsive Design**: Mobile-first layout that works across all device sizes
+
+### User Interface
+
+- **Fixed Header**: Logo, title, and quick access links always visible
+- **Version Badge**: Current version displayed with link to help page
+- **GitHub Integration**: Direct links to repository and issue reporting
+- **Loading States**: Visual feedback while content loads
+- **Tooltips**: Helpful context on hover for navigation elements
+- **Accessibility**: Screen reader support, keyboard navigation, ARIA labels, skip links
 
 ## Future Enhancements
 
 ### High Priority
 
-- [ ] **Search/Filter Functionality**: Add ability to search practices by name or category
-- [ ] **Practice Detail Page**: Dedicated route for each practice with full information
-- [ ] **Back Button**: Navigate back through previously viewed practices
-- [ ] **URL State Management**: Persist selected practice in URL for sharing
+- [ ] **Search/Filter Functionality**: Search practices by name, category, or keywords
+- [ ] **Practice Detail Page**: Dedicated route (`/practice/{id}`) for each practice with full information
+- [ ] **URL State Management**: Persist selected practice in URL for sharing and bookmarking
+- [ ] **Keyboard Shortcuts**: Quick navigation (arrow keys, Enter to select, Esc to deselect)
 
 ### Medium Priority
 
-- [ ] **Print/Export**: Export dependency graph as image or PDF
-- [ ] **Progress Tracking**: Allow users to mark practices as "implemented" or "in progress"
-- [ ] **Custom Practice Views**: Save and share custom views of the dependency tree
-- [ ] **Practice Notes**: Add personal notes to practices
-- [ ] **Dark Mode**: Add dark theme option
+- [ ] **Print/Export**: Export dependency graph as SVG, PNG, or PDF
+- [ ] **Progress Tracking**: Mark practices as "implemented", "in progress", or "planned"
+- [ ] **Custom Practice Views**: Save and share filtered/customized views of the dependency tree
+- [ ] **Practice Notes**: Add personal notes and links to practices (stored locally)
+- [ ] **Compare Practices**: Side-by-side comparison of multiple practices
 
-### Technical Debt
+### Low Priority / Future Considerations
 
-- [ ] **Performance Optimization**: Virtualize large dependency trees
-- [ ] **Bundle Size**: Optimize JavaScript bundle size
-- [ ] **Caching Strategy**: Implement service worker for offline support
-- [ ] **Error Boundaries**: Add error boundaries for better error handling
-- [ ] **Loading States**: Improve loading state indicators
-- [ ] **Test Coverage**: Add more edge case tests
+- [ ] **Offline Support**: Service worker for offline viewing
+      ]
 
 ## Feedback & Issues
 

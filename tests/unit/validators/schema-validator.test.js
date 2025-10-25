@@ -224,7 +224,7 @@ describe('Schema Validation (Integration)', () => {
 	})
 
 	describe('validateSchema', () => {
-		it.skip('returns success for completely valid schema', () => {
+		it('returns success for completely valid schema', () => {
 			const result = validateSchema(validSchema)
 
 			expect(result.isValid).toBe(true)
@@ -295,7 +295,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.errors.dependencies).toBeDefined()
 		})
 
-		it.skip('detects circular dependencies', () => {
+		it('detects circular dependencies', () => {
 			const schema = {
 				practices: [
 					{ ...validPractice, id: 'practice-a' },
@@ -312,7 +312,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.errors.circularDependencies || result.warnings).toBeDefined()
 		})
 
-		it.skip('detects duplicate practice IDs', () => {
+		it('detects duplicate practice IDs', () => {
 			const schema = {
 				practices: practicesWithDuplicateIds,
 				dependencies: [],
@@ -325,7 +325,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.errors.duplicatePractices).toBeDefined()
 		})
 
-		it.skip('validates at least one root practice exists', () => {
+		it('validates at least one root practice exists', () => {
 			const schema = {
 				practices: [validPractice], // No root practice
 				dependencies: [],
@@ -355,7 +355,7 @@ describe('Schema Validation (Integration)', () => {
 	})
 
 	describe('validateFullSchema', () => {
-		it.skip('performs complete validation including all checks', () => {
+		it('performs complete validation including all checks', () => {
 			const result = validateFullSchema(validSchema)
 
 			expect(result.isValid).toBe(true)
@@ -364,7 +364,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.summary.totalDependencies).toBeGreaterThanOrEqual(0)
 		})
 
-		it.skip('returns summary of validation results', () => {
+		it('returns summary of validation results', () => {
 			const result = validateFullSchema(validSchema)
 
 			expect(result.summary).toMatchObject({
@@ -375,7 +375,7 @@ describe('Schema Validation (Integration)', () => {
 			})
 		})
 
-		it.skip('includes all error categories', () => {
+		it('includes all error categories', () => {
 			const invalidSchema = {
 				practices: practicesWithDuplicateIds,
 				dependencies: circularDependencies,
@@ -389,7 +389,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(Array.isArray(result.errorCategories)).toBe(true)
 		})
 
-		it.skip('validates practice type distribution', () => {
+		it('validates practice type distribution', () => {
 			const schema = {
 				practices: [validPractice, validRootPractice],
 				dependencies: [],
@@ -402,7 +402,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.summary.practicesByType).toHaveProperty('root')
 		})
 
-		it.skip('validates category distribution', () => {
+		it('validates category distribution', () => {
 			const result = validateFullSchema(validSchema)
 
 			expect(result.summary.practicesByCategory).toBeDefined()
@@ -412,6 +412,7 @@ describe('Schema Validation (Integration)', () => {
 
 	describe('loadAndValidateSchema', () => {
 		it.skip('loads and validates schema from file path', async () => {
+			// TODO: Implement file loading functionality
 			const filePath = '/Users/bryan/_git/interactive-cd/src/lib/data/cd-practices.json'
 
 			const result = await loadAndValidateSchema(filePath)
@@ -421,13 +422,14 @@ describe('Schema Validation (Integration)', () => {
 		})
 
 		it.skip('returns error for non-existent file', async () => {
+			// TODO: Implement file loading functionality
 			const result = await loadAndValidateSchema('/non/existent/file.json')
 
 			expect(result.isValid).toBe(false)
 			expect(result.errors.file).toBeDefined()
 		})
 
-		it.skip('returns error for invalid JSON', async () => {
+		it('returns error for invalid JSON', async () => {
 			// This would need a test fixture with invalid JSON
 			// For now, just verify the function exists and returns proper structure
 			const result = await loadAndValidateSchema('/invalid/path')
@@ -484,7 +486,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.isValid).toBe(false)
 		})
 
-		it.skip('validates practice requirements are non-empty', () => {
+		it('validates practice requirements are non-empty', () => {
 			const schema = {
 				practices: [{ ...validPractice, requirements: [] }],
 				dependencies: [],
@@ -496,7 +498,7 @@ describe('Schema Validation (Integration)', () => {
 			expect(result.isValid).toBe(false)
 		})
 
-		it.skip('validates practice benefits are non-empty', () => {
+		it('validates practice benefits are non-empty', () => {
 			const schema = {
 				practices: [{ ...validPractice, benefits: [] }],
 				dependencies: [],
@@ -578,9 +580,9 @@ describe('Schema Validation (Integration)', () => {
 			expect(typeof result.isValid).toBe('boolean')
 		})
 
-		it.skip('handles schema with no dependencies', () => {
+		it('handles schema with no dependencies', () => {
 			const schema = {
-				practices: [validPractice],
+				practices: [validRootPractice],
 				dependencies: [],
 				metadata: validMetadata
 			}
@@ -608,6 +610,7 @@ describe('Schema Validation (Integration)', () => {
 
 	describe('real-world validation', () => {
 		it.skip('validates actual cd-practices.json file structure', async () => {
+			// TODO: Implement file loading functionality
 			const filePath = '/Users/bryan/_git/interactive-cd/src/lib/data/cd-practices.json'
 
 			const result = await loadAndValidateSchema(filePath)

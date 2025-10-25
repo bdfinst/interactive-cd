@@ -52,8 +52,8 @@ export const minimalValidPractice = {
 
 // Valid Dependency Examples
 export const validDependency = {
-	practice_id: 'continuous-integration',
-	depends_on_id: 'version-control'
+	practice_id: 'continuous-delivery',
+	depends_on_id: 'continuous-integration'
 }
 
 // Valid Metadata Example

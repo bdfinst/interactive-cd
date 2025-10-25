@@ -12,7 +12,7 @@
  */
 
 import { validatePractices } from './practice-validator.js'
-import { validateDependencies } from './dependency-validator.js'
+import { validateDependencies, findCircularDependencies } from './dependency-validator.js'
 import { validateMetadata } from './metadata-validator.js'
 
 // Pure function: Validate schema structure (top-level fields)
@@ -170,11 +170,13 @@ export const validateSchema = schema => {
 			isValid: false,
 			errors: {
 				structure: structureValidation.errors
-			}
+			},
+			warnings: []
 		}
 	}
 
 	const allErrors = {}
+	const warnings = []
 
 	// Validate practices
 	const practicesValidation = validatePractices(schema.practices)
@@ -182,18 +184,24 @@ export const validateSchema = schema => {
 		allErrors.practices = practicesValidation.errors
 	}
 
-	// Validate unique practice IDs
+	// Validate unique practice IDs - store in dedicated field
 	const idValidation = validatePracticeIds(schema.practices)
 	if (!idValidation.isValid) {
-		if (!allErrors.practices) allErrors.practices = []
-		allErrors.practices.push(...idValidation.errors)
+		allErrors.duplicatePractices = idValidation.errors
 	}
 
-	// Validate root practice
+	// Validate root practice - store in dedicated field
 	const rootValidation = validateRootPractice(schema.practices)
 	if (!rootValidation.isValid) {
-		if (!allErrors.practices) allErrors.practices = []
-		allErrors.practices.push(...rootValidation.errors)
+		allErrors.rootPractice = rootValidation.errors[0] // Single error message
+	}
+
+	// Detect circular dependencies separately
+	const cycles = findCircularDependencies(schema.dependencies || [])
+	if (cycles.length > 0) {
+		allErrors.circularDependencies = cycles.map(
+			cycle => `Circular dependency: ${cycle.join(' -> ')}`
+		)
 	}
 
 	// Validate dependencies (with cross-reference to practices)
@@ -208,9 +216,15 @@ export const validateSchema = schema => {
 		allErrors.metadata = metadataValidation.errors
 	}
 
+	// Check for empty dependencies array (warning, not error)
+	if (schema.dependencies && schema.dependencies.length === 0) {
+		warnings.push('Schema has no dependencies defined')
+	}
+
 	return {
 		isValid: Object.keys(allErrors).length === 0,
-		errors: allErrors
+		errors: allErrors,
+		warnings
 	}
 }
 
@@ -218,16 +232,40 @@ export const validateSchema = schema => {
 export const validateFullSchema = schema => {
 	const validation = validateSchema(schema)
 
-	// Calculate statistics
-	const stats = {
-		practiceCount: schema.practices?.length || 0,
-		dependencyCount: schema.dependencies?.length || 0,
-		errorCount: Object.values(validation.errors).flat().length
+	// Calculate detailed summary statistics
+	const practices = schema.practices || []
+	const dependencies = schema.dependencies || []
+
+	// Count practices by type
+	const practicesByType = practices.reduce((acc, p) => {
+		acc[p.type] = (acc[p.type] || 0) + 1
+		return acc
+	}, {})
+
+	// Count practices by category
+	const practicesByCategory = practices.reduce((acc, p) => {
+		acc[p.category] = (acc[p.category] || 0) + 1
+		return acc
+	}, {})
+
+	const summary = {
+		totalPractices: practices.length,
+		totalDependencies: dependencies.length,
+		practicesByType,
+		practicesByCategory,
+		hasErrors: !validation.isValid,
+		hasWarnings: validation.warnings.length > 0,
+		errorCount: Object.keys(validation.errors).length,
+		warningCount: validation.warnings.length
 	}
+
+	// Extract error categories (keys from errors object)
+	const errorCategories = Object.keys(validation.errors)
 
 	return {
 		...validation,
-		stats
+		summary,
+		errorCategories
 	}
 }
 
@@ -267,6 +305,6 @@ export const formatValidationResults = validationResult => {
 
 // Pure function: Load and validate schema (for use in scripts)
 export const loadAndValidateSchema = schema => {
-	const validation = validateFullSchema(schema)
-	return formatValidationResults(validation)
+	// Return full validation result with isValid, errors, warnings, summary
+	return validateFullSchema(schema)
 }
