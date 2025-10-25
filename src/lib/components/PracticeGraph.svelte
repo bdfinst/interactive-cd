@@ -396,23 +396,14 @@
 			{#if flattenedTree.length > 0}
 				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level (level)}
 					<div class="space-y-4">
-						<!-- Cards at this level in horizontal grid -->
-						<div class="flex justify-center">
-							<div
-								class="grid gap-x-4 gap-y-4 max-w-screen-xl grid-cols-12 justify-items-center"
-								style="width: fit-content;"
-							>
-								{#each groupedByLevel[level] as practice (practice.id)}
-									{@const isSelected = selectedNodeId === practice.id}
-									{@const isSingleItem = groupedByLevel[level].length === 1}
+						<!-- Selected card on its own centered row -->
+						{#each groupedByLevel[level] as practice (practice.id)}
+							{@const isSelected = selectedNodeId === practice.id}
+							{#if isSelected}
+								<div class="flex justify-center">
 									<div
 										bind:this={treeNodeRefs[practice.id]}
-										class={isSingleItem
-											? 'col-span-12'
-											: isSelected
-												? 'col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3'
-												: 'col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2'}
-										style={isSelected ? '' : 'max-width: 150px;'}
+										class="w-full max-w-[482px] min-h-[300px]"
 									>
 										<GraphNode
 											{practice}
@@ -424,9 +415,55 @@
 											compact={true}
 										/>
 									</div>
-								{/each}
-							</div>
-						</div>
+								</div>
+							{/if}
+						{/each}
+
+						<!-- Unselected cards in horizontal grid -->
+						{#each [groupedByLevel[level].filter(p => selectedNodeId !== p.id)] as unselectedPractices}
+							{#if unselectedPractices.length > 0}
+								<div class="flex justify-center">
+									<div
+										class="grid gap-x-4 gap-y-4 max-w-screen-xl grid-cols-12 justify-items-center"
+										style="width: fit-content;"
+									>
+										{#each unselectedPractices as practice (practice.id)}
+											{@const isSingleItem = unselectedPractices.length === 1}
+											<div
+												bind:this={treeNodeRefs[practice.id]}
+												class={isSingleItem
+													? 'col-span-12 flex justify-center'
+													: 'col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2 w-full min-w-[120px] max-w-[150px] min-h-[80px]'}
+											>
+												{#if isSingleItem}
+													<div class="w-full min-w-[120px] max-w-[150px] min-h-[80px]">
+														<GraphNode
+															{practice}
+															isRoot={practice.level === 0}
+															isSelected={false}
+															isTreeExpanded={$isFullTreeExpanded}
+															onclick={() => selectNode(practice.id)}
+															onexpand={null}
+															compact={true}
+														/>
+													</div>
+												{:else}
+													<GraphNode
+														{practice}
+														isRoot={practice.level === 0}
+														isSelected={false}
+														isTreeExpanded={$isFullTreeExpanded}
+														onclick={() => selectNode(practice.id)}
+														onexpand={null}
+														compact={true}
+													/>
+												{/if}
+											</div>
+										{/each}
+									</div>
+								</div>
+							{/if}
+						{/each}
 					</div>
 				{/each}
 			{/if}

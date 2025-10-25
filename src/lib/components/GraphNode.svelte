@@ -56,8 +56,8 @@
 </script>
 
 <button
-	class="relative block w-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
-		? 'p-1.5'
+	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
+		? 'p-3'
 		: 'p-4'}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
@@ -73,7 +73,13 @@
 
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
-		<h3 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900">
+		<h3
+			class="{compact
+				? isSelected
+					? 'mb-0.5 text-base'
+					: 'mb-0.5 text-xs'
+				: 'mb-2 text-lg'} font-bold leading-tight text-gray-900"
+		>
 			{practice.name}
 		</h3>
 	</div>
