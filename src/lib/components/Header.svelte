@@ -11,6 +11,21 @@
 	let showSupportTooltip = $state(false)
 	let showVersionTooltip = $state(false)
 
+	// Touch handlers for mobile tooltip support
+	const touchTimeouts = {}
+
+	function createTooltipTouchHandler(tooltipKey, setter) {
+		return e => {
+			e.preventDefault()
+			clearTimeout(touchTimeouts[tooltipKey])
+			const currentValue = setter(prev => !prev)
+			// Auto-dismiss after 3 seconds
+			if (currentValue !== false) {
+				touchTimeouts[tooltipKey] = setTimeout(() => setter(false), 3000)
+			}
+		}
+	}
+
 	// Determine if version is beta (< 1.0.0)
 	const isBeta = version.split('.')[0] === '0'
 
@@ -41,7 +56,16 @@
 					class="rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 					aria-label="Return to home page"
 				>
-					<img src="/images/logo.png" alt="Logo" class="h-logo-lg w-auto" />
+					<picture>
+						<source srcset="/images/logo-md.webp 1x, /images/logo-lg.webp 2x" type="image/webp" />
+						<img
+							src="/images/logo.png"
+							alt="Logo"
+							class="h-logo-lg w-auto"
+							loading="lazy"
+							decoding="async"
+						/>
+					</picture>
 				</a>
 			</div>
 
@@ -59,10 +83,11 @@
 				<div class="relative inline-flex">
 					<a
 						href="/help"
-						class="text-sm text-gray-800 mt-0.5 px-2 py-1 rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+						class="text-sm text-gray-800 mt-0.5 px-2 py-1 min-h-[44px] inline-flex items-center rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 active:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 touch-manipulation"
 						aria-label="View capabilities and help"
 						onmouseenter={() => (showVersionTooltip = true)}
 						onmouseleave={() => (showVersionTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('version', v => (showVersionTooltip = v))}
 					>
 						{#if isBeta}
 							<span class="font-semibold">v{version}</span>
@@ -92,10 +117,11 @@
 						href="https://github.com/bdfinst/interactive-cd"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="View on GitHub"
 						onmouseenter={() => (showGithubTooltip = true)}
 						onmouseleave={() => (showGithubTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('github', v => (showGithubTooltip = v))}
 					>
 						<svg
 							width="29"
@@ -125,10 +151,11 @@
 						href="https://github.com/bdfinst/interactive-cd/issues"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="Report a bug or request a feature"
 						onmouseenter={() => (showBugTooltip = true)}
 						onmouseleave={() => (showBugTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('bug', v => (showBugTooltip = v))}
 					>
 						<Fa icon={faBug} size="1.5x" />
 					</a>
@@ -147,10 +174,11 @@
 						href="https://minimumcd.org"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center px-2 py-1 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center px-2 py-1 min-h-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="MinimumCD.org"
 						onmouseenter={() => (showMinimumCDTooltip = true)}
 						onmouseleave={() => (showMinimumCDTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('minimumcd', v => (showMinimumCDTooltip = v))}
 					>
 						<img
 							src="/images/minimumCD-logo-sm.png"
@@ -173,10 +201,11 @@
 						href="https://ko-fi.com/bryanfinster"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl md:text-3xl leading-none hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors text-2xl md:text-3xl leading-none hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="Support this project"
 						onmouseenter={() => (showSupportTooltip = true)}
 						onmouseleave={() => (showSupportTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('support', v => (showSupportTooltip = v))}
 					>
 						🥃
 					</a>
@@ -193,10 +222,11 @@
 				<div class="relative inline-flex">
 					<a
 						href="/help"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="View help and capabilities"
 						onmouseenter={() => (showHelpTooltip = true)}
 						onmouseleave={() => (showHelpTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('help', v => (showHelpTooltip = v))}
 					>
 						<Fa icon={faCircleInfo} size="1.5x" />
 					</a>
@@ -215,7 +245,9 @@
 		<div class="flex lg:hidden flex-col gap-4">
 			<!-- Top: Title (centered) -->
 			<div class="flex flex-col items-center">
-				<h1 class="text-title-sm md:text-title-md font-bold m-0 text-center whitespace-nowrap">
+				<h1
+					class="text-title-sm md:text-title-md font-bold m-0 text-center whitespace-nowrap min-h-[44px] flex items-center"
+				>
 					<a
 						href="/"
 						class="text-gray-800 hover:text-gray-600 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -227,7 +259,7 @@
 				<div class="relative inline-flex">
 					<a
 						href="/help"
-						class="text-xs md:text-sm text-gray-800 mt-0.5 px-2 py-1 rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+						class="text-xs md:text-sm text-gray-800 mt-0.5 px-2 py-1 min-h-[44px] inline-flex items-center rounded-md bg-green-100 border-2 border-green-700 transition-colors hover:bg-green-200 active:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 touch-manipulation"
 						aria-label="View capabilities and help"
 					>
 						{#if isBeta}
@@ -251,7 +283,7 @@
 						href="https://github.com/bdfinst/interactive-cd"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="View on GitHub"
 					>
 						<svg
@@ -275,7 +307,7 @@
 						href="https://github.com/bdfinst/interactive-cd/issues"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="Report a bug or request a feature"
 					>
 						<Fa icon={faBug} size="lg" />
@@ -288,7 +320,7 @@
 						href="https://minimumcd.org"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="flex items-center px-2 py-1 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center px-2 py-1 min-h-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="MinimumCD.org"
 					>
 						<img src="/images/minimumCD-logo-sm.png" alt="MinimumCD.org" class="h-6 w-auto" />
@@ -301,7 +333,7 @@
 						href="https://Ko-fi.com/bryanfinster"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 rounded-md transition-colors text-2xl leading-none hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="inline-flex items-center justify-center text-gray-800 no-underline p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors text-2xl leading-none hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="Support this project"
 					>
 						🥃
@@ -312,7 +344,7 @@
 				<div class="relative inline-flex">
 					<a
 						href="/help"
-						class="flex items-center justify-center text-gray-800 p-2 rounded-md transition-colors hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
 						aria-label="View help and capabilities"
 					>
 						<Fa icon={faCircleInfo} size="lg" />

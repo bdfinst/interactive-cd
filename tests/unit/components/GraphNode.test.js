@@ -152,7 +152,7 @@ describe('GraphNode', () => {
 			await fireEvent.click(getByTestId('graph-node'))
 
 			expect(handleClick).toHaveBeenCalledOnce()
-			expect(handleClick).toHaveBeenCalledWith({ practiceId: practice.id })
+			expect(handleClick).toHaveBeenCalledWith()
 		})
 
 		it('auto-expands dependencies when clicked if has dependencies and not root', async () => {
@@ -167,7 +167,7 @@ describe('GraphNode', () => {
 
 			expect(handleClick).toHaveBeenCalledOnce()
 			expect(handleExpand).toHaveBeenCalledOnce()
-			expect(handleExpand).toHaveBeenCalledWith({ practiceId: practice.id })
+			expect(handleExpand).toHaveBeenCalledWith()
 		})
 
 		it('does not auto-expand when practice is root', async () => {

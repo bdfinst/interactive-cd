@@ -19,9 +19,23 @@
 	} = $props()
 
 	let showTooltip = $state(false)
+	let touchTimeout
+
+	// Touch handler for mobile tooltip support
+	function handleTouch(e) {
+		e.preventDefault()
+		clearTimeout(touchTimeout)
+		showTooltip = !showTooltip
+		// Auto-dismiss tooltip after 3 seconds
+		if (showTooltip) {
+			touchTimeout = setTimeout(() => {
+				showTooltip = false
+			}, 3000)
+		}
+	}
 
 	const baseClasses =
-		'relative inline-flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent'
+		'relative inline-flex items-center gap-2 px-3 py-2 min-h-[44px] min-w-[44px] rounded-lg transition-colors duration-200 hover:bg-white/10 active:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent touch-manipulation active:scale-95'
 </script>
 
 {#if href}
@@ -33,6 +47,7 @@
 		aria-label={ariaLabel}
 		onmouseenter={() => (showTooltip = true)}
 		onmouseleave={() => (showTooltip = false)}
+		ontouchstart={handleTouch}
 	>
 		{@render children?.()}
 		{#if tooltipText}
@@ -47,6 +62,7 @@
 		{onclick}
 		onmouseenter={() => (showTooltip = true)}
 		onmouseleave={() => (showTooltip = false)}
+		ontouchstart={handleTouch}
 	>
 		{@render children?.()}
 		{#if tooltipText}

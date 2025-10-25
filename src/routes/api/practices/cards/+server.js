@@ -81,15 +81,22 @@ export async function GET({ url }) {
 		// Return root first, then dependencies
 		const practices = [rootCard, ...dependencyCards]
 
-		return json({
-			success: true,
-			data: practices,
-			metadata: {
-				rootId: rootIdParam,
-				practiceCount: practices.length,
-				timestamp: new Date().toISOString()
+		return json(
+			{
+				success: true,
+				data: practices,
+				metadata: {
+					rootId: rootIdParam,
+					practiceCount: practices.length,
+					timestamp: new Date().toISOString()
+				}
+			},
+			{
+				headers: {
+					'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
+				}
 			}
-		})
+		)
 	} catch (error) {
 		console.error('API error:', error)
 		return json(

@@ -31,7 +31,11 @@ export async function GET({ url }) {
 			)
 		}
 
-		return json(result)
+		return json(result, {
+			headers: {
+				'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
+			}
+		})
 	} catch (error) {
 		console.error('API error:', error)
 		return json(

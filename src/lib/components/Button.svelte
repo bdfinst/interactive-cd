@@ -15,12 +15,24 @@
 		variant = 'primary', // 'primary' | 'secondary' | 'gray'
 		size = 'md', // 'sm' | 'md' | 'lg'
 		onclick = undefined,
+		ontouchend = undefined,
 		type = 'button',
 		disabled = false,
 		class: className = '',
 		children,
 		...restProps
 	} = $props()
+
+	// Handle touch events
+	function handleTouch(event) {
+		if (ontouchend) {
+			event.preventDefault()
+			ontouchend(event)
+		} else if (onclick) {
+			event.preventDefault()
+			onclick(event)
+		}
+	}
 
 	// Variant styles matching version button pattern
 	const variantClasses = $derived.by(() => {
@@ -36,23 +48,24 @@
 		}
 	})
 
-	// Size classes
+	// Size classes with WCAG-compliant touch targets (44x44px minimum)
 	const sizeClasses = $derived.by(() => {
 		switch (size) {
 			case 'sm':
-				return 'px-2 py-1 text-xs'
+				return 'px-3 py-2 text-xs min-h-[44px] min-w-[44px]'
 			case 'md':
-				return 'px-2 py-1 text-sm'
+				return 'px-4 py-2.5 text-sm min-h-[48px] min-w-[48px]'
 			case 'lg':
-				return 'px-4 py-2 text-base'
+				return 'px-6 py-3 text-base min-h-[52px] min-w-[52px]'
 			default:
-				return 'px-2 py-1 text-sm'
+				return 'px-4 py-2.5 text-sm min-h-[48px] min-w-[48px]'
 		}
 	})
 
 	// Base classes (matching version button style exactly)
+	// Added touch-manipulation to eliminate 300ms tap delay on mobile
 	const baseClasses =
-		'inline-flex items-center justify-center gap-2 rounded-md border-2 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+		'inline-flex items-center justify-center gap-2 rounded-md border-2 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation active:scale-95'
 
 	const combinedClasses = $derived(`${baseClasses} ${variantClasses} ${sizeClasses} ${className}`)
 </script>
@@ -62,7 +75,14 @@
 		{@render children()}
 	</a>
 {:else}
-	<button {type} {disabled} {onclick} class={combinedClasses} {...restProps}>
+	<button
+		{type}
+		{disabled}
+		{onclick}
+		ontouchend={handleTouch}
+		class={combinedClasses}
+		{...restProps}
+	>
 		{@render children()}
 	</button>
 {/if}

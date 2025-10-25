@@ -16,6 +16,7 @@
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { onMount, tick } from 'svelte'
+	import { debounce } from '$lib/utils/debounce.js'
 	import GraphNode from './GraphNode.svelte'
 	import LoadingSpinner from './LoadingSpinner.svelte'
 
@@ -51,8 +52,10 @@
 			await loadCurrentView()
 		}
 		recalculateAllConnections()
-		window.addEventListener('resize', recalculateAllConnections)
-		return () => window.removeEventListener('resize', recalculateAllConnections)
+		// Debounce resize handler to prevent layout thrashing on mobile
+		const debouncedResize = debounce(recalculateAllConnections, 150)
+		window.addEventListener('resize', debouncedResize, { passive: true })
+		return () => window.removeEventListener('resize', debouncedResize)
 	})
 
 	// Set expand button renderer on mount, clear on unmount
@@ -203,17 +206,27 @@
 	function calculateTreeConnections() {
 		if (!containerRef || filteredTree.length === 0) return
 
+		// PHASE 1: Batch all DOM reads to prevent layout thrashing
 		const containerRect = containerRef.getBoundingClientRect()
-		treeConnections = []
+		const rectCache = {}
 
-		// Draw connections from each practice to its dependencies
+		// Read all rects in one pass
+		filteredTree.forEach(practice => {
+			const ref = treeNodeRefs[practice.id]
+			if (ref) {
+				rectCache[practice.id] = ref.getBoundingClientRect()
+			}
+		})
+
+		// PHASE 2: Calculate connections from cached data (no forced layouts)
+		const newConnections = []
+
 		filteredTree.forEach(practice => {
 			if (!practice.dependencies || practice.dependencies.length === 0) return
 
-			const parentRef = treeNodeRefs[practice.id]
-			if (!parentRef) return
+			const parentRect = rectCache[practice.id]
+			if (!parentRect) return
 
-			const parentRect = parentRef.getBoundingClientRect()
 			const parentX = parentRect.left - containerRect.left + parentRect.width / 2
 			const parentY = parentRect.bottom - containerRect.top
 
@@ -222,14 +235,13 @@
 
 			practice.dependencies.forEach(dep => {
 				// Dependencies are full objects, not just IDs
-				const childRef = treeNodeRefs[dep.id]
-				if (!childRef) return
+				const childRect = rectCache[dep.id]
+				if (!childRect) return
 
-				const childRect = childRef.getBoundingClientRect()
 				const childX = childRect.left - containerRect.left + childRect.width / 2
 				const childY = childRect.top - containerRect.top
 
-				treeConnections.push({
+				newConnections.push({
 					x1: parentX,
 					y1: parentY,
 					x2: childX,
@@ -239,6 +251,9 @@
 				})
 			})
 		})
+
+		// PHASE 3: Single write operation
+		treeConnections = newConnections
 	}
 
 	function calculateConnections() {

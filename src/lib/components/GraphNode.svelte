@@ -47,22 +47,28 @@
 	)
 
 	function handleClick() {
-		onclick({ practiceId: practice.id })
+		onclick()
 		// Auto-expand dependencies when selecting a NON-ROOT practice with dependencies
 		if (!isRoot && practice.dependencyCount > 0 && onexpand) {
-			onexpand({ practiceId: practice.id })
+			onexpand()
 		}
+	}
+
+	function handleTouch() {
+		// Call onclick directly for touch events
+		handleClick()
 	}
 </script>
 
 <button
-	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
-		? 'p-3'
-		: 'p-4'}"
+	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg active:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-[0.98] {compact
+		? 'p-4 min-h-[48px]'
+		: 'p-6 min-h-[64px]'}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
 	onclick={handleClick}
+	ontouchend={handleTouch}
 >
 	<!-- External link icon in upper right corner (unselected view only) -->
 	{#if !isSelected && practice.quickStartGuide}
@@ -86,14 +92,14 @@
 
 	{#if isSelected}
 		<!-- Description -->
-		<p class="{compact ? 'mb-1 text-[0.5rem]' : 'mb-3 text-sm'} text-gray-600">
+		<p class="{compact ? 'mb-1 text-xs' : 'mb-3 text-sm'} text-gray-600">
 			{practice.description}
 		</p>
 
 		<!-- Requirements -->
 		{#if practice.requirements && practice.requirements.length > 0}
 			<div class={compact ? 'mb-1' : 'mb-3'}>
-				<h4 class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-blue-700">
+				<h4 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-sm'} font-semibold text-blue-700">
 					Requirements
 				</h4>
 				<ListWithIcons
@@ -101,7 +107,7 @@
 					icon="•"
 					iconColor="text-gray-400"
 					{compact}
-					textSize={compact ? 'text-[0.45rem]' : 'text-xs'}
+					textSize={compact ? 'text-xs' : 'text-sm'}
 				/>
 			</div>
 		{/if}
@@ -109,9 +115,7 @@
 		<!-- Benefits -->
 		{#if practice.benefits && practice.benefits.length > 0}
 			<div class={compact ? 'mb-1' : 'mb-3'}>
-				<h4
-					class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-green-700"
-				>
+				<h4 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-sm'} font-semibold text-green-700">
 					Benefits
 				</h4>
 				<ListWithIcons
@@ -119,7 +123,7 @@
 					icon="→"
 					iconColor="text-green-600"
 					{compact}
-					textSize={compact ? 'text-[0.45rem]' : 'text-xs'}
+					textSize={compact ? 'text-xs' : 'text-sm'}
 				/>
 			</div>
 		{/if}
@@ -149,8 +153,8 @@
 			{#if !isTreeExpanded && practice.dependencyCount > 0}
 				<div
 					class="text-center {compact
-						? 'mt-1 pt-1 text-[0.45rem]'
-						: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
+						? 'mt-1 pt-1 text-xs'
+						: 'mt-3 pt-3 text-sm'} border-t border-gray-200 text-gray-500"
 				>
 					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
 						<!-- Collapsed view: show both direct and total -->
