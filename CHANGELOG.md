@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.0...interactive-cd-v1.1.1) (2025-10-25)
+
+
+### Bug Fixes
+
+* allow release flow to be triggered on demand ([0ae547f](https://github.com/bdfinst/interactive-cd/commit/0ae547fa5dc8b33987f12faeb7d559a9bbf4e918))
+* version bump to trigger release ([8edd96b](https://github.com/bdfinst/interactive-cd/commit/8edd96b472376b05cdd3311dcf8c0dc05f17fcd4))
+
 ## [1.1.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.0.0...interactive-cd-v1.1.0) (2025-10-24)
 
 ### Features
