@@ -5,6 +5,7 @@
 
 /**
  * Recursively collects all practice occurrences with their levels
+ * Pure function - creates new Map instead of mutating
  * @param {Object} node - Tree node with dependencies
  * @param {number} level - Current depth level
  * @param {Map} occurrences - Map of practice ID to array of occurrences
@@ -13,23 +14,20 @@
 const collectOccurrences = (node, level = 0, occurrences = new Map()) => {
 	if (!node) return occurrences
 
-	// Add this occurrence to the map
-	if (!occurrences.has(node.id)) {
-		occurrences.set(node.id, [])
-	}
-	occurrences.get(node.id).push({
-		...node,
-		level
-	})
+	// Create new Map with this occurrence added (immutable)
+	const existing = occurrences.get(node.id) || []
+	const newOccurrences = new Map(occurrences)
+	newOccurrences.set(node.id, [...existing, { ...node, level }])
 
 	// Recursively collect dependencies
 	if (node.dependencies?.length > 0) {
-		node.dependencies.forEach(dep => {
-			collectOccurrences(dep, level + 1, occurrences)
-		})
+		return node.dependencies.reduce(
+			(acc, dep) => collectOccurrences(dep, level + 1, acc),
+			newOccurrences
+		)
 	}
 
-	return occurrences
+	return newOccurrences
 }
 
 /**

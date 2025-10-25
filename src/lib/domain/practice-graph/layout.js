@@ -48,6 +48,7 @@ const buildConnectionMap = flatTree => {
 /**
  * Optimize node ordering within levels to minimize connection crossings
  * Uses the Barycenter method with bidirectional sweeps
+ * Pure function - creates new object instead of mutating
  *
  * @param {Object} groupedByLevel - Practices grouped by level {level: [practices]}
  * @param {number} iterations - Number of optimization passes (default: 3)
@@ -67,7 +68,7 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 	const connections = buildConnectionMap(allPractices)
 
 	// Initialize with current ordering
-	const optimized = { ...groupedByLevel }
+	let optimized = { ...groupedByLevel }
 
 	// Perform multiple sweep iterations
 	for (let iter = 0; iter < iterations; iter++) {
@@ -88,8 +89,11 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 			// Sort by barycenter
 			withBarycenters.sort((a, b) => a.barycenter - b.barycenter)
 
-			// Update optimized ordering
-			optimized[level] = withBarycenters.map(item => item.practice)
+			// Create new object with updated ordering (immutable)
+			optimized = {
+				...optimized,
+				[level]: withBarycenters.map(item => item.practice)
+			}
 		}
 
 		// Sweep up (bottom to top)
@@ -109,8 +113,11 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 			// Sort by barycenter
 			withBarycenters.sort((a, b) => a.barycenter - b.barycenter)
 
-			// Update optimized ordering
-			optimized[level] = withBarycenters.map(item => item.practice)
+			// Create new object with updated ordering (immutable)
+			optimized = {
+				...optimized,
+				[level]: withBarycenters.map(item => item.practice)
+			}
 		}
 	}
 

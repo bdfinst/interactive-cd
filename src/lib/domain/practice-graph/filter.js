@@ -1,5 +1,6 @@
 /**
  * Filter tree to show only related practices
+ * Pure functional approach with immutable Set operations
  *
  * When a practice is selected, show only:
  * - The selected practice itself
@@ -20,44 +21,55 @@ export function filterTreeBySelection(flattenedTree, selectedPracticeId) {
 		return flattenedTree
 	}
 
-	const relatedPracticeIds = new Set()
-
-	// Add the selected practice itself
-	relatedPracticeIds.add(selectedPracticeId)
-
 	// Find all practices that depend ON the selected practice (ancestors/parents)
 	// These are practices where the selected practice appears in their dependencies
-	function addAncestors(practiceId) {
-		flattenedTree.forEach(practice => {
-			if (practice.dependencies && practice.dependencies.some(dep => dep.id === practiceId)) {
-				if (!relatedPracticeIds.has(practice.id)) {
-					relatedPracticeIds.add(practice.id)
-					// Recursively add their ancestors too
-					addAncestors(practice.id)
-				}
-			}
-		})
+	// Pure function - returns new Set instead of mutating
+	function collectAncestors(practiceId, visited = new Set()) {
+		const newAncestors = flattenedTree
+			.filter(
+				practice =>
+					practice.dependencies &&
+					practice.dependencies.some(dep => dep.id === practiceId) &&
+					!visited.has(practice.id)
+			)
+			.map(p => p.id)
+
+		if (newAncestors.length === 0) return visited
+
+		// Recursively collect ancestors of the new ancestors
+		return newAncestors.reduce(
+			(acc, ancestorId) => collectAncestors(ancestorId, acc),
+			new Set([...visited, ...newAncestors])
+		)
 	}
 
 	// Find all practices that the selected practice depends ON (descendants/children)
-	function addDescendants(practice) {
-		if (practice.dependencies) {
-			practice.dependencies.forEach(dep => {
-				if (!relatedPracticeIds.has(dep.id)) {
-					relatedPracticeIds.add(dep.id)
-					// Find the full practice object and recurse
-					const depPractice = flattenedTree.find(p => p.id === dep.id)
-					if (depPractice) {
-						addDescendants(depPractice)
-					}
-				}
-			})
+	// Pure function - returns new Set instead of mutating
+	function collectDescendants(practice, visited = new Set()) {
+		if (!practice.dependencies || practice.dependencies.length === 0) {
+			return visited
 		}
+
+		const newDescendants = practice.dependencies
+			.filter(dep => !visited.has(dep.id))
+			.map(dep => dep.id)
+
+		if (newDescendants.length === 0) return visited
+
+		// Recursively collect descendants of the new descendants
+		return newDescendants.reduce(
+			(acc, depId) => {
+				const depPractice = flattenedTree.find(p => p.id === depId)
+				return depPractice ? collectDescendants(depPractice, acc) : acc
+			},
+			new Set([...visited, ...newDescendants])
+		)
 	}
 
 	// Build the set of related practices
-	addAncestors(selectedPracticeId)
-	addDescendants(selectedPractice)
+	const ancestors = collectAncestors(selectedPracticeId)
+	const descendants = collectDescendants(selectedPractice)
+	const relatedPracticeIds = new Set([selectedPracticeId, ...ancestors, ...descendants])
 
 	// Filter the tree to only include related practices
 	return flattenedTree.filter(practice => relatedPracticeIds.has(practice.id))
