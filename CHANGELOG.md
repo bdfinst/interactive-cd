@@ -2,39 +2,34 @@
 
 ## [1.3.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.2.0...interactive-cd-v1.3.0) (2025-10-26)
 
-
 ### Features
 
-* Improve mobile UX ([7e8ee52](https://github.com/bdfinst/interactive-cd/commit/7e8ee52ed2ca25b69311fac26ebb03d68e07310b))
-
+- Improve mobile UX ([7e8ee52](https://github.com/bdfinst/interactive-cd/commit/7e8ee52ed2ca25b69311fac26ebb03d68e07310b))
 
 ### Bug Fixes
 
-* broken build ([4176e7e](https://github.com/bdfinst/interactive-cd/commit/4176e7e8761dc3964f1da9df5cafca88873fa0b7))
-* correct e2e test setup ([e6dab5d](https://github.com/bdfinst/interactive-cd/commit/e6dab5dcb383959507725170717e4fcee500cde0))
-* modify card layout ([695fa97](https://github.com/bdfinst/interactive-cd/commit/695fa974024dde4245e29e6416364935de5c8462))
+- broken build ([4176e7e](https://github.com/bdfinst/interactive-cd/commit/4176e7e8761dc3964f1da9df5cafca88873fa0b7))
+- correct e2e test setup ([e6dab5d](https://github.com/bdfinst/interactive-cd/commit/e6dab5dcb383959507725170717e4fcee500cde0))
+- modify card layout ([695fa97](https://github.com/bdfinst/interactive-cd/commit/695fa974024dde4245e29e6416364935de5c8462))
 
 ## [1.2.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.1...interactive-cd-v1.2.0) (2025-10-25)
 
-
 ### Features
 
-* ad link buttons to expanded view ([dcaaa90](https://github.com/bdfinst/interactive-cd/commit/dcaaa90ca2c27a9ca6be023a1e5726060ac87ac2))
-* add connection calculator and memoize utilities (Sprint 2) ([21a4afa](https://github.com/bdfinst/interactive-cd/commit/21a4afae5b59c75c3e4216636e9243dccb30802d))
-
+- ad link buttons to expanded view ([dcaaa90](https://github.com/bdfinst/interactive-cd/commit/dcaaa90ca2c27a9ca6be023a1e5726060ac87ac2))
+- add connection calculator and memoize utilities (Sprint 2) ([21a4afa](https://github.com/bdfinst/interactive-cd/commit/21a4afae5b59c75c3e4216636e9243dccb30802d))
 
 ### Bug Fixes
 
-* center the cards in the expanded view ([0bdd3cc](https://github.com/bdfinst/interactive-cd/commit/0bdd3ccca52e63aed3196223c335b69592f21af6))
-* switch back to ko-fi ([3d791f5](https://github.com/bdfinst/interactive-cd/commit/3d791f53843767a22409e7640a2d075d9c03b391))
+- center the cards in the expanded view ([0bdd3cc](https://github.com/bdfinst/interactive-cd/commit/0bdd3ccca52e63aed3196223c335b69592f21af6))
+- switch back to ko-fi ([3d791f5](https://github.com/bdfinst/interactive-cd/commit/3d791f53843767a22409e7640a2d075d9c03b391))
 
 ## [1.1.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.0...interactive-cd-v1.1.1) (2025-10-25)
 
-
 ### Bug Fixes
 
-* allow release flow to be triggered on demand ([0ae547f](https://github.com/bdfinst/interactive-cd/commit/0ae547fa5dc8b33987f12faeb7d559a9bbf4e918))
-* version bump to trigger release ([8edd96b](https://github.com/bdfinst/interactive-cd/commit/8edd96b472376b05cdd3311dcf8c0dc05f17fcd4))
+- allow release flow to be triggered on demand ([0ae547f](https://github.com/bdfinst/interactive-cd/commit/0ae547fa5dc8b33987f12faeb7d559a9bbf4e918))
+- version bump to trigger release ([8edd96b](https://github.com/bdfinst/interactive-cd/commit/8edd96b472376b05cdd3311dcf8c0dc05f17fcd4))
 
 ## [1.1.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.0.0...interactive-cd-v1.1.0) (2025-10-24)
 

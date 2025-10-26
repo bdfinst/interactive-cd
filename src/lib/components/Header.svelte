@@ -1,6 +1,7 @@
 <script>
 	import { headerHeight } from '$lib/stores/headerHeight.js'
-	import { faBug, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
+	import { faBug, faCircleInfo, faFlask } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import { version } from '../../../package.json'
 
@@ -10,6 +11,7 @@
 	let showMinimumCDTooltip = $state(false)
 	let showSupportTooltip = $state(false)
 	let showVersionTooltip = $state(false)
+	let showExperimentalTooltip = $state(false)
 
 	// Touch handlers for mobile tooltip support
 	const touchTimeouts = {}
@@ -111,6 +113,33 @@
 
 			<!-- Right: Menu buttons -->
 			<div class="flex items-center justify-end gap-3">
+				<!-- Experimental Feature Indicator -->
+				{#if $isPracticeAdoptionEnabled}
+					<div class="relative inline-flex">
+						<div
+							role="status"
+							class="flex items-center gap-2 px-3 py-1.5 min-h-[44px] rounded-md bg-amber-100 border-2 border-amber-600 cursor-default"
+							aria-label="Experimental feature enabled"
+							onmouseenter={() => (showExperimentalTooltip = true)}
+							onmouseleave={() => (showExperimentalTooltip = false)}
+							ontouchstart={createTooltipTouchHandler(
+								'experimental',
+								v => (showExperimentalTooltip = v)
+							)}
+						>
+							<Fa icon={faFlask} class="text-amber-700" />
+							<span class="text-sm font-semibold text-amber-900 uppercase">Experimental</span>
+						</div>
+						{#if showExperimentalTooltip}
+							<div
+								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90"
+							>
+								Practice Adoption feature enabled
+							</div>
+						{/if}
+					</div>
+				{/if}
+
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
 					<a
@@ -276,7 +305,18 @@
 			</div>
 
 			<!-- Bottom: Menu buttons (centered) -->
-			<div class="flex items-center justify-center gap-2 md:gap-3">
+			<div class="flex items-center justify-center gap-2 md:gap-3 flex-wrap">
+				<!-- Experimental Feature Indicator (Mobile) -->
+				{#if $isPracticeAdoptionEnabled}
+					<div
+						class="flex items-center gap-1.5 px-2.5 py-1 min-h-[44px] rounded-md bg-amber-100 border-2 border-amber-600 cursor-default w-full justify-center"
+						aria-label="Experimental feature enabled"
+					>
+						<Fa icon={faFlask} class="text-amber-700" size="sm" />
+						<span class="text-xs font-semibold text-amber-900 uppercase">Experimental</span>
+					</div>
+				{/if}
+
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
 					<a
