@@ -6,6 +6,52 @@ Feature: Practice Adoption Tracking
   Background:
     Given I am viewing the interactive continuous delivery practices
 
+  # Feature Flag Control Scenarios
+
+  Scenario: Feature is hidden by default when flag is not set
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is not set
+    And I visit the application without URL parameters
+    When I view the practice cards
+    Then I should not see any adoption checkboxes
+    And I should not see export/import buttons
+    And I should not see the "Experimental" badge
+
+  Scenario: Feature is enabled via environment variable
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is set to "true"
+    When I visit the application
+    Then I should see adoption checkboxes on practice cards
+    And I should see export and import buttons
+    And I should see the "Experimental" badge in the header
+
+  Scenario: Case-insensitive URL parameter
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is not set
+    When I visit the application with "?feature=PRACTICE-ADOPTION"
+    Then I should see adoption checkboxes on practice cards
+    And the feature should be enabled regardless of parameter case
+
+  @edge-case
+  Scenario: Empty feature parameter value
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is not set
+    When I visit the application with "?feature="
+    Then I should not see any adoption checkboxes
+    And the feature should remain disabled
+
+  @edge-case
+  Scenario: Wrong feature name in URL parameter
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is not set
+    When I visit the application with "?feature=wrong-feature-name"
+    Then I should not see any adoption checkboxes
+    And the feature should remain disabled
+
+  @edge-case
+  Scenario: Malformed URL parameters are handled gracefully
+    Given the VITE_ENABLE_PRACTICE_ADOPTION environment variable is not set
+    When I visit the application with "?feature=practice-adoption&&&"
+    Then I should see adoption checkboxes on practice cards
+    And the application should handle malformed parameters gracefully
+
+  # Original Practice Adoption Scenarios
+
   Scenario: Marking a practice as adopted
     Given I can see the "Continuous Integration" practice card
     When I click the adoption checkbox on "Continuous Integration"
@@ -21,11 +67,17 @@ Feature: Practice Adoption Tracking
     And the adoption state should be updated in localStorage
     And the URL should be updated to reflect the change
 
-  Scenario: Viewing dependency adoption count
+  Scenario: Viewing dependency adoption percentage
     Given "Continuous Integration" has 5 dependencies
-    And I have adopted 3 of those dependencies
+    And I have adopted 1 of those dependencies
     When I view the "Continuous Integration" practice card
-    Then I should see "3/5 dependencies adopted" displayed on the card
+    Then I should see "20% adopted" displayed on the card
+
+  Scenario: Dynamic dependency adoption percentage updates
+    Given "Continuous Integration" has 5 dependencies
+    And I have adopted 1 of those dependencies
+    When I adopt another dependency of "Continuous Integration"
+    Then the "Continuous Integration" card should update to show "40% adopted"
 
   Scenario: Viewing Continuous Delivery adoption percentage
     Given I am viewing the "Continuous Delivery" practice
@@ -57,7 +109,7 @@ Feature: Practice Adoption Tracking
     Given I have not adopted any practices
     When I view any practice card
     Then no checkmarks should be visible
-    And dependency adoption counts should show "0/X dependencies adopted"
+    And dependency adoption counts should show "0% adopted"
     And Continuous Delivery should show "0% adoption"
 
   Scenario: Bulk adoption tracking

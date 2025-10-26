@@ -4,7 +4,6 @@ import { debounce } from '$lib/utils/debounce.js'
 import { getAdoptionStateFromURL, updateURLWithAdoptionState } from '$lib/utils/urlState.js'
 import { saveAdoptionState, loadAdoptionState } from '$lib/services/adoptionPersistence.js'
 import { filterValidPracticeIds } from '$lib/utils/adoption.js'
-import { isPracticeAdoptionEnabled } from './featureFlags.js'
 
 /**
  * Creates the adoption store that manages practice adoption state
@@ -50,7 +49,7 @@ const createAdoptionStore = () => {
 			saveAdoptionState(initialState)
 		} else if (initialState.size > 0) {
 			// Update URL to match localStorage
-			updateURLWithAdoptionState(initialState, get(isPracticeAdoptionEnabled))
+			updateURLWithAdoptionState(initialState)
 		}
 	}
 
@@ -72,7 +71,7 @@ const createAdoptionStore = () => {
 			}
 
 			// Immediately update URL (replaceState doesn't trigger navigation)
-			updateURLWithAdoptionState(newSet, get(isPracticeAdoptionEnabled))
+			updateURLWithAdoptionState(newSet)
 
 			// Debounced save to localStorage
 			debouncedSaveToStorage(newSet)
@@ -110,7 +109,7 @@ const createAdoptionStore = () => {
 
 		const emptySet = new Set()
 		set(emptySet)
-		updateURLWithAdoptionState(emptySet, get(isPracticeAdoptionEnabled))
+		updateURLWithAdoptionState(emptySet)
 		saveAdoptionState(emptySet)
 	}
 
@@ -124,7 +123,7 @@ const createAdoptionStore = () => {
 
 		const newSet = new Set(practiceIds)
 		set(newSet)
-		updateURLWithAdoptionState(newSet, get(isPracticeAdoptionEnabled))
+		updateURLWithAdoptionState(newSet)
 		saveAdoptionState(newSet)
 	}
 

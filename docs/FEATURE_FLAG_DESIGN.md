@@ -2,11 +2,10 @@
 
 ## Overview
 
-The Practice Adoption feature will be hidden behind a feature flag to allow:
+The Practice Adoption feature is hidden behind a feature flag to allow:
 
 - Development and testing in production
 - Gradual rollout to users
-- A/B testing (optional)
 - Quick rollback if issues arise
 - Beta testing with select users
 
@@ -14,15 +13,22 @@ The Practice Adoption feature will be hidden behind a feature flag to allow:
 
 ## Feature Flag Strategy
 
-### Approach: Environment Variable + URL Parameter
+### Approach: Environment Variable Only
 
-**Flag Name:** `PUBLIC_ENABLE_PRACTICE_ADOPTION`
+**Flag Name:** `VITE_ENABLE_PRACTICE_ADOPTION`
 
-**Priority Order:**
+**Important Changes (Latest Refactoring):**
 
-1. **URL parameter** (highest) - For testing/preview
-2. **Environment variable** (medium) - For production control
-3. **Default: disabled** (lowest) - Safe default
+- URL parameters (`?feature=practice-adoption`) are **NO LONGER** used to control the feature
+- Feature control is now **ONLY** via the `VITE_ENABLE_PRACTICE_ADOPTION` environment variable
+- URL parameters are preserved for backward compatibility but are ignored by the feature flag system
+- This simplifies deployment and ensures consistent feature state across all users
+- **NEW:** Feature flags are now configured in a centralized config file (`src/lib/config/featureFlags.config.js`)
+
+**Control:**
+
+1. **Environment variable (ONLY)** - `VITE_ENABLE_PRACTICE_ADOPTION`
+2. **Default: disabled** - Safe default when env var is not set or is 'false'
 
 ---
 
@@ -34,71 +40,81 @@ The Practice Adoption feature will be hidden behind a feature flag to allow:
 
 ```bash
 # Feature Flags
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true
+VITE_ENABLE_PRACTICE_ADOPTION=true
 ```
 
 **File:** `.env.production` (production - initially disabled)
 
 ```bash
 # Feature Flags
-PUBLIC_ENABLE_PRACTICE_ADOPTION=false
+VITE_ENABLE_PRACTICE_ADOPTION=false
 ```
 
-**Note:** Use `PUBLIC_` prefix so it's available in browser (SvelteKit convention)
+**Note:** Use `VITE_` prefix so it's available in browser (Vite convention)
 
 ---
 
-### 2. Feature Flag Store
+### 2. Feature Flag Configuration
+
+**File:** `src/lib/config/featureFlags.config.js`
+
+This centralized configuration file defines all feature flags with metadata:
+
+```javascript
+export const FEATURE_FLAGS = {
+	PRACTICE_ADOPTION: {
+		key: 'ENABLE_PRACTICE_ADOPTION',
+		defaultValue: false,
+		description: 'Practice adoption tracking with export/import functionality',
+		owner: 'adoption-team',
+		status: 'beta',
+		createdAt: '2025-01-15'
+	}
+}
+```
+
+**Benefits:**
+
+- Single source of truth for all feature flags
+- Self-documenting with descriptions and metadata
+- Easy to add new flags without modifying store code
+- Supports tooling (documentation generation, dashboards)
+
+---
+
+### 3. Feature Flag Store
 
 **File:** `src/lib/stores/featureFlags.js`
 
 ```javascript
 import { writable, derived } from 'svelte/store'
 import { browser } from '$app/environment'
-
-/**
- * Feature flag configuration
- */
-const FLAGS = {
-	PRACTICE_ADOPTION: 'PUBLIC_ENABLE_PRACTICE_ADOPTION'
-}
+import { FEATURE_FLAGS, FLAGS } from '$lib/config/featureFlags.config.js'
 
 /**
  * Check if a feature flag is enabled
- * Priority: URL param > env var > default (false)
- *
- * @param {string} flagName - Feature flag name
- * @returns {boolean}
  */
-const isFeatureEnabled = flagName => {
+const isFeatureEnabled = flagConfig => {
 	if (!browser) return false
 
-	// 1. Check URL parameter (for testing/preview)
-	// Example: ?feature=practice-adoption or ?features=practice-adoption,other-feature
-	const urlParams = new URLSearchParams(window.location.search)
-	const featuresParam = urlParams.get('feature') || urlParams.get('features')
+	const { key: flagName, defaultValue } = flagConfig
+	const envValue = import.meta.env[`VITE_${flagName}`]
+	const isEnabled = envValue === 'true' || envValue === '1' || envValue === true || envValue === 1
 
-	if (featuresParam) {
-		const enabledFeatures = featuresParam.split(',').map(f => f.trim())
-
-		// Map flag names to URL-friendly names
-		const urlFlagName = flagName.replace('ENABLE_', '').replace(/_/g, '-').toLowerCase()
-
-		if (enabledFeatures.includes(urlFlagName)) {
-			console.info(`🚩 Feature flag "${flagName}" enabled via URL parameter`)
-			return true
-		}
-	}
-
-	// 2. Check environment variable
-	const envValue = import.meta.env[`PUBLIC_${flagName}`]
-
-	if (envValue === 'true' || envValue === '1') {
+	if (isEnabled) {
 		console.info(`🚩 Feature flag "${flagName}" enabled via environment variable`)
 		return true
 	}
 
-	// 3. Default: disabled
+	// Use default value from config if env var not set
+	if (envValue === undefined || envValue === null) {
+		if (defaultValue) {
+			console.info(`🚩 Feature flag "${flagName}" using default value (${defaultValue})`)
+			return defaultValue
+		}
+	}
+
+	console.info(`🚩 Feature flag "${flagName}" disabled`)
 	return false
 }
 
@@ -106,29 +122,19 @@ const isFeatureEnabled = flagName => {
  * Create feature flag store
  */
 const createFeatureFlagStore = () => {
-	const { subscribe, update } = writable({
-		[FLAGS.PRACTICE_ADOPTION]: isFeatureEnabled(FLAGS.PRACTICE_ADOPTION)
-	})
+	// Initialize all feature flags from config
+	const initialState = Object.entries(FEATURE_FLAGS).reduce((acc, [key, config]) => {
+		acc[config.key] = isFeatureEnabled(config)
+		return acc
+	}, {})
 
-	// Re-check flags when URL changes (for SPA navigation)
-	if (browser) {
-		window.addEventListener('popstate', () => {
-			update(flags => ({
-				...flags,
-				[FLAGS.PRACTICE_ADOPTION]: isFeatureEnabled(FLAGS.PRACTICE_ADOPTION)
-			}))
-		})
-	}
+	const { subscribe } = writable(initialState)
 
 	return {
 		subscribe,
-		FLAGS,
+		FLAGS, // Legacy compatibility
+		FEATURE_FLAGS, // New config access
 
-		/**
-		 * Check if a specific feature is enabled
-		 * @param {string} flagName - Flag name from FLAGS
-		 * @returns {boolean}
-		 */
 		isEnabled: flagName => {
 			let enabled = false
 			subscribe(flags => {
@@ -247,29 +253,97 @@ export const isPracticeAdoptionEnabled = derived(
 
 ---
 
+## Adding New Feature Flags
+
+With the centralized configuration approach, adding a new feature flag is simple and requires no changes to the feature flag store code.
+
+### Step 1: Add to Configuration
+
+**File:** `src/lib/config/featureFlags.config.js`
+
+```javascript
+export const FEATURE_FLAGS = {
+	PRACTICE_ADOPTION: {
+		key: 'ENABLE_PRACTICE_ADOPTION',
+		defaultValue: false,
+		description: 'Practice adoption tracking with export/import functionality',
+		owner: 'adoption-team',
+		status: 'beta',
+		createdAt: '2025-01-15'
+	},
+
+	// Add your new feature flag here:
+	NEW_FEATURE: {
+		key: 'ENABLE_NEW_FEATURE',
+		defaultValue: false,
+		description: 'Description of what this feature does',
+		owner: 'team-name',
+		status: 'alpha', // 'alpha' | 'beta' | 'stable' | 'deprecated'
+		createdAt: '2025-MM-DD'
+	}
+}
+```
+
+### Step 2: Add Environment Variable
+
+**File:** `.env`
+
+```bash
+VITE_ENABLE_NEW_FEATURE=true
+```
+
+### Step 3: Create Derived Store (Optional)
+
+**File:** `src/lib/stores/featureFlags.js`
+
+```javascript
+export const isNewFeatureEnabled = derived(
+	featureFlags,
+	$flags => $flags[featureFlags.FLAGS.NEW_FEATURE]
+)
+```
+
+### Step 4: Use in Components
+
+```svelte
+<script>
+	import { isNewFeatureEnabled } from '$lib/stores/featureFlags.js'
+</script>
+
+{#if $isNewFeatureEnabled}
+	<!-- Your new feature UI -->
+{/if}
+```
+
+**That's it!** The feature flag store automatically initializes all flags from the configuration.
+
+---
+
 ## Testing URLs
 
 ### Enable Feature for Testing
 
-```
-# Enable via URL parameter
-https://example.com/?feature=practice-adoption
+**Important:** URL parameters NO LONGER control the feature flag.
 
-# Enable multiple features (future use)
+To enable the feature for testing:
+
+1. **Local Development:**
+   - Set `VITE_ENABLE_PRACTICE_ADOPTION=true` in `.env`
+   - Restart the dev server with `npm run dev`
+
+2. **Production/Staging:**
+   - Set `VITE_ENABLE_PRACTICE_ADOPTION=true` in environment variables
+   - Redeploy the application
+
+### URL Parameters (Backward Compatibility)
+
+```
+# These URLs are valid but the parameter is IGNORED for feature control
+https://example.com/?feature=practice-adoption
 https://example.com/?features=practice-adoption,other-feature
 
-# Works with any URL
-https://example.com/help?feature=practice-adoption
-```
-
-### Production URLs
-
-```
-# Normal production (feature hidden)
-https://example.com/
-
-# Beta testing link (feature visible)
-https://example.com/?feature=practice-adoption
+# The feature flag is controlled ONLY by VITE_ENABLE_PRACTICE_ADOPTION
+# URL parameters are preserved for backward compatibility (e.g., adoption state data)
 ```
 
 ---
@@ -280,17 +354,18 @@ https://example.com/?feature=practice-adoption
 
 ```bash
 # .env
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true
+VITE_ENABLE_PRACTICE_ADOPTION=true
 ```
 
 - Feature visible in local development
 - Build and test all functionality
+- **Must restart dev server** after changing env var
 
 ### Phase 2: Staging (Before Production)
 
 ```bash
 # .env.production (staging)
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true
+VITE_ENABLE_PRACTICE_ADOPTION=true
 ```
 
 - Feature visible on staging environment
@@ -301,23 +376,24 @@ PUBLIC_ENABLE_PRACTICE_ADOPTION=true
 
 ```bash
 # .env.production
-PUBLIC_ENABLE_PRACTICE_ADOPTION=false
+VITE_ENABLE_PRACTICE_ADOPTION=false
 ```
 
-- Feature hidden by default
-- Share beta URL with select users: `?feature=practice-adoption`
+- Feature hidden from all users
+- Enable via deployment configuration for beta environment only
 - Collect feedback, monitor for issues
+- **Note:** URL parameters no longer enable the feature
 
 ### Phase 4: Production - Full Launch
 
 ```bash
 # .env.production
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true
+VITE_ENABLE_PRACTICE_ADOPTION=true
 ```
 
 - Feature visible to all users
 - Monitor analytics and performance
-- URL parameter still works for debugging
+- Consistent experience for all users
 
 ### Phase 5: Cleanup (Optional - Future)
 
@@ -360,10 +436,10 @@ export default config
 
 ```bash
 # Environment Variables (Production)
-PUBLIC_ENABLE_PRACTICE_ADOPTION=false
+VITE_ENABLE_PRACTICE_ADOPTION=false
 
 # Preview Deployments (Optional)
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true
+VITE_ENABLE_PRACTICE_ADOPTION=true
 ```
 
 #### Netlify
@@ -371,20 +447,20 @@ PUBLIC_ENABLE_PRACTICE_ADOPTION=true
 ```toml
 # netlify.toml
 [build.environment]
-  PUBLIC_ENABLE_PRACTICE_ADOPTION = "false"
+  VITE_ENABLE_PRACTICE_ADOPTION = "false"
 
 [context.deploy-preview.environment]
-  PUBLIC_ENABLE_PRACTICE_ADOPTION = "true"
+  VITE_ENABLE_PRACTICE_ADOPTION = "true"
 ```
 
 #### GitHub Pages / Static Export
 
 ```bash
 # Build with feature disabled
-PUBLIC_ENABLE_PRACTICE_ADOPTION=false npm run build
+VITE_ENABLE_PRACTICE_ADOPTION=false npm run build
 
 # Or build with feature enabled
-PUBLIC_ENABLE_PRACTICE_ADOPTION=true npm run build
+VITE_ENABLE_PRACTICE_ADOPTION=true npm run build
 ```
 
 ---
@@ -411,22 +487,24 @@ describe('Feature Flags', () => {
 		expect(get(isPracticeAdoptionEnabled)).toBe(false)
 	})
 
-	it('enables via URL parameter', () => {
+	it('ignores URL parameters', () => {
 		window.location.search = '?feature=practice-adoption'
 		const flags = featureFlags
-		expect(flags.isEnabled(flags.FLAGS.PRACTICE_ADOPTION)).toBe(true)
+		// URL parameters are ignored
+		expect(flags.isEnabled(flags.FLAGS.PRACTICE_ADOPTION)).toBe(false)
 	})
 
 	it('enables via environment variable', () => {
-		vi.stubEnv('PUBLIC_ENABLE_PRACTICE_ADOPTION', 'true')
+		vi.stubEnv('VITE_ENABLE_PRACTICE_ADOPTION', 'true')
 		const flags = featureFlags
 		expect(flags.isEnabled(flags.FLAGS.PRACTICE_ADOPTION)).toBe(true)
 	})
 
-	it('URL parameter takes precedence over env var', () => {
-		vi.stubEnv('PUBLIC_ENABLE_PRACTICE_ADOPTION', 'false')
-		window.location.search = '?feature=practice-adoption'
+	it('environment variable controls feature regardless of URL', () => {
+		vi.stubEnv('VITE_ENABLE_PRACTICE_ADOPTION', 'true')
+		window.location.search = '?feature=wrong-feature'
 		const flags = featureFlags
+		// Env var controls feature, URL is ignored
 		expect(flags.isEnabled(flags.FLAGS.PRACTICE_ADOPTION)).toBe(true)
 	})
 })
@@ -441,7 +519,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Feature Flags - Practice Adoption', () => {
 	test('should hide adoption feature when flag disabled', async ({ page }) => {
-		// Visit without feature flag
+		// Visit page (VITE_ENABLE_PRACTICE_ADOPTION=false in config)
 		await page.goto('/')
 
 		// Wait for page load
@@ -456,36 +534,24 @@ test.describe('Feature Flags - Practice Adoption', () => {
 		await expect(exportButton).not.toBeVisible()
 	})
 
-	test('should show adoption feature when flag enabled via URL', async ({ page }) => {
-		// Visit WITH feature flag
+	test('should ignore URL parameters for feature control', async ({ page }) => {
+		// Visit WITH URL parameter (but env var is false)
 		await page.goto('/?feature=practice-adoption')
 
 		// Wait for page load
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Verify adoption checkboxes ARE visible
+		// Verify adoption checkboxes are NOT visible (URL param ignored)
 		const checkboxes = page.locator('[role="checkbox"]')
-		await expect(checkboxes.first()).toBeVisible()
+		await expect(checkboxes).toHaveCount(0)
 
-		// Verify export/import buttons ARE visible
+		// Verify export/import buttons are NOT visible
 		const exportButton = page.locator('button:has-text("Export")')
-		await expect(exportButton).toBeVisible()
+		await expect(exportButton).not.toBeVisible()
 	})
 
-	test('should persist feature flag across navigation', async ({ page }) => {
-		// Start with feature enabled
-		await page.goto('/?feature=practice-adoption')
-
-		// Verify feature is active
-		const checkbox = page.locator('[role="checkbox"]').first()
-		await expect(checkbox).toBeVisible()
-
-		// Navigate to another page (if multi-page app)
-		// await page.click('a[href="/help"]')
-
-		// Feature should still be active (if using URL parameter)
-		// await expect(checkbox).toBeVisible()
-	})
+	// Note: Tests that require feature enabled should use a separate config
+	// with VITE_ENABLE_PRACTICE_ADOPTION=true or be marked as .skip()
 })
 ```
 
@@ -498,9 +564,9 @@ test.describe('Feature Flags - Practice Adoption', () => {
 When feature flag is checked:
 
 ```javascript
-// Console output example
-🚩 Feature flag "PUBLIC_ENABLE_PRACTICE_ADOPTION" enabled via URL parameter
-🚩 Feature flag "PUBLIC_ENABLE_PRACTICE_ADOPTION" enabled via environment variable
+// Console output examples
+🚩 Feature flag "ENABLE_PRACTICE_ADOPTION" enabled via environment variable (VITE_ENABLE_PRACTICE_ADOPTION=true)
+🚩 Feature flag "ENABLE_PRACTICE_ADOPTION" disabled (VITE_ENABLE_PRACTICE_ADOPTION: false)
 ```
 
 ### Debug Panel (Optional Enhancement)
@@ -567,19 +633,21 @@ When feature flag is checked:
 ### Benefits
 
 ✅ **Safe Development** - Build in production without exposing to users
-✅ **Gradual Rollout** - Test with beta users before full launch
+✅ **Gradual Rollout** - Test with beta users before full launch via separate deployments
 ✅ **Quick Rollback** - Disable via env var if issues found
-✅ **Testing Flexibility** - URL parameter for easy testing/demoing
+✅ **Consistent Experience** - All users see the same feature state (no URL-based variations)
 ✅ **Zero Performance Impact** - No code runs when flag disabled
 ✅ **Clean Architecture** - Easy to remove flag post-launch
+✅ **Simplified Deployment** - No need to manage URL parameters for feature control
 
 ### Deployment Checklist
 
-- [ ] Set `PUBLIC_ENABLE_PRACTICE_ADOPTION=true` in `.env` (local dev)
-- [ ] Set `PUBLIC_ENABLE_PRACTICE_ADOPTION=false` in production env vars
-- [ ] Test feature with URL parameter: `?feature=practice-adoption`
-- [ ] Verify feature hidden without URL parameter
-- [ ] Beta test with select users (share URL with parameter)
+- [ ] Set `VITE_ENABLE_PRACTICE_ADOPTION=true` in `.env` (local dev)
+- [ ] **Restart dev server** after changing env var (required for Vite)
+- [ ] Set `VITE_ENABLE_PRACTICE_ADOPTION=false` in production env vars
+- [ ] Test feature is enabled in local dev
+- [ ] Verify feature hidden in production
+- [ ] Beta test: Deploy separate environment with env var = `true`
 - [ ] Monitor for issues
 - [ ] When ready: Set env var to `true` for full launch
 

@@ -48,41 +48,45 @@ describe('Feature Flags', () => {
 		})
 	})
 
-	describe('isFeatureEnabled - URL Parameter', () => {
-		it('enables via URL parameter ?feature=practice-adoption', async () => {
+	describe('isFeatureEnabled - URL Parameter (IGNORED)', () => {
+		it('ignores URL parameter ?feature=practice-adoption', async () => {
 			window.location.search = '?feature=practice-adoption'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are now ignored - feature is disabled without env var
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
-		it('enables via URL parameter ?features=practice-adoption (plural)', async () => {
+		it('ignores URL parameter ?features=practice-adoption (plural)', async () => {
 			window.location.search = '?features=practice-adoption'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are now ignored - feature is disabled without env var
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
-		it('enables via URL parameter with multiple features', async () => {
+		it('ignores URL parameter with multiple features', async () => {
 			window.location.search = '?features=practice-adoption,other-feature'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are now ignored - feature is disabled without env var
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
-		it('is case-insensitive for URL parameter', async () => {
+		it('ignores case-insensitive URL parameter', async () => {
 			window.location.search = '?feature=PRACTICE-ADOPTION'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are now ignored - feature is disabled without env var
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
 		it('does not enable with wrong URL parameter', async () => {
@@ -91,6 +95,7 @@ describe('Feature Flags', () => {
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
+			// Still disabled (this test is unchanged but kept for consistency)
 			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 	})
@@ -137,25 +142,27 @@ describe('Feature Flags', () => {
 		})
 	})
 
-	describe('Priority: URL Parameter > Environment Variable', () => {
-		it('URL parameter takes precedence over env var when both are true', async () => {
+	describe('Environment Variable Only (No URL Override)', () => {
+		it('env var controls feature regardless of URL parameter', async () => {
 			window.location.search = '?feature=practice-adoption'
 			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
+			// Enabled by env var (URL is ignored)
 			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
 		})
 
-		it('URL parameter enables feature even when env var is false', async () => {
+		it('URL parameter cannot enable feature when env var is false', async () => {
 			window.location.search = '?feature=practice-adoption'
 			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'false'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// Disabled by env var (URL is ignored)
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
 		it('env var enables feature when URL param is absent', async () => {
@@ -165,6 +172,7 @@ describe('Feature Flags', () => {
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
+			// Enabled by env var
 			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
 		})
 	})
@@ -179,13 +187,14 @@ describe('Feature Flags', () => {
 			expect(featureFlags.isEnabled(featureFlags.FLAGS.PRACTICE_ADOPTION)).toBe(false)
 		})
 
-		it('returns true when feature is enabled via URL', async () => {
+		it('returns false even with URL parameter (URL ignored)', async () => {
 			window.location.search = '?feature=practice-adoption'
 			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 
-			expect(featureFlags.isEnabled(featureFlags.FLAGS.PRACTICE_ADOPTION)).toBe(true)
+			// URL parameters are ignored
+			expect(featureFlags.isEnabled(featureFlags.FLAGS.PRACTICE_ADOPTION)).toBe(false)
 		})
 
 		it('returns true when feature is enabled via env var', async () => {
@@ -208,13 +217,14 @@ describe('Feature Flags', () => {
 			expect(get(isPracticeAdoptionEnabled)).toBe(false)
 		})
 
-		it('derives correctly when enabled via URL', async () => {
+		it('derives correctly when disabled (URL ignored)', async () => {
 			window.location.search = '?feature=practice-adoption'
 			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { isPracticeAdoptionEnabled } = await import('$lib/stores/featureFlags.js')
 
-			expect(get(isPracticeAdoptionEnabled)).toBe(true)
+			// URL parameters are ignored
+			expect(get(isPracticeAdoptionEnabled)).toBe(false)
 		})
 
 		it('derives correctly when enabled via env var', async () => {
@@ -228,33 +238,37 @@ describe('Feature Flags', () => {
 	})
 
 	describe('Edge Cases', () => {
-		it('handles empty URL parameter value', async () => {
+		it('handles empty URL parameter value (URL ignored)', async () => {
 			window.location.search = '?feature='
 			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			// Empty parameter should be filtered out, so feature should be disabled
+			// URL parameters are ignored regardless of value
 			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
-		it('handles malformed URL parameters', async () => {
+		it('handles malformed URL parameters (URL ignored)', async () => {
 			window.location.search = '?feature=practice-adoption&&&&&'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are ignored
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
-		it('handles URL with spaces', async () => {
+		it('handles URL with spaces (URL ignored)', async () => {
 			window.location.search = '?features=practice-adoption, other-feature'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
 
-			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
+			// URL parameters are ignored
+			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(false)
 		})
 
 		it('handles undefined environment variable', async () => {

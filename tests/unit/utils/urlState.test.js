@@ -189,13 +189,13 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(practiceIds, false)
+			updateURLWithAdoptionState(practiceIds)
 
 			expect(capturedURL).toContain('adopted=')
 			expect(capturedURL).toContain('?')
 		})
 
-		it('adds feature flag parameter when feature is enabled but not in URL', () => {
+		it('does NOT add feature flag parameter (feature param no longer used)', () => {
 			window.location.search = ''
 			const practiceIds = new Set(['version-control'])
 
@@ -204,13 +204,15 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(practiceIds, true)
+			updateURLWithAdoptionState(practiceIds)
 
-			expect(capturedURL).toContain('feature=practice-adoption')
+			// Feature parameter is no longer added to URL
+			expect(capturedURL).not.toContain('feature=practice-adoption')
+			// Only adopted parameter is added
 			expect(capturedURL).toContain('adopted=')
 		})
 
-		it('does not add duplicate feature parameter if already in URL', () => {
+		it('preserves existing feature parameter if present (backward compatibility)', () => {
 			window.location.search = '?feature=practice-adoption'
 			const practiceIds = new Set(['version-control'])
 
@@ -219,11 +221,11 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(practiceIds, true)
+			updateURLWithAdoptionState(practiceIds)
 
-			// Count occurrences of 'feature=' in the URL
-			const matches = capturedURL.match(/feature=/g)
-			expect(matches).toHaveLength(1)
+			// Feature parameter is preserved but not controlled
+			expect(capturedURL).toContain('feature=practice-adoption')
+			expect(capturedURL).toContain('adopted=')
 		})
 
 		it('removes adopted parameter when set is empty', () => {
@@ -248,7 +250,7 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(practiceIds, false)
+			updateURLWithAdoptionState(practiceIds)
 
 			expect(capturedURL).toContain('feature=practice-adoption')
 			expect(capturedURL).toContain('other=value')
@@ -266,7 +268,7 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(newPracticeIds, false)
+			updateURLWithAdoptionState(newPracticeIds)
 
 			expect(capturedURL).toContain('adopted=')
 			expect(capturedURL).not.toContain(oldEncoded)
@@ -282,7 +284,7 @@ describe('urlState', () => {
 				capturedURL = url
 			}
 
-			updateURLWithAdoptionState(practiceIds, false)
+			updateURLWithAdoptionState(practiceIds)
 
 			expect(capturedURL).toContain('/help')
 		})
@@ -333,7 +335,7 @@ describe('urlState', () => {
 				window.location.search = new URL(url, 'http://localhost:5173').search
 			}
 
-			updateURLWithAdoptionState(practiceIds, false)
+			updateURLWithAdoptionState(practiceIds)
 			const retrieved = getAdoptionStateFromURL()
 
 			expect(retrieved).toEqual(practiceIds)

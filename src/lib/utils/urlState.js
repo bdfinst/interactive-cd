@@ -75,18 +75,18 @@ export const getAdoptionStateFromURL = () => {
 /**
  * Update URL with current adoption state
  * Uses history.replaceState to avoid creating new history entries
+ * Note: URL parameters do NOT control feature flag - only VITE_ENABLE_PRACTICE_ADOPTION does
+ *
  * @param {Set<string>} practiceIds - Set of adopted practice IDs
- * @param {boolean} isPracticeAdoptionEnabled - Whether the feature is currently enabled
  */
-export const updateURLWithAdoptionState = (practiceIds, isPracticeAdoptionEnabled = false) => {
+export const updateURLWithAdoptionState = practiceIds => {
 	if (!browser) return
 
 	const urlParams = new URLSearchParams(window.location.search)
 
-	// If feature is enabled but not in URL, add it so the URL is shareable
-	if (isPracticeAdoptionEnabled && !urlParams.has('feature') && !urlParams.has('features')) {
-		urlParams.set('feature', 'practice-adoption')
-	}
+	// Note: We no longer add/remove the feature parameter
+	// The feature flag is controlled solely by VITE_ENABLE_PRACTICE_ADOPTION
+	// Existing URL parameters (like ?feature=practice-adoption) are preserved but ignored
 
 	if (!practiceIds || practiceIds.size === 0) {
 		// Remove adopted parameter if set is empty
