@@ -76,11 +76,17 @@ export const getAdoptionStateFromURL = () => {
  * Update URL with current adoption state
  * Uses history.replaceState to avoid creating new history entries
  * @param {Set<string>} practiceIds - Set of adopted practice IDs
+ * @param {boolean} isPracticeAdoptionEnabled - Whether the feature is currently enabled
  */
-export const updateURLWithAdoptionState = practiceIds => {
+export const updateURLWithAdoptionState = (practiceIds, isPracticeAdoptionEnabled = false) => {
 	if (!browser) return
 
 	const urlParams = new URLSearchParams(window.location.search)
+
+	// If feature is enabled but not in URL, add it so the URL is shareable
+	if (isPracticeAdoptionEnabled && !urlParams.has('feature') && !urlParams.has('features')) {
+		urlParams.set('feature', 'practice-adoption')
+	}
 
 	if (!practiceIds || practiceIds.size === 0) {
 		// Remove adopted parameter if set is empty

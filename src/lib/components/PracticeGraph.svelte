@@ -50,6 +50,27 @@
 
 	// Initialize with provided practices
 	onMount(async () => {
+		// Initialize adoption store with all valid practice IDs
+		// Load full tree to get all practice IDs
+		const treeResponse = await fetch('/api/practices/tree?root=continuous-delivery')
+		const treeResult = await treeResponse.json()
+
+		if (treeResult.success) {
+			// Extract all practice IDs from the tree
+			// eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary Set, not reactive state
+			const allPracticeIds = new Set()
+			const extractIds = node => {
+				allPracticeIds.add(node.id)
+				if (node.dependencies) {
+					node.dependencies.forEach(extractIds)
+				}
+			}
+			extractIds(treeResult.data)
+
+			// Initialize adoption store with valid practice IDs
+			adoptionStore.initialize(allPracticeIds)
+		}
+
 		// Use server data if available, otherwise fetch
 		if (initialData?.initialPractices) {
 			const practices = initialData.initialPractices
