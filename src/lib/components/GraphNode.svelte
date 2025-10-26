@@ -81,17 +81,17 @@
 	onclick={handleClick}
 	ontouchend={handleTouch}
 >
+	<!-- External link icon in upper left corner (unselected view only) -->
+	{#if !isSelected && practice.quickStartGuide}
+		<div class="absolute top-3 left-3 text-blue-600 z-10">
+			<Fa icon={faExternalLinkAlt} size="sm" />
+		</div>
+	{/if}
+
 	<!-- Adoption Checkbox in top-right corner (when feature enabled) -->
 	{#if practiceAdoptionEnabled}
 		<div class="absolute top-3 right-3 z-10" onclick={e => e.stopPropagation()} role="presentation">
 			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={ontoggleadoption} />
-		</div>
-	{/if}
-
-	<!-- External link icon in upper right corner (unselected view only, when adoption not shown) -->
-	{#if !isSelected && practice.quickStartGuide && !practiceAdoptionEnabled}
-		<div class="absolute top-3 right-3 text-blue-600">
-			<Fa icon={faExternalLinkAlt} size="sm" />
 		</div>
 	{/if}
 
