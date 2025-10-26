@@ -1,7 +1,16 @@
 <script>
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
-	import { faBug, faCircleInfo, faFlask } from '@fortawesome/free-solid-svg-icons'
+	import { adoptionStore } from '$lib/stores/adoptionStore.js'
+	import { exportAdoptionState, importAdoptionState } from '$lib/utils/exportImport.js'
+	import { get } from 'svelte/store'
+	import {
+		faBug,
+		faCircleInfo,
+		faFlask,
+		faDownload,
+		faUpload
+	} from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import { version } from '../../../package.json'
 
@@ -12,6 +21,19 @@
 	let showSupportTooltip = $state(false)
 	let showVersionTooltip = $state(false)
 	let showExperimentalTooltip = $state(false)
+	let showExportTooltip = $state(false)
+	let showImportTooltip = $state(false)
+
+	// State for import feedback
+	let importMessage = $state(null)
+	let importMessageType = $state('success') // 'success' | 'error'
+
+	// File input reference
+	let fileInput = $state()
+
+	// Track total practices count for export
+	let totalPracticesCount = $state(0)
+	let validPracticeIds = $state(new Set())
 
 	// Touch handlers for mobile tooltip support
 	const touchTimeouts = {}
@@ -42,6 +64,107 @@
 			headerHeight.set(currentHeight)
 		}
 	})
+
+	// Load practice data when feature is enabled
+	$effect(() => {
+		if ($isPracticeAdoptionEnabled) {
+			loadPracticeData()
+		}
+	})
+
+	/**
+	 * Load all practice IDs for validation during import
+	 */
+	const loadPracticeData = async () => {
+		try {
+			const response = await fetch('/api/practices/tree?root=continuous-delivery')
+			const result = await response.json()
+
+			if (result.success) {
+				// eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary Set, not reactive state
+				const allIds = new Set()
+				const extractIds = node => {
+					allIds.add(node.id)
+					if (node.dependencies) {
+						node.dependencies.forEach(extractIds)
+					}
+				}
+				extractIds(result.data)
+
+				validPracticeIds = allIds
+				totalPracticesCount = allIds.size
+			}
+		} catch (error) {
+			console.error('Failed to load practice data:', error)
+		}
+	}
+
+	/**
+	 * Handle export button click
+	 */
+	const handleExport = () => {
+		const adoptedPractices = get(adoptionStore)
+		exportAdoptionState(adoptedPractices, totalPracticesCount, version)
+	}
+
+	/**
+	 * Handle import button click - open file picker
+	 */
+	const handleImportClick = () => {
+		if (fileInput) {
+			fileInput.click()
+		}
+	}
+
+	/**
+	 * Handle file selection for import
+	 */
+	const handleFileChange = async event => {
+		const file = event.target.files?.[0]
+		if (!file) return
+
+		try {
+			const result = await importAdoptionState(file, validPracticeIds)
+
+			if (!result.success) {
+				importMessage = result.error
+				importMessageType = 'error'
+				setTimeout(() => {
+					importMessage = null
+				}, 5000)
+				return
+			}
+
+			// Import successful - update the store with bulk import
+			adoptionStore.importPractices(result.imported)
+
+			// Show success message
+			const imported = result.imported.size
+			const invalid = result.invalid.length
+			if (invalid > 0) {
+				importMessage = `Imported ${imported} practices. ${invalid} invalid practice IDs were skipped.`
+				importMessageType = 'warning'
+			} else {
+				importMessage = `Successfully imported ${imported} practices.`
+				importMessageType = 'success'
+			}
+
+			setTimeout(() => {
+				importMessage = null
+			}, 5000)
+		} catch (error) {
+			importMessage = `Failed to import: ${error.message}`
+			importMessageType = 'error'
+			setTimeout(() => {
+				importMessage = null
+			}, 5000)
+		} finally {
+			// Reset file input so the same file can be selected again
+			if (fileInput) {
+				fileInput.value = ''
+			}
+		}
+	}
 </script>
 
 <header
@@ -138,6 +261,62 @@
 							</div>
 						{/if}
 					</div>
+
+					<!-- Export Button -->
+					<div class="relative inline-flex">
+						<button
+							type="button"
+							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+							aria-label="Export adoption data"
+							data-testid="export-button"
+							onclick={handleExport}
+							onmouseenter={() => (showExportTooltip = true)}
+							onmouseleave={() => (showExportTooltip = false)}
+							ontouchstart={createTooltipTouchHandler('export', v => (showExportTooltip = v))}
+						>
+							<Fa icon={faDownload} size="1.5x" />
+						</button>
+						{#if showExportTooltip}
+							<div
+								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
+							>
+								Export Adoption Data
+							</div>
+						{/if}
+					</div>
+
+					<!-- Import Button -->
+					<div class="relative inline-flex">
+						<button
+							type="button"
+							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+							aria-label="Import adoption data"
+							data-testid="import-button"
+							onclick={handleImportClick}
+							onmouseenter={() => (showImportTooltip = true)}
+							onmouseleave={() => (showImportTooltip = false)}
+							ontouchstart={createTooltipTouchHandler('import', v => (showImportTooltip = v))}
+						>
+							<Fa icon={faUpload} size="1.5x" />
+						</button>
+						{#if showImportTooltip}
+							<div
+								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
+							>
+								Import Adoption Data
+							</div>
+						{/if}
+					</div>
+
+					<!-- Hidden file input -->
+					<input
+						type="file"
+						accept=".cdpa,application/vnd.cd-practices.adoption+json"
+						bind:this={fileInput}
+						onchange={handleFileChange}
+						class="hidden"
+						data-testid="import-file-input"
+					/>
 				{/if}
 
 				<!-- GitHub Link -->
@@ -315,6 +494,31 @@
 						<Fa icon={faFlask} class="text-amber-700" size="sm" />
 						<span class="text-xs font-semibold text-amber-900 uppercase">Experimental</span>
 					</div>
+
+					<!-- Export/Import Buttons (Mobile) -->
+					<div class="flex items-center gap-2">
+						<!-- Export Button -->
+						<button
+							type="button"
+							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+							aria-label="Export adoption data"
+							data-testid="export-button-mobile"
+							onclick={handleExport}
+						>
+							<Fa icon={faDownload} size="lg" />
+						</button>
+
+						<!-- Import Button -->
+						<button
+							type="button"
+							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+							aria-label="Import adoption data"
+							data-testid="import-button-mobile"
+							onclick={handleImportClick}
+						>
+							<Fa icon={faUpload} size="lg" />
+						</button>
+					</div>
 				{/if}
 
 				<!-- GitHub Link -->
@@ -394,3 +598,22 @@
 		</div>
 	</div>
 </header>
+
+<!-- Import/Export Feedback Message -->
+{#if importMessage}
+	<div
+		class="fixed top-20 left-1/2 -translate-x-1/2 z-[2000] max-w-md w-full px-4"
+		data-testid="import-message"
+		role="alert"
+	>
+		<div
+			class="rounded-lg shadow-lg p-4 {importMessageType === 'success'
+				? 'bg-green-100 border-2 border-green-600 text-green-900'
+				: importMessageType === 'warning'
+					? 'bg-amber-100 border-2 border-amber-600 text-amber-900'
+					: 'bg-red-100 border-2 border-red-600 text-red-900'}"
+		>
+			<p class="text-sm font-semibold">{importMessage}</p>
+		</div>
+	</div>
+{/if}

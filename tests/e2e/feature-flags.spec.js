@@ -271,6 +271,234 @@ test.describe('Feature Flags - Practice Adoption', () => {
 		})
 	})
 
+	test.describe('Export/Import Functionality', () => {
+		test('should show export and import buttons when feature is enabled', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Verify at least one export button is visible (desktop OR mobile)
+			const exportButtons = page.locator(
+				'[data-testid="export-button"], [data-testid="export-button-mobile"]'
+			)
+			// Find a visible export button
+			let foundVisibleExport = false
+			const exportCount = await exportButtons.count()
+			for (let i = 0; i < exportCount; i++) {
+				if (await exportButtons.nth(i).isVisible()) {
+					foundVisibleExport = true
+					break
+				}
+			}
+			expect(foundVisibleExport).toBe(true)
+
+			// Verify at least one import button is visible (desktop OR mobile)
+			const importButtons = page.locator(
+				'[data-testid="import-button"], [data-testid="import-button-mobile"]'
+			)
+			// Find a visible import button
+			let foundVisibleImport = false
+			const importCount = await importButtons.count()
+			for (let i = 0; i < importCount; i++) {
+				if (await importButtons.nth(i).isVisible()) {
+					foundVisibleImport = true
+					break
+				}
+			}
+			expect(foundVisibleImport).toBe(true)
+		})
+
+		test('should not show export/import buttons when feature is disabled', async ({ page }) => {
+			// Visit without feature flag
+			await page.goto('/')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Verify export buttons are not visible
+			const exportButtons = page.locator(
+				'[data-testid="export-button"], [data-testid="export-button-mobile"]'
+			)
+			await expect(exportButtons.first())
+				.not.toBeVisible({ timeout: 2000 })
+				.catch(() => {
+					return expect(exportButtons).toHaveCount(0)
+				})
+
+			// Verify import buttons are not visible
+			const importButtons = page.locator(
+				'[data-testid="import-button"], [data-testid="import-button-mobile"]'
+			)
+			await expect(importButtons.first())
+				.not.toBeVisible({ timeout: 2000 })
+				.catch(() => {
+					return expect(importButtons).toHaveCount(0)
+				})
+		})
+
+		test('should trigger download when export button is clicked', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Setup download listener
+			const downloadPromise = page.waitForEvent('download')
+
+			// Find and click the visible export button
+			const exportButtons = page.locator(
+				'[data-testid="export-button"], [data-testid="export-button-mobile"]'
+			)
+			const exportCount = await exportButtons.count()
+			for (let i = 0; i < exportCount; i++) {
+				if (await exportButtons.nth(i).isVisible()) {
+					await exportButtons.nth(i).click()
+					break
+				}
+			}
+
+			// Wait for download to start
+			const download = await downloadPromise
+
+			// Verify download has correct filename pattern
+			const filename = download.suggestedFilename()
+			expect(filename).toMatch(/^cd-practices-adoption-\d{4}-\d{2}-\d{2}\.cdpa$/)
+		})
+
+		test('should show import file picker when import button is clicked', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Verify file input exists but is hidden
+			const fileInput = page.locator('[data-testid="import-file-input"]')
+			await expect(fileInput).toBeAttached()
+			await expect(fileInput).toBeHidden()
+
+			// Find and click the visible import button
+			const importButtons = page.locator(
+				'[data-testid="import-button"], [data-testid="import-button-mobile"]'
+			)
+			const importCount = await importButtons.count()
+			for (let i = 0; i < importCount; i++) {
+				if (await importButtons.nth(i).isVisible()) {
+					await importButtons.nth(i).click()
+					break
+				}
+			}
+
+			// File picker will open (can't test actual file picker, but we can verify the click happened)
+			// In real browser, file picker would open
+		})
+
+		test('should accept .cdpa file format for import', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Verify file input accepts correct file types
+			const fileInput = page.locator('[data-testid="import-file-input"]')
+			const acceptAttribute = await fileInput.getAttribute('accept')
+			expect(acceptAttribute).toContain('.cdpa')
+		})
+
+		test('should show success message after successful import', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Create a valid import file
+			const importData = {
+				version: '1.0.0',
+				exportedAt: new Date().toISOString(),
+				metadata: {
+					totalPractices: 3,
+					adoptedCount: 2,
+					adoptionPercentage: 67,
+					appVersion: '1.3.0'
+				},
+				adoptedPractices: ['version-control', 'automated-testing']
+			}
+
+			// Upload the file
+			const fileInput = page.locator('[data-testid="import-file-input"]')
+			await fileInput.setInputFiles({
+				name: 'test-import.cdpa',
+				mimeType: 'application/vnd.cd-practices.adoption+json',
+				buffer: Buffer.from(JSON.stringify(importData))
+			})
+
+			// Wait for import message to appear
+			const importMessage = page.locator('[data-testid="import-message"]')
+			await expect(importMessage).toBeVisible({ timeout: 5000 })
+
+			// Verify success message content
+			await expect(importMessage).toContainText('Successfully imported')
+		})
+
+		test('should show error message for invalid import file', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Create an invalid import file (missing required fields)
+			const invalidData = {
+				invalid: 'data'
+			}
+
+			// Upload the file
+			const fileInput = page.locator('[data-testid="import-file-input"]')
+			await fileInput.setInputFiles({
+				name: 'invalid-import.cdpa',
+				mimeType: 'application/json',
+				buffer: Buffer.from(JSON.stringify(invalidData))
+			})
+
+			// Wait for error message to appear
+			const importMessage = page.locator('[data-testid="import-message"]')
+			await expect(importMessage).toBeVisible({ timeout: 5000 })
+
+			// Verify error message styling (red background)
+			const classes = await importMessage.locator('div').first().getAttribute('class')
+			expect(classes).toContain('bg-red-100')
+			expect(classes).toContain('border-red-600')
+		})
+
+		test('should dismiss import message after 5 seconds', async ({ page }) => {
+			// Visit with feature flag
+			await page.goto('/?feature=practice-adoption')
+			await page.waitForSelector('[data-testid="graph-node"]')
+
+			// Create a valid import file
+			const importData = {
+				version: '1.0.0',
+				exportedAt: new Date().toISOString(),
+				metadata: {
+					totalPractices: 1,
+					adoptedCount: 1,
+					adoptionPercentage: 100,
+					appVersion: '1.3.0'
+				},
+				adoptedPractices: ['version-control']
+			}
+
+			// Upload the file
+			const fileInput = page.locator('[data-testid="import-file-input"]')
+			await fileInput.setInputFiles({
+				name: 'test-import.cdpa',
+				mimeType: 'application/vnd.cd-practices.adoption+json',
+				buffer: Buffer.from(JSON.stringify(importData))
+			})
+
+			// Verify message appears
+			const importMessage = page.locator('[data-testid="import-message"]')
+			await expect(importMessage).toBeVisible()
+
+			// Wait for auto-dismiss (5 seconds + buffer)
+			await page.waitForTimeout(5500)
+
+			// Verify message is gone
+			await expect(importMessage).not.toBeVisible()
+		})
+	})
+
 	test.describe('Edge Cases', () => {
 		test('should handle empty feature parameter', async ({ page }) => {
 			// Visit with empty parameter

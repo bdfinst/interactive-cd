@@ -114,13 +114,28 @@ const createAdoptionStore = () => {
 		saveAdoptionState(emptySet)
 	}
 
+	/**
+	 * Import multiple practices at once
+	 *
+	 * @param {Set<string>} practiceIds - Set of practice IDs to import
+	 */
+	const importPractices = practiceIds => {
+		if (!browser) return
+
+		const newSet = new Set(practiceIds)
+		set(newSet)
+		updateURLWithAdoptionState(newSet, get(isPracticeAdoptionEnabled))
+		saveAdoptionState(newSet)
+	}
+
 	return {
 		subscribe,
 		initialize,
 		toggle,
 		isAdopted,
 		getCount,
-		clearAll
+		clearAll,
+		importPractices
 	}
 }
 
