@@ -171,7 +171,7 @@
 						<div>
 							<span class="font-semibold">{practice.directDependencyCount} direct</span>
 
-							<span class="text-[0.9em]"> - {practice.totalDependencyCount} total</span>
+							<span> - {practice.totalDependencyCount} total</span>
 						</div>
 					{:else}
 						<!-- Fallback: show only dependency count -->
