@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { get } from 'svelte/store'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('Feature Flags', () => {
 	let originalLocation
@@ -32,7 +32,6 @@ describe('Feature Flags', () => {
 		it('is disabled by default when no env var or URL param is set', async () => {
 			// Set up clean state
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -42,7 +41,6 @@ describe('Feature Flags', () => {
 
 		it('returns false for isPracticeAdoptionEnabled by default', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { isPracticeAdoptionEnabled } = await import('$lib/stores/featureFlags.js')
 
@@ -98,9 +96,9 @@ describe('Feature Flags', () => {
 	})
 
 	describe('isFeatureEnabled - Environment Variable', () => {
-		it('enables via environment variable PUBLIC_ENABLE_PRACTICE_ADOPTION=true', async () => {
+		it('enables via environment variable VITE_ENABLE_PRACTICE_ADOPTION=true', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'true'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -108,9 +106,9 @@ describe('Feature Flags', () => {
 			expect(flags[featureFlags.FLAGS.PRACTICE_ADOPTION]).toBe(true)
 		})
 
-		it('enables via environment variable PUBLIC_ENABLE_PRACTICE_ADOPTION=1', async () => {
+		it('enables via environment variable VITE_ENABLE_PRACTICE_ADOPTION=1', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = '1'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = '1'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -120,7 +118,7 @@ describe('Feature Flags', () => {
 
 		it('does not enable with env var set to false', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'false'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'false'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -130,7 +128,7 @@ describe('Feature Flags', () => {
 
 		it('does not enable with env var set to 0', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = '0'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = '0'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -142,7 +140,7 @@ describe('Feature Flags', () => {
 	describe('Priority: URL Parameter > Environment Variable', () => {
 		it('URL parameter takes precedence over env var when both are true', async () => {
 			window.location.search = '?feature=practice-adoption'
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'true'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -152,7 +150,7 @@ describe('Feature Flags', () => {
 
 		it('URL parameter enables feature even when env var is false', async () => {
 			window.location.search = '?feature=practice-adoption'
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'false'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'false'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -162,7 +160,7 @@ describe('Feature Flags', () => {
 
 		it('env var enables feature when URL param is absent', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'true'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -174,7 +172,7 @@ describe('Feature Flags', () => {
 	describe('featureFlags.isEnabled()', () => {
 		it('returns false when feature is disabled', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 
@@ -183,6 +181,7 @@ describe('Feature Flags', () => {
 
 		it('returns true when feature is enabled via URL', async () => {
 			window.location.search = '?feature=practice-adoption'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 
@@ -191,7 +190,7 @@ describe('Feature Flags', () => {
 
 		it('returns true when feature is enabled via env var', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'true'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 
@@ -202,7 +201,7 @@ describe('Feature Flags', () => {
 	describe('isPracticeAdoptionEnabled - Derived Store', () => {
 		it('derives correctly when disabled', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { isPracticeAdoptionEnabled } = await import('$lib/stores/featureFlags.js')
 
@@ -211,6 +210,7 @@ describe('Feature Flags', () => {
 
 		it('derives correctly when enabled via URL', async () => {
 			window.location.search = '?feature=practice-adoption'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { isPracticeAdoptionEnabled } = await import('$lib/stores/featureFlags.js')
 
@@ -219,7 +219,7 @@ describe('Feature Flags', () => {
 
 		it('derives correctly when enabled via env var', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = 'true'
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = 'true'
 
 			const { isPracticeAdoptionEnabled } = await import('$lib/stores/featureFlags.js')
 
@@ -230,7 +230,7 @@ describe('Feature Flags', () => {
 	describe('Edge Cases', () => {
 		it('handles empty URL parameter value', async () => {
 			window.location.search = '?feature='
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)
@@ -259,7 +259,7 @@ describe('Feature Flags', () => {
 
 		it('handles undefined environment variable', async () => {
 			window.location.search = ''
-			import.meta.env.PUBLIC_ENABLE_PRACTICE_ADOPTION = undefined
+			import.meta.env.VITE_ENABLE_PRACTICE_ADOPTION = undefined
 
 			const { featureFlags } = await import('$lib/stores/featureFlags.js')
 			const flags = get(featureFlags)

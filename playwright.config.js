@@ -57,6 +57,11 @@ export default defineConfig({
 	webServer: {
 		command: 'npm run dev',
 		url: 'http://localhost:5173',
-		reuseExistingServer: !process.env.CI
+		reuseExistingServer: !process.env.CI,
+		env: {
+			// Override environment variables for E2E tests
+			// Feature flags should be disabled by default in tests
+			VITE_ENABLE_PRACTICE_ADOPTION: 'false'
+		}
 	}
 })

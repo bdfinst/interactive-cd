@@ -1,6 +1,8 @@
 <script>
+	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
 	import Button from '$lib/components/Button.svelte'
 	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
+	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
 	import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
@@ -15,9 +17,18 @@
 		isSelected = false,
 		compact = false,
 		isTreeExpanded = false, // Add prop to know if we're in tree view
+		isAdopted = false, // NEW: Is this practice adopted
+		adoptedDependencyCount = 0, // NEW: How many dependencies are adopted
 		onclick = () => {},
-		onexpand = () => {}
+		onexpand = () => {},
+		ontoggleadoption = () => {} // NEW: Toggle adoption callback
 	} = $props()
+
+	// Subscribe to feature flag
+	let practiceAdoptionEnabled = $state(false)
+	isPracticeAdoptionEnabled.subscribe(value => {
+		practiceAdoptionEnabled = value
+	})
 
 	// Determine background color class based on category
 	// Colors defined in app.css @theme directive
@@ -70,8 +81,15 @@
 	onclick={handleClick}
 	ontouchend={handleTouch}
 >
-	<!-- External link icon in upper right corner (unselected view only) -->
-	{#if !isSelected && practice.quickStartGuide}
+	<!-- Adoption Checkbox in top-right corner (when feature enabled) -->
+	{#if practiceAdoptionEnabled}
+		<div class="absolute top-3 right-3 z-10" onclick={e => e.stopPropagation()} role="presentation">
+			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={ontoggleadoption} />
+		</div>
+	{/if}
+
+	<!-- External link icon in upper right corner (unselected view only, when adoption not shown) -->
+	{#if !isSelected && practice.quickStartGuide && !practiceAdoptionEnabled}
 		<div class="absolute top-3 right-3 text-blue-600">
 			<Fa icon={faExternalLinkAlt} size="sm" />
 		</div>
@@ -80,11 +98,7 @@
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
 		<h3
-			class="{compact
-				? isSelected
-					? 'mb-0.5 text-base'
-					: 'mb-0.5 text-xs'
-				: 'mb-2 text-lg'} font-bold leading-tight text-gray-900"
+			class="{compact ? 'mb-0.5 text-base' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900"
 		>
 			{practice.name}
 		</h3>
@@ -164,6 +178,25 @@
 						{practice.dependencyCount}
 						{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
 					{/if}
+				</div>
+			{/if}
+
+			<!-- Adoption counter (when feature enabled and has dependencies) -->
+			{#if practiceAdoptionEnabled && practice.dependencyCount > 0}
+				<div class="text-center {compact ? 'text-xs' : 'text-sm'} text-green-700">
+					<span class="font-semibold">{adoptedDependencyCount}/{practice.dependencyCount}</span> dependencies
+					adopted
+				</div>
+			{/if}
+
+			<!-- CD adoption percentage (when feature enabled and practice is CD itself) -->
+			{#if practiceAdoptionEnabled && practice.id === 'continuous-delivery'}
+				{@const adoptionPercentage =
+					practice.dependencyCount > 0
+						? Math.round((adoptedDependencyCount / practice.dependencyCount) * 100)
+						: 0}
+				<div class="text-center {compact ? 'text-xs' : 'text-sm'} font-bold text-blue-700">
+					{adoptionPercentage}% adoption
 				</div>
 			{/if}
 		</div>

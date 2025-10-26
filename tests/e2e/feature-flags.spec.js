@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 // Helper function to check if experimental indicator is visible
 // (There are 2 instances: desktop and mobile, only one is visible at a time)
@@ -211,7 +211,13 @@ test.describe('Feature Flags - Practice Adoption', () => {
 			expect(foundStyledBadge).toBe(true)
 		})
 
-		test('should show tooltip on hover (desktop)', async ({ page }) => {
+		test('should show tooltip on hover (desktop)', async ({ page, isMobile }) => {
+			// Skip on mobile/tablet viewports since hover is not supported
+			if (isMobile) {
+				test.skip(true, 'Hover tooltips not testable on mobile viewports')
+				return
+			}
+
 			// Visit with feature flag
 			await page.goto('/?feature=practice-adoption')
 			await page.waitForSelector('[data-testid="graph-node"]')
@@ -224,12 +230,7 @@ test.describe('Feature Flags - Practice Adoption', () => {
 				.first()
 
 			// Check if the badge is visible (desktop viewport)
-			// On mobile viewports, the desktop badge is hidden by Tailwind responsive classes
-			const isVisible = await badge.isVisible()
-			if (!isVisible) {
-				test.skip(true, 'Desktop tooltip not visible on this viewport size (mobile)')
-				return
-			}
+			await expect(badge).toBeVisible()
 
 			// Hover over the badge
 			await badge.hover()

@@ -16,7 +16,7 @@ The Practice Adoption feature will be hidden behind a feature flag to allow:
 
 ### Approach: Environment Variable + URL Parameter
 
-**Flag Name:** `ENABLE_PRACTICE_ADOPTION`
+**Flag Name:** `PUBLIC_ENABLE_PRACTICE_ADOPTION`
 
 **Priority Order:**
 
@@ -60,7 +60,7 @@ import { browser } from '$app/environment'
  * Feature flag configuration
  */
 const FLAGS = {
-	PRACTICE_ADOPTION: 'ENABLE_PRACTICE_ADOPTION'
+	PRACTICE_ADOPTION: 'PUBLIC_ENABLE_PRACTICE_ADOPTION'
 }
 
 /**
@@ -499,8 +499,8 @@ When feature flag is checked:
 
 ```javascript
 // Console output example
-🚩 Feature flag "ENABLE_PRACTICE_ADOPTION" enabled via URL parameter
-🚩 Feature flag "ENABLE_PRACTICE_ADOPTION" enabled via environment variable
+🚩 Feature flag "PUBLIC_ENABLE_PRACTICE_ADOPTION" enabled via URL parameter
+🚩 Feature flag "PUBLIC_ENABLE_PRACTICE_ADOPTION" enabled via environment variable
 ```
 
 ### Debug Panel (Optional Enhancement)

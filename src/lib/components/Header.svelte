@@ -117,6 +117,7 @@
 				{#if $isPracticeAdoptionEnabled}
 					<div class="relative inline-flex">
 						<div
+							role="status"
 							class="flex items-center gap-2 px-3 py-1.5 min-h-[44px] rounded-md bg-amber-100 border-2 border-amber-600 cursor-default"
 							aria-label="Experimental feature enabled"
 							onmouseenter={() => (showExperimentalTooltip = true)}

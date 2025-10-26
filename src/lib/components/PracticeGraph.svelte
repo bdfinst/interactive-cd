@@ -15,6 +15,8 @@
 	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { adoptionStore } from '$lib/stores/adoptionStore.js'
+	import { calculateAdoptedDependencies } from '$lib/utils/adoption.js'
 	import { onMount, tick } from 'svelte'
 	import { debounce } from '$lib/utils/debounce.js'
 	import GraphNode from './GraphNode.svelte'
@@ -22,6 +24,12 @@
 
 	// Accept initial server data
 	const { initialData = null } = $props()
+
+	// Subscribe to adoption store
+	let adoptedPractices = $state(new Set())
+	adoptionStore.subscribe(value => {
+		adoptedPractices = value
+	})
 
 	let containerRef = $state()
 	const ancestorRefs = $state([])
@@ -510,8 +518,14 @@
 							isSelected={selectedNodeId === currentPractice.id}
 							isExpanded={isPracticeExpanded(currentPractice.id)}
 							isTreeExpanded={false}
+							isAdopted={adoptedPractices.has(currentPractice.id)}
+							adoptedDependencyCount={calculateAdoptedDependencies(
+								currentPractice,
+								adoptedPractices
+							)}
 							onclick={() => selectNode(currentPractice.id)}
 							onexpand={() => expandPractice(currentPractice.id)}
+							ontoggleadoption={() => adoptionStore.toggle(currentPractice.id)}
 						/>
 					</div>
 				</div>
@@ -536,8 +550,12 @@
 								{isSelected}
 								isExpanded={isPracticeExpanded(dependency.id)}
 								isTreeExpanded={false}
+								isAdopted={adoptedPractices.has(dependency.id)}
+								adoptedDependencyCount={calculateAdoptedDependencies(dependency, adoptedPractices)}
 								onclick={() => selectNode(dependency.id)}
 								onexpand={() => expandPractice(dependency.id)}
+								ontoggleadoption={() => adoptionStore.toggle(dependency.id)}
+								compact={!isSelected}
 							/>
 						</div>
 					{/each}

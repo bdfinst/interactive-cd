@@ -1,5 +1,5 @@
-import { writable, derived } from 'svelte/store'
 import { browser } from '$app/environment'
+import { derived, writable } from 'svelte/store'
 
 /**
  * Feature flag configuration
@@ -39,15 +39,19 @@ const isFeatureEnabled = flagName => {
 		}
 	}
 
-	// 2. Check environment variable
-	const envValue = import.meta.env[`PUBLIC_${flagName}`]
+	// 2. Check environment variable (VITE_ prefix)
+	const envValue = import.meta.env[`VITE_${flagName}`]
+	const isEnabled = envValue === 'true' || envValue === '1' || envValue === true || envValue === 1
 
-	if (envValue === 'true' || envValue === '1') {
-		console.info(`🚩 Feature flag "${flagName}" enabled via environment variable`)
+	if (isEnabled) {
+		console.info(
+			`🚩 Feature flag "${flagName}" enabled via environment variable (VITE_${flagName}=${envValue})`
+		)
 		return true
 	}
 
 	// 3. Default: disabled
+	console.info(`🚩 Feature flag "${flagName}" disabled (VITE_${flagName}: ${envValue})`)
 	return false
 }
 
