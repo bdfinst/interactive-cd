@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.2.0...interactive-cd-v1.3.0) (2025-10-26)
+
+
+### Features
+
+* Improve mobile UX ([7e8ee52](https://github.com/bdfinst/interactive-cd/commit/7e8ee52ed2ca25b69311fac26ebb03d68e07310b))
+
+
+### Bug Fixes
+
+* broken build ([4176e7e](https://github.com/bdfinst/interactive-cd/commit/4176e7e8761dc3964f1da9df5cafca88873fa0b7))
+* correct e2e test setup ([e6dab5d](https://github.com/bdfinst/interactive-cd/commit/e6dab5dcb383959507725170717e4fcee500cde0))
+* modify card layout ([695fa97](https://github.com/bdfinst/interactive-cd/commit/695fa974024dde4245e29e6416364935de5c8462))
+
 ## [1.2.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.1.1...interactive-cd-v1.2.0) (2025-10-25)
 
 
