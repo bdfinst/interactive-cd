@@ -16,8 +16,8 @@
 	/* Pale yellow with 30% white mixed in = RGB(255, 255, 219) */
 	--color-category-automation: rgba(255, 255, 219, 1);
 
-	/* Light cyan blue with 30% white mixed in = RGB(79, 210, 253) */
-	--color-category-behavior: rgba(79, 210, 253, 1);
+	/* Light cyan blue with 50% white mixed in = RGB(114, 219, 253) - 20% lighter */
+	--color-category-behavior: rgba(114, 219, 253, 1);
 
 	/* Light turquoise with 30% white mixed in = RGB(166, 255, 233) */
 	--color-category-behavior-enabled: rgba(166, 255, 233, 1);

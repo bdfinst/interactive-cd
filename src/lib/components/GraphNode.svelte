@@ -63,7 +63,7 @@
 <button
 	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg active:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-[0.98] {compact
 		? 'p-4 min-h-[48px]'
-		: 'p-6 min-h-[64px]'}"
+		: 'p-4 min-h-[64px]'}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
@@ -151,15 +151,14 @@
 		<div class="flex flex-col gap-2">
 			<!-- Show dependency count only in collapsed view -->
 			{#if !isTreeExpanded && practice.dependencyCount > 0}
-				<div
-					class="text-center {compact
-						? 'mt-1 pt-1 text-xs'
-						: 'mt-3 pt-3 text-sm'} border-t border-gray-200 text-gray-500"
-				>
+				<div class="text-center {compact ? 'mt-1 pt-1 text-xs' : 'pt-3 text-sm'}  text-gray-500">
 					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
 						<!-- Collapsed view: show both direct and total -->
-						<div class="font-semibold">{practice.directDependencyCount} direct</div>
-						<div class="text-[0.9em]">{practice.totalDependencyCount} total</div>
+						<div>
+							<span class="font-semibold">{practice.directDependencyCount} direct</span>
+
+							<span class="text-[0.9em]"> - {practice.totalDependencyCount} total</span>
+						</div>
 					{:else}
 						<!-- Fallback: show only dependency count -->
 						{practice.dependencyCount}

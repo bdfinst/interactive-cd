@@ -528,7 +528,7 @@
 						<div
 							bind:this={dependencyRefs[i]}
 							class="w-full {isSelected ? 'md:w-2/3 lg:w-1/2' : ''}"
-							style={isSelected ? '' : 'max-width: 250px;'}
+							style={isSelected ? '' : 'max-width: 250px; height: 140px;'}
 						>
 							<GraphNode
 								practice={dependency}
