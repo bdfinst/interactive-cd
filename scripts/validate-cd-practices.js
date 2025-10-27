@@ -10,9 +10,10 @@
  * 1 - Validation failed
  */
 
-import { readFile } from 'fs/promises'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { readFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { validateCdPractices } from '../src/lib/validators/cd-practices-validator.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -68,7 +69,7 @@ const formatOutput = result => {
 }
 
 // Main execution
-const main = async () => {
+try {
 	const dataPath = join(projectRoot, 'src/lib/data/cd-practices.json')
 	const schemaPath = join(projectRoot, 'src/lib/schemas/cd-practices.schema.json')
 
@@ -96,10 +97,8 @@ const main = async () => {
 
 	console.log(`${output.color}%s\x1b[0m`, output.text)
 	process.exit(output.exitCode)
-}
-
-main().catch(error => {
+} catch (error) {
 	console.error('\x1b[31m%s\x1b[0m', '\nUnexpected error:')
 	console.error(error)
 	process.exit(1)
-})
+}

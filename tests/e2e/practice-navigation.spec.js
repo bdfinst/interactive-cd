@@ -78,7 +78,7 @@ test.describe('Practice Navigation', () => {
 		// Get initial node count
 		const initialCount = await page.locator('[data-testid="graph-node"]').count()
 
-		// Find a non-selected practice with dependencies and click it
+		// Find a non-selected practice with dependencies
 		const unselectedNode = page.locator('[data-selected="false"]').first()
 
 		if (await unselectedNode.isVisible()) {
@@ -88,8 +88,9 @@ test.describe('Practice Navigation', () => {
 				.isVisible()
 
 			if (hasDependencies) {
-				// Click the practice
-				await unselectedNode.click()
+				// Click the expand/details button to select the practice
+				const expandButton = unselectedNode.locator('button[aria-label*="View details"]')
+				await expandButton.click()
 
 				// Wait for navigation to complete
 				await page.waitForTimeout(500)
@@ -160,7 +161,9 @@ test.describe('Practice Navigation', () => {
 				.first()
 
 			if (await nodeWithDeps.isVisible()) {
-				await nodeWithDeps.click()
+				// Click the expand button to navigate
+				const expandButton = nodeWithDeps.locator('button[aria-label*="View details"]')
+				await expandButton.click()
 				await page.waitForTimeout(500)
 			}
 		}
@@ -185,15 +188,16 @@ test.describe('Practice Selection', () => {
 		const count = await nodes.count()
 
 		if (count > 1) {
-			// Click on a non-selected practice
+			// Find a non-selected practice
 			const unselectedNode = page.locator('[data-selected="false"]').first()
 
 			if (await unselectedNode.isVisible()) {
 				// Get the practice ID before clicking
 				const practiceId = await unselectedNode.getAttribute('data-practice-id')
 
-				// Click the practice
-				await unselectedNode.click()
+				// Click the expand/details button within the practice card
+				const expandButton = unselectedNode.locator('button[aria-label*="View details"]')
+				await expandButton.click()
 				await page.waitForTimeout(500)
 
 				// Re-query to get updated state
@@ -211,8 +215,9 @@ test.describe('Practice Selection', () => {
 		if (await selectedNode.isVisible()) {
 			const practiceId = await selectedNode.getAttribute('data-practice-id')
 
-			// Click it again
-			await selectedNode.click()
+			// Click the close button within the selected practice card
+			const closeButton = selectedNode.locator('button[aria-label*="Close details"]')
+			await closeButton.click()
 			await page.waitForTimeout(200)
 
 			// Verify it's deselected
@@ -306,14 +311,16 @@ test.describe('Visual Elements', () => {
 		await page.goto('/')
 		await page.waitForSelector('[data-testid="graph-node"]')
 
-		// Click on a practice with dependencies to auto-expand
+		// Find a practice with dependencies to auto-expand
 		const nodeWithDeps = page
 			.locator('[data-testid="graph-node"]')
 			.filter({ hasText: /\d+ dependenc(y|ies)/ })
 			.first()
 
 		if (await nodeWithDeps.isVisible()) {
-			await nodeWithDeps.click()
+			// Click the expand button to select and expand dependencies
+			const expandButton = nodeWithDeps.locator('button[aria-label*="View details"]')
+			await expandButton.click()
 			await page.waitForTimeout(500)
 
 			// Verify SVG with connections exists
