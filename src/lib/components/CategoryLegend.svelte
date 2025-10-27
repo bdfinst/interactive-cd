@@ -3,6 +3,8 @@
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
+	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
+	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 
 	/**
 	 * CategoryLegend Component
@@ -74,6 +76,20 @@
 		// Toggle tooltip on touch
 		showTooltip = { ...showTooltip, [index]: !showTooltip[index] }
 	}
+
+	/**
+	 * Handle reset adoption button click with confirmation
+	 */
+	function handleResetAdoption() {
+		// Use browser's native confirm dialog
+		const confirmed = window.confirm(
+			'Are you sure you want to reset all adoption data? This will clear all checkboxes and cannot be undone.'
+		)
+
+		if (confirmed) {
+			adoptionStore.clearAll()
+		}
+	}
 </script>
 
 <div
@@ -132,8 +148,20 @@
 				{/each}
 			</div>
 
-			<!-- Right: Empty spacer for balance -->
-			<div></div>
+			<!-- Right: Reset Adoption Button (when feature enabled) -->
+			<div class="flex justify-end">
+				{#if $isPracticeAdoptionEnabled}
+					<Button
+						onclick={handleResetAdoption}
+						variant="danger"
+						size="md"
+						data-testid="reset-adoption-button"
+						aria-label="Reset all adoption data"
+					>
+						Reset
+					</Button>
+				{/if}
+			</div>
 		</div>
 	</div>
 </div>

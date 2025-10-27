@@ -106,6 +106,16 @@
 	</div>
 
 	{#if isSelected}
+		<!-- Adoption percentage (when feature enabled and has dependencies) -->
+		{#if practiceAdoptionEnabled && totalDependencyCount > 0}
+			{@const totalWithParent = totalDependencyCount + 1}
+			{@const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount}
+			{@const adoptionPercentage = Math.floor((adoptedWithParent / totalWithParent) * 100)}
+			<div class="text-center {compact ? 'mb-1 text-xs' : 'mb-3 text-sm'} font-bold text-blue-700">
+				{adoptionPercentage}% adoption
+			</div>
+		{/if}
+
 		<!-- Description -->
 		<p class="{compact ? 'mb-1 text-xs' : 'mb-3 text-sm'} text-gray-600">
 			{practice.description}
@@ -182,20 +192,11 @@
 				</div>
 			{/if}
 
-			<!-- Adoption counter (when feature enabled and has dependencies) -->
+			<!-- Adoption percentage (when feature enabled and has dependencies) -->
 			{#if practiceAdoptionEnabled && totalDependencyCount > 0}
-				<div class="text-center {compact ? 'text-xs' : 'text-sm'} text-green-700">
-					<span class="font-semibold">{adoptedDependencyCount}/{totalDependencyCount}</span> dependencies
-					adopted
-				</div>
-			{/if}
-
-			<!-- CD adoption percentage (when feature enabled and practice is CD itself) -->
-			{#if practiceAdoptionEnabled && practice.id === 'continuous-delivery'}
-				{@const adoptionPercentage =
-					totalDependencyCount > 0
-						? Math.round((adoptedDependencyCount / totalDependencyCount) * 100)
-						: 0}
+				{@const totalWithParent = totalDependencyCount + 1}
+				{@const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount}
+				{@const adoptionPercentage = Math.floor((adoptedWithParent / totalWithParent) * 100)}
 				<div class="text-center {compact ? 'text-xs' : 'text-sm'} font-bold text-blue-700">
 					{adoptionPercentage}% adoption
 				</div>

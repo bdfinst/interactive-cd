@@ -469,11 +469,6 @@
 						{#each groupedByLevel[level] as practice (practice.id)}
 							{@const isSelected = selectedNodeId === practice.id}
 							{#if isSelected}
-								{@const adoptionCounts = calculateAdoptedDependencies(
-									practice,
-									adoptedPractices,
-									practiceMap
-								)}
 								<div class="flex justify-center">
 									<div
 										bind:this={treeNodeRefs[practice.id]}
@@ -484,12 +479,8 @@
 											isRoot={practice.level === 0}
 											{isSelected}
 											isTreeExpanded={$isFullTreeExpanded}
-											isAdopted={adoptedPractices.has(practice.id)}
-											adoptedDependencyCount={adoptionCounts.adoptedCount}
-											totalDependencyCount={adoptionCounts.totalCount}
 											onclick={() => selectNode(practice.id)}
 											onexpand={null}
-											ontoggleadoption={() => adoptionStore.toggle(practice.id)}
 											compact={true}
 										/>
 									</div>
@@ -502,11 +493,6 @@
 							{#if unselectedPractices.length > 0}
 								<div class="flex flex-wrap justify-center gap-x-4 gap-y-4 max-w-screen-xl">
 									{#each unselectedPractices as practice (practice.id)}
-										{@const adoptionCounts = calculateAdoptedDependencies(
-											practice,
-											adoptedPractices,
-											practiceMap
-										)}
 										<div
 											bind:this={treeNodeRefs[practice.id]}
 											class="w-full min-w-[120px] max-w-[150px] min-h-[80px]"
@@ -516,12 +502,8 @@
 												isRoot={practice.level === 0}
 												isSelected={false}
 												isTreeExpanded={$isFullTreeExpanded}
-												isAdopted={adoptedPractices.has(practice.id)}
-												adoptedDependencyCount={adoptionCounts.adoptedCount}
-												totalDependencyCount={adoptionCounts.totalCount}
 												onclick={() => selectNode(practice.id)}
 												onexpand={null}
-												ontoggleadoption={() => adoptionStore.toggle(practice.id)}
 												compact={true}
 											/>
 										</div>
