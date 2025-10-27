@@ -3,7 +3,6 @@
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
-	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 
 	/**
@@ -148,19 +147,17 @@
 				{/each}
 			</div>
 
-			<!-- Right: Reset Adoption Button (when feature enabled) -->
+			<!-- Right: Reset Adoption Button -->
 			<div class="flex justify-end">
-				{#if $isPracticeAdoptionEnabled}
-					<Button
-						onclick={handleResetAdoption}
-						variant="danger"
-						size="md"
-						data-testid="reset-adoption-button"
-						aria-label="Reset all adoption data"
-					>
-						Reset
-					</Button>
-				{/if}
+				<Button
+					onclick={handleResetAdoption}
+					variant="danger"
+					size="md"
+					data-testid="reset-adoption-button"
+					aria-label="Reset all adoption data"
+				>
+					Reset
+				</Button>
 			</div>
 		</div>
 	</div>

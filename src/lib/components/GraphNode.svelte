@@ -2,7 +2,6 @@
 	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
 	import IconButton from '$lib/components/IconButton.svelte'
 	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
-	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
 	import { faExpand, faExternalLinkAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
@@ -24,12 +23,6 @@
 		onExpand = () => {},
 		onToggleAdoption = () => {} // NEW: Toggle adoption callback
 	} = $props()
-
-	// Subscribe to feature flag
-	let practiceAdoptionEnabled = $state(false)
-	isPracticeAdoptionEnabled.subscribe(value => {
-		practiceAdoptionEnabled = value
-	})
 
 	// Determine background color class based on category
 	// Colors defined in app.css @theme directive
@@ -68,32 +61,31 @@
 </script>
 
 <div
-	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left transition-all duration-200 {bgClass} {borderClass} {compact
+	class="relative block w-full h-full text-gray-800 rounded-[10px] shadow-md text-left transition-all duration-200 {bgClass} {borderClass} {compact
 		? 'p-4 min-h-12'
 		: 'p-4 min-h-16'}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
 >
-	<!-- Details/Close button in top-left corner -->
-	<div class="absolute top-3 left-3 z-10">
-		<IconButton
-			onclick={handleDetailsClick}
-			ariaLabel={isSelected
-				? `Close details for ${practice.name}`
-				: `View details for ${practice.name}`}
-		>
-			<Fa icon={isSelected ? faTimes : faExpand} size="md" />
-		</IconButton>
-	</div>
+	<div class="flex justify-between items-center -mt-4">
+		<!-- Details/Close button in top-left corner -->
+		<div class="z-10">
+			<IconButton
+				onclick={handleDetailsClick}
+				ariaLabel={isSelected
+					? `Close details for ${practice.name}`
+					: `View details for ${practice.name}`}
+			>
+				<Fa icon={isSelected ? faTimes : faExpand} size="md" />
+			</IconButton>
+		</div>
 
-	<!-- Adoption Checkbox in top-right corner (when feature enabled) -->
-	{#if practiceAdoptionEnabled}
-		<div class="absolute top-3 right-3 z-10" onclick={e => e.stopPropagation()} role="presentation">
+		<!-- Adoption Checkbox in top-right corner -->
+		<div class="z-10" onclick={e => e.stopPropagation()} role="presentation">
 			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
 		</div>
-	{/if}
-
+	</div>
 	<!-- Title Section -->
 	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
 		<h3
@@ -104,8 +96,8 @@
 	</div>
 
 	{#if isSelected}
-		<!-- Adoption percentage (when feature enabled and has dependencies) -->
-		{#if practiceAdoptionEnabled && totalDependencyCount > 0}
+		<!-- Adoption percentage (when has dependencies) -->
+		{#if totalDependencyCount > 0}
 			{@const totalWithParent = totalDependencyCount + 1}
 			{@const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount}
 			{@const adoptionPercentage = Math.floor((adoptedWithParent / totalWithParent) * 100)}
@@ -168,16 +160,6 @@
 						{practice.dependencyCount}
 						{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
 					{/if}
-				</div>
-			{/if}
-
-			<!-- Adoption percentage (when feature enabled and has dependencies) -->
-			{#if practiceAdoptionEnabled && totalDependencyCount > 0}
-				{@const totalWithParent = totalDependencyCount + 1}
-				{@const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount}
-				{@const adoptionPercentage = Math.floor((adoptedWithParent / totalWithParent) * 100)}
-				<div class="text-center {compact ? 'text-xs' : 'text-sm'} font-bold text-blue-700">
-					{adoptionPercentage}% adoption
 				</div>
 			{/if}
 		</div>

@@ -246,7 +246,7 @@
 		},
 		{
 			"id": "compliance-testing",
-			"name": "Compliance Testing and Checking",
+			"name": "Compliance Testing",
 			"type": "practice",
 			"category": "behavior",
 			"description": "Automated testing and validation to ensure compliance with regulatory requirements, industry standards, and organizational policies.",

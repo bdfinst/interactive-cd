@@ -1,16 +1,9 @@
 <script>
 	import { headerHeight } from '$lib/stores/headerHeight.js'
-	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 	import { exportAdoptionState, importAdoptionState } from '$lib/utils/exportImport.js'
 	import { get } from 'svelte/store'
-	import {
-		faBug,
-		faCircleInfo,
-		faFlask,
-		faDownload,
-		faUpload
-	} from '@fortawesome/free-solid-svg-icons'
+	import { faBug, faCircleInfo, faDownload, faUpload } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import { version } from '../../../package.json'
 
@@ -20,7 +13,6 @@
 	let showMinimumCDTooltip = $state(false)
 	let showSupportTooltip = $state(false)
 	let showVersionTooltip = $state(false)
-	let showExperimentalTooltip = $state(false)
 	let showExportTooltip = $state(false)
 	let showImportTooltip = $state(false)
 
@@ -65,11 +57,9 @@
 		}
 	})
 
-	// Load practice data when feature is enabled
+	// Load practice data on mount
 	$effect(() => {
-		if ($isPracticeAdoptionEnabled) {
-			loadPracticeData()
-		}
+		loadPracticeData()
 	})
 
 	/**
@@ -236,88 +226,61 @@
 
 			<!-- Right: Menu buttons -->
 			<div class="flex items-center justify-end gap-3">
-				<!-- Experimental Feature Indicator -->
-				{#if $isPracticeAdoptionEnabled}
-					<div class="relative inline-flex">
+				<!-- Export Button -->
+				<div class="relative inline-flex">
+					<button
+						type="button"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+						aria-label="Export adoption data"
+						data-testid="export-button"
+						onclick={handleExport}
+						onmouseenter={() => (showExportTooltip = true)}
+						onmouseleave={() => (showExportTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('export', v => (showExportTooltip = v))}
+					>
+						<Fa icon={faDownload} size="1.5x" />
+					</button>
+					{#if showExportTooltip}
 						<div
-							role="status"
-							class="flex items-center gap-2 px-3 py-1.5 min-h-[44px] rounded-md bg-amber-100 border-2 border-amber-600 cursor-default"
-							aria-label="Experimental feature enabled"
-							onmouseenter={() => (showExperimentalTooltip = true)}
-							onmouseleave={() => (showExperimentalTooltip = false)}
-							ontouchstart={createTooltipTouchHandler(
-								'experimental',
-								v => (showExperimentalTooltip = v)
-							)}
+							class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
 						>
-							<Fa icon={faFlask} class="text-amber-700" />
-							<span class="text-sm font-semibold text-amber-900 uppercase">Experimental</span>
+							Export Adoption Data
 						</div>
-						{#if showExperimentalTooltip}
-							<div
-								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90"
-							>
-								Practice Adoption feature enabled
-							</div>
-						{/if}
-					</div>
+					{/if}
+				</div>
 
-					<!-- Export Button -->
-					<div class="relative inline-flex">
-						<button
-							type="button"
-							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
-							aria-label="Export adoption data"
-							data-testid="export-button"
-							onclick={handleExport}
-							onmouseenter={() => (showExportTooltip = true)}
-							onmouseleave={() => (showExportTooltip = false)}
-							ontouchstart={createTooltipTouchHandler('export', v => (showExportTooltip = v))}
+				<!-- Import Button -->
+				<div class="relative inline-flex">
+					<button
+						type="button"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+						aria-label="Import adoption data"
+						data-testid="import-button"
+						onclick={handleImportClick}
+						onmouseenter={() => (showImportTooltip = true)}
+						onmouseleave={() => (showImportTooltip = false)}
+						ontouchstart={createTooltipTouchHandler('import', v => (showImportTooltip = v))}
+					>
+						<Fa icon={faUpload} size="1.5x" />
+					</button>
+					{#if showImportTooltip}
+						<div
+							class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
 						>
-							<Fa icon={faDownload} size="1.5x" />
-						</button>
-						{#if showExportTooltip}
-							<div
-								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
-							>
-								Export Adoption Data
-							</div>
-						{/if}
-					</div>
+							Import Adoption Data
+						</div>
+					{/if}
+				</div>
 
-					<!-- Import Button -->
-					<div class="relative inline-flex">
-						<button
-							type="button"
-							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
-							aria-label="Import adoption data"
-							data-testid="import-button"
-							onclick={handleImportClick}
-							onmouseenter={() => (showImportTooltip = true)}
-							onmouseleave={() => (showImportTooltip = false)}
-							ontouchstart={createTooltipTouchHandler('import', v => (showImportTooltip = v))}
-						>
-							<Fa icon={faUpload} size="1.5x" />
-						</button>
-						{#if showImportTooltip}
-							<div
-								class="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1.5 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[6px] before:border-transparent before:border-b-black/90 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2 md:text-sm"
-							>
-								Import Adoption Data
-							</div>
-						{/if}
-					</div>
-
-					<!-- Hidden file input -->
-					<input
-						type="file"
-						accept=".cdpa,application/vnd.cd-practices.adoption+json"
-						bind:this={fileInput}
-						onchange={handleFileChange}
-						class="hidden"
-						data-testid="import-file-input"
-					/>
-				{/if}
+				<!-- Hidden file input -->
+				<input
+					type="file"
+					accept=".cdpa,application/vnd.cd-practices.adoption+json"
+					bind:this={fileInput}
+					onchange={handleFileChange}
+					class="hidden"
+					data-testid="import-file-input"
+				/>
 
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
@@ -485,41 +448,30 @@
 
 			<!-- Bottom: Menu buttons (centered) -->
 			<div class="flex items-center justify-center gap-2 md:gap-3 flex-wrap">
-				<!-- Experimental Feature Indicator (Mobile) -->
-				{#if $isPracticeAdoptionEnabled}
-					<div
-						class="flex items-center gap-1.5 px-2.5 py-1 min-h-[44px] rounded-md bg-amber-100 border-2 border-amber-600 cursor-default w-full justify-center"
-						aria-label="Experimental feature enabled"
+				<!-- Export/Import Buttons (Mobile) -->
+				<div class="flex items-center gap-2">
+					<!-- Export Button -->
+					<button
+						type="button"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+						aria-label="Export adoption data"
+						data-testid="export-button-mobile"
+						onclick={handleExport}
 					>
-						<Fa icon={faFlask} class="text-amber-700" size="sm" />
-						<span class="text-xs font-semibold text-amber-900 uppercase">Experimental</span>
-					</div>
+						<Fa icon={faDownload} size="lg" />
+					</button>
 
-					<!-- Export/Import Buttons (Mobile) -->
-					<div class="flex items-center gap-2">
-						<!-- Export Button -->
-						<button
-							type="button"
-							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
-							aria-label="Export adoption data"
-							data-testid="export-button-mobile"
-							onclick={handleExport}
-						>
-							<Fa icon={faDownload} size="lg" />
-						</button>
-
-						<!-- Import Button -->
-						<button
-							type="button"
-							class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
-							aria-label="Import adoption data"
-							data-testid="import-button-mobile"
-							onclick={handleImportClick}
-						>
-							<Fa icon={faUpload} size="lg" />
-						</button>
-					</div>
-				{/if}
+					<!-- Import Button -->
+					<button
+						type="button"
+						class="flex items-center justify-center text-gray-800 p-2 min-h-[44px] min-w-[44px] rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-95"
+						aria-label="Import adoption data"
+						data-testid="import-button-mobile"
+						onclick={handleImportClick}
+					>
+						<Fa icon={faUpload} size="lg" />
+					</button>
+				</div>
 
 				<!-- GitHub Link -->
 				<div class="relative inline-flex">
