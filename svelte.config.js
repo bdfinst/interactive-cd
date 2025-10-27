@@ -16,6 +16,9 @@ const config = {
 			$domain: './src/domain',
 			$application: './src/application',
 			$infrastructure: './src/infrastructure'
+		},
+		serviceWorker: {
+			register: false // We register the service worker manually in +layout.svelte
 		}
 	}
 }

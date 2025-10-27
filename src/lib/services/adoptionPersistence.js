@@ -1,4 +1,3 @@
-/* global localStorage */
 /**
  * Adoption State Persistence Service
  * Handles localStorage operations for practice adoption state

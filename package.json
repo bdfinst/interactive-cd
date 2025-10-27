@@ -55,6 +55,7 @@
 		"@testing-library/svelte": "^5.2.8",
 		"@typescript-eslint/eslint-plugin": "^8.46.1",
 		"@typescript-eslint/parser": "^8.46.1",
+		"@vite-pwa/sveltekit": "^1.0.1",
 		"ajv": "^8.17.1",
 		"ajv-formats": "^3.0.1",
 		"eslint": "^9.38.0",
@@ -70,6 +71,7 @@
 		"svelte-eslint-parser": "^1.4.0",
 		"tailwindcss": "^4.1.14",
 		"vite": "^7.1.10",
+		"vite-plugin-pwa": "^1.1.0",
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {

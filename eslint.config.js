@@ -35,6 +35,10 @@ export default [
 				clearTimeout: 'readonly',
 				setInterval: 'readonly',
 				clearInterval: 'readonly',
+				localStorage: 'readonly',
+				// Service Worker globals
+				self: 'readonly',
+				caches: 'readonly',
 				// Node globals
 				process: 'readonly',
 				global: 'readonly',
