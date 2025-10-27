@@ -19,6 +19,7 @@
 		isTreeExpanded = false, // Add prop to know if we're in tree view
 		isAdopted = false, // NEW: Is this practice adopted
 		adoptedDependencyCount = 0, // NEW: How many dependencies are adopted
+		totalDependencyCount = 0, // NEW: Total transitive dependency count
 		onclick = () => {},
 		onexpand = () => {},
 		ontoggleadoption = () => {} // NEW: Toggle adoption callback
@@ -182,9 +183,9 @@
 			{/if}
 
 			<!-- Adoption counter (when feature enabled and has dependencies) -->
-			{#if practiceAdoptionEnabled && practice.dependencyCount > 0}
+			{#if practiceAdoptionEnabled && totalDependencyCount > 0}
 				<div class="text-center {compact ? 'text-xs' : 'text-sm'} text-green-700">
-					<span class="font-semibold">{adoptedDependencyCount}/{practice.dependencyCount}</span> dependencies
+					<span class="font-semibold">{adoptedDependencyCount}/{totalDependencyCount}</span> dependencies
 					adopted
 				</div>
 			{/if}
@@ -192,8 +193,8 @@
 			<!-- CD adoption percentage (when feature enabled and practice is CD itself) -->
 			{#if practiceAdoptionEnabled && practice.id === 'continuous-delivery'}
 				{@const adoptionPercentage =
-					practice.dependencyCount > 0
-						? Math.round((adoptedDependencyCount / practice.dependencyCount) * 100)
+					totalDependencyCount > 0
+						? Math.round((adoptedDependencyCount / totalDependencyCount) * 100)
 						: 0}
 				<div class="text-center {compact ? 'text-xs' : 'text-sm'} font-bold text-blue-700">
 					{adoptionPercentage}% adoption

@@ -16,7 +16,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(0)
+			expect(result).toEqual({ adoptedCount: 0, totalCount: 0 })
 		})
 
 		it('returns 0 when no dependencies are adopted', () => {
@@ -28,7 +28,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(0)
+			expect(result.adoptedCount).toBe(0)
 		})
 
 		it('counts adopted dependencies correctly', () => {
@@ -40,7 +40,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(2)
+			expect(result.adoptedCount).toBe(2)
 		})
 
 		it('returns total when all dependencies are adopted', () => {
@@ -52,7 +52,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(2)
+			expect(result.adoptedCount).toBe(2)
 		})
 
 		it('handles single dependency', () => {
@@ -64,7 +64,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(1)
+			expect(result.adoptedCount).toBe(1)
 		})
 
 		it('handles practice with dependencies array containing duplicates', () => {
@@ -77,14 +77,20 @@ describe('adoption', () => {
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
 			// Should count unique dependencies
-			expect(result).toBe(2)
+			expect(result.adoptedCount).toBe(2)
 		})
 
 		it('handles null or undefined practice gracefully', () => {
 			const adoptedSet = new Set(['version-control'])
 
-			expect(calculateAdoptedDependencies(null, adoptedSet, new Map())).toBe(0)
-			expect(calculateAdoptedDependencies(undefined, adoptedSet, new Map())).toBe(0)
+			expect(calculateAdoptedDependencies(null, adoptedSet, new Map())).toEqual({
+				adoptedCount: 0,
+				totalCount: 0
+			})
+			expect(calculateAdoptedDependencies(undefined, adoptedSet, new Map())).toEqual({
+				adoptedCount: 0,
+				totalCount: 0
+			})
 		})
 
 		it('handles null or undefined dependencies array', () => {
@@ -96,7 +102,7 @@ describe('adoption', () => {
 
 			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(result).toBe(0)
+			expect(result.adoptedCount).toBe(0)
 		})
 	})
 
@@ -253,6 +259,132 @@ describe('adoption', () => {
 		})
 	})
 
+	describe('Transitive Dependencies', () => {
+		it('counts transitive dependencies when practice map is provided', () => {
+			// Build practice map: CI -> VC, CI -> AT, VC -> TBD
+			const practiceMap = new Map()
+			practiceMap.set('continuous-integration', {
+				id: 'continuous-integration',
+				dependencies: ['version-control', 'automated-testing']
+			})
+			practiceMap.set('version-control', {
+				id: 'version-control',
+				dependencies: ['trunk-based-dev']
+			})
+			practiceMap.set('automated-testing', {
+				id: 'automated-testing',
+				dependencies: ['test-automation', 'tdd']
+			})
+			practiceMap.set('trunk-based-dev', {
+				id: 'trunk-based-dev',
+				dependencies: []
+			})
+			practiceMap.set('test-automation', {
+				id: 'test-automation',
+				dependencies: []
+			})
+			practiceMap.set('tdd', {
+				id: 'tdd',
+				dependencies: []
+			})
+
+			// Adopt version-control (direct), trunk-based-dev (transitive), tdd (transitive)
+			const adoptedSet = new Set(['version-control', 'trunk-based-dev', 'tdd'])
+
+			const result = calculateAdoptedDependencies(
+				practiceMap.get('continuous-integration'),
+				adoptedSet,
+				practiceMap
+			)
+
+			// Should count: version-control (direct) + trunk-based-dev (transitive via VC) + tdd (transitive via AT)
+			expect(result.adoptedCount).toBe(3)
+		})
+
+		it('counts only direct dependencies when practice map is empty', () => {
+			const practice = {
+				id: 'continuous-integration',
+				dependencies: ['version-control', 'automated-testing']
+			}
+			const adoptedSet = new Set(['version-control', 'automated-testing'])
+			const emptyMap = new Map()
+
+			const result = calculateAdoptedDependencies(practice, adoptedSet, emptyMap)
+
+			// Should only count direct dependencies
+			expect(result.adoptedCount).toBe(2)
+		})
+
+		it('handles cyclic dependencies gracefully', () => {
+			const practiceMap = new Map()
+			practiceMap.set('practice-a', {
+				id: 'practice-a',
+				dependencies: ['practice-b']
+			})
+			practiceMap.set('practice-b', {
+				id: 'practice-b',
+				dependencies: ['practice-c']
+			})
+			practiceMap.set('practice-c', {
+				id: 'practice-c',
+				dependencies: ['practice-a'] // Cycle!
+			})
+
+			const adoptedSet = new Set(['practice-b', 'practice-c'])
+
+			const result = calculateAdoptedDependencies(
+				practiceMap.get('practice-a'),
+				adoptedSet,
+				practiceMap
+			)
+
+			// Should handle cycle and count unique dependencies
+			expect(result.adoptedCount).toBe(2) // practice-b and practice-c
+		})
+
+		it('counts all levels of transitive dependencies', () => {
+			const practiceMap = new Map()
+			// CD -> CI -> VC -> TBD -> GIT
+			practiceMap.set('continuous-delivery', {
+				id: 'continuous-delivery',
+				dependencies: ['continuous-integration']
+			})
+			practiceMap.set('continuous-integration', {
+				id: 'continuous-integration',
+				dependencies: ['version-control']
+			})
+			practiceMap.set('version-control', {
+				id: 'version-control',
+				dependencies: ['trunk-based-dev']
+			})
+			practiceMap.set('trunk-based-dev', {
+				id: 'trunk-based-dev',
+				dependencies: ['git-basics']
+			})
+			practiceMap.set('git-basics', {
+				id: 'git-basics',
+				dependencies: []
+			})
+
+			// Adopt all practices
+			const adoptedSet = new Set([
+				'continuous-integration',
+				'version-control',
+				'trunk-based-dev',
+				'git-basics'
+			])
+
+			const result = calculateAdoptedDependencies(
+				practiceMap.get('continuous-delivery'),
+				adoptedSet,
+				practiceMap
+			)
+
+			// Should count all 4 levels of transitive dependencies
+			expect(result.adoptedCount).toBe(4)
+		})
+	})
+
 	describe('Edge cases and integration', () => {
 		it('handles practice with empty dependencies array', () => {
 			const practice = {
@@ -263,7 +395,7 @@ describe('adoption', () => {
 
 			const count = calculateAdoptedDependencies(practice, adoptedSet, new Map())
 
-			expect(count).toBe(0)
+			expect(count).toEqual({ adoptedCount: 0, totalCount: 0 })
 		})
 
 		it('calculates 0% adoption correctly', () => {
@@ -290,6 +422,105 @@ describe('adoption', () => {
 			const percentage = calculateAdoptionPercentage(filtered.size, validIds.size)
 
 			expect(percentage).toBe(67) // 2/3 = 66.67% → 67%
+		})
+	})
+
+	describe('Object-based dependencies', () => {
+		it('handles dependencies as objects with id property', () => {
+			const practice = {
+				id: 'continuous-integration',
+				dependencies: [
+					{ id: 'version-control', name: 'Version Control' },
+					{ id: 'automated-testing', name: 'Automated Testing' }
+				]
+			}
+			const adoptedSet = new Set(['version-control'])
+
+			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
+
+			expect(result.adoptedCount).toBe(1)
+		})
+
+		it('handles mixed string and object dependencies', () => {
+			const practice = {
+				id: 'test-practice',
+				dependencies: [
+					'version-control', // String
+					{ id: 'automated-testing', name: 'Automated Testing' } // Object
+				]
+			}
+			const adoptedSet = new Set(['version-control', 'automated-testing'])
+
+			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
+
+			expect(result.adoptedCount).toBe(2)
+		})
+
+		it('counts transitive dependencies with object structure', () => {
+			const practiceMap = new Map()
+			practiceMap.set('continuous-delivery', {
+				id: 'continuous-delivery',
+				dependencies: [{ id: 'continuous-integration', name: 'CI' }]
+			})
+			practiceMap.set('continuous-integration', {
+				id: 'continuous-integration',
+				dependencies: [
+					{ id: 'version-control', name: 'VC' },
+					{ id: 'automated-testing', name: 'AT' }
+				]
+			})
+			practiceMap.set('version-control', {
+				id: 'version-control',
+				dependencies: [{ id: 'trunk-based-dev', name: 'TBD' }]
+			})
+			practiceMap.set('trunk-based-dev', {
+				id: 'trunk-based-dev',
+				dependencies: []
+			})
+			practiceMap.set('automated-testing', {
+				id: 'automated-testing',
+				dependencies: []
+			})
+
+			// Adopt version-control, trunk-based-dev, and automated-testing
+			const adoptedSet = new Set(['version-control', 'trunk-based-dev', 'automated-testing'])
+
+			const result = calculateAdoptedDependencies(
+				practiceMap.get('continuous-delivery'),
+				adoptedSet,
+				practiceMap
+			)
+
+			// Should count: CI -> VC (adopted), VC -> TBD (adopted), CI -> AT (adopted)
+			// Total: 4 dependencies (CI, VC, TBD, AT), 3 adopted (VC, TBD, AT)
+			expect(result.adoptedCount).toBe(3)
+		})
+
+		it('handles null or undefined object dependencies', () => {
+			const practice = {
+				id: 'test-practice',
+				dependencies: [{ id: 'version-control' }, null, undefined, { id: 'automated-testing' }]
+			}
+			const adoptedSet = new Set(['version-control', 'automated-testing'])
+
+			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
+
+			expect(result.adoptedCount).toBe(2)
+		})
+
+		it('handles object dependencies without id property', () => {
+			const practice = {
+				id: 'test-practice',
+				dependencies: [
+					{ name: 'Invalid' }, // No id property
+					{ id: 'version-control' }
+				]
+			}
+			const adoptedSet = new Set(['version-control'])
+
+			const result = calculateAdoptedDependencies(practice, adoptedSet, new Map())
+
+			expect(result.adoptedCount).toBe(1)
 		})
 	})
 })

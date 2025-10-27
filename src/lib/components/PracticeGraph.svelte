@@ -48,6 +48,28 @@
 	// Full tree data
 	let fullTreeData = $state(null)
 
+	// Practice map for transitive dependency calculations
+	let practiceMap = $state(new Map())
+
+	/**
+	 * Build a map of practice ID to practice object from tree data
+	 * @param {Object} node - Tree node (practice with nested dependencies)
+	 * @param {Map} map - Map to populate
+	 */
+	function buildPracticeMap(node, map) {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- Building map from tree data, not reactive state
+		if (!map) map = new Map()
+		if (!node) return map
+
+		map.set(node.id, node)
+
+		if (node.dependencies && Array.isArray(node.dependencies)) {
+			node.dependencies.forEach(dep => buildPracticeMap(dep, map))
+		}
+
+		return map
+	}
+
 	// Initialize with provided practices
 	onMount(async () => {
 		// Initialize adoption store with all valid practice IDs
@@ -56,6 +78,9 @@
 		const treeResult = await treeResponse.json()
 
 		if (treeResult.success) {
+			// Build practice map for transitive dependency calculations
+			practiceMap = buildPracticeMap(treeResult.data)
+
 			// Extract all practice IDs from the tree
 			// eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary Set, not reactive state
 			const allPracticeIds = new Set()
@@ -531,6 +556,11 @@
 
 			<!-- Current Practice -->
 			{#if currentPractice}
+				{@const adoptionCounts = calculateAdoptedDependencies(
+					currentPractice,
+					adoptedPractices,
+					practiceMap
+				)}
 				<div class="flex justify-center mb-16">
 					<div bind:this={currentRef} class="max-w-[400px] w-full">
 						<GraphNode
@@ -540,10 +570,8 @@
 							isExpanded={isPracticeExpanded(currentPractice.id)}
 							isTreeExpanded={false}
 							isAdopted={adoptedPractices.has(currentPractice.id)}
-							adoptedDependencyCount={calculateAdoptedDependencies(
-								currentPractice,
-								adoptedPractices
-							)}
+							adoptedDependencyCount={adoptionCounts.adoptedCount}
+							totalDependencyCount={adoptionCounts.totalCount}
 							onclick={() => selectNode(currentPractice.id)}
 							onexpand={() => expandPractice(currentPractice.id)}
 							ontoggleadoption={() => adoptionStore.toggle(currentPractice.id)}
@@ -560,6 +588,11 @@
 				>
 					{#each dependencies as dependency, i (dependency.id)}
 						{@const isSelected = selectedNodeId === dependency.id}
+						{@const depAdoptionCounts = calculateAdoptedDependencies(
+							dependency,
+							adoptedPractices,
+							practiceMap
+						)}
 						<div
 							bind:this={dependencyRefs[i]}
 							class="w-full {isSelected ? 'md:w-2/3 lg:w-1/2' : ''}"
@@ -572,7 +605,8 @@
 								isExpanded={isPracticeExpanded(dependency.id)}
 								isTreeExpanded={false}
 								isAdopted={adoptedPractices.has(dependency.id)}
-								adoptedDependencyCount={calculateAdoptedDependencies(dependency, adoptedPractices)}
+								adoptedDependencyCount={depAdoptionCounts.adoptedCount}
+								totalDependencyCount={depAdoptionCounts.totalCount}
 								onclick={() => selectNode(dependency.id)}
 								onexpand={() => expandPractice(dependency.id)}
 								ontoggleadoption={() => adoptionStore.toggle(dependency.id)}
