@@ -94,7 +94,7 @@ describe('GraphNode', () => {
 			expect(queryByText('Faster delivery')).not.toBeInTheDocument()
 		})
 
-		it('applies selected visual style', () => {
+		it('applies selected data attribute', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, {
 				props: { practice, isSelected: true }
@@ -102,11 +102,9 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-selected')).toBe('true')
-			expect(node.className).toContain('border-4')
-			expect(node.className).toContain('border-blue-600')
 		})
 
-		it('applies unselected visual style', () => {
+		it('applies unselected data attribute', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, {
 				props: { practice, isSelected: false }
@@ -114,7 +112,6 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-selected')).toBe('false')
-			expect(node.className).toContain('border-2')
 		})
 	})
 
@@ -282,6 +279,58 @@ describe('GraphNode', () => {
 			})
 
 			expect(queryByText('Requirements')).not.toBeInTheDocument()
+		})
+	})
+
+	describe('node sizing', () => {
+		it('applies tiny size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'tiny' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('tiny')
+		})
+
+		it('applies compact size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'compact' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('compact')
+		})
+
+		it('applies standard size variant data attribute by default', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('standard')
+		})
+
+		it('applies expanded size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'expanded' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('expanded')
+		})
+
+		it('applies selected-dependency size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'selected-dependency' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('selected-dependency')
 		})
 	})
 })

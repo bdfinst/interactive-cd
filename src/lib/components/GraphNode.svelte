@@ -14,14 +14,14 @@
 		practice,
 		isRoot = false,
 		isSelected = false,
-		compact = false,
-		isTreeExpanded = false, // Add prop to know if we're in tree view
-		isAdopted = false, // NEW: Is this practice adopted
-		adoptedDependencyCount = 0, // NEW: How many dependencies are adopted
-		totalDependencyCount = 0, // NEW: Total transitive dependency count
+		nodeSize = 'standard', // NEW: size variant (tiny, compact, standard, expanded, selected-dependency)
+		isTreeExpanded = false,
+		isAdopted = false,
+		adoptedDependencyCount = 0,
+		totalDependencyCount = 0,
 		onclick = () => {},
 		onExpand = () => {},
-		onToggleAdoption = () => {} // NEW: Toggle adoption callback
+		onToggleAdoption = () => {}
 	} = $props()
 
 	// Determine background color class based on category
@@ -41,15 +41,30 @@
 		}
 	})
 
-	const borderClass = $derived(
-		isSelected
-			? compact
-				? 'border-2 border-blue-600'
-				: 'border-4 border-blue-600'
-			: compact
-				? 'border border-black'
-				: 'border-2 border-black'
+	// Adoption percentage calculation (DRY)
+	const adoptionData = $derived.by(() => {
+		if (totalDependencyCount === 0) {
+			return null
+		}
+
+		const totalWithParent = totalDependencyCount + 1
+		const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount
+		const percentage = Math.floor((adoptedWithParent / totalWithParent) * 100)
+
+		return {
+			totalWithParent,
+			adoptedWithParent,
+			percentage
+		}
+	})
+
+	// Determine when to show adoption percentage
+	const shouldShowAdoptionPercentage = $derived(
+		adoptionData !== null && (isSelected || !isTreeExpanded)
 	)
+
+	// Determine if node is in compact display mode (affects content shown)
+	const isCompactDisplay = $derived(nodeSize === 'tiny' || nodeSize === 'compact')
 
 	function handleDetailsClick() {
 		onclick()
@@ -61,11 +76,10 @@
 </script>
 
 <div
-	class="relative block w-full h-full text-gray-800 rounded-[10px] shadow-md text-left transition-all duration-200 {bgClass} {borderClass} {compact
-		? 'p-4 min-h-12'
-		: 'p-4 min-h-16'}"
+	class="relative block w-full h-full text-gray-800 rounded-[10px] shadow-md text-left transition-all duration-200 {bgClass}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
+	data-node-size={nodeSize}
 	data-selected={isSelected}
 >
 	<div class="flex justify-between items-center -mt-4">
@@ -86,59 +100,84 @@
 			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
 		</div>
 	</div>
+
 	<!-- Title Section -->
-	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
-		<h3
-			class="{compact ? 'mb-0.5 text-base' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900"
-		>
+	<div class="text-center node-section">
+		<h3 class="font-bold leading-tight text-gray-900">
 			{practice.name}
 		</h3>
 	</div>
 
 	{#if isSelected}
 		<!-- Adoption percentage (when has dependencies) -->
-		{#if totalDependencyCount > 0}
-			{@const totalWithParent = totalDependencyCount + 1}
-			{@const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount}
-			{@const adoptionPercentage = Math.floor((adoptedWithParent / totalWithParent) * 100)}
-			<div class="text-center {compact ? 'mb-1 text-xs' : 'mb-3 text-sm'} font-bold text-blue-700">
-				{adoptionPercentage}% adoption
+		{#if shouldShowAdoptionPercentage}
+			<div class="adoption-percentage text-center font-bold text-blue-700 node-section">
+				{adoptionData.percentage}% adoption
+			</div>
+		{/if}
+
+		<!-- Quick-Start Guide Link (selected view) -->
+		{#if practice.quickStartGuide}
+			<div class="flex justify-start node-section">
+				<a
+					href={practice.quickStartGuide}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-600 hover:text-blue-700 transition-colors"
+					data-testid="quick-start-guide-link"
+					onclick={e => e.stopPropagation()}
+					aria-label="Quick-start guide for {practice.name}"
+				>
+					<Fa icon={faExternalLinkAlt} size="md" />
+				</a>
 			</div>
 		{/if}
 
 		<!-- Description -->
-		<p class="{compact ? 'mb-1 text-xs' : 'mb-3 text-sm'} text-gray-600">
+		<p
+			class="text-gray-600 node-section"
+			class:text-xs={isCompactDisplay}
+			class:text-sm={!isCompactDisplay}
+		>
 			{practice.description}
 		</p>
 
 		<!-- Requirements -->
 		{#if practice.requirements && practice.requirements.length > 0}
-			<div class={compact ? 'mb-1' : 'mb-3'}>
-				<h4 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-sm'} font-semibold text-blue-700">
+			<div class="node-section">
+				<h4
+					class="font-semibold text-blue-700"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
+				>
 					Requirements
 				</h4>
 				<ListWithIcons
 					items={practice.requirements}
 					icon="•"
 					iconColor="text-gray-400"
-					{compact}
-					textSize={compact ? 'text-xs' : 'text-sm'}
+					compact={isCompactDisplay}
+					textSize={isCompactDisplay ? 'text-xs' : 'text-sm'}
 				/>
 			</div>
 		{/if}
 
 		<!-- Benefits -->
 		{#if practice.benefits && practice.benefits.length > 0}
-			<div class={compact ? 'mb-1' : 'mb-3'}>
-				<h4 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-sm'} font-semibold text-green-700">
+			<div class="node-section">
+				<h4
+					class="font-semibold text-green-700"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
+				>
 					Benefits
 				</h4>
 				<ListWithIcons
 					items={practice.benefits}
 					icon="→"
 					iconColor="text-green-600"
-					{compact}
-					textSize={compact ? 'text-xs' : 'text-sm'}
+					compact={isCompactDisplay}
+					textSize={isCompactDisplay ? 'text-xs' : 'text-sm'}
 				/>
 			</div>
 		{/if}
@@ -147,12 +186,15 @@
 		<div class="flex flex-col gap-2">
 			<!-- Show dependency count only in collapsed view -->
 			{#if !isTreeExpanded && practice.dependencyCount > 0}
-				<div class="text-center {compact ? 'mt-1 pt-1 text-xs' : 'pt-3 text-sm'}  text-gray-500">
+				<div
+					class="dependency-count text-center text-gray-500"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
+				>
 					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
 						<!-- Collapsed view: show both direct and total -->
-						<div>
+						<div class={isCompactDisplay ? 'mt-1 pt-1' : 'pt-3'}>
 							<span class="font-semibold">{practice.directDependencyCount} direct</span>
-
 							<span> - {practice.totalDependencyCount} total</span>
 						</div>
 					{:else}
@@ -162,24 +204,30 @@
 					{/if}
 				</div>
 			{/if}
-		</div>
-	{/if}
 
-	<!-- Quick-Start Guide Link (bottom center for all views) -->
-	{#if practice.quickStartGuide}
-		<div class="absolute bottom-3 left-0 right-0 flex justify-center z-10">
-			<a
-				href={practice.quickStartGuide}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="inline-flex items-center gap-1 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-xs font-medium"
-				data-testid="quick-start-guide-link"
-				onclick={e => e.stopPropagation()}
-			>
-				<span>📚</span>
-				<span>Guide</span>
-				<Fa icon={faExternalLinkAlt} size="xs" />
-			</a>
+			<!-- Adoption percentage (when has dependencies and NOT in tree expanded view) -->
+			{#if shouldShowAdoptionPercentage}
+				<div class="adoption-percentage text-center font-bold text-blue-700">
+					{adoptionData.percentage}% adoption
+				</div>
+			{/if}
+
+			<!-- Quick-Start Guide Link (unselected view) -->
+			{#if practice.quickStartGuide}
+				<div class="flex justify-start">
+					<a
+						href={practice.quickStartGuide}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-blue-600 hover:text-blue-700 transition-colors"
+						data-testid="quick-start-guide-link"
+						onclick={e => e.stopPropagation()}
+						aria-label="Quick-start guide for {practice.name}"
+					>
+						<Fa icon={faExternalLinkAlt} size="md" />
+					</a>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>

@@ -475,14 +475,12 @@
 									practiceMap
 								)}
 								<div class="flex justify-center">
-									<div
-										bind:this={treeNodeRefs[practice.id]}
-										class="w-full max-w-[482px] min-h-[300px]"
-									>
+									<div bind:this={treeNodeRefs[practice.id]}>
 										<GraphNode
 											{practice}
 											isRoot={practice.level === 0}
 											{isSelected}
+											nodeSize="expanded"
 											isTreeExpanded={$isFullTreeExpanded}
 											isAdopted={adoptedPractices.has(practice.id)}
 											adoptedDependencyCount={adoptionCounts.adoptedCount}
@@ -490,7 +488,6 @@
 											onclick={() => selectNode(practice.id)}
 											onExpand={null}
 											onToggleAdoption={() => adoptionStore.toggle(practice.id)}
-											compact={true}
 										/>
 									</div>
 								</div>
@@ -507,14 +504,12 @@
 											adoptedPractices,
 											practiceMap
 										)}
-										<div
-											bind:this={treeNodeRefs[practice.id]}
-											class="w-full min-w-[120px] max-w-[150px] min-h-[80px]"
-										>
+										<div bind:this={treeNodeRefs[practice.id]}>
 											<GraphNode
 												{practice}
 												isRoot={practice.level === 0}
 												isSelected={false}
+												nodeSize="tiny"
 												isTreeExpanded={$isFullTreeExpanded}
 												isAdopted={adoptedPractices.has(practice.id)}
 												adoptedDependencyCount={adoptionCounts.adoptedCount}
@@ -522,7 +517,6 @@
 												onclick={() => selectNode(practice.id)}
 												onExpand={null}
 												onToggleAdoption={() => adoptionStore.toggle(practice.id)}
-												compact={true}
 											/>
 										</div>
 									{/each}
@@ -558,11 +552,12 @@
 			{#if ancestorPractices.length > 0}
 				{#each ancestorPractices as ancestor, i (ancestor.id)}
 					<div class="flex justify-center mb-16">
-						<div bind:this={ancestorRefs[i]} class="max-w-[400px] w-full">
+						<div bind:this={ancestorRefs[i]}>
 							<GraphNode
 								practice={ancestor}
 								isRoot={i === 0}
 								isSelected={false}
+								nodeSize="standard"
 								isTreeExpanded={false}
 								onclick={() => navigateToAncestor(i)}
 								onExpand={() => navigateToAncestor(i)}
@@ -580,11 +575,12 @@
 					practiceMap
 				)}
 				<div class="flex justify-center mb-16">
-					<div bind:this={currentRef} class="max-w-[400px] w-full">
+					<div bind:this={currentRef}>
 						<GraphNode
 							practice={currentPractice}
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
+							nodeSize="standard"
 							isExpanded={isPracticeExpanded(currentPractice.id)}
 							isTreeExpanded={false}
 							isAdopted={adoptedPractices.has(currentPractice.id)}
@@ -611,15 +607,12 @@
 							adoptedPractices,
 							practiceMap
 						)}
-						<div
-							bind:this={dependencyRefs[i]}
-							class="w-full {isSelected ? 'md:w-2/3 lg:w-1/2' : ''}"
-							style={isSelected ? '' : 'max-width: 250px; height: 140px;'}
-						>
+						<div bind:this={dependencyRefs[i]}>
 							<GraphNode
 								practice={dependency}
 								isRoot={false}
 								{isSelected}
+								nodeSize={isSelected ? 'selected-dependency' : 'compact'}
 								isExpanded={isPracticeExpanded(dependency.id)}
 								isTreeExpanded={false}
 								isAdopted={adoptedPractices.has(dependency.id)}
@@ -628,7 +621,6 @@
 								onclick={() => selectNode(dependency.id)}
 								onExpand={() => expandPractice(dependency.id)}
 								onToggleAdoption={() => adoptionStore.toggle(dependency.id)}
-								compact={!isSelected}
 							/>
 						</div>
 					{/each}
