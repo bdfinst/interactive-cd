@@ -61,7 +61,7 @@ This feature allows users to track which DevOps practices they have adopted, wit
 - Handles special characters in practice IDs
 - Easy to encode/decode
 
-### Example URLs:
+### Example URLs
 
 ```
 # No adoptions
@@ -78,13 +78,13 @@ https://example.com/?adopted=Y2ksdmMsYXQsY2QsZGI
 
 ## State Synchronization Strategy
 
-### Priority Order:
+### Priority Order
 
 1. **URL parameters** (highest priority - enables sharing)
 2. **localStorage** (fallback - persistence)
 3. **Empty state** (default)
 
-### Sync Flow:
+### Sync Flow
 
 ```
 Page Load
@@ -102,7 +102,7 @@ Initialize Svelte store with state
 On toggle → Update store → Update localStorage → Update URL
 ```
 
-### Debouncing:
+### Debouncing
 
 - **localStorage writes:** Debounced 500ms (avoid excessive writes)
 - **URL updates:** Immediate (use `history.replaceState` to avoid breaking back button)
@@ -205,7 +205,7 @@ docs/features/
   isAdopted: boolean,              // From adoptionStore
   adoptedDependencyCount: number,  // Computed from store
   totalDependencyCount: number,    // From practice.dependencyCount
-  ontoggleadoption: (id) => void  // Toggle adoption callback
+  onToggleAdoption: (id) => void  // Toggle adoption callback
 }
 ```
 
@@ -679,7 +679,7 @@ $: adoptionPercentage =
 
 ## Future Enhancements
 
-### Phase 2 (Optional):
+### Phase 2 (Optional)
 
 1. **Export/Import**
    - Download adoption state as JSON

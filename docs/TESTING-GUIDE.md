@@ -1707,9 +1707,9 @@ describe('Complex Feature', () => {
 - **CLAUDE.md**: Full development workflow guide
 - **Test Quality Reviewer Agent**: `.claude/agents/test-quality-reviewer.md`
 - **BDD Expert Agent**: `.claude/agents/bdd-expert.md`
-- **Vitest Documentation**: https://vitest.dev
-- **Playwright Documentation**: https://playwright.dev
-- **Testing Library**: https://testing-library.com/docs/svelte-testing-library/intro
+- **Vitest Documentation**: <https://vitest.dev>
+- **Playwright Documentation**: <https://playwright.dev>
+- **Testing Library**: <https://testing-library.com/docs/svelte-testing-library/intro>
 
 ---
 

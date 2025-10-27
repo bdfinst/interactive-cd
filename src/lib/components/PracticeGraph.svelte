@@ -5,20 +5,20 @@
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
 	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
+	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
+	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
 	import {
 		expandPractice as expandPracticeLogic,
 		isPracticeExpanded as isPracticeExpandedLogic,
 		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
-	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
-	import { flattenTree, enrichWithDependencyCounts } from '$lib/domain/practice-graph/tree.js'
-	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
-	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
-	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { enrichWithDependencyCounts, flattenTree } from '$lib/domain/practice-graph/tree.js'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
 	import { calculateAdoptedDependencies } from '$lib/utils/adoption.js'
-	import { onMount, tick } from 'svelte'
 	import { debounce } from '$lib/utils/debounce.js'
+	import { onMount, tick } from 'svelte'
 	import GraphNode from './GraphNode.svelte'
 	import LoadingSpinner from './LoadingSpinner.svelte'
 
@@ -488,8 +488,8 @@
 											adoptedDependencyCount={adoptionCounts.adoptedCount}
 											totalDependencyCount={adoptionCounts.totalCount}
 											onclick={() => selectNode(practice.id)}
-											onexpand={null}
-											ontoggleadoption={() => adoptionStore.toggle(practice.id)}
+											onExpand={null}
+											onToggleAdoption={() => adoptionStore.toggle(practice.id)}
 											compact={true}
 										/>
 									</div>
@@ -520,8 +520,8 @@
 												adoptedDependencyCount={adoptionCounts.adoptedCount}
 												totalDependencyCount={adoptionCounts.totalCount}
 												onclick={() => selectNode(practice.id)}
-												onexpand={null}
-												ontoggleadoption={() => adoptionStore.toggle(practice.id)}
+												onExpand={null}
+												onToggleAdoption={() => adoptionStore.toggle(practice.id)}
 												compact={true}
 											/>
 										</div>
@@ -565,7 +565,7 @@
 								isSelected={false}
 								isTreeExpanded={false}
 								onclick={() => navigateToAncestor(i)}
-								onexpand={() => navigateToAncestor(i)}
+								onExpand={() => navigateToAncestor(i)}
 							/>
 						</div>
 					</div>
@@ -591,8 +591,8 @@
 							adoptedDependencyCount={adoptionCounts.adoptedCount}
 							totalDependencyCount={adoptionCounts.totalCount}
 							onclick={() => selectNode(currentPractice.id)}
-							onexpand={() => expandPractice(currentPractice.id)}
-							ontoggleadoption={() => adoptionStore.toggle(currentPractice.id)}
+							onExpand={() => expandPractice(currentPractice.id)}
+							onToggleAdoption={() => adoptionStore.toggle(currentPractice.id)}
 						/>
 					</div>
 				</div>
@@ -626,8 +626,8 @@
 								adoptedDependencyCount={depAdoptionCounts.adoptedCount}
 								totalDependencyCount={depAdoptionCounts.totalCount}
 								onclick={() => selectNode(dependency.id)}
-								onexpand={() => expandPractice(dependency.id)}
-								ontoggleadoption={() => adoptionStore.toggle(dependency.id)}
+								onExpand={() => expandPractice(dependency.id)}
+								onToggleAdoption={() => adoptionStore.toggle(dependency.id)}
 								compact={!isSelected}
 							/>
 						</div>

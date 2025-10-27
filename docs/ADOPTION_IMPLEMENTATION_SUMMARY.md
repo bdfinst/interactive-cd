@@ -250,7 +250,7 @@ function handleKeyDown(event) {
   isAdopted={$adoptionStore.has(practice.id)}
   adoptedDependencyCount={calculateAdoptedDeps(practice)}
   totalPracticeCount={allPractices.length}
-  ontoggleadoption={() => adoptionStore.toggle(practice.id)}
+  onToggleAdoption={() => adoptionStore.toggle(practice.id)}
   // ... existing props
 />
 ```
@@ -269,7 +269,7 @@ const {
 	isAdopted = false,
 	adoptedDependencyCount = 0,
 	totalPracticeCount = 54,
-	ontoggleadoption = () => {}
+	onToggleAdoption = () => {}
 	// ... existing props
 } = $props()
 
@@ -286,7 +286,7 @@ $: adoptionPercentage = showAdoptionPercentage
 <button class="...existing classes...">
 	<!-- TOP-RIGHT: Adoption Checkbox -->
 	<div class="absolute top-2 right-2 z-10">
-		<AdoptionCheckbox practiceId={practice.id} {isAdopted} size="md" ontoggle={ontoggleadoption} />
+		<AdoptionCheckbox practiceId={practice.id} {isAdopted} size="md" ontoggle={onToggleAdoption} />
 	</div>
 
 	<!-- TITLE SECTION (existing) -->
@@ -635,7 +635,7 @@ Estimated URL length: ~800 characters (well under 2000 limit)
 
 Ready to begin implementation. Awaiting approval to proceed with **Phase 1: Core Utilities (TDD)**.
 
-### Phase 1 Deliverables:
+### Phase 1 Deliverables
 
 1. `src/lib/utils/urlState.js` + tests
 2. `src/lib/utils/adoption.js` + tests

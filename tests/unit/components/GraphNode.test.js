@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, fireEvent } from '@testing-library/svelte'
 import GraphNode from '$lib/components/GraphNode.svelte'
-import { buildPractice, buildMinimalPractice } from '../../utils/builders.js'
+import { fireEvent, render } from '@testing-library/svelte'
+import { describe, expect, it, vi } from 'vitest'
+
+import { buildMinimalPractice, buildPractice } from '../../utils/builders.js'
 
 describe('GraphNode', () => {
 	describe('rendering', () => {
@@ -20,12 +21,12 @@ describe('GraphNode', () => {
 			expect(node.classList.contains('bg-category-automation')).toBe(true)
 		})
 
-		it('renders as a button element', () => {
+		it('renders as a div element', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, { props: { practice } })
 
 			const node = getByTestId('graph-node')
-			expect(node.tagName).toBe('BUTTON')
+			expect(node.tagName).toBe('DIV')
 		})
 
 		it('includes practice id in data attribute', () => {
@@ -34,6 +35,20 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-practice-id')).toBe('test-practice-id')
+		})
+
+		it('renders maximize button when not selected', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: false } })
+
+			expect(getByLabelText(`View details for ${practice.name}`)).toBeInTheDocument()
+		})
+
+		it('renders close button when selected', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: true } })
+
+			expect(getByLabelText(`Close details for ${practice.name}`)).toBeInTheDocument()
 		})
 	})
 
@@ -142,28 +157,47 @@ describe('GraphNode', () => {
 	})
 
 	describe('user interactions', () => {
-		it('calls onclick callback when clicked', async () => {
+		it('calls onclick callback when maximize button is clicked', async () => {
 			const practice = buildPractice()
 			const handleClick = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, onclick: handleClick }
+			const { getByLabelText } = render(GraphNode, {
+				props: { practice, onclick: handleClick, isSelected: false }
 			})
 
-			await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
 			expect(handleClick).toHaveBeenCalledOnce()
 			expect(handleClick).toHaveBeenCalledWith()
 		})
 
-		it('auto-expands dependencies when clicked if has dependencies and not root', async () => {
+		it('calls onclick callback when close button is clicked', async () => {
+			const practice = buildPractice()
+			const handleClick = vi.fn()
+			const { getByLabelText } = render(GraphNode, {
+				props: { practice, onclick: handleClick, isSelected: true }
+			})
+
+			await fireEvent.click(getByLabelText(`Close details for ${practice.name}`))
+
+			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleClick).toHaveBeenCalledWith()
+		})
+
+		it('auto-expands dependencies when maximize button clicked if has dependencies and not root', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, isRoot: false, onclick: handleClick, onexpand: handleExpand }
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: false,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
 			})
 
-			await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
 			expect(handleClick).toHaveBeenCalledOnce()
 			expect(handleExpand).toHaveBeenCalledOnce()
@@ -174,11 +208,17 @@ describe('GraphNode', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, isRoot: true, onclick: handleClick, onexpand: handleExpand }
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: true,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
 			})
 
-			await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
 			expect(handleClick).toHaveBeenCalledOnce()
 			expect(handleExpand).not.toHaveBeenCalled()
@@ -188,11 +228,17 @@ describe('GraphNode', () => {
 			const practice = buildMinimalPractice()
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, isRoot: false, onclick: handleClick, onexpand: handleExpand }
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: false,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
 			})
 
-			await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
 			expect(handleClick).toHaveBeenCalledOnce()
 			expect(handleExpand).not.toHaveBeenCalled()
@@ -200,13 +246,22 @@ describe('GraphNode', () => {
 	})
 
 	describe('accessibility', () => {
-		it('includes focus styles for keyboard navigation', () => {
+		it('maximize button is keyboard accessible', () => {
 			const practice = buildPractice()
-			const { getByTestId } = render(GraphNode, { props: { practice } })
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: false } })
 
-			const node = getByTestId('graph-node')
-			expect(node.className).toContain('focus:outline-none')
-			expect(node.className).toContain('focus:ring-2')
+			const maximizeButton = getByLabelText(`View details for ${practice.name}`)
+			expect(maximizeButton).toBeInTheDocument()
+			expect(maximizeButton.tagName).toBe('BUTTON')
+		})
+
+		it('close button is keyboard accessible when selected', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: true } })
+
+			const closeButton = getByLabelText(`Close details for ${practice.name}`)
+			expect(closeButton).toBeInTheDocument()
+			expect(closeButton.tagName).toBe('BUTTON')
 		})
 	})
 

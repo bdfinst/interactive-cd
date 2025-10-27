@@ -1,9 +1,9 @@
 <script>
 	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
-	import Button from '$lib/components/Button.svelte'
+	import IconButton from '$lib/components/IconButton.svelte'
 	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
 	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
-	import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+	import { faExpand, faExternalLinkAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
 	/**
@@ -21,8 +21,8 @@
 		adoptedDependencyCount = 0, // NEW: How many dependencies are adopted
 		totalDependencyCount = 0, // NEW: Total transitive dependency count
 		onclick = () => {},
-		onexpand = () => {},
-		ontoggleadoption = () => {} // NEW: Toggle adoption callback
+		onExpand = () => {},
+		onToggleAdoption = () => {} // NEW: Toggle adoption callback
 	} = $props()
 
 	// Subscribe to feature flag
@@ -54,45 +54,43 @@
 				? 'border-2 border-blue-600'
 				: 'border-4 border-blue-600'
 			: compact
-				? 'border border-black hover:border-gray-600'
-				: 'border-2 border-black hover:border-gray-600'
+				? 'border border-black'
+				: 'border-2 border-black'
 	)
 
-	function handleClick() {
+	function handleDetailsClick() {
 		onclick()
 		// Auto-expand dependencies when selecting a NON-ROOT practice with dependencies
-		if (!isRoot && practice.dependencyCount > 0 && onexpand) {
-			onexpand()
+		if (!isRoot && practice.dependencyCount > 0 && onExpand) {
+			onExpand()
 		}
-	}
-
-	function handleTouch() {
-		// Call onclick directly for touch events
-		handleClick()
 	}
 </script>
 
-<button
-	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {bgClass} {borderClass} hover:shadow-lg active:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation active:scale-[0.98] {compact
-		? 'p-4 min-h-[48px]'
-		: 'p-4 min-h-[64px]'}"
+<div
+	class="relative block w-full h-full text-gray-800 rounded-[20px] shadow-md text-left transition-all duration-200 {bgClass} {borderClass} {compact
+		? 'p-4 min-h-12'
+		: 'p-4 min-h-16'}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
 	data-selected={isSelected}
-	onclick={handleClick}
-	ontouchend={handleTouch}
 >
-	<!-- External link icon in upper left corner (unselected view only) -->
-	{#if !isSelected && practice.quickStartGuide}
-		<div class="absolute top-3 left-3 text-blue-600 z-10">
-			<Fa icon={faExternalLinkAlt} size="sm" />
-		</div>
-	{/if}
+	<!-- Details/Close button in top-left corner -->
+	<div class="absolute top-3 left-3 z-10">
+		<IconButton
+			onclick={handleDetailsClick}
+			ariaLabel={isSelected
+				? `Close details for ${practice.name}`
+				: `View details for ${practice.name}`}
+		>
+			<Fa icon={isSelected ? faTimes : faExpand} size="md" />
+		</IconButton>
+	</div>
 
 	<!-- Adoption Checkbox in top-right corner (when feature enabled) -->
 	{#if practiceAdoptionEnabled}
 		<div class="absolute top-3 right-3 z-10" onclick={e => e.stopPropagation()} role="presentation">
-			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={ontoggleadoption} />
+			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
 		</div>
 	{/if}
 
@@ -152,25 +150,6 @@
 				/>
 			</div>
 		{/if}
-
-		<!-- Quick-Start Guide Link -->
-		{#if practice.quickStartGuide}
-			<div class="mt-3 pt-3 border-t border-gray-200">
-				<Button
-					href={practice.quickStartGuide}
-					variant="primary"
-					size="md"
-					data-testid="quick-start-guide-link"
-					target="_blank"
-					rel="noopener noreferrer"
-					onclick={e => e.stopPropagation()}
-				>
-					<span>📚</span>
-					<span>More Info</span>
-					<Fa icon={faExternalLinkAlt} />
-				</Button>
-			</div>
-		{/if}
 	{:else}
 		<!-- Unselected view -->
 		<div class="flex flex-col gap-2">
@@ -203,4 +182,22 @@
 			{/if}
 		</div>
 	{/if}
-</button>
+
+	<!-- Quick-Start Guide Link (bottom center for all views) -->
+	{#if practice.quickStartGuide}
+		<div class="absolute bottom-3 left-0 right-0 flex justify-center z-10">
+			<a
+				href={practice.quickStartGuide}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-1 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-xs font-medium"
+				data-testid="quick-start-guide-link"
+				onclick={e => e.stopPropagation()}
+			>
+				<span>📚</span>
+				<span>Guide</span>
+				<Fa icon={faExternalLinkAlt} size="xs" />
+			</a>
+		</div>
+	{/if}
+</div>

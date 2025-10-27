@@ -167,7 +167,7 @@ export const isPracticeAdoptionEnabled = derived(
 	import { isPracticeAdoptionEnabled } from '$lib/stores/featureFlags.js'
 	import AdoptionCheckbox from './AdoptionCheckbox.svelte'
 
-	const { practice, isAdopted = false, ontoggleadoption = () => {} } = $props()
+	const { practice, isAdopted = false, onToggleAdoption = () => {} } = $props()
 </script>
 
 <button class="...">
@@ -178,7 +178,7 @@ export const isPracticeAdoptionEnabled = derived(
 				practiceId={practice.id}
 				{isAdopted}
 				size="md"
-				ontoggle={ontoggleadoption}
+				ontoggle={onToggleAdoption}
 			/>
 		</div>
 	{/if}
