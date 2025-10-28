@@ -3,6 +3,7 @@
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { headerHeight } from '$lib/stores/headerHeight.js'
 	import { legendHeight } from '$lib/stores/legendHeight.js'
+	import { menuStore } from '$lib/stores/menuStore.js'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 
 	/**
@@ -11,6 +12,11 @@
 	 * Displays a horizontal legend showing the category colors and their meanings
 	 * Floats below the header using fixed positioning
 	 */
+
+	/**
+	 * Subscribe to menu store to get expanded state
+	 */
+	const isExpanded = $derived($menuStore.isExpanded)
 
 	// Category definitions (excluding 'core' which isn't shown in legend)
 	// Colors defined in app.css @theme directive
@@ -93,7 +99,9 @@
 
 <div
 	bind:this={legendElement}
-	class="fixed left-0 right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2"
+	class="fixed right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2 transition-all duration-300 {isExpanded
+		? 'left-64'
+		: 'left-16'}"
 	style="top: {$headerHeight}px;"
 	data-testid="category-legend"
 >
