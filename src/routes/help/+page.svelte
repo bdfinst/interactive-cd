@@ -1,6 +1,6 @@
 <script>
-	import SEO from '$lib/components/SEO.svelte'
 	import Button from '$lib/components/Button.svelte'
+	import SEO from '$lib/components/SEO.svelte'
 
 	const { data } = $props()
 
@@ -67,12 +67,14 @@
 
 <div class="min-h-screen bg-gray-900">
 	<!-- Skip to main content link for keyboard users -->
-	<a
-		href="#main-content"
-		class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-	>
-		Skip to main content
-	</a>
+	<nav aria-label="Skip links">
+		<a
+			href="#main-content"
+			class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+		>
+			Skip to main content
+		</a>
+	</nav>
 
 	<div class="max-w-4xl mx-auto px-4 py-8">
 		<!-- Back to Home Button -->
@@ -99,7 +101,7 @@
 		</nav>
 
 		<!-- Main Content -->
-		<main
+		<div
 			id="main-content"
 			class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-none border border-gray-700"
 		>
@@ -108,6 +110,6 @@
 			</h1>
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html htmlContent}
-		</main>
+		</div>
 	</div>
 </div>

@@ -136,16 +136,22 @@ describe('Menu', () => {
 		})
 
 		it('handles import action', async () => {
-			const { getByRole } = render(Menu, {
+			const { getByTestId, getByLabelText } = render(Menu, {
 				props: {
 					onImport: vi.fn()
 				}
 			})
 
-			const importButton = getByRole('button', { name: 'Import' })
-			await fireEvent.click(importButton)
+			// Import is now a label for the file input, not a button
+			const importLabel = getByTestId('menu-item-import')
+			expect(importLabel).toBeInTheDocument()
+			expect(importLabel.tagName).toBe('LABEL')
 
-			// Import handler should be called (we'll verify this in integration)
+			// Verify it's connected to the file input
+			const fileInput = getByLabelText('Import adoption data file')
+			expect(fileInput).toBeInTheDocument()
+			expect(fileInput.getAttribute('type')).toBe('file')
+			expect(fileInput.getAttribute('id')).toBe('import-file-input')
 		})
 
 		it('provides click handler for navigation links', async () => {

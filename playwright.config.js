@@ -6,7 +6,7 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0, // Reduced from 2 to 1
 	workers: process.env.CI ? 4 : undefined, // Increased from 1 to 4 for better parallelization
-	reporter: 'html',
+	reporter: 'list',
 	use: {
 		baseURL: 'http://localhost:5173',
 		trace: 'on-first-retry'

@@ -6,9 +6,7 @@
 </script>
 
 <div class="container px-4 mx-auto">
-	<main>
-		<div data-testid="practice-graph">
-			<PracticeGraph initialData={data} />
-		</div>
-	</main>
+	<div data-testid="practice-graph">
+		<PracticeGraph initialData={data} />
+	</div>
 </div>

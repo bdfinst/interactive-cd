@@ -1,4 +1,3 @@
-import { browser } from '$app/environment'
 import { get, writable } from 'svelte/store'
 
 /**
@@ -67,12 +66,17 @@ export const getMenuItems = () => [
 ]
 
 /**
- * Pure function to determine initial expanded state based on screen size
- * @returns {boolean} True if menu should be expanded (desktop), false if collapsed (mobile)
+ * Pure function to determine initial expanded state
+ * Desktop (≥1024px): Expanded by default (shows labels)
+ * Mobile (<1024px): Collapsed by default (icons only)
+ * @returns {boolean} True if desktop width, false if mobile
  */
 const getInitialExpanded = () => {
-	if (!browser) return true // Default to expanded for SSR
-	return window.innerWidth >= 1024 // Desktop (lg breakpoint): expanded, Mobile: collapsed
+	// Check if running in browser and screen width
+	if (typeof window !== 'undefined') {
+		return window.innerWidth >= 1024 // Desktop: expanded, Mobile: collapsed
+	}
+	return true // Default to expanded for SSR
 }
 
 /**

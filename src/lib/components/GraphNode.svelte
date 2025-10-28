@@ -2,7 +2,7 @@
 	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
 	import IconButton from '$lib/components/IconButton.svelte'
 	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
-	import { faExpand, faExternalLinkAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
+	import { faExternalLinkAlt, faRightToBracket, faTimes } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
 	/**
@@ -87,7 +87,7 @@
 					? `Close details for ${practice.name}`
 					: `View details for ${practice.name}`}
 			>
-				<Fa icon={isSelected ? faTimes : faExpand} size="md" />
+				<Fa icon={isSelected ? faTimes : faRightToBracket} size="md" />
 			</IconButton>
 		</div>
 

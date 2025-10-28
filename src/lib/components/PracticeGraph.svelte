@@ -482,12 +482,7 @@
 	}
 </script>
 
-<div
-	class="relative w-full min-h-screen p-8"
-	bind:this={containerRef}
-	role="main"
-	aria-label="Practice dependency graph"
->
+<div class="relative w-full p-8" bind:this={containerRef} aria-label="Practice dependency graph">
 	{#if loading}
 		<LoadingSpinner />
 	{:else if $isFullTreeExpanded}
