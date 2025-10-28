@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte'
+	import { browser } from '$app/environment'
 	import Header from '$lib/components/Header.svelte'
 	import HeaderSpacer from '$lib/components/HeaderSpacer.svelte'
 	import CategoryLegend from '$lib/components/CategoryLegend.svelte'
@@ -29,7 +30,20 @@
 	 */
 	const isExpanded = $derived($menuStore.isExpanded)
 
-	onMount(() => {
+	onMount(async () => {
+		// Unregister any old service workers from the PWA branch
+		if (browser && 'serviceWorker' in navigator) {
+			try {
+				const registrations = await navigator.serviceWorker.getRegistrations()
+				for (const registration of registrations) {
+					await registration.unregister()
+					console.log('Unregistered old service worker')
+				}
+			} catch (error) {
+				console.error('Failed to unregister service worker:', error)
+			}
+		}
+
 		// Load practice data for validation
 		loadPracticeData()
 	})
