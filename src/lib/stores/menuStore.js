@@ -1,5 +1,5 @@
-import { writable, get } from 'svelte/store'
 import { browser } from '$app/environment'
+import { get, writable } from 'svelte/store'
 
 /**
  * Pure function to check if a link is external
@@ -59,7 +59,7 @@ export const getMenuItems = () => [
 	},
 	{
 		id: 'support',
-		label: 'Support this Project',
+		label: 'Contribute',
 		href: 'https://ko-fi.com/bryanfinster',
 		icon: 'whiskey',
 		external: true

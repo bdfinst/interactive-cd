@@ -29,38 +29,60 @@
 /* Graph Node Sizing System - CSS Custom Properties */
 :root {
 	/* Node Width Variants */
-	--node-width-tiny: 150px; /* Unselected nodes in tree view */
-	--node-width-compact: 250px; /* Unselected dependencies in normal view */
-	--node-width-standard: 400px; /* Ancestor and current practice nodes */
-	--node-width-expanded: 482px; /* Selected nodes in tree view */
+	--node-width-tiny: 150px;
+	/* Unselected nodes in tree view */
+	--node-width-compact: 250px;
+	/* Unselected dependencies in normal view */
+	--node-width-standard: 400px;
+	/* Ancestor and current practice nodes */
+	--node-width-expanded: 482px;
+	/* Selected nodes in tree view */
 
 	/* Node Height Variants */
-	--node-height-tiny: 80px; /* Unselected nodes in tree view */
-	--node-height-compact: 140px; /* Unselected dependencies in normal view */
-	--node-height-standard: auto; /* Ancestor and current practice (content-driven) */
-	--node-height-expanded: 300px; /* Selected nodes in tree view (minimum) */
+	--node-height-tiny: 80px;
+	/* Unselected nodes in tree view */
+	--node-height-compact: 162px;
+	/* Unselected dependencies in normal view */
+	--node-height-standard: auto;
+	/* Ancestor and current practice (content-driven) */
+	--node-height-expanded: 300px;
+	/* Selected nodes in tree view (minimum) */
 
 	/* Node Padding Variants */
-	--node-padding-tiny: 0.75rem; /* Compact padding for tiny nodes */
-	--node-padding-standard: 1rem; /* Standard padding for most nodes */
+	--node-padding-tiny: 0.75rem;
+	/* Compact padding for tiny nodes */
+	--node-padding-standard: 1rem;
+	/* Standard padding for most nodes */
 
 	/* Border Width Variants */
-	--node-border-normal: 1px; /* Unselected compact nodes */
-	--node-border-normal-thick: 2px; /* Unselected standard nodes */
-	--node-border-selected: 2px; /* Selected compact nodes */
-	--node-border-selected-thick: 4px; /* Selected standard nodes */
+	--node-border-normal: 1px;
+	/* Unselected compact nodes */
+	--node-border-normal-thick: 2px;
+	/* Unselected standard nodes */
+	--node-border-selected: 2px;
+	/* Selected compact nodes */
+	--node-border-selected-thick: 4px;
+	/* Selected standard nodes */
 
 	/* Typography Variants */
-	--node-title-tiny: 1rem; /* 16px - tiny node titles */
-	--node-title-standard: 1.125rem; /* 18px - standard node titles */
-	--node-text-tiny: 0.75rem; /* 12px - tiny node text */
-	--node-text-small: 0.875rem; /* 14px - small node text */
-	--node-text-standard: 1rem; /* 16px - standard node text */
+	--node-title-tiny: 1rem;
+	/* 16px - tiny node titles */
+	--node-title-standard: 1.125rem;
+	/* 18px - standard node titles */
+	--node-text-tiny: 0.75rem;
+	/* 12px - tiny node text */
+	--node-text-small: 0.875rem;
+	/* 14px - small node text */
+	--node-text-standard: 1rem;
+	/* 16px - standard node text */
 
 	/* Spacing Variants */
-	--node-spacing-tiny: 0.25rem; /* 4px - spacing in tiny nodes */
-	--node-spacing-small: 0.5rem; /* 8px - spacing in compact nodes */
-	--node-spacing-standard: 0.75rem; /* 12px - spacing in standard nodes */
+	--node-spacing-tiny: 0.25rem;
+	/* 4px - spacing in tiny nodes */
+	--node-spacing-small: 0.5rem;
+	/* 8px - spacing in compact nodes */
+	--node-spacing-standard: 0.75rem;
+	/* 12px - spacing in standard nodes */
 }
 
 @layer base {
@@ -92,8 +114,9 @@
 	[data-node-size='compact'] {
 		width: 100%;
 		max-width: var(--node-width-compact);
-		height: var(--node-height-compact);
+		max-height: var(--node-height-compact);
 		padding: var(--node-padding-standard);
+		overflow: hidden;
 	}
 
 	/* Standard nodes - ancestors and current practice */
@@ -118,11 +141,13 @@
 		padding: var(--node-padding-standard);
 
 		@media (min-width: 768px) {
-			width: 66.666667%; /* 2/3 */
+			width: 66.666667%;
+			/* 2/3 */
 		}
 
 		@media (min-width: 1024px) {
-			width: 50%; /* 1/2 */
+			width: 50%;
+			/* 1/2 */
 		}
 	}
 
@@ -143,14 +168,18 @@
 	[data-node-size='tiny'][data-selected='true'],
 	[data-node-size='compact'][data-selected='true'] {
 		border-width: var(--node-border-selected);
-		border-color: #2563eb; /* blue-600 */
+		border-color: #2563eb;
+		/* blue-600 */
 	}
 
 	[data-node-size='standard'][data-selected='true'],
 	[data-node-size='expanded'][data-selected='true'],
 	[data-node-size='selected-dependency'][data-selected='true'] {
 		border-width: var(--node-border-selected-thick);
-		border-color: #2563eb; /* blue-600 */
+		border-color: #2563eb;
+		/* blue-600 */
+		max-width: 400px;
+		/* Limit selected card width */
 	}
 
 	/* Typography scaling based on node size */

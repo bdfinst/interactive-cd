@@ -16,7 +16,7 @@
 	/**
 	 * Split menu items into main and bottom sections
 	 */
-	const bottomItemIds = ['minimum-cd', 'support', 'github']
+	const bottomItemIds = ['support', 'github', 'minimum-cd']
 	const mainItems = menuItems.filter(item => !bottomItemIds.includes(item.id))
 	const bottomItems = bottomItemIds
 		.map(id => menuItems.find(item => item.id === id))
@@ -88,32 +88,38 @@
 			<MenuToggle {isExpanded} onclick={handleToggle} />
 		</div>
 
-		<!-- Main Menu Items List (flex-1 to push bottom items down) -->
-		<ul class="flex flex-col gap-2 p-2 flex-1">
-			{#each mainItems as item (item.id)}
-				<li>
-					{#if item.action}
-						<MenuItem {item} {isExpanded} onclick={() => handleItemClick(item)} />
-					{:else if item.href}
-						<MenuItem {item} {isExpanded} />
-					{/if}
-				</li>
-			{/each}
-		</ul>
+		<!-- Menu Items Container - Centers both sections together -->
+		<div class="flex-1 flex flex-col items-center">
+			<div class="flex flex-col w-fit gap-2 py-2">
+				<!-- Main Menu Items List -->
+				<ul class="flex flex-col items-center gap-2">
+					{#each mainItems as item (item.id)}
+						<li>
+							{#if item.action}
+								<MenuItem {item} {isExpanded} onclick={() => handleItemClick(item)} />
+							{:else if item.href}
+								<MenuItem {item} {isExpanded} />
+							{/if}
+						</li>
+					{/each}
+				</ul>
 
-		<!-- Bottom Menu Items (GitHub, MinimumCD, Support) -->
-		<div class="border-t border-slate-300">
-			<ul class="flex flex-col gap-2 p-2">
-				{#each bottomItems as item (item.id)}
-					<li>
-						{#if item.action}
-							<MenuItem {item} {isExpanded} onclick={() => handleItemClick(item)} />
-						{:else if item.href}
-							<MenuItem {item} {isExpanded} />
-						{/if}
-					</li>
-				{/each}
-			</ul>
+				<!-- Separator -->
+				<div class="border-t border-slate-300 my-2"></div>
+
+				<!-- Bottom Menu Items (GitHub, MinimumCD, Support) -->
+				<ul class="flex flex-col items-start gap-2">
+					{#each bottomItems as item (item.id)}
+						<li>
+							{#if item.action}
+								<MenuItem {item} {isExpanded} onclick={() => handleItemClick(item)} />
+							{:else if item.href}
+								<MenuItem {item} {isExpanded} />
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
 	</div>
 </nav>

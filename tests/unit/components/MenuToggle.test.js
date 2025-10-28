@@ -7,7 +7,7 @@ describe('MenuToggle', () => {
 		it('renders hamburger button', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -15,10 +15,10 @@ describe('MenuToggle', () => {
 			expect(button).toBeInTheDocument()
 		})
 
-		it('shows open icon when menu is closed', () => {
+		it('shows open icon when menu is collapsed', () => {
 			const { container } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -27,44 +27,44 @@ describe('MenuToggle', () => {
 			expect(svg).toBeInTheDocument()
 		})
 
-		it('shows close icon when menu is open', () => {
+		it('shows collapse icon when menu is expanded', () => {
 			const { container } = render(MenuToggle, {
 				props: {
-					isOpen: true
+					isExpanded: true
 				}
 			})
 
-			// Close (X) icon should be visible
+			// Collapse (chevron) icon should be visible
 			const svg = container.querySelector('svg')
 			expect(svg).toBeInTheDocument()
 		})
 
-		it('has proper aria-label when closed', () => {
+		it('has proper aria-label when collapsed', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
 			const button = getByRole('button')
-			expect(button).toHaveAttribute('aria-label', 'Open menu')
+			expect(button).toHaveAttribute('aria-label', 'Expand menu')
 		})
 
-		it('has proper aria-label when open', () => {
+		it('has proper aria-label when expanded', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: true
+					isExpanded: true
 				}
 			})
 
 			const button = getByRole('button')
-			expect(button).toHaveAttribute('aria-label', 'Close menu')
+			expect(button).toHaveAttribute('aria-label', 'Collapse menu')
 		})
 
-		it('has aria-expanded false when closed', () => {
+		it('has aria-expanded false when collapsed', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -72,10 +72,10 @@ describe('MenuToggle', () => {
 			expect(button).toHaveAttribute('aria-expanded', 'false')
 		})
 
-		it('has aria-expanded true when open', () => {
+		it('has aria-expanded true when expanded', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: true
+					isExpanded: true
 				}
 			})
 
@@ -90,7 +90,7 @@ describe('MenuToggle', () => {
 
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false,
+					isExpanded: false,
 					onclick: handleClick
 				}
 			})
@@ -106,7 +106,7 @@ describe('MenuToggle', () => {
 
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false,
+					isExpanded: false,
 					onclick: handleClick
 				}
 			})
@@ -123,7 +123,7 @@ describe('MenuToggle', () => {
 		it('has type="button" attribute', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -134,7 +134,7 @@ describe('MenuToggle', () => {
 		it('has proper focus styles', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -145,7 +145,7 @@ describe('MenuToggle', () => {
 		it('has minimum touch target size (44px)', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -159,7 +159,7 @@ describe('MenuToggle', () => {
 		it('has base styling classes', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -172,7 +172,7 @@ describe('MenuToggle', () => {
 		it('has hover state classes', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -183,7 +183,7 @@ describe('MenuToggle', () => {
 		it('has active state classes for touch feedback', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
@@ -191,40 +191,41 @@ describe('MenuToggle', () => {
 			expect(button.className).toMatch(/active:/)
 		})
 
-		it('is only visible on mobile (lg:hidden)', () => {
+		it('is visible on all screen sizes', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
 			const button = getByRole('button')
-			expect(button.className).toMatch(/lg:hidden/)
+			// Menu toggle should not have lg:hidden anymore
+			expect(button.className).not.toMatch(/lg:hidden/)
 		})
 	})
 
 	describe('visual states', () => {
-		it('shows correct icon and label when closed', () => {
+		it('shows correct icon and label when collapsed', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: false
+					isExpanded: false
 				}
 			})
 
 			const button = getByRole('button')
-			expect(button).toHaveAttribute('aria-label', 'Open menu')
+			expect(button).toHaveAttribute('aria-label', 'Expand menu')
 			expect(button).toHaveAttribute('aria-expanded', 'false')
 		})
 
-		it('shows correct icon and label when open', () => {
+		it('shows correct icon and label when expanded', () => {
 			const { getByRole } = render(MenuToggle, {
 				props: {
-					isOpen: true
+					isExpanded: true
 				}
 			})
 
 			const button = getByRole('button')
-			expect(button).toHaveAttribute('aria-label', 'Close menu')
+			expect(button).toHaveAttribute('aria-label', 'Collapse menu')
 			expect(button).toHaveAttribute('aria-expanded', 'true')
 		})
 	})

@@ -220,6 +220,24 @@ Feature: Practice Dependency Graph
     And it spans more columns in the responsive grid
     And other practices adjust their positions accordingly
 
+  Scenario: Navigate to selected practice in collapsed view
+    Given I am viewing the practice graph in collapsed (drill-down) mode
+    And I am viewing "Continuous Delivery" with its 6 direct dependencies displayed
+    When I click the details button on "Continuous Integration"
+    Then "Continuous Integration" becomes the current practice
+    And "Continuous Delivery" appears as an ancestor above
+    And only the direct dependencies of "Continuous Integration" are displayed
+    And the ancestor chain is preserved visually
+
+  Scenario: Navigate to selected practice in expanded tree view
+    Given I am viewing the full expanded tree with all 23 practices visible
+    When I click the details button on "Continuous Integration"
+    Then the view filters to show only relevant practices
+    And "Continuous Delivery" appears as an ancestor above
+    And "Continuous Integration" becomes the current practice
+    And all direct and indirect dependencies of "Continuous Integration" are displayed
+    And practices outside this hierarchy are hidden
+
   # Connection Lines
 
   Scenario: Connection lines show dependency relationships

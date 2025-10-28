@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('Responsive Menu Navigation', () => {
 	test.describe('Desktop View (1024px+)', () => {
@@ -23,7 +23,7 @@ test.describe('Responsive Menu Navigation', () => {
 			await expect(page.getByLabel('View on GitHub')).toBeVisible()
 			await expect(page.getByLabel('Report a bug or request a feature')).toBeVisible()
 			await expect(page.getByLabel('MinimumCD.org')).toBeVisible()
-			await expect(page.getByLabel('Support this project')).toBeVisible()
+			await expect(page.getByLabel('Contribute')).toBeVisible()
 			await expect(page.getByLabel('View help and capabilities')).toBeVisible()
 		})
 

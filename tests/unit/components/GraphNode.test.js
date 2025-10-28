@@ -180,7 +180,7 @@ describe('GraphNode', () => {
 			expect(handleClick).toHaveBeenCalledWith()
 		})
 
-		it('auto-expands dependencies when maximize button clicked if has dependencies and not root', async () => {
+		it('calls onclick when maximize button clicked (auto-expand removed)', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
@@ -196,9 +196,10 @@ describe('GraphNode', () => {
 
 			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
+			// Auto-expand behavior was intentionally removed
+			// Now only onclick is called, navigation logic is in PracticeGraph
 			expect(handleClick).toHaveBeenCalledOnce()
-			expect(handleExpand).toHaveBeenCalledOnce()
-			expect(handleExpand).toHaveBeenCalledWith()
+			expect(handleExpand).not.toHaveBeenCalled()
 		})
 
 		it('does not auto-expand when practice is root', async () => {

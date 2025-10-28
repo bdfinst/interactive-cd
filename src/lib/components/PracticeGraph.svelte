@@ -70,6 +70,32 @@
 		return map
 	}
 
+	/**
+	 * Find the path from root to a practice in the tree
+	 * @param {Object} tree - Root tree node
+	 * @param {string} practiceId - Target practice ID
+	 * @param {string[]} currentPath - Current path being built
+	 * @returns {string[]|null} Path from root to practice, or null if not found
+	 */
+	function _findPathToPractice(tree, practiceId, currentPath = []) {
+		if (!tree) return null
+
+		const newPath = [...currentPath, tree.id]
+
+		if (tree.id === practiceId) {
+			return newPath
+		}
+
+		if (tree.dependencies && Array.isArray(tree.dependencies)) {
+			for (const dep of tree.dependencies) {
+				const found = _findPathToPractice(dep, practiceId, newPath)
+				if (found) return found
+			}
+		}
+
+		return null
+	}
+
 	// Initialize with provided practices
 	onMount(async () => {
 		// Initialize adoption store with all valid practice IDs
@@ -204,9 +230,45 @@
 
 	async function selectNode(practiceId) {
 		if (selectedNodeId === practiceId) {
+			// Deselect if clicking the same practice again
 			selectedNodeId = null
 		} else {
-			selectedNodeId = practiceId
+			if ($isFullTreeExpanded) {
+				// In full tree view, exit full tree mode and navigate to the selected practice
+				// This will show ancestors above and all dependencies below
+
+				// Manually collapse the tree without triggering the effect
+				fullTreeData = null
+
+				// Reset to root before navigating to the selected practice
+				// This ensures we build the correct navigation path
+				navigationPath = ['continuous-delivery']
+
+				// Navigate to the selected practice
+				if (practiceId !== 'continuous-delivery') {
+					await expandPractice(practiceId)
+				} else {
+					// If selecting the root, just load the root view
+					selectedNodeId = null
+					await loadCurrentView()
+				}
+
+				// Update the store to reflect collapsed state
+				// Set this after navigation completes to avoid race conditions
+				await tick()
+				isFullTreeExpanded.set(false)
+			} else {
+				// In collapsed view:
+				// - If clicking the current practice, just select it
+				// - If clicking a dependency or ancestor, navigate to it
+				if (practiceId === currentPractice.id) {
+					selectedNodeId = practiceId
+				} else {
+					// Navigate to the selected practice
+					// This will make it the current practice and show its parents and direct dependencies
+					await expandPractice(practiceId)
+				}
+			}
 		}
 		await tick()
 		recalculateAllConnections()
@@ -475,7 +537,7 @@
 									practiceMap
 								)}
 								<div class="flex justify-center">
-									<div bind:this={treeNodeRefs[practice.id]}>
+									<div bind:this={treeNodeRefs[practice.id]} class="max-w-[400px]">
 										<GraphNode
 											{practice}
 											isRoot={practice.level === 0}
@@ -552,7 +614,11 @@
 			{#if ancestorPractices.length > 0}
 				{#each ancestorPractices as ancestor, i (ancestor.id)}
 					<div class="flex justify-center mb-16">
-						<div bind:this={ancestorRefs[i]}>
+						<div
+							bind:this={ancestorRefs[i]}
+							data-testid="ancestor-node"
+							data-practice-id={ancestor.id}
+						>
 							<GraphNode
 								practice={ancestor}
 								isRoot={i === 0}

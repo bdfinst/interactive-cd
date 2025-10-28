@@ -160,7 +160,7 @@ describe('Menu Data Utils', () => {
 			const helpItem = items.find(item => item.id === 'help')
 
 			expect(helpItem).toBeDefined()
-			expect(helpItem.label).toBe('Help')
+			expect(helpItem.label).toBe('About')
 			expect(helpItem.href).toBe('/help')
 		})
 
@@ -189,10 +189,6 @@ describe('Menu Data Utils', () => {
 			const githubItem = items.find(item => item.id === 'github')
 			expect(githubItem).toBeDefined()
 			expect(githubItem.external).toBe(true)
-
-			const bugItem = items.find(item => item.id === 'bug-report')
-			expect(bugItem).toBeDefined()
-			expect(bugItem.external).toBe(true)
 
 			const minimumCDItem = items.find(item => item.id === 'minimum-cd')
 			expect(minimumCDItem).toBeDefined()

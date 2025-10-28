@@ -12,7 +12,7 @@
 	 */
 	const {
 		practice,
-		isRoot = false,
+		isRoot: _isRoot = false,
 		isSelected = false,
 		nodeSize = 'standard', // NEW: size variant (tiny, compact, standard, expanded, selected-dependency)
 		isTreeExpanded = false,
@@ -20,7 +20,7 @@
 		adoptedDependencyCount = 0,
 		totalDependencyCount = 0,
 		onclick = () => {},
-		onExpand = () => {},
+		onExpand: _onExpand = () => {},
 		onToggleAdoption = () => {}
 	} = $props()
 
@@ -68,10 +68,6 @@
 
 	function handleDetailsClick() {
 		onclick()
-		// Auto-expand dependencies when selecting a NON-ROOT practice with dependencies
-		if (!isRoot && practice.dependencyCount > 0 && onExpand) {
-			onExpand()
-		}
 	}
 </script>
 
