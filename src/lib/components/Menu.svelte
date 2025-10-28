@@ -5,8 +5,6 @@
 	import { importAdoptionState } from '$lib/utils/exportImport.js'
 	import MenuItem from './MenuItem.svelte'
 	import MenuToggle from './MenuToggle.svelte'
-	import Fa from 'svelte-fa'
-	import { faUpload } from '@fortawesome/free-solid-svg-icons'
 
 	/**
 	 * Props for action handlers
@@ -184,27 +182,9 @@
 			<ul class="flex flex-col items-center gap-2">
 				{#each mainItems as item (item.id)}
 					<li>
-						{#if item.id === 'import'}
-							<!-- Import button as label for file input -->
-							<label
-								for="import-file-input"
-								class={isExpanded
-									? 'flex items-center gap-3 p-3 w-full text-left text-gray-800 rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation cursor-pointer'
-									: 'flex items-center justify-center p-3 w-full min-h-11 min-w-11 text-gray-800 rounded-md transition-colors hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 touch-manipulation cursor-pointer'}
-								aria-label={item.label}
-								data-testid="menu-item-{item.id}"
-							>
-								<span data-testid="menu-icon-{item.id}">
-									<Fa icon={faUpload} size="lg" />
-								</span>
-								<span
-									class="flex-1 {isExpanded ? '' : 'sr-only'}"
-									data-testid="menu-label-{item.id}">{item.label}</span
-								>
-							</label>
-						{:else if item.action === 'export'}
+						{#if item.action === 'export'}
 							<MenuItem {item} {isExpanded} onclick={handleExportClick} />
-						{:else if item.href}
+						{:else}
 							<MenuItem {item} {isExpanded} />
 						{/if}
 					</li>

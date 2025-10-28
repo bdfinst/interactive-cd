@@ -25,7 +25,7 @@ export const getMenuItems = () => [
 		id: 'import',
 		label: 'Import',
 		icon: 'upload',
-		action: 'import',
+		inputId: 'import-file-input',
 		external: false
 	},
 	{

@@ -119,7 +119,7 @@
 					href={practice.quickStartGuide}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-blue-600 hover:text-blue-700 transition-colors"
+					class="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
 					data-testid="quick-start-guide-link"
 					onclick={e => e.stopPropagation()}
 					aria-label="Quick-start guide for {practice.name}"
@@ -215,7 +215,7 @@
 						href={practice.quickStartGuide}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-blue-600 hover:text-blue-700 transition-colors"
+						class="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
 						data-testid="quick-start-guide-link"
 						onclick={e => e.stopPropagation()}
 						aria-label="Quick-start guide for {practice.name}"
