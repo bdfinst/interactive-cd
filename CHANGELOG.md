@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.4.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.3.0...interactive-cd-v1.4.0) (2025-10-28)
+
+
+### Features
+
+* add collapsible sidebar menu with header redesign ([8496f30](https://github.com/bdfinst/interactive-cd/commit/8496f3001e921efdd0400d0f1fcc75ee74e4420c))
+* add practice adoption export, import, and adoption rate ([a0e736a](https://github.com/bdfinst/interactive-cd/commit/a0e736acfbe59fddef1c935f140c5923f7dcb2df))
+* Practice adoption tracking (Phases 1-4) ([#32](https://github.com/bdfinst/interactive-cd/issues/32)) ([d8a0412](https://github.com/bdfinst/interactive-cd/commit/d8a0412ee823e1d504283b1204664e4355c39c38))
+* show number of adoped dependencies ([fc9cfda](https://github.com/bdfinst/interactive-cd/commit/fc9cfdabf72f4b3cd8b6fe6d562e303076aacddb))
+
+
+### Bug Fixes
+
+* cleanup hanging service workers ([118dd3c](https://github.com/bdfinst/interactive-cd/commit/118dd3c3ff97cf1d7a15dbec724f787bed08572d))
+* correct navigation issues ([25e6b36](https://github.com/bdfinst/interactive-cd/commit/25e6b3606e4816e1263e6b46571cb38ac9798cb0))
+* correct pointer behavior for links ([478596b](https://github.com/bdfinst/interactive-cd/commit/478596b6bc5965558950f21b79516d87956fe37b))
+* improve adoption calculation ([0771a58](https://github.com/bdfinst/interactive-cd/commit/0771a585d227454c93542da45b848626a411badd))
+* improve alignment ([b71cc8e](https://github.com/bdfinst/interactive-cd/commit/b71cc8e123339f1bb6e02a8c79a92724d2eef3c7))
+* improve card sizing and simplify code ([bad7c49](https://github.com/bdfinst/interactive-cd/commit/bad7c49840b6fde4ed768bb4a7ee891ca28aa13a))
+* improve navigation ([3fe9720](https://github.com/bdfinst/interactive-cd/commit/3fe972096258394a511c085f0c80ba029feb6261))
+* overly specific tests ([3c5be2b](https://github.com/bdfinst/interactive-cd/commit/3c5be2bf5f45d8155c2fa1c9ed5bb41c479eaaef))
+* remove PWA-specific code from main branch ([4f92f88](https://github.com/bdfinst/interactive-cd/commit/4f92f88a944d8a183a3aaf773e63949eca5d92c5))
+
 ## [1.3.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.2.0...interactive-cd-v1.3.0) (2025-10-26)
 
 ### Features
