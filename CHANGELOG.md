@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.1...interactive-cd-v1.5.2) (2025-10-29)
+
+
+### Bug Fixes
+
+* correct tree info defects ([0bd50cc](https://github.com/bdfinst/interactive-cd/commit/0bd50cc9410be035d71ff7464c117b9036f09f0a))
+* don't run the CI flow if the merge is from release-please ([e053e8c](https://github.com/bdfinst/interactive-cd/commit/e053e8cebd7248c1522b419f98bb3cd010cf1f51))
+
 ## [1.5.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.0...interactive-cd-v1.5.1) (2025-10-29)
 
 ### Bug Fixes
