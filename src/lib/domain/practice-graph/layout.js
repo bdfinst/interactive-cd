@@ -7,9 +7,9 @@
  */
 
 /**
- * Get the maturity level of a practice with default fallback
+ * Get the maturity level of a practice
  * @param {Object} practice - The practice object
- * @returns {number} Maturity level (0-3), defaults to 1 if not specified
+ * @returns {number|undefined} Maturity level (0-3), or undefined if not specified
  */
 const getMaturityLevel = practice => {
 	if (practice.maturityLevel !== undefined) {
@@ -18,10 +18,10 @@ const getMaturityLevel = practice => {
 
 	// Log warning in development mode
 	if (process.env.NODE_ENV !== 'production') {
-		console.warn(`Practice "${practice.id}" is missing maturityLevel field, defaulting to 1`)
+		console.warn(`Practice "${practice.id}" is missing maturityLevel field`)
 	}
 
-	return 1 // Default to Core Automation level
+	return undefined
 }
 
 /**
@@ -109,6 +109,13 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 			// Two-stage sort: primary by maturityLevel (ascending), secondary by barycenter
 			withBarycenters.sort((a, b) => {
 				// Primary sort: by maturity level (ascending: 0 → 3)
+				// Practices without maturityLevel sort to the end
+				if (a.maturityLevel === undefined && b.maturityLevel === undefined) {
+					return a.barycenter - b.barycenter
+				}
+				if (a.maturityLevel === undefined) return 1 // a sorts after b
+				if (b.maturityLevel === undefined) return -1 // b sorts after a
+
 				if (a.maturityLevel !== b.maturityLevel) {
 					return a.maturityLevel - b.maturityLevel
 				}
@@ -141,6 +148,13 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 			// Two-stage sort: primary by maturityLevel (ascending), secondary by barycenter
 			withBarycenters.sort((a, b) => {
 				// Primary sort: by maturity level (ascending: 0 → 3)
+				// Practices without maturityLevel sort to the end
+				if (a.maturityLevel === undefined && b.maturityLevel === undefined) {
+					return a.barycenter - b.barycenter
+				}
+				if (a.maturityLevel === undefined) return 1 // a sorts after b
+				if (b.maturityLevel === undefined) return -1 // b sorts after a
+
 				if (a.maturityLevel !== b.maturityLevel) {
 					return a.maturityLevel - b.maturityLevel
 				}

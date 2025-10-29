@@ -53,6 +53,7 @@ const buildTreeWithDependencies = (practices, dependencies, rootId) => {
 			requirements: practice.requirements || [],
 			benefits: practice.benefits || [],
 			quickStartGuide: practice.quickStartGuide, // Preserve quickStartGuide
+			maturityLevel: practice.maturityLevel, // Preserve maturityLevel
 			level: practice.level || 0,
 			dependencies: []
 		})

@@ -117,7 +117,8 @@ export const createGetPracticeTreeService = practiceRepository => {
 				benefitCount: node.benefits?.length || 0,
 				practicePrerequisites: [],
 				capabilityPrerequisites: [],
-				dependencies: [] // Don't recurse into circular reference
+				dependencies: [], // Don't recurse into circular reference
+				maturityLevel: node.maturityLevel // Preserve maturityLevel for circular references
 			}
 		}
 
@@ -142,7 +143,8 @@ export const createGetPracticeTreeService = practiceRepository => {
 			practicePrerequisites: [],
 			capabilityPrerequisites: [],
 			dependencies: enrichedDependencies,
-			quickStartGuide: node.quickStartGuide // Explicitly preserve quickStartGuide
+			quickStartGuide: node.quickStartGuide, // Explicitly preserve quickStartGuide
+			maturityLevel: node.maturityLevel // Explicitly preserve maturityLevel
 		}
 
 		return enriched

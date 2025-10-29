@@ -64,7 +64,7 @@
 				"Reduced human error",
 				"Fast feedback on changes"
 			],
-			"maturityLevel": 3
+			"maturityLevel": 1
 		},
 		{
 			"id": "artifact-repository",
@@ -200,7 +200,7 @@
 				"Enables collaboration",
 				"Clear definition of done"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "build-automation",
@@ -297,7 +297,7 @@
 				"Reduced cross-team dependencies and handoffs",
 				"Stronger team autonomy"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 3
 		},
 		{
 			"id": "continuous-delivery",
@@ -367,7 +367,7 @@
 				"Reduced manual testing effort",
 				"Living documentation of system behavior"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "contract-testing",
@@ -571,7 +571,7 @@
 				"Reduced downtime during migrations",
 				"Safer deployments"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "exploratory-testing",
@@ -615,7 +615,7 @@
 				"Gradual rollouts"
 			],
 			"quickStartGuide": "https://minimumcd.org/recommendations/feature-flags/",
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "functional-testing",
@@ -659,7 +659,7 @@
 				"Simplified rollback"
 			],
 			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/",
-			"maturityLevel": 0
+			"maturityLevel": 1
 		},
 		{
 			"id": "infrastructure-automation",
@@ -745,7 +745,7 @@
 				"Team autonomy and ownership",
 				"Parallel development capability"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "telemetry-observability",
@@ -811,7 +811,7 @@
 				"Lower MTTR (Mean Time To Recovery)"
 			],
 			"quickStartGuide": "https://minimumcd.org/minimumcd/rollback/",
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "performance-testing",
@@ -854,7 +854,7 @@
 				"Transparency",
 				"Improved collaboration"
 			],
-			"maturityLevel": 0
+			"maturityLevel": 2
 		},
 		{
 			"id": "prioritized-features",
@@ -923,7 +923,7 @@
 				"Provides fast feedback on quality issues",
 				"Reduces technical debt accumulation"
 			],
-			"maturityLevel": 1
+			"maturityLevel": 2
 		},
 		{
 			"id": "test-environment",
@@ -1076,7 +1076,7 @@
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
 			],
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "test-data-management",
@@ -1119,7 +1119,7 @@
 				"Encourages small, frequent commits"
 			],
 			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/",
-			"maturityLevel": 2
+			"maturityLevel": 1
 		},
 		{
 			"id": "unified-team-backlog",
@@ -1140,7 +1140,7 @@
 				"Shared understanding of priorities",
 				"Faster decision making"
 			],
-			"maturityLevel": 3
+			"maturityLevel": 2
 		},
 		{
 			"id": "usability-testing",
@@ -1229,7 +1229,7 @@
 				"Executable specification of system behavior"
 			],
 			"type": "practice",
-			"maturityLevel": 3
+			"maturityLevel": 1
 		},
 		{
 			"id": "cross-functional-product-team",

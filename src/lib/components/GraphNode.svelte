@@ -2,6 +2,7 @@
 	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
 	import IconButton from '$lib/components/IconButton.svelte'
 	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
+	import MaturityBadge from '$lib/components/MaturityBadge.svelte'
 	import { faExternalLinkAlt, faRightToBracket, faTimes } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
@@ -87,9 +88,19 @@
 					? `Close details for ${practice.name}`
 					: `View details for ${practice.name}`}
 			>
-				<Fa icon={isSelected ? faTimes : faRightToBracket} size="md" />
+				<Fa icon={isSelected ? faTimes : faRightToBracket} size="lg" />
 			</IconButton>
 		</div>
+
+		<!-- Maturity Badge in center (only show if maturityLevel is defined) -->
+		{#if practice.maturityLevel !== undefined}
+			<div class="z-10 flex items-center justify-center">
+				<MaturityBadge maturityLevel={practice.maturityLevel} />
+			</div>
+		{:else}
+			<!-- Spacer to maintain layout when no badge -->
+			<div class="z-10 flex items-center justify-center min-w-[24px]"></div>
+		{/if}
 
 		<!-- Adoption Checkbox in top-right corner -->
 		<div class="z-10" onclick={e => e.stopPropagation()} role="presentation">
