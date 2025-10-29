@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.0...interactive-cd-v1.5.1) (2025-10-29)
+
+
+### Bug Fixes
+
+* correct the release process ([e3ebe64](https://github.com/bdfinst/interactive-cd/commit/e3ebe6477512ba8f9af2d19e47b7e400c30264d9))
+
 ## [1.5.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.4.0...interactive-cd-v1.5.0) (2025-10-29)
 
 
