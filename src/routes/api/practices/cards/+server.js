@@ -6,9 +6,12 @@
 import { json } from '@sveltejs/kit'
 import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
+import { generateETag, getCacheControl, isCacheFresh } from '$lib/server/etag.js'
+
+/* global Response */
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET({ url }) {
+export async function GET({ url, request }) {
 	try {
 		const repository = createFilePracticeRepository()
 
@@ -81,22 +84,37 @@ export async function GET({ url }) {
 		// Return root first, then dependencies
 		const practices = [rootCard, ...dependencyCards]
 
-		return json(
-			{
-				success: true,
-				data: practices,
-				metadata: {
-					rootId: rootIdParam,
-					practiceCount: practices.length,
-					timestamp: new Date().toISOString()
-				}
-			},
-			{
-				headers: {
-					'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
-				}
+		const responseData = {
+			success: true,
+			data: practices,
+			metadata: {
+				rootId: rootIdParam,
+				practiceCount: practices.length,
+				timestamp: new Date().toISOString()
 			}
-		)
+		}
+
+		// Generate ETag from response data for cache validation
+		const etag = generateETag(responseData)
+
+		// Check if client's cached version is still fresh
+		if (isCacheFresh(request, etag)) {
+			return new Response(null, {
+				status: 304,
+				headers: {
+					ETag: etag,
+					'Cache-Control': getCacheControl(3600)
+				}
+			})
+		}
+
+		// Return fresh data with ETag
+		return json(responseData, {
+			headers: {
+				ETag: etag,
+				'Cache-Control': getCacheControl(3600)
+			}
+		})
 	} catch (error) {
 		console.error('API error:', error)
 		return json(

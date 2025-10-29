@@ -1,1768 +1,1802 @@
 {
+	"dependencies": [
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "api-management"
+		},
+		{
+			"depends_on_id": "automated-artifact-versioning",
+			"practice_id": "application-pipeline"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "application-pipeline"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "application-pipeline"
+		},
+		{
+			"depends_on_id": "quality-gates",
+			"practice_id": "application-pipeline"
+		},
+		{
+			"depends_on_id": "artifact-repository",
+			"practice_id": "automated-artifact-versioning"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "automated-artifact-versioning"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "automated-db-changes"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "automated-db-changes"
+		},
+		{
+			"depends_on_id": "database-migration-strategy",
+			"practice_id": "automated-db-changes"
+		},
+		{
+			"depends_on_id": "evolutionary-database",
+			"practice_id": "automated-db-changes"
+		},
+		{
+			"depends_on_id": "infrastructure-automation",
+			"practice_id": "automated-environment-provisioning"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "automated-testing"
+		},
+		{
+			"depends_on_id": "behavior-driven-development",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "dependency-management",
+			"practice_id": "build-automation"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "build-automation"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "compliance-testing"
+		},
+		{
+			"depends_on_id": "security-testing",
+			"practice_id": "compliance-testing"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "component-ownership"
+		},
+		{
+			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "component-ownership"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "component-ownership"
+		},
+		{
+			"depends_on_id": "secret-management",
+			"practice_id": "configuration-management"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "configuration-management"
+		},
+		{
+			"depends_on_id": "application-pipeline",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "automated-db-changes",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "automated-environment-provisioning",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "configuration-management",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "continuous-integration",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "continuous-testing",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "immutable-artifact",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "modular-system",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "on-demand-rollback",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "developer-driven-support",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "evolutionary-coding",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "prioritized-features",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "monitoring-and-alerting",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "atdd",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "build-on-commit",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "trunk-based-development",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "functional-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "performance-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "compliance-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "integration-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "continuous-integration",
+			"practice_id": "cycle-time-tracking"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "cycle-time-tracking"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "cycle-time-tracking"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "cycle-time-tracking"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "database-migration-strategy"
+		},
+		{
+			"depends_on_id": "evolutionary-database",
+			"practice_id": "database-migration-strategy"
+		},
+		{
+			"depends_on_id": "configuration-management",
+			"practice_id": "deployment-automation"
+		},
+		{
+			"depends_on_id": "infrastructure-automation",
+			"practice_id": "deployment-automation"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "deployment-automation"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "automated-testing"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "developer-driven-support"
+		},
+		{
+			"depends_on_id": "monitoring-and-alerting",
+			"practice_id": "developer-driven-support"
+		},
+		{
+			"depends_on_id": "versioned-database",
+			"practice_id": "evolutionary-database"
+		},
+		{
+			"depends_on_id": "infrastructure-automation",
+			"practice_id": "ephemeral-test-environments"
+		},
+		{
+			"depends_on_id": "test-data-management",
+			"practice_id": "ephemeral-test-environments"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "exploratory-testing"
+		},
+		{
+			"depends_on_id": "exploratory-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "usability-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "configuration-management",
+			"practice_id": "feature-flags"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "artifact-repository",
+			"practice_id": "immutable-artifact"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "immutable-artifact"
+		},
+		{
+			"depends_on_id": "configuration-management",
+			"practice_id": "immutable-artifact"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "infrastructure-automation"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "behavior-driven-development",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "api-management",
+			"practice_id": "modular-system"
+		},
+		{
+			"depends_on_id": "component-ownership",
+			"practice_id": "modular-system"
+		},
+		{
+			"depends_on_id": "logging-infrastructure",
+			"practice_id": "telemetry-observability"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "monitoring-and-alerting"
+		},
+		{
+			"depends_on_id": "cycle-time-tracking",
+			"practice_id": "monitoring-and-alerting"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "performance-testing"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "performance-testing"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "performance-testing"
+		},
+		{
+			"depends_on_id": "application-pipeline",
+			"practice_id": "pipeline-visibility"
+		},
+		{
+			"depends_on_id": "pipeline-visibility",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "product-goals",
+			"practice_id": "prioritized-features"
+		},
+		{
+			"depends_on_id": "unified-team-backlog",
+			"practice_id": "prioritized-features"
+		},
+		{
+			"depends_on_id": "static-analysis",
+			"practice_id": "quality-gates"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "quality-gates"
+		},
+		{
+			"depends_on_id": "resilience-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "resilience-testing"
+		},
+		{
+			"depends_on_id": "infrastructure-automation",
+			"practice_id": "resilience-testing"
+		},
+		{
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "resilience-testing"
+		},
+		{
+			"depends_on_id": "test-data-management",
+			"practice_id": "resilience-testing"
+		},
+		{
+			"depends_on_id": "database-migration-strategy",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "security-testing"
+		},
+		{
+			"depends_on_id": "static-analysis",
+			"practice_id": "security-testing"
+		},
+		{
+			"depends_on_id": "static-analysis",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "smoke-testing",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "smoke-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "smoke-testing"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "static-analysis"
+		},
+		{
+			"depends_on_id": "stop-the-line",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "infrastructure-automation",
+			"practice_id": "test-environment"
+		},
+		{
+			"depends_on_id": "test-data-management",
+			"practice_id": "test-environment"
+		},
+		{
+			"depends_on_id": "build-on-commit",
+			"practice_id": "trunk-based-development"
+		},
+		{
+			"depends_on_id": "continuous-testing",
+			"practice_id": "trunk-based-development"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "trunk-based-development"
+		},
+		{
+			"depends_on_id": "feature-flags",
+			"practice_id": "trunk-based-development"
+		},
+		{
+			"depends_on_id": "product-goals",
+			"practice_id": "unified-team-backlog"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "usability-testing"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "build-on-commit"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "contract-testing"
+		},
+		{
+			"depends_on_id": "contract-testing",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "smoke-testing"
+		},
+		{
+			"depends_on_id": "behavior-driven-development",
+			"practice_id": "atdd"
+		},
+		{
+			"depends_on_id": "ephemeral-test-environments",
+			"practice_id": "atdd"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "compliance-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "contract-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "atdd"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "smoke-testing"
+		},
+		{
+			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "behavior-driven-development"
+		}
+	],
+	"metadata": {
+		"changelog": "Added ephemeral-test-environments practice (maturity level 2) as a dependency of continuous-integration, depending on test-data-management and infrastructure-automation. Added maturityLevel field to all practices. Added quality-gates and cycle-time-tracking practices. Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
+		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
+		"lastUpdated": "2025-10-29",
+		"source": "MinimumCD.org",
+		"version": "1.12.0"
+	},
 	"practices": [
 		{
-			"id": "api-management",
-			"name": "API Management",
-			"type": "practice",
+			"benefits": [
+				"Better API discoverability and documentation",
+				"Consistent API experience for consumers",
+				"Controlled access and security",
+				"Usage analytics and insights",
+				"Version management and deprecation"
+			],
 			"category": "automation",
 			"description": "Governance and lifecycle management of APIs including versioning, documentation, security, and monitoring.",
+			"id": "api-management",
+			"maturityLevel": 1,
+			"name": "API Management",
 			"requirements": [
-				"API gateway infrastructure",
+				"API analytics and monitoring",
 				"API documentation tools (OpenAPI, Swagger)",
-				"Versioning strategy (semantic versioning)",
+				"API gateway infrastructure",
 				"Security controls (authentication, authorization)",
-				"API analytics and monitoring"
+				"Versioning strategy (semantic versioning)"
 			],
-			"benefits": [
-				"Consistent API experience for consumers",
-				"Better API discoverability and documentation",
-				"Controlled access and security",
-				"Version management and deprecation",
-				"Usage analytics and insights"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "configuration-management",
-			"name": "Application Configuration Management",
-			"type": "practice",
-			"category": "automation",
-			"description": "Manage application configuration separately from code, versioned and deployed alongside artifacts.",
-			"requirements": [
-				"Configuration versioned in source control",
-				"Deployed with artifact",
-				"Environment-specific values externalized",
-				"No secrets in source code",
-				"Auditable changes"
-			],
 			"benefits": [
-				"Traceable configuration changes",
-				"Environment parity",
-				"Secure secret management",
-				"Easy configuration rollback"
+				"Automated quality gates",
+				"Consistent deployment process",
+				"Fast feedback on changes",
+				"Reduced human error"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/application-configuration/",
-			"maturityLevel": 1
-		},
-		{
-			"id": "application-pipeline",
-			"name": "Application Pipeline",
-			"type": "practice",
 			"category": "behavior-enabled-automation",
 			"description": "The automated pipeline is the only path to production, validating every change through build, test, and deployment stages.",
+			"id": "application-pipeline",
+			"maturityLevel": 1,
+			"name": "Application Pipeline",
 			"requirements": [
-				"Only path to production",
-				"Determines production readiness",
 				"Automated build process",
-				"Automated testing stages",
 				"Automated deployment capability",
+				"Automated testing stages",
+				"Determines production readiness",
+				"Only path to production",
 				"Visible to entire team"
 			],
-			"benefits": [
-				"Consistent deployment process",
-				"Automated quality gates",
-				"Reduced human error",
-				"Fast feedback on changes"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "artifact-repository",
-			"name": "Artifact Repository",
-			"type": "practice",
-			"category": "automation",
-			"description": "Central storage for build artifacts, ensuring traceability and enabling artifact promotion across environments.",
-			"requirements": [
-				"Version all artifacts",
-				"Secure storage",
-				"Fast retrieval",
-				"Retention policies",
-				"Access controls"
-			],
 			"benefits": [
 				"Artifact traceability",
-				"Consistent deployments",
 				"Audit trail",
+				"Consistent deployments",
 				"Easy rollback"
 			],
-			"maturityLevel": 0
+			"category": "automation",
+			"description": "Central storage for versioned build artifacts, ensuring traceability and enabling artifact promotion across environments.",
+			"id": "artifact-repository",
+			"maturityLevel": 0,
+			"name": "Artifact Repository",
+			"requirements": [
+				"Access controls",
+				"Fast retrieval",
+				"Retention policies",
+				"Secure storage",
+				"Version all artifacts"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "automated-artifact-versioning",
-			"name": "Automated Artifact Versioning",
-			"type": "practice",
-			"category": "automation",
-			"description": "Automatically generating and managing semantic version numbers for build artifacts based on commits.",
-			"requirements": [
-				"Versioning scheme (semantic versioning)",
-				"Automated version increment from CI",
-				"Artifact repository with version support",
-				"Version tagging in VCS (git tags)",
-				"Changelog generation from commits"
-			],
 			"benefits": [
+				"Confidence in refactoring with comprehensive acceptance coverage",
+				"Early validation of architectural decisions",
+				"Executable specification of system behavior",
+				"Implementation guided by concrete acceptance criteria",
+				"Prevention of scope creep through clear boundaries",
+				"Reduced manual testing effort",
+				"Verification that features meet business requirements"
+			],
+			"category": "behavior",
+			"description": "Development approach where acceptance tests are written before implementation, derived from BDD scenarios, ensuring the system meets business requirements and user expectations.",
+			"id": "atdd",
+			"maturityLevel": 1,
+			"name": "Acceptance Test-Driven Development (ATDD",
+			"requirements": [
+				"Acceptance tests written before implementation",
+				"Automated acceptance test execution",
+				"BDD scenarios to guide acceptance test creation",
+				"Clear definition of done based on passing acceptance tests",
+				"Fast feedback from acceptance test runs",
+				"Tests focus on user-visible behavior, not implementation details"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Automated release notes",
+				"Better dependency management",
 				"Clear artifact tracking and traceability",
 				"Reproducible builds at any point",
-				"Better dependency management",
-				"Simplified rollbacks to known versions",
-				"Automated release notes"
+				"Simplified rollbacks to known versions"
 			],
-			"maturityLevel": 1
+			"category": "automation",
+			"description": "Automatically generating and managing semantic version numbers for build artifacts based on commits.",
+			"id": "automated-artifact-versioning",
+			"maturityLevel": 1,
+			"name": "Automated Artifact Versioning",
+			"requirements": [
+				"Artifact repository with version support",
+				"Automated version increment from CI",
+				"Changelog generation from commits",
+				"Version tagging in VCS (git tags)",
+				"Versioning scheme (semantic versioning)"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "automated-db-changes",
-			"name": "Automated DB Changes",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Database schema and data changes are automated and applied through CI/CD pipeline with version control.",
-			"requirements": [
-				"Database migration tools (Flyway, Liquibase)",
-				"Version control for schema changes",
-				"Automated testing of migrations",
-				"Rollback procedures for each migration",
-				"Database change validation in pipeline"
-			],
 			"benefits": [
-				"Consistent database state across environments",
-				"Reduced deployment errors and risks",
-				"Faster deployments and releases",
 				"Better audit trail of changes",
+				"Consistent database state across environments",
+				"Faster deployments and releases",
+				"Reduced deployment errors and risks",
 				"Simplified database versioning"
 			],
-			"maturityLevel": 0
+			"category": "behavior-enabled-automation",
+			"description": "Database schema and data changes are automated and applied through CI/CD pipeline with version control.",
+			"id": "automated-db-changes",
+			"maturityLevel": 1,
+			"name": "Automated DB Changes",
+			"requirements": [
+				"Automated testing of migrations",
+				"Database change validation in pipeline",
+				"Database migration tools (Flyway, Liquibase)",
+				"Rollback procedures for each migration",
+				"Version control for schema changes"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "automated-environment-provisioning",
-			"name": "Automated Environment Provisioning",
-			"type": "practice",
+			"benefits": [
+				"Better disaster recovery capability",
+				"Consistent environments across SDLC",
+				"Cost optimization through automation",
+				"Faster environment provisioning",
+				"Reduced configuration drift issues"
+			],
 			"category": "automation",
 			"description": "Infrastructure and environments created automatically through code (IaC) on-demand.",
+			"id": "automated-environment-provisioning",
+			"maturityLevel": 1,
+			"name": "Automated Environment Provisioning",
 			"requirements": [
-				"Infrastructure as Code tools (Terraform, Pulumi)",
-				"Configuration management (Ansible, Chef)",
+				"Automated testing of infrastructure",
 				"Cloud provider APIs and automation",
+				"Configuration management (Ansible, Chef)",
 				"Environment templates and blueprints",
-				"Automated testing of infrastructure"
+				"Infrastructure as Code tools (Terraform, Pulumi)"
 			],
-			"benefits": [
-				"Consistent environments across SDLC",
-				"Faster environment provisioning",
-				"Reduced configuration drift issues",
-				"Better disaster recovery capability",
-				"Cost optimization through automation"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "automated-testing",
-			"name": "Automated Testing",
-			"type": "practice",
-			"category": "automation",
-			"description": "Comprehensive automated test suite that runs on every code change to ensure quality and catch regressions.",
-			"requirements": [
-				"Run on every commit",
-				"Fast feedback (< 10 minutes for unit tests)",
-				"Multiple test levels (unit, integration, acceptance)",
-				"High code coverage",
-				"Tests must pass before merge",
-				"Flaky tests fixed immediately"
-			],
 			"benefits": [
 				"Early defect detection",
-				"Refactoring confidence",
 				"Living documentation",
-				"Reduced manual testing effort"
+				"Reduced manual testing effort",
+				"Refactoring confidence"
 			],
-			"maturityLevel": 0
+			"category": "automation",
+			"description": "Comprehensive automated test suite that runs on every code change to ensure quality and catch regressions.",
+			"id": "automated-testing",
+			"maturityLevel": 0,
+			"name": "Automated Testing",
+			"requirements": [
+				"Fast feedback (< 10 minutes for unit tests)",
+				"Flaky tests fixed immediately",
+				"High code coverage",
+				"Multiple test levels (unit, integration, acceptance)",
+				"Run on every commit",
+				"Tests must pass before merge"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "behavior-driven-development",
-			"name": "Behavior-Driven Development (BDD)",
-			"type": "practice",
+			"benefits": [
+				"Clear definition of done",
+				"Enables collaboration",
+				"Foundation for deterministic tests",
+				"Living documentation stays current",
+				"Reduces ambiguity in requirements",
+				"Shared understanding between technical and business teams",
+				"Testable acceptance criteria"
+			],
 			"category": "behavior",
 			"description": "Define software behavior using a structured, human-readable DSL that serves as executable specifications and living documentation.",
+			"id": "behavior-driven-development",
+			"maturityLevel": 1,
+			"name": "Behavior-Driven Development (BDD)",
 			"requirements": [
-				"Scenarios relate to a single feature",
-				"Scenarios focus on behavior and interactions, not implementation",
-				"Use specific, testable acceptance criteria",
+				"Features reviewed with stakeholders",
+				"Features serve as living documentation",
 				"Include explicit data values in scenarios",
 				"Scenarios are declarative (what, not how)",
 				"Scenarios are defined in a collaborative process with product, quality, and development points of view",
-				"Features reviewed with stakeholders",
-				"Features serve as living documentation"
+				"Scenarios focus on behavior and interactions, not implementation",
+				"Scenarios relate to a single feature",
+				"Use specific, testable acceptance criteria"
 			],
-			"benefits": [
-				"Shared understanding between technical and business teams",
-				"Testable acceptance criteria",
-				"Living documentation stays current",
-				"Reduces ambiguity in requirements",
-				"Foundation for deterministic tests",
-				"Enables collaboration",
-				"Clear definition of done"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "build-automation",
-			"name": "Build Automation",
-			"type": "practice",
-			"category": "automation",
-			"maturityLevel": 0,
-			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
-			"requirements": [
-				"Repeatable builds",
-				"Fast execution",
-				"Runs in CI environment",
-				"Fail fast on errors",
-				"CI/CD build pipeline configuration",
-				"One-command build from any commit",
-				"Repeatable builds with same inputs",
-				"Fast execution with caching strategies",
-				"Fail fast on errors with clear messages",
-				"Parallel build stages where possible"
-			],
 			"benefits": [
-				"Consistency across builds",
-				"Reduced human error",
-				"Fast feedback",
-				"Easy onboarding",
+				"Build reproducibility and traceability",
 				"Consistency across all builds",
-				"Reduced human error in build process",
-				"Fast feedback to developers",
+				"Consistency across builds",
+				"Easy onboarding",
 				"Easy onboarding for new team members",
-				"Build reproducibility and traceability"
-			]
+				"Fast feedback",
+				"Fast feedback to developers",
+				"Reduced human error",
+				"Reduced human error in build process"
+			],
+			"category": "automation",
+			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
+			"id": "build-automation",
+			"maturityLevel": 1,
+			"name": "Build Automation",
+			"requirements": [
+				"CI/CD build pipeline configuration",
+				"Fail fast on errors",
+				"Fail fast on errors with clear messages",
+				"Fast execution",
+				"Fast execution with caching strategies",
+				"One-command build from any commit",
+				"Parallel build stages where possible",
+				"Repeatable builds",
+				"Repeatable builds with same inputs",
+				"Runs in CI environment"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "build-on-commit",
-			"name": "Build on Commit",
-			"type": "practice",
+			"benefits": [
+				"Enforces quality gates automatically",
+				"Immediate feedback on code changes",
+				"Maintains always-green build status",
+				"Prevents broken builds in trunk",
+				"Reduces integration issues"
+			],
 			"category": "behavior",
 			"description": "Every code commit triggers an automated build and test cycle to provide immediate feedback.",
+			"id": "build-on-commit",
+			"maturityLevel": 1,
+			"name": "Build on Commit",
 			"requirements": [
-				"VCS webhooks for triggering builds",
 				"CI trigger configuration",
 				"Fast build times (< 10 minutes)",
 				"Notification system for build status",
-				"Protected trunk branch requiring passing builds"
+				"Protected trunk branch requiring passing builds",
+				"VCS webhooks for triggering builds"
 			],
-			"benefits": [
-				"Immediate feedback on code changes",
-				"Prevents broken builds in trunk",
-				"Enforces quality gates automatically",
-				"Maintains always-green build status",
-				"Reduces integration issues"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "compliance-testing",
-			"name": "Compliance Testing",
-			"type": "practice",
+			"benefits": [
+				"Audit trail for regulatory requirements",
+				"Continuous compliance validation",
+				"Early detection of compliance violations",
+				"Lower compliance risk",
+				"Reduced audit preparation time"
+			],
 			"category": "behavior",
 			"description": "Automated testing and validation to ensure compliance with regulatory requirements, industry standards, and organizational policies.",
+			"id": "compliance-testing",
+			"maturityLevel": 2,
+			"name": "Compliance Testing",
 			"requirements": [
 				"Automated compliance checking tools",
+				"Automated policy enforcement",
 				"Compliance test suite in CI/CD pipeline",
-				"Regular compliance audits",
 				"Documentation of compliance requirements",
-				"Automated policy enforcement"
+				"Regular compliance audits"
 			],
-			"benefits": [
-				"Continuous compliance validation",
-				"Reduced audit preparation time",
-				"Early detection of compliance violations",
-				"Audit trail for regulatory requirements",
-				"Lower compliance risk"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "component-ownership",
-			"name": "Component Ownership",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Clear accountability for each component with a designated team responsible for its entire lifecycle.",
-			"requirements": [
-				"Ownership registry and documentation",
-				"Clear team responsibilities and boundaries",
-				"Team structure aligned with components",
-				"Communication channels for each component",
-				"On-call rotation for owned components"
-			],
 			"benefits": [
+				"Better code and system quality",
 				"Clear accountability and ownership",
 				"Faster decision making on changes",
-				"Better code and system quality",
 				"Reduced cross-team dependencies and handoffs",
 				"Stronger team autonomy"
 			],
-			"maturityLevel": 3
+			"category": "behavior",
+			"description": "Clear accountability for each component with a designated team responsible for its entire lifecycle.",
+			"id": "component-ownership",
+			"maturityLevel": 3,
+			"name": "Component Ownership",
+			"requirements": [
+				"Clear team responsibilities and boundaries",
+				"Communication channels for each component",
+				"On-call rotation for owned components",
+				"Ownership registry and documentation",
+				"Team structure aligned with components"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "continuous-delivery",
-			"name": "Continuous Delivery",
-			"type": "root",
+			"benefits": [
+				"Easy configuration rollback",
+				"Environment parity",
+				"Secure secret management",
+				"Traceable configuration changes"
+			],
+			"category": "automation",
+			"description": "Manage application configuration separately from code, versioned and deployed alongside artifacts.",
+			"id": "configuration-management",
+			"maturityLevel": 1,
+			"name": "Application Configuration Management",
+			"quickStartGuide": "https://minimumcd.org/minimumcd/application-configuration/",
+			"requirements": [
+				"Auditable changes",
+				"Configuration versioned in source control",
+				"Deployed with artifact",
+				"Environment-specific values externalized",
+				"No secrets in source code"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Better team culture",
+				"Higher quality releases",
+				"Improved delivery performance",
+				"Less deployment pain",
+				"Reduced burnout"
+			],
 			"category": "core",
 			"description": "Continuous delivery improves both delivery performance and quality, and also helps improve culture and reduce burnout and deployment pain.",
+			"id": "continuous-delivery",
+			"maturityLevel": 3,
+			"name": "Continuous Delivery",
 			"requirements": [
-				"Use Continuous Integration",
 				"Application pipeline is the only path to production",
-				"Pipeline determines production readiness",
 				"Create immutable artifacts",
-				"Stop feature work when pipeline fails",
-				"Maintain production-like test environment",
+				"Deploy application configuration with artifact",
 				"Enable on-demand rollback",
-				"Deploy application configuration with artifact"
+				"Maintain production-like test environment",
+				"Pipeline determines production readiness",
+				"Stop feature work when pipeline fails",
+				"Use Continuous Integration"
 			],
-			"benefits": [
-				"Improved delivery performance",
-				"Higher quality releases",
-				"Better team culture",
-				"Reduced burnout",
-				"Less deployment pain"
-			],
-			"maturityLevel": 3
+			"type": "root"
 		},
 		{
-			"id": "continuous-integration",
-			"name": "Continuous Integration",
-			"type": "practice",
+			"benefits": [
+				"Always-releasable codebase",
+				"Early detection of integration issues",
+				"Faster feedback cycles",
+				"Reduced merge conflicts"
+			],
 			"category": "behavior",
 			"description": "Integrate code changes frequently to detect integration issues early and maintain a working mainline.",
+			"id": "continuous-integration",
+			"maturityLevel": 1,
+			"name": "Continuous Integration",
+			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/",
 			"requirements": [
-				"Use Trunk-based Development",
-				"Integrate work to trunk at least daily",
 				"Automated testing before merging to trunk",
 				"Automatically test work with other work on merge",
+				"Ensure new work doesn't break existing work",
+				"Integrate work to trunk at least daily",
 				"Stop feature work when build fails",
-				"Ensure new work doesn't break existing work"
+				"Use Trunk-based Development"
 			],
-			"benefits": [
-				"Early detection of integration issues",
-				"Reduced merge conflicts",
-				"Always-releasable codebase",
-				"Faster feedback cycles"
-			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/",
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "continuous-testing",
-			"name": "Continuous Testing",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Testing throughout the development lifecycle with automated feedback at every stage of the pipeline plus continuous exploration and validation of look and feel.",
-			"requirements": [
-				"Test automation framework and tooling",
-				"CI/CD pipeline integration",
-				"Test data management strategy",
-				"Test environment infrastructure",
-				"Multiple test levels (unit, integration, E2E)"
-			],
 			"benefits": [
 				"Early defect detection in pipeline",
 				"Faster feedback cycles for developers",
 				"Higher confidence in changes and releases",
-				"Reduced manual testing effort",
-				"Living documentation of system behavior"
+				"Living documentation of system behavior",
+				"Reduced manual testing effort"
 			],
-			"maturityLevel": 1
+			"category": "behavior-enabled-automation",
+			"description": "Testing throughout the development lifecycle with automated feedback at every stage of the pipeline plus continuous exploration and validation of look and feel.",
+			"id": "continuous-testing",
+			"maturityLevel": 1,
+			"name": "Continuous Testing",
+			"requirements": [
+				"CI/CD pipeline integration",
+				"Multiple test levels (unit, integration, E2E)",
+				"Test automation framework and tooling",
+				"Test data management strategy",
+				"Test environment infrastructure"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "contract-testing",
-			"name": "Contract Testing",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Testing API contracts between services to ensure compatibility and prevent breaking changes.",
-			"requirements": [
-				"Contract testing tools (static mocks, virtual services, etc.)",
-				"Machine readable service contract definitions (OpenAPI, RAML, GraphQL, AsyncApi, etc.)",
-				"Contract versioning strategy",
-				"Contract broker for sharing"
-			],
 			"benefits": [
-				"Prevents breaking API changes",
-				"Enables independent service deployment",
 				"Better API stability and reliability",
+				"Enables independent service deployment",
 				"Faster feedback on incompatibilities",
+				"Prevents breaking API changes",
 				"Reduced integration testing needs"
 			],
-			"maturityLevel": 1
+			"category": "behavior",
+			"description": "Testing API contracts between services to ensure compatibility and prevent breaking changes.",
+			"id": "contract-testing",
+			"maturityLevel": 1,
+			"name": "Contract Testing",
+			"requirements": [
+				"Contract broker for sharing",
+				"Contract testing tools (static mocks, virtual services, etc.)",
+				"Contract versioning strategy",
+				"Machine readable service contract definitions (OpenAPI, RAML, GraphQL, AsyncApi, etc.)"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "cycle-time-tracking",
-			"name": "Cycle Time Tracking",
-			"type": "practice",
+			"benefits": [
+				"Better alignment between business needs and technical implementation",
+				"Better collaboration and shared understanding",
+				"Faster delivery through reduced handoffs and dependencies",
+				"Higher team morale and engagement",
+				"Improved quality through collective ownership",
+				"More effective feedback loops with stakeholders",
+				"Reduced communication overhead",
+				"Stronger accountability and ownership of outcomes"
+			],
+			"category": "behavior",
+			"description": "Highly cohesive, autonomous teams with all skills necessary to deliver business capabilities end-to-end, owning a subset of the product and working together continuously.",
+			"id": "cross-functional-product-team",
+			"maturityLevel": 3,
+			"name": "Cross-Functional Product Team",
+			"requirements": [
+				"Clear boundaries of team responsibility and autonomy",
+				"Stable team membership over time",
+				"Team has authority to make decisions within their scope",
+				"Team has direct access to stakeholders and users",
+				"Team includes all necessary roles: developers, testers, UX, product owner",
+				"Team operates what they build in production",
+				"Team owns a clear subset of business capabilities or product features",
+				"Team works together in the same space (physical or virtual)"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Enables evidence-based decision making",
+				"Highlights quality trends via defect rates",
+				"Identifies bottlenecks in delivery process",
+				"Provides data-driven insights for improvement",
+				"Tracks progress toward CD maturity"
+			],
 			"category": "behavior",
 			"description": "Measurement and monitoring of development cycle metrics including lead time, deployment frequency, and defect arrival rates to identify bottlenecks and drive continuous improvement.",
+			"id": "cycle-time-tracking",
+			"maturityLevel": 2,
+			"name": "Cycle Time Tracking",
 			"requirements": [
 				"Automated collection of cycle time data from VCS and CI/CD pipeline",
-				"Lead time measurement (commit to production)",
-				"Deployment frequency tracking",
-				"Defect arrival rate monitoring",
 				"Change failure rate measurement",
+				"Defect arrival rate monitoring",
+				"Deployment frequency tracking",
+				"Lead time measurement (commit to production)",
 				"Mean time to recovery (MTTR) tracking",
 				"Visualization dashboards for team review"
 			],
-			"benefits": [
-				"Identifies bottlenecks in delivery process",
-				"Provides data-driven insights for improvement",
-				"Tracks progress toward CD maturity",
-				"Enables evidence-based decision making",
-				"Highlights quality trends via defect rates"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "database-migration-strategy",
-			"name": "Database Migration Strategy",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Approach to database changes that supports continuous delivery and enables safe rollbacks.",
-			"requirements": [
-				"Backward compatible changes",
-				"Automated migrations",
-				"Versioned with code",
-				"Testable migrations",
-				"Rollback plan for each change"
-			],
 			"benefits": [
-				"Safe database deployments",
-				"Rollback capability",
 				"Reduced deployment risk",
+				"Rollback capability",
+				"Safe database deployments",
 				"Schema version control"
 			],
-			"maturityLevel": 1
+			"category": "behavior",
+			"description": "Approach to database changes that supports continuous delivery and enables safe rollbacks.",
+			"id": "database-migration-strategy",
+			"maturityLevel": 1,
+			"name": "Database Migration Strategy",
+			"requirements": [
+				"Automated migrations",
+				"Backward compatible changes",
+				"Rollback plan for each change",
+				"Testable migrations",
+				"Versioned with code"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "dependency-management",
-			"name": "Dependency Management",
-			"type": "practice",
+			"benefits": [
+				"Easy upgrades",
+				"Reduced conflicts",
+				"Reproducible builds",
+				"Security awareness"
+			],
 			"category": "automation",
 			"description": "Systematic approach to managing third-party libraries and dependencies.",
+			"id": "dependency-management",
+			"maturityLevel": 1,
+			"name": "Dependency Management",
 			"requirements": [
 				"Declare all dependencies",
+				"License compliance",
 				"Pin versions",
-				"Vulnerability scanning",
 				"Regular updates",
-				"License compliance"
+				"Vulnerability scanning"
 			],
-			"benefits": [
-				"Reproducible builds",
-				"Security awareness",
-				"Reduced conflicts",
-				"Easy upgrades"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "deployment-automation",
-			"name": "Deployment Automation",
-			"type": "practice",
-			"category": "automation",
-			"description": "Automated deployment process that can push artifacts to any environment without manual steps.",
-			"requirements": [
-				"No manual deployment steps",
-				"Push-button deployment",
-				"Environment-agnostic scripts",
-				"Idempotent operations",
-				"Automated verification"
-			],
 			"benefits": [
 				"Consistent deployments",
-				"Reduced deployment time",
+				"Deployable at any time",
 				"Lower error rates",
-				"Deployable at any time"
+				"Reduced deployment time"
 			],
-			"maturityLevel": 1
+			"category": "automation",
+			"description": "Automated deployment process that can push artifacts to any environment without manual steps.",
+			"id": "deployment-automation",
+			"maturityLevel": 1,
+			"name": "Deployment Automation",
+			"requirements": [
+				"Automated verification",
+				"Environment-agnostic scripts",
+				"Idempotent operations",
+				"No manual deployment steps",
+				"Push-button deployment"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "deterministic-tests",
-			"name": "Deterministic Tests",
-			"type": "practice",
+			"benefits": [
+				"Builds trust in test suite",
+				"Eliminates wasted time on false failures",
+				"Enables trunk-based development",
+				"Fast, confident merging to trunk",
+				"Reduces investigation time",
+				"Reliable CI/CD pipelines",
+				"Supports frequent integration",
+				"Teams act on test failures immediately"
+			],
 			"category": "behavior-enabled-automation",
 			"description": "Ensuring all tests produce the same result every time they run, eliminating flakiness and reliably reporting the status of the system. Unreliable tests are corrected or removed from the primary pipeline flow to maintain trust in the pipeline's decisions.",
+			"id": "deterministic-tests",
+			"maturityLevel": 0,
+			"name": "Deterministic Tests",
+			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/",
 			"requirements": [
-				"Tests reliably indicate actual system status",
-				"Process for identifying unreliable tests",
-				"Unreliable tests corrected immediately",
-				"Tests that cannot be fixed are removed from primary pipeline",
+				"Clean up test data after each test",
 				"Control all inputs (time, randomness, external services)",
 				"Isolate test execution (no shared state)",
 				"Mock external dependencies appropriately",
-				"Clean up test data after each test",
-				"Tests can run in parallel without interference"
+				"Process for identifying unreliable tests",
+				"Tests can run in parallel without interference",
+				"Tests reliably indicate actual system status",
+				"Tests that cannot be fixed are removed from primary pipeline",
+				"Unreliable tests corrected immediately"
 			],
-			"benefits": [
-				"Enables trunk-based development",
-				"Builds trust in test suite",
-				"Eliminates wasted time on false failures",
-				"Reliable CI/CD pipelines",
-				"Supports frequent integration",
-				"Fast, confident merging to trunk",
-				"Reduces investigation time",
-				"Teams act on test failures immediately"
-			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/",
-			"maturityLevel": 0
+			"type": "practice"
 		},
 		{
-			"id": "developer-driven-support",
-			"name": "Developer Driven Support",
-			"type": "practice",
+			"benefits": [
+				"Better understanding of production behavior",
+				"Faster issue resolution and MTTR",
+				"Improved system design from operational feedback",
+				"Reduced reliance on separate operations team",
+				"Stronger ownership mindset in teams"
+			],
 			"category": "behavior",
 			"description": "Development teams take ownership of supporting their services in production with on-call rotations.",
+			"id": "developer-driven-support",
+			"maturityLevel": 3,
+			"name": "Developer Driven Support",
 			"requirements": [
-				"On-call rotation schedule for developers",
 				"Access to production monitoring and logs",
 				"Incident response training and runbooks",
+				"On-call rotation schedule for developers",
 				"Post-incident review process",
 				"Runbook documentation for services"
 			],
-			"benefits": [
-				"Faster issue resolution and MTTR",
-				"Better understanding of production behavior",
-				"Improved system design from operational feedback",
-				"Stronger ownership mindset in teams",
-				"Reduced reliance on separate operations team"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		},
 		{
-			"id": "evolutionary-coding",
-			"name": "Evolutionary Coding",
-			"type": "practice",
+			"benefits": [
+				"Adaptable to changing requirements",
+				"Parallel operation of old and new code",
+				"Reduced risk of introducing breaking changes",
+				"Safe evolution without breaking consumers",
+				"Zero-downtime deployments"
+			],
 			"category": "behavior",
 			"description": "Code evolves incrementally through backward-compatible changes that allow existing behaviors and consumers to continue working until they are ready to be replaced.",
+			"id": "evolutionary-coding",
+			"maturityLevel": 3,
+			"name": "Evolutionary Coding",
 			"requirements": [
-				"Comprehensive test coverage for safety",
 				"Backward compatibility practices",
 				"Code review process and culture",
+				"Comprehensive test coverage for safety",
 				"Feature flag capabilities",
 				"Small, incremental changes"
 			],
-			"benefits": [
-				"Zero-downtime deployments",
-				"Safe evolution without breaking consumers",
-				"Reduced risk of introducing breaking changes",
-				"Parallel operation of old and new code",
-				"Adaptable to changing requirements"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		},
 		{
-			"id": "evolutionary-database",
-			"name": "Evolutionary Database",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Database design evolves incrementally through small, reversible, backward-compatible changes.",
-			"requirements": [
-				"Backward compatible schema changes",
-				"Incremental migration strategy",
-				"Automated migration testing",
-				"Refactoring support tooling",
-				"Parallel change pattern"
-			],
 			"benefits": [
-				"Lower risk database changes",
-				"Continuous database improvement",
 				"Better adaptability to change",
+				"Continuous database improvement",
+				"Lower risk database changes",
 				"Reduced downtime during migrations",
 				"Safer deployments"
 			],
-			"maturityLevel": 1
+			"category": "behavior-enabled-automation",
+			"description": "Database design evolves incrementally through small, reversible, backward-compatible changes.",
+			"id": "evolutionary-database",
+			"maturityLevel": 1,
+			"name": "Evolutionary Database",
+			"requirements": [
+				"Automated migration testing",
+				"Backward compatible schema changes",
+				"Incremental migration strategy",
+				"Parallel change pattern",
+				"Refactoring support tooling"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "exploratory-testing",
-			"name": "Exploratory Testing",
-			"type": "practice",
+			"benefits": [
+				"Faster test execution with parallel environments",
+				"Isolated testing without interference",
+				"Reduced environment conflicts",
+				"Cost optimization through on-demand provisioning",
+				"Consistent test environment state"
+			],
+			"category": "automation",
+			"description": "Short-lived test environments created on-demand for testing and automatically destroyed after use, ensuring clean state and isolation.",
+			"id": "ephemeral-test-environments",
+			"maturityLevel": 2,
+			"name": "Ephemeral Test Environments",
+			"requirements": [
+				"Automated environment creation and destruction",
+				"Infrastructure as Code for environment templates",
+				"On-demand provisioning capability",
+				"Versioned infrastructure configuration",
+				"Versioned test data management"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Complements automated testing",
+				"Discovers unexpected edge cases",
+				"Finds issues automation misses",
+				"Provides creative feedback on features",
+				"Validates user experience flows"
+			],
 			"category": "behavior",
 			"description": "Unscripted manual testing to discover unexpected behaviors, edge cases, and usability issues.",
+			"id": "exploratory-testing",
+			"maturityLevel": 3,
+			"name": "Exploratory Testing",
 			"requirements": [
+				"Bug tracking and reporting system",
+				"Session-based testing approach",
 				"Skilled testers with domain knowledge",
 				"Test charter templates",
-				"Session-based testing approach",
-				"Bug tracking and reporting system",
 				"Time-boxed testing sessions"
 			],
-			"benefits": [
-				"Discovers unexpected edge cases",
-				"Validates user experience flows",
-				"Complements automated testing",
-				"Provides creative feedback on features",
-				"Finds issues automation misses"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		},
 		{
-			"id": "feature-flags",
-			"name": "Feature Flags",
-			"type": "practice",
-			"category": "automation",
-			"description": "Runtime toggles that allow features to be deployed to production but not yet enabled for users.",
-			"requirements": [
-				"Decouple deployment from release",
-				"Toggle features at runtime",
-				"Environment-specific controls",
-				"User/group targeting",
-				"Flag lifecycle management"
-			],
 			"benefits": [
 				"Deploy incomplete features safely",
 				"Enable A/B testing",
 				"Fast feature rollback",
 				"Gradual rollouts"
 			],
+			"category": "automation",
+			"description": "Runtime toggles that allow features to be deployed to production but not yet enabled for users.",
+			"id": "feature-flags",
+			"maturityLevel": 1,
+			"name": "Feature Flags",
 			"quickStartGuide": "https://minimumcd.org/recommendations/feature-flags/",
-			"maturityLevel": 1
+			"requirements": [
+				"Decouple deployment from release",
+				"Environment-specific controls",
+				"Flag lifecycle management",
+				"Toggle features at runtime",
+				"User/group targeting"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "functional-testing",
-			"name": "Functional Testing",
-			"type": "practice",
+			"benefits": [
+				"Builds stakeholder confidence",
+				"Documents expected behavior",
+				"Executable specifications",
+				"Prevents functional regressions",
+				"Validates business requirements"
+			],
 			"category": "behavior-enabled-automation",
 			"description": "Testing that verifies the system behaves according to functional requirements and user expectations.",
+			"id": "functional-testing",
+			"maturityLevel": 1,
+			"name": "Functional Testing",
 			"requirements": [
-				"Test automation framework",
 				"Clear functional requirements",
+				"Gherkin or similar specification language",
+				"Test automation framework",
 				"Test data management",
-				"Test environments",
-				"Gherkin or similar specification language"
+				"Test environments"
 			],
-			"benefits": [
-				"Validates business requirements",
-				"Prevents functional regressions",
-				"Documents expected behavior",
-				"Builds stakeholder confidence",
-				"Executable specifications"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "immutable-artifact",
-			"name": "Immutable Artifact",
-			"type": "practice",
-			"category": "automation",
-			"description": "Build artifacts once and promote the same artifact through all environments without rebuilding.",
-			"requirements": [
-				"Build once, deploy many times",
-				"Same artifact across all environments",
-				"Versioned and traceable",
-				"No environment-specific builds",
-				"Configuration separated from artifact"
-			],
 			"benefits": [
-				"Consistency across environments",
 				"Confidence in what's being deployed",
+				"Consistency across environments",
 				"Faster deployments",
 				"Simplified rollback"
 			],
+			"category": "automation",
+			"description": "Build artifacts once and promote the same artifact through all environments without rebuilding.",
+			"id": "immutable-artifact",
+			"maturityLevel": 1,
+			"name": "Immutable Artifact",
 			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/",
-			"maturityLevel": 1
+			"requirements": [
+				"Build once, deploy many times",
+				"Configuration separated from artifact",
+				"No environment-specific builds",
+				"Same artifact across all environments",
+				"Versioned and traceable"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "infrastructure-automation",
-			"name": "Infrastructure Automation",
-			"type": "practice",
+			"benefits": [
+				"Disaster recovery",
+				"Documentation through code",
+				"Environment consistency",
+				"Fast environment creation"
+			],
 			"category": "automation",
 			"description": "Infrastructure provisioned and configured through code, enabling repeatable and consistent environments.",
+			"id": "infrastructure-automation",
+			"maturityLevel": 1,
+			"name": "Infrastructure Automation",
 			"requirements": [
-				"Infrastructure as Code (IaC)",
-				"Version controlled",
 				"Automated provisioning",
 				"Idempotent operations",
-				"Tested like application code"
+				"Infrastructure as Code (IaC)",
+				"Tested like application code",
+				"Version controlled"
 			],
-			"benefits": [
-				"Environment consistency",
-				"Fast environment creation",
-				"Disaster recovery",
-				"Documentation through code"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "integration-testing",
-			"name": "Integration Testing",
-			"type": "practice",
+			"benefits": [
+				"Catches interface contract issues",
+				"Reduces integration risks in production",
+				"Tests with real dependencies",
+				"Validates component interactions",
+				"Verifies end-to-end behavior"
+			],
 			"category": "behavior",
 			"description": "Testing the interactions between components, services, and external systems to validate integration points.",
+			"id": "integration-testing",
+			"maturityLevel": 1,
+			"name": "Integration Testing",
 			"requirements": [
-				"Test doubles/mocks for external dependencies",
+				"API and database integration tests",
 				"Integration test framework",
-				"Test data setup and teardown",
 				"Isolated test environments",
-				"API and database integration tests"
+				"Test data setup and teardown",
+				"Test doubles/mocks for external dependencies"
 			],
-			"benefits": [
-				"Validates component interactions",
-				"Catches interface contract issues",
-				"Verifies end-to-end behavior",
-				"Reduces integration risks in production",
-				"Tests with real dependencies"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "logging-infrastructure",
-			"name": "Logging Infrastructure",
-			"type": "practice",
-			"category": "automation",
-			"description": "Centralized logging system that aggregates logs from all application components and infrastructure.",
-			"requirements": [
-				"Centralized log storage",
-				"Searchable logs",
-				"Structured logging",
-				"Log retention policies",
-				"Fast querying"
-			],
 			"benefits": [
-				"Easier troubleshooting",
 				"Compliance",
+				"Easier troubleshooting",
 				"Performance analysis",
 				"Security monitoring"
 			],
-			"maturityLevel": 2
+			"category": "automation",
+			"description": "Centralized logging system that aggregates logs from all application components and infrastructure.",
+			"id": "logging-infrastructure",
+			"maturityLevel": 2,
+			"name": "Logging Infrastructure",
+			"requirements": [
+				"Centralized log storage",
+				"Fast querying",
+				"Log retention policies",
+				"Searchable logs",
+				"Structured logging"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "modular-system",
-			"name": "Modular System",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "System architecture based on loosely coupled, independently deployable modules with clear boundaries.",
-			"requirements": [
-				"Clear module boundaries and interfaces",
-				"Well-defined contracts between modules",
-				"Dependency management and isolation",
-				"Service contracts and APIs",
-				"Independent deployment capability"
-			],
 			"benefits": [
-				"Independent module deployment",
 				"Better system scalability",
 				"Easier maintenance and evolution",
-				"Team autonomy and ownership",
-				"Parallel development capability"
+				"Independent module deployment",
+				"Parallel development capability",
+				"Team autonomy and ownership"
 			],
-			"maturityLevel": 1
+			"category": "behavior-enabled-automation",
+			"description": "System architecture based on loosely coupled, independently deployable modules with clear boundaries.",
+			"id": "modular-system",
+			"maturityLevel": 1,
+			"name": "Modular System",
+			"requirements": [
+				"Clear module boundaries and interfaces",
+				"Dependency management and isolation",
+				"Independent deployment capability",
+				"Service contracts and APIs",
+				"Well-defined contracts between modules"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "telemetry-observability",
-			"name": "Telemetry & Observability",
-			"type": "practice",
-			"category": "automation",
-			"description": "Comprehensive monitoring of application and infrastructure health to detect and diagnose issues quickly.",
-			"requirements": [
-				"Application metrics",
-				"Infrastructure metrics",
-				"Log aggregation",
-				"Alerting on anomalies",
-				"Distributed tracing",
-				"Real-time dashboards"
-			],
 			"benefits": [
-				"Early issue detection",
-				"Faster troubleshooting",
-				"Performance insights",
-				"Informed decision making"
-			],
-			"maturityLevel": 2
-		},
-		{
-			"id": "monitoring-and-alerting",
-			"name": "Monitoring and Alerting",
-			"type": "practice",
-			"category": "automation",
-			"description": "Comprehensive observability of system behavior with proactive alerting on anomalies and SLA violations.",
-			"requirements": [
-				"Metrics collection infrastructure (Prometheus, DataDog)",
-				"Log aggregation and analysis (ELK, Splunk)",
-				"Distributed tracing (Jaeger, Zipkin)",
-				"Alert management system (PagerDuty, OpsGenie)",
-				"Real-time dashboards and visualization"
-			],
-			"benefits": [
-				"Early problem detection before user impact",
-				"Reduced MTTR with better diagnostics",
 				"Better system understanding and insights",
 				"Data-driven operational decisions",
-				"Proactive issue resolution"
+				"Early problem detection before user impact",
+				"Proactive issue resolution",
+				"Reduced MTTR with better diagnostics"
 			],
-			"maturityLevel": 2
+			"category": "automation",
+			"description": "Comprehensive observability of system behavior with proactive alerting on anomalies and SLA violations.",
+			"id": "monitoring-and-alerting",
+			"maturityLevel": 2,
+			"name": "Monitoring and Alerting",
+			"requirements": [
+				"Alert management system (PagerDuty, OpsGenie)",
+				"Distributed tracing (Jaeger, Zipkin)",
+				"Log aggregation and analysis (ELK, Splunk)",
+				"Metrics collection infrastructure (Prometheus, DataDog)",
+				"Real-time dashboards and visualization"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "on-demand-rollback",
-			"name": "On-demand Rollback",
-			"type": "practice",
-			"category": "automation",
-			"description": "Ability to quickly rollback to a previous known-good version if issues are detected in production.",
-			"requirements": [
-				"Rollback mechanism in place",
-				"Tested regularly",
-				"Fast execution (minutes)",
-				"Database migration compatibility",
-				"Monitoring to detect issues"
-			],
 			"benefits": [
-				"Reduced risk of deployments",
 				"Faster incident recovery",
 				"Increased deployment confidence",
-				"Lower MTTR (Mean Time To Recovery)"
+				"Lower MTTR (Mean Time To Recovery)",
+				"Reduced risk of deployments"
 			],
+			"category": "automation",
+			"description": "Ability to quickly rollback to a previous known-good version if issues are detected in production.",
+			"id": "on-demand-rollback",
+			"maturityLevel": 1,
+			"name": "On-demand Rollback",
 			"quickStartGuide": "https://minimumcd.org/minimumcd/rollback/",
-			"maturityLevel": 1
+			"requirements": [
+				"Database migration compatibility",
+				"Fast execution (minutes)",
+				"Monitoring to detect issues",
+				"Rollback mechanism in place",
+				"Tested regularly"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "performance-testing",
-			"name": "Performance Testing",
-			"type": "practice",
+			"benefits": [
+				"Ensures SLA compliance",
+				"Identifies performance bottlenecks early",
+				"Optimizes resource usage and costs",
+				"Prevents performance regressions",
+				"Validates scalability requirements"
+			],
 			"category": "behavior",
 			"description": "Continuous validation of system performance under load to identify bottlenecks and ensure scalability.",
+			"id": "performance-testing",
+			"maturityLevel": 2,
+			"name": "Performance Testing",
 			"requirements": [
+				"Continuous performance benchmarking",
 				"Load testing tools (JMeter, Gatling, k6)",
 				"Performance baselines and SLOs",
-				"Realistic test scenarios and data volumes",
 				"Performance monitoring and profiling",
-				"Continuous performance benchmarking"
+				"Realistic test scenarios and data volumes"
 			],
-			"benefits": [
-				"Identifies performance bottlenecks early",
-				"Prevents performance regressions",
-				"Validates scalability requirements",
-				"Optimizes resource usage and costs",
-				"Ensures SLA compliance"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "pipeline-visibility",
-			"name": "Pipeline Visibility",
-			"type": "practice",
-			"category": "automation",
-			"description": "Make pipeline status and results visible to the entire team to encourage collaboration and quick response to failures.",
-			"requirements": [
-				"Real-time status display",
-				"Visible to all team members",
-				"Clear failure indicators",
-				"Build history accessible",
-				"Notifications on failure"
-			],
 			"benefits": [
 				"Faster failure response",
+				"Improved collaboration",
 				"Team accountability",
-				"Transparency",
-				"Improved collaboration"
+				"Transparency"
 			],
-			"maturityLevel": 2
+			"category": "automation",
+			"description": "Make pipeline status and results visible to the entire team to encourage collaboration and quick response to failures.",
+			"id": "pipeline-visibility",
+			"maturityLevel": 2,
+			"name": "Pipeline Visibility",
+			"requirements": [
+				"Build history accessible",
+				"Clear failure indicators",
+				"Notifications on failure",
+				"Real-time status display",
+				"Visible to all team members"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "prioritized-features",
-			"name": "Prioritized Features",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Features are ranked by business value and worked on in strict priority order to maximize ROI.",
-			"requirements": [
-				"Stakeholder collaboration process",
-				"Value metrics and success criteria",
-				"Regular review of priorities cadence"
-			],
 			"benefits": [
-				"Maximizes business value delivery",
 				"Better resource allocation",
 				"Clearer team focus and alignment",
-				"Stakeholder satisfaction",
-				"Data-driven decision making"
+				"Data-driven decision making",
+				"Maximizes business value delivery",
+				"Stakeholder satisfaction"
 			],
-			"maturityLevel": 3
+			"category": "behavior",
+			"description": "Features are ranked by business value and worked on in strict priority order to maximize ROI.",
+			"id": "prioritized-features",
+			"maturityLevel": 3,
+			"name": "Prioritized Features",
+			"requirements": [
+				"Regular review of priorities cadence",
+				"Stakeholder collaboration process",
+				"Value metrics and success criteria"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "product-goals",
-			"name": "Product Goals",
-			"type": "practice",
+			"benefits": [
+				"Better feature prioritization decisions",
+				"Clearer communication with stakeholders",
+				"Focused effort on high-impact work",
+				"Measurable progress tracking",
+				"Reduced waste on low-value features",
+				"Strategic product direction",
+				"Team alignment on what matters most"
+			],
 			"category": "behavior",
 			"description": "Clearly defined, measurable product goals that align team effort and provide direction for feature prioritization.",
+			"id": "product-goals",
+			"maturityLevel": 3,
+			"name": "Product Goals",
 			"requirements": [
 				"Clear product vision and mission",
-				"Measurable objectives and key results (OKRs)",
-				"Stakeholder alignment on goals",
-				"Regular goal review and adjustment",
 				"Goals communicated to entire team",
+				"Measurable objectives and key results (OKRs)",
+				"Regular goal review and adjustment",
+				"Stakeholder alignment on goals",
 				"Success metrics defined",
 				"Time-bound goal setting"
 			],
-			"benefits": [
-				"Better feature prioritization decisions",
-				"Team alignment on what matters most",
-				"Focused effort on high-impact work",
-				"Clearer communication with stakeholders",
-				"Measurable progress tracking",
-				"Reduced waste on low-value features",
-				"Strategic product direction"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		},
 		{
-			"id": "quality-gates",
-			"name": "Quality Gates & Thresholds",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Automated quality thresholds enforced in the CI/CD pipeline that must be met before code can progress to the next stage, ensuring consistent quality standards.",
-			"requirements": [
-				"Defined quality thresholds (code coverage, complexity, vulnerabilities)",
-				"Automated enforcement in pipeline",
-				"Clear pass/fail criteria",
-				"Blocking mechanism for failed gates",
-				"Visibility of gate status to team",
-				"Configurable thresholds per project/environment"
-			],
 			"benefits": [
-				"Prevents low-quality code from reaching production",
 				"Enforces consistent quality standards",
 				"Makes quality expectations explicit",
+				"Prevents low-quality code from reaching production",
 				"Provides fast feedback on quality issues",
 				"Reduces technical debt accumulation"
 			],
-			"maturityLevel": 2
-		},
-		{
-			"id": "test-environment",
-			"name": "Production-like Test Environment",
-			"type": "practice",
-			"category": "automation",
-			"description": "Maintain test environments that closely mirror production to catch environment-specific issues early.",
+			"category": "behavior-enabled-automation",
+			"description": "Automated quality thresholds enforced in the CI/CD pipeline that must be met before code can progress to the next stage, ensuring consistent quality standards.",
+			"id": "quality-gates",
+			"maturityLevel": 2,
+			"name": "Quality Gates & Thresholds",
 			"requirements": [
-				"Mirrors production infrastructure",
-				"Same OS and versions as production",
-				"Similar data volumes",
-				"Same network topology where critical",
-				"Regularly validated against production"
+				"Automated enforcement in pipeline",
+				"Blocking mechanism for failed gates",
+				"Clear pass/fail criteria",
+				"Configurable thresholds per project/environment",
+				"Defined quality thresholds (code coverage, complexity, vulnerabilities)",
+				"Visibility of gate status to team"
 			],
-			"benefits": [
-				"Catch environment issues early",
-				"Reduce production surprises",
-				"Accurate performance testing",
-				"Confident deployments"
-			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/production-like-test-environment/",
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "resilience-testing",
-			"name": "Resilience Testing",
-			"type": "practice",
+			"benefits": [
+				"Builds confidence in disaster recovery",
+				"Identifies architectural weak points",
+				"Improves system robustness and reliability",
+				"Reduces MTTR in production incidents",
+				"Validates failure handling and recovery"
+			],
 			"category": "behavior",
 			"description": "Testing system behavior under failure conditions using chaos engineering principles.",
+			"id": "resilience-testing",
+			"maturityLevel": 2,
+			"name": "Resilience Testing",
 			"requirements": [
 				"Chaos engineering tools (Chaos Monkey, Gremlin)",
 				"Failure injection capabilities",
-				"Recovery validation procedures",
+				"Incident runbooks and procedures",
 				"Production-like test environments",
-				"Incident runbooks and procedures"
+				"Recovery validation procedures"
 			],
-			"benefits": [
-				"Validates failure handling and recovery",
-				"Improves system robustness and reliability",
-				"Builds confidence in disaster recovery",
-				"Identifies architectural weak points",
-				"Reduces MTTR in production incidents"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "secret-management",
-			"name": "Secret Management",
-			"type": "practice",
+			"benefits": [
+				"Centralized management",
+				"Compliance",
+				"Enhanced security",
+				"Reduced secret sprawl"
+			],
 			"category": "automation",
 			"description": "Secure storage and access control for secrets like passwords, API keys, and certificates.",
+			"id": "secret-management",
+			"maturityLevel": 1,
+			"name": "Secret Management",
 			"requirements": [
-				"Encrypted at rest",
 				"Access controls",
 				"Audit logging",
+				"Encrypted at rest",
 				"No secrets in source code",
 				"Rotation capability"
 			],
-			"benefits": [
-				"Enhanced security",
-				"Compliance",
-				"Centralized management",
-				"Reduced secret sprawl"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "security-testing",
-			"name": "Security Testing",
-			"type": "practice",
+			"benefits": [
+				"Compliance with security standards",
+				"Continuous security validation",
+				"Early vulnerability detection",
+				"Prevents vulnerable code in production",
+				"Reduced security risks"
+			],
 			"category": "behavior",
 			"description": "Automated security testing integrated into the CI/CD pipeline to identify vulnerabilities early.",
+			"id": "security-testing",
+			"maturityLevel": 2,
+			"name": "Security Testing",
 			"requirements": [
-				"Static Application Security Testing (SAST)",
-				"Dynamic Application Security Testing (DAST)",
 				"Dependency vulnerability scanning",
+				"Dynamic Application Security Testing (DAST)",
+				"Regular security scans and audits",
 				"Security testing in pipeline",
-				"Regular security scans and audits"
+				"Static Application Security Testing (SAST)"
 			],
-			"benefits": [
-				"Early vulnerability detection",
-				"Reduced security risks",
-				"Compliance with security standards",
-				"Prevents vulnerable code in production",
-				"Continuous security validation"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "smoke-testing",
-			"name": "Smoke Testing",
-			"type": "practice",
+			"benefits": [
+				"Builds confidence in deployments",
+				"Early warning system for production issues",
+				"Fast feedback on critical failures",
+				"Immediate deployment validation",
+				"Prevents broken deployments from persisting"
+			],
 			"category": "behavior",
 			"description": "Quick validation tests after deployment to ensure critical functionality works and the system is stable.",
+			"id": "smoke-testing",
+			"maturityLevel": 1,
+			"name": "Smoke Testing",
 			"requirements": [
 				"Automated smoke test suite",
-				"Tests run immediately after deployment",
-				"Tests critical user journeys",
+				"Clear pass/fail criteria",
 				"Fast execution (< 5 minutes)",
-				"Clear pass/fail criteria"
+				"Tests critical user journeys",
+				"Tests run immediately after deployment"
 			],
-			"benefits": [
-				"Immediate deployment validation",
-				"Fast feedback on critical failures",
-				"Prevents broken deployments from persisting",
-				"Builds confidence in deployments",
-				"Early warning system for production issues"
-			],
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "static-analysis",
-			"name": "Static Analysis",
-			"type": "practice",
-			"category": "automation",
-			"description": "Automated analysis of code without executing it to find bugs, security issues, and code quality problems.",
-			"requirements": [
-				"Static analysis tools (ESLint, SonarQube)",
-				"Code quality rules configuration",
-				"CI integration",
-				"Quality gates and thresholds",
-				"Security vulnerability scanning"
-			],
 			"benefits": [
 				"Early bug detection before runtime",
 				"Enforces coding standards consistently",
+				"Faster code reviews",
 				"Improves security posture",
-				"Reduces technical debt",
-				"Faster code reviews"
+				"Reduces technical debt"
 			],
-			"maturityLevel": 2
+			"category": "automation",
+			"description": "Automated analysis of code without executing it to find bugs, security issues, and code quality problems.",
+			"id": "static-analysis",
+			"maturityLevel": 2,
+			"name": "Static Analysis",
+			"requirements": [
+				"CI integration",
+				"Code quality rules configuration",
+				"Quality gates and thresholds",
+				"Security vulnerability scanning",
+				"Static analysis tools (ESLint, SonarQube)"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "stop-the-line",
-			"name": "Stop-the-Line for Failed Builds",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Team immediately stops all feature work when the build fails and prioritizes fixing the build before continuing development.",
-			"requirements": [
-				"Team commitment to stop feature work on build failure",
-				"Clear build failure notifications to entire team",
-				"Designated responsibility for build failures",
-				"Build status visible to all team members",
-				"Fast build feedback (< 10 minutes)"
-			],
 			"benefits": [
+				"Builds team ownership of quality",
+				"Enforces quality discipline",
 				"Maintains always-releasable trunk",
 				"Prevents cascading build failures",
-				"Enforces quality discipline",
-				"Reduces time to fix integration issues",
-				"Builds team ownership of quality"
+				"Reduces time to fix integration issues"
 			],
-			"maturityLevel": 1
+			"category": "behavior",
+			"description": "Team immediately stops all feature work when the build fails and prioritizes fixing the build before continuing development.",
+			"id": "stop-the-line",
+			"maturityLevel": 1,
+			"name": "Stop-the-Line for Failed Builds",
+			"requirements": [
+				"Build status visible to all team members",
+				"Clear build failure notifications to entire team",
+				"Designated responsibility for build failures",
+				"Fast build feedback (< 10 minutes)",
+				"Team commitment to stop feature work on build failure"
+			],
+			"type": "practice"
 		},
 		{
-			"id": "test-data-management",
-			"name": "Test Data Management",
-			"type": "practice",
+			"benefits": [
+				"Early issue detection",
+				"Faster troubleshooting",
+				"Informed decision making",
+				"Performance insights"
+			],
+			"category": "automation",
+			"description": "Comprehensive monitoring of application and infrastructure health to detect and diagnose issues quickly.",
+			"id": "telemetry-observability",
+			"maturityLevel": 2,
+			"name": "Telemetry & Observability",
+			"requirements": [
+				"Alerting on anomalies",
+				"Application metrics",
+				"Distributed tracing",
+				"Infrastructure metrics",
+				"Log aggregation",
+				"Real-time dashboards"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Compliance with regulations",
+				"Easier debugging",
+				"Faster test execution",
+				"Reliable tests"
+			],
 			"category": "automation",
 			"description": "System for creating, managing, and maintaining test data that supports automated testing.",
+			"id": "test-data-management",
+			"maturityLevel": 0,
+			"name": "Test Data Management",
 			"requirements": [
-				"Representative data sets",
 				"Data privacy compliance",
 				"Fast data refresh",
-				"Version controlled fixtures",
-				"Isolated test data"
+				"Isolated test data",
+				"Representative data sets",
+				"Version controlled fixtures"
 			],
-			"benefits": [
-				"Reliable tests",
-				"Faster test execution",
-				"Compliance with regulations",
-				"Easier debugging"
-			],
-			"maturityLevel": 0
+			"type": "practice"
 		},
 		{
-			"id": "trunk-based-development",
-			"name": "Trunk-based Development",
-			"type": "practice",
+			"benefits": [
+				"Accurate performance testing",
+				"Catch environment issues early",
+				"Confident deployments",
+				"Reduce production surprises"
+			],
+			"category": "automation",
+			"description": "Maintain test environments that closely mirror production to catch environment-specific issues early.",
+			"id": "test-environment",
+			"maturityLevel": 1,
+			"name": "Production-like Test Environment",
+			"quickStartGuide": "https://minimumcd.org/minimumcd/production-like-test-environment/",
+			"requirements": [
+				"Mirrors production infrastructure",
+				"Regularly validated against production",
+				"Same network topology where critical",
+				"Same OS and versions as production",
+				"Similar data volumes"
+			],
+			"type": "practice"
+		},
+		{
+			"benefits": [
+				"Encourages small, frequent commits",
+				"Faster integration",
+				"Minimized merge conflicts",
+				"Simplified branching model"
+			],
 			"category": "behavior",
 			"description": "All developers work on a single branch (trunk/main) with short-lived feature branches that integrate frequently.",
+			"id": "trunk-based-development",
+			"maturityLevel": 1,
+			"name": "Trunk-based Development",
+			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/",
 			"requirements": [
 				"All changes integrate into trunk",
 				"Branches originate from trunk",
 				"Branches re-integrate to trunk",
-				"Short-lived branches (hours to days)",
-				"Branches removed after merge"
+				"Branches removed after merge",
+				"Short-lived branches (hours to days)"
 			],
-			"benefits": [
-				"Minimized merge conflicts",
-				"Faster integration",
-				"Simplified branching model",
-				"Encourages small, frequent commits"
-			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/",
-			"maturityLevel": 1
+			"type": "practice"
 		},
 		{
-			"id": "unified-team-backlog",
-			"name": "Unified Team Backlog",
-			"type": "practice",
+			"benefits": [
+				"Better collaboration and alignment",
+				"Faster decision making",
+				"Improved transparency across team",
+				"Reduced silos and handoffs",
+				"Shared understanding of priorities"
+			],
 			"category": "behavior",
 			"description": "Single shared backlog of work items (features, defects, maintenance) for the entire team with transparent priorities.",
+			"id": "unified-team-backlog",
+			"maturityLevel": 2,
+			"name": "Unified Team Backlog",
 			"requirements": [
+				"Priority ordering by business value",
 				"Regular backlog refinement sessions",
 				"Team access and visibility",
-				"Team ownership and accountability",
-				"Priority ordering by business value"
+				"Team ownership and accountability"
 			],
-			"benefits": [
-				"Improved transparency across team",
-				"Better collaboration and alignment",
-				"Reduced silos and handoffs",
-				"Shared understanding of priorities",
-				"Faster decision making"
-			],
-			"maturityLevel": 2
+			"type": "practice"
 		},
 		{
-			"id": "usability-testing",
-			"name": "Usability Testing",
-			"type": "practice",
+			"benefits": [
+				"Identifies UX issues early",
+				"Improves user satisfaction and adoption",
+				"Informs design decisions with data",
+				"Reduces support and training costs",
+				"Validates actual user workflows"
+			],
 			"category": "behavior",
 			"description": "Testing with real users to validate user experience, interface design, and workflow efficiency.",
+			"id": "usability-testing",
+			"maturityLevel": 3,
+			"name": "Usability Testing",
 			"requirements": [
-				"User recruitment process",
-				"Testing protocol and scripts",
-				"Recording capabilities (screen, audio)",
 				"Analysis framework for findings",
-				"Iterative feedback incorporation"
+				"Iterative feedback incorporation",
+				"Recording capabilities (screen, audio)",
+				"Testing protocol and scripts",
+				"User recruitment process"
 			],
-			"benefits": [
-				"Validates actual user workflows",
-				"Improves user satisfaction and adoption",
-				"Identifies UX issues early",
-				"Reduces support and training costs",
-				"Informs design decisions with data"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		},
 		{
-			"id": "version-control",
-			"name": "Version Control",
-			"type": "practice",
-			"category": "automation",
-			"maturityLevel": 0,
-			"description": "All code, configuration, and infrastructure definitions stored in version control system.",
-			"requirements": [
-				"Single source of truth",
-				"All team members have access",
-				"Commit frequently",
-				"Meaningful commit messages"
-			],
 			"benefits": [
-				"Complete change history",
+				"Code review workflows",
 				"Collaboration enabled",
-				"Rollback capability",
-				"Code review workflows"
-			]
-		},
-		{
-			"id": "versioned-database",
-			"name": "Versioned Database",
-			"type": "practice",
-			"category": "behavior-enabled-automation",
-			"description": "Database schemas are version controlled and changes are tracked over time with full history.",
-			"requirements": [
-				"Version control system for schema",
-				"Migration scripts in source control",
-				"Change tracking and audit trail",
-				"Schema documentation",
+				"Complete change history",
 				"Rollback capability"
 			],
+			"category": "automation",
+			"description": "All code, configuration, and infrastructure definitions stored in version control system.",
+			"id": "version-control",
+			"maturityLevel": 0,
+			"name": "Version Control",
+			"requirements": [
+				"All team members have access",
+				"Commit frequently",
+				"Meaningful commit messages",
+				"Single source of truth"
+			],
+			"type": "practice"
+		},
+		{
 			"benefits": [
-				"Reproducible database state",
 				"Better team collaboration",
 				"Clear change history and audit trail",
-				"Simplified rollbacks and recovery",
-				"Environment parity"
+				"Environment parity",
+				"Reproducible database state",
+				"Simplified rollbacks and recovery"
 			],
-			"maturityLevel": 0
-		},
-		{
-			"id": "atdd",
-			"name": "Acceptance Test-Driven Development (ATDD",
-			"category": "behavior",
-			"description": "Development approach where acceptance tests are written before implementation, derived from BDD scenarios, ensuring the system meets business requirements and user expectations.",
+			"category": "behavior-enabled-automation",
+			"description": "Database schemas are version controlled and changes are tracked over time with full history.",
+			"id": "versioned-database",
+			"maturityLevel": 0,
+			"name": "Versioned Database",
 			"requirements": [
-				"BDD scenarios to guide acceptance test creation",
-				"Acceptance tests written before implementation",
-				"Clear definition of done based on passing acceptance tests",
-				"Automated acceptance test execution",
-				"Tests focus on user-visible behavior, not implementation details",
-				"Fast feedback from acceptance test runs"
+				"Change tracking and audit trail",
+				"Migration scripts in source control",
+				"Rollback capability",
+				"Schema documentation",
+				"Version control system for schema"
 			],
-			"benefits": [
-				"Implementation guided by concrete acceptance criteria",
-				"Verification that features meet business requirements",
-				"Prevention of scope creep through clear boundaries",
-				"Confidence in refactoring with comprehensive acceptance coverage",
-				"Reduced manual testing effort",
-				"Early validation of architectural decisions",
-				"Executable specification of system behavior"
-			],
-			"type": "practice",
-			"maturityLevel": 1
-		},
-		{
-			"id": "cross-functional-product-team",
-			"name": "Cross-Functional Product Team",
-			"type": "practice",
-			"category": "behavior",
-			"description": "Highly cohesive, autonomous teams with all skills necessary to deliver business capabilities end-to-end, owning a subset of the product and working together continuously.",
-			"requirements": [
-				"Team includes all necessary roles: developers, testers, UX, product owner",
-				"Team has authority to make decisions within their scope",
-				"Team owns a clear subset of business capabilities or product features",
-				"Team works together in the same space (physical or virtual)",
-				"Stable team membership over time",
-				"Team has direct access to stakeholders and users",
-				"Team operates what they build in production",
-				"Clear boundaries of team responsibility and autonomy"
-			],
-			"benefits": [
-				"Faster delivery through reduced handoffs and dependencies",
-				"Better collaboration and shared understanding",
-				"Improved quality through collective ownership",
-				"Higher team morale and engagement",
-				"Reduced communication overhead",
-				"Better alignment between business needs and technical implementation",
-				"Stronger accountability and ownership of outcomes",
-				"More effective feedback loops with stakeholders"
-			],
-			"maturityLevel": 3
+			"type": "practice"
 		}
-	],
-	"dependencies": [
-		{
-			"practice_id": "api-management",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "application-pipeline",
-			"depends_on_id": "automated-artifact-versioning"
-		},
-		{
-			"practice_id": "application-pipeline",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "application-pipeline",
-			"depends_on_id": "deployment-automation"
-		},
-		{
-			"practice_id": "application-pipeline",
-			"depends_on_id": "quality-gates"
-		},
-		{
-			"practice_id": "automated-artifact-versioning",
-			"depends_on_id": "artifact-repository"
-		},
-		{
-			"practice_id": "automated-artifact-versioning",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "automated-db-changes",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "automated-db-changes",
-			"depends_on_id": "deployment-automation"
-		},
-		{
-			"practice_id": "automated-db-changes",
-			"depends_on_id": "database-migration-strategy"
-		},
-		{
-			"practice_id": "automated-db-changes",
-			"depends_on_id": "evolutionary-database"
-		},
-		{
-			"practice_id": "automated-environment-provisioning",
-			"depends_on_id": "infrastructure-automation"
-		},
-		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "behavior-driven-development"
-		},
-		{
-			"practice_id": "build-automation",
-			"depends_on_id": "dependency-management"
-		},
-		{
-			"practice_id": "build-automation",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "compliance-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "compliance-testing",
-			"depends_on_id": "security-testing"
-		},
-		{
-			"practice_id": "component-ownership",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "component-ownership",
-			"depends_on_id": "cross-functional-product-team"
-		},
-		{
-			"practice_id": "component-ownership",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "configuration-management",
-			"depends_on_id": "secret-management"
-		},
-		{
-			"practice_id": "configuration-management",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "application-pipeline"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "automated-db-changes"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "automated-environment-provisioning"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "configuration-management"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "continuous-integration"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "continuous-testing"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "immutable-artifact"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "modular-system"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "on-demand-rollback"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "cross-functional-product-team"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "developer-driven-support"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "evolutionary-coding"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "prioritized-features"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "monitoring-and-alerting"
-		},
-		{
-			"practice_id": "continuous-delivery",
-			"depends_on_id": "atdd"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "build-on-commit"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "trunk-based-development"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "functional-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "performance-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "compliance-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "integration-testing"
-		},
-		{
-			"practice_id": "cycle-time-tracking",
-			"depends_on_id": "continuous-integration"
-		},
-		{
-			"practice_id": "cycle-time-tracking",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "cycle-time-tracking",
-			"depends_on_id": "deployment-automation"
-		},
-		{
-			"practice_id": "cycle-time-tracking",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "database-migration-strategy",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "database-migration-strategy",
-			"depends_on_id": "evolutionary-database"
-		},
-		{
-			"practice_id": "deployment-automation",
-			"depends_on_id": "configuration-management"
-		},
-		{
-			"practice_id": "deployment-automation",
-			"depends_on_id": "infrastructure-automation"
-		},
-		{
-			"practice_id": "deployment-automation",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "automated-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "developer-driven-support",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "developer-driven-support",
-			"depends_on_id": "monitoring-and-alerting"
-		},
-		{
-			"practice_id": "evolutionary-database",
-			"depends_on_id": "versioned-database"
-		},
-		{
-			"practice_id": "exploratory-testing",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "exploratory-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "usability-testing"
-		},
-		{
-			"practice_id": "feature-flags",
-			"depends_on_id": "configuration-management"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "immutable-artifact",
-			"depends_on_id": "artifact-repository"
-		},
-		{
-			"practice_id": "immutable-artifact",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "immutable-artifact",
-			"depends_on_id": "configuration-management"
-		},
-		{
-			"practice_id": "infrastructure-automation",
-			"depends_on_id": "version-control"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "behavior-driven-development"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "modular-system",
-			"depends_on_id": "api-management"
-		},
-		{
-			"practice_id": "modular-system",
-			"depends_on_id": "component-ownership"
-		},
-		{
-			"practice_id": "telemetry-observability",
-			"depends_on_id": "logging-infrastructure"
-		},
-		{
-			"practice_id": "monitoring-and-alerting",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "monitoring-and-alerting",
-			"depends_on_id": "cycle-time-tracking"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "pipeline-visibility",
-			"depends_on_id": "application-pipeline"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "pipeline-visibility"
-		},
-		{
-			"practice_id": "prioritized-features",
-			"depends_on_id": "product-goals"
-		},
-		{
-			"practice_id": "prioritized-features",
-			"depends_on_id": "unified-team-backlog"
-		},
-		{
-			"practice_id": "quality-gates",
-			"depends_on_id": "static-analysis"
-		},
-		{
-			"practice_id": "quality-gates",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "resilience-testing"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "infrastructure-automation"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "test-data-management"
-		},
-		{
-			"practice_id": "on-demand-rollback",
-			"depends_on_id": "database-migration-strategy"
-		},
-		{
-			"practice_id": "on-demand-rollback",
-			"depends_on_id": "deployment-automation"
-		},
-		{
-			"practice_id": "security-testing",
-			"depends_on_id": "automated-testing"
-		},
-		{
-			"practice_id": "security-testing",
-			"depends_on_id": "static-analysis"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "static-analysis"
-		},
-		{
-			"practice_id": "on-demand-rollback",
-			"depends_on_id": "smoke-testing"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "smoke-testing"
-		},
-		{
-			"practice_id": "smoke-testing",
-			"depends_on_id": "deployment-automation"
-		},
-		{
-			"practice_id": "static-analysis",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "stop-the-line"
-		},
-		{
-			"practice_id": "test-environment",
-			"depends_on_id": "infrastructure-automation"
-		},
-		{
-			"practice_id": "test-environment",
-			"depends_on_id": "test-data-management"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "build-on-commit"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "continuous-testing"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "trunk-based-development",
-			"depends_on_id": "feature-flags"
-		},
-		{
-			"practice_id": "unified-team-backlog",
-			"depends_on_id": "product-goals"
-		},
-		{
-			"practice_id": "usability-testing",
-			"depends_on_id": "test-environment"
-		},
-		{
-			"practice_id": "build-on-commit",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "contract-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "contract-testing"
-		},
-		{
-			"practice_id": "smoke-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "atdd",
-			"depends_on_id": "behavior-driven-development"
-		},
-		{
-			"practice_id": "compliance-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "continuous-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "contract-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "atdd",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "smoke-testing",
-			"depends_on_id": "deterministic-tests"
-		},
-		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "cross-functional-product-team"
-		}
-	],
-	"metadata": {
-		"changelog": "Added maturityLevel field to all practices. Added quality-gates and cycle-time-tracking practices. Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
-		"source": "MinimumCD.org",
-		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"version": "1.11.0",
-		"lastUpdated": "2025-10-29"
-	}
+	]
 }

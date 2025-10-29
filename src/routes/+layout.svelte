@@ -27,16 +27,26 @@
 	const isExpanded = $derived($menuStore.isExpanded)
 
 	onMount(async () => {
-		// Unregister any old service workers from the PWA branch
+		// Register service worker for cache management
 		if (browser && 'serviceWorker' in navigator) {
 			try {
-				const registrations = await navigator.serviceWorker.getRegistrations()
-				for (const registration of registrations) {
-					await registration.unregister()
-					console.log('Unregistered old service worker')
-				}
+				const registration = await navigator.serviceWorker.register('/service-worker.js')
+				console.log('Service Worker registered:', registration.scope)
+
+				// Listen for updates
+				registration.addEventListener('updatefound', () => {
+					const newWorker = registration.installing
+					if (newWorker) {
+						newWorker.addEventListener('statechange', () => {
+							if (newWorker.state === 'activated') {
+								console.log('New Service Worker activated - reloading for fresh content')
+								window.location.reload()
+							}
+						})
+					}
+				})
 			} catch (error) {
-				console.error('Failed to unregister service worker:', error)
+				console.error('Service Worker registration failed:', error)
 			}
 		}
 

@@ -1,0 +1,35 @@
+{
+	"0": [
+		"Regular automated builds, reproducible from VCS",
+		"Partial deploy automation",
+		"Reliable but painful releases",
+		"Story-automated tests",
+		"DB changes scripted & versioned",
+		"VCS for full recreation",
+		"Basic pipeline visibility"
+	],
+	"1": [
+		"Automated builds/tests per commit",
+		"Push-button deploy to all envs",
+		"Automated unit & acceptance tests",
+		"Auto DB updates in deploy",
+		"Managed dependencies & CM policies",
+		"[Conflict] Codefresh promotes fewer manual approvals; InfoQ retains gates"
+	],
+	"2": [
+		"Metrics gathered, no broken builds",
+		"Orchestrated deploys, tested rollback",
+		"Health monitored, cycle time tracked",
+		"Quality metrics & non-functional coverage",
+		"DB upgrades validated per release",
+		"Daily trunk commits, release branches only"
+	],
+	"3": [
+		"Continuous improvement via automation & feedback",
+		"Fully automated & virtualized",
+		"Ops collab, reduced cycle time",
+		"Rollbacks rare, defects fixed fast",
+		"DB feedback informs optimization",
+		"Validated CM policies enabling rapid dev"
+	]
+}

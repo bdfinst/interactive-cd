@@ -17,12 +17,12 @@
 		0: {
 			icon: faSeedling,
 			label: 'Repeatable',
-			description: 'Documented and partly automated'
+			description: 'Foundational'
 		},
 		1: {
 			icon: faCog,
 			label: 'Consistent',
-			description: 'Automated across entire lifecycle'
+			description: 'Automated and repeatable'
 		},
 		2: {
 			icon: faRocket,

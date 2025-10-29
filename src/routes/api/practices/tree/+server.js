@@ -7,9 +7,12 @@
 import { json } from '@sveltejs/kit'
 import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { createGetPracticeTreeService } from '$application/practice-catalog/GetPracticeTreeService.js'
+import { generateETag, getCacheControl, isCacheFresh } from '$lib/server/etag.js'
+
+/* global Response */
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET({ url }) {
+export async function GET({ url, request }) {
 	try {
 		// Get optional root parameter (defaults to 'continuous-delivery')
 		const rootId = url.searchParams.get('root') || 'continuous-delivery'
@@ -31,9 +34,25 @@ export async function GET({ url }) {
 			)
 		}
 
+		// Generate ETag from response data for cache validation
+		const etag = generateETag(result)
+
+		// Check if client's cached version is still fresh
+		if (isCacheFresh(request, etag)) {
+			return new Response(null, {
+				status: 304,
+				headers: {
+					ETag: etag,
+					'Cache-Control': getCacheControl(3600)
+				}
+			})
+		}
+
+		// Return fresh data with ETag
 		return json(result, {
 			headers: {
-				'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
+				ETag: etag,
+				'Cache-Control': getCacheControl(3600)
 			}
 		})
 	} catch (error) {
