@@ -2,8 +2,27 @@
  * Graph Layout Optimization
  *
  * Algorithms to minimize connection line lengths in hierarchical graph layout.
- * Uses the Barycenter heuristic for layer-by-layer sweep.
+ * Uses the Barycenter heuristic for layer-by-layer sweep, with maturity-level-based
+ * vertical positioning (lower maturity = lower in tree, higher maturity = higher in tree).
  */
+
+/**
+ * Get the maturity level of a practice with default fallback
+ * @param {Object} practice - The practice object
+ * @returns {number} Maturity level (0-3), defaults to 1 if not specified
+ */
+const getMaturityLevel = practice => {
+	if (practice.maturityLevel !== undefined) {
+		return practice.maturityLevel
+	}
+
+	// Log warning in development mode
+	if (process.env.NODE_ENV !== 'production') {
+		console.warn(`Practice "${practice.id}" is missing maturityLevel field, defaulting to 1`)
+	}
+
+	return 1 // Default to Core Automation level
+}
 
 /**
  * Calculate the barycenter (average position) of a node's connections
@@ -83,11 +102,19 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 
 			const withBarycenters = practices.map(practice => ({
 				practice,
+				maturityLevel: getMaturityLevel(practice),
 				barycenter: calculateBarycenter(practice.id, connections, positions, true)
 			}))
 
-			// Sort by barycenter
-			withBarycenters.sort((a, b) => a.barycenter - b.barycenter)
+			// Two-stage sort: primary by maturityLevel (ascending), secondary by barycenter
+			withBarycenters.sort((a, b) => {
+				// Primary sort: by maturity level (ascending: 0 → 3)
+				if (a.maturityLevel !== b.maturityLevel) {
+					return a.maturityLevel - b.maturityLevel
+				}
+				// Secondary sort: by barycenter (minimize line crossings)
+				return a.barycenter - b.barycenter
+			})
 
 			// Create new object with updated ordering (immutable)
 			optimized = {
@@ -107,11 +134,19 @@ export const optimizeLayerOrdering = (groupedByLevel, iterations = 3) => {
 
 			const withBarycenters = practices.map(practice => ({
 				practice,
+				maturityLevel: getMaturityLevel(practice),
 				barycenter: calculateBarycenter(practice.id, connections, positions, false)
 			}))
 
-			// Sort by barycenter
-			withBarycenters.sort((a, b) => a.barycenter - b.barycenter)
+			// Two-stage sort: primary by maturityLevel (ascending), secondary by barycenter
+			withBarycenters.sort((a, b) => {
+				// Primary sort: by maturity level (ascending: 0 → 3)
+				if (a.maturityLevel !== b.maturityLevel) {
+					return a.maturityLevel - b.maturityLevel
+				}
+				// Secondary sort: by barycenter (minimize line crossings)
+				return a.barycenter - b.barycenter
+			})
 
 			// Create new object with updated ordering (immutable)
 			optimized = {

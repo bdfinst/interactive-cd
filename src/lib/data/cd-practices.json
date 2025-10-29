@@ -19,7 +19,8 @@
 				"Controlled access and security",
 				"Version management and deprecation",
 				"Usage analytics and insights"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "configuration-management",
@@ -40,7 +41,8 @@
 				"Secure secret management",
 				"Easy configuration rollback"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/application-configuration/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/application-configuration/",
+			"maturityLevel": 1
 		},
 		{
 			"id": "application-pipeline",
@@ -61,7 +63,8 @@
 				"Automated quality gates",
 				"Reduced human error",
 				"Fast feedback on changes"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "artifact-repository",
@@ -81,7 +84,8 @@
 				"Consistent deployments",
 				"Audit trail",
 				"Easy rollback"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "automated-artifact-versioning",
@@ -102,7 +106,8 @@
 				"Better dependency management",
 				"Simplified rollbacks to known versions",
 				"Automated release notes"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "automated-db-changes",
@@ -123,7 +128,8 @@
 				"Faster deployments and releases",
 				"Better audit trail of changes",
 				"Simplified database versioning"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "automated-environment-provisioning",
@@ -144,7 +150,8 @@
 				"Reduced configuration drift issues",
 				"Better disaster recovery capability",
 				"Cost optimization through automation"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "automated-testing",
@@ -165,7 +172,8 @@
 				"Refactoring confidence",
 				"Living documentation",
 				"Reduced manual testing effort"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "behavior-driven-development",
@@ -191,13 +199,15 @@
 				"Foundation for deterministic tests",
 				"Enables collaboration",
 				"Clear definition of done"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "build-automation",
 			"name": "Build Automation",
 			"type": "practice",
 			"category": "automation",
+			"maturityLevel": 0,
 			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
 			"requirements": [
 				"Repeatable builds",
@@ -242,7 +252,8 @@
 				"Enforces quality gates automatically",
 				"Maintains always-green build status",
 				"Reduces integration issues"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "compliance-testing",
@@ -263,7 +274,8 @@
 				"Early detection of compliance violations",
 				"Audit trail for regulatory requirements",
 				"Lower compliance risk"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "component-ownership",
@@ -284,7 +296,8 @@
 				"Better code and system quality",
 				"Reduced cross-team dependencies and handoffs",
 				"Stronger team autonomy"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "continuous-delivery",
@@ -308,7 +321,8 @@
 				"Better team culture",
 				"Reduced burnout",
 				"Less deployment pain"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "continuous-integration",
@@ -330,7 +344,8 @@
 				"Always-releasable codebase",
 				"Faster feedback cycles"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/",
+			"maturityLevel": 1
 		},
 		{
 			"id": "continuous-testing",
@@ -351,7 +366,8 @@
 				"Higher confidence in changes and releases",
 				"Reduced manual testing effort",
 				"Living documentation of system behavior"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "contract-testing",
@@ -371,7 +387,32 @@
 				"Better API stability and reliability",
 				"Faster feedback on incompatibilities",
 				"Reduced integration testing needs"
-			]
+			],
+			"maturityLevel": 1
+		},
+		{
+			"id": "cycle-time-tracking",
+			"name": "Cycle Time Tracking",
+			"type": "practice",
+			"category": "behavior",
+			"description": "Measurement and monitoring of development cycle metrics including lead time, deployment frequency, and defect arrival rates to identify bottlenecks and drive continuous improvement.",
+			"requirements": [
+				"Automated collection of cycle time data from VCS and CI/CD pipeline",
+				"Lead time measurement (commit to production)",
+				"Deployment frequency tracking",
+				"Defect arrival rate monitoring",
+				"Change failure rate measurement",
+				"Mean time to recovery (MTTR) tracking",
+				"Visualization dashboards for team review"
+			],
+			"benefits": [
+				"Identifies bottlenecks in delivery process",
+				"Provides data-driven insights for improvement",
+				"Tracks progress toward CD maturity",
+				"Enables evidence-based decision making",
+				"Highlights quality trends via defect rates"
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "database-migration-strategy",
@@ -391,7 +432,8 @@
 				"Rollback capability",
 				"Reduced deployment risk",
 				"Schema version control"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "dependency-management",
@@ -411,7 +453,8 @@
 				"Security awareness",
 				"Reduced conflicts",
 				"Easy upgrades"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "deployment-automation",
@@ -431,7 +474,8 @@
 				"Reduced deployment time",
 				"Lower error rates",
 				"Deployable at any time"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "deterministic-tests",
@@ -460,7 +504,8 @@
 				"Reduces investigation time",
 				"Teams act on test failures immediately"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/",
+			"maturityLevel": 0
 		},
 		{
 			"id": "developer-driven-support",
@@ -481,7 +526,8 @@
 				"Improved system design from operational feedback",
 				"Stronger ownership mindset in teams",
 				"Reduced reliance on separate operations team"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "evolutionary-coding",
@@ -502,7 +548,8 @@
 				"Reduced risk of introducing breaking changes",
 				"Parallel operation of old and new code",
 				"Adaptable to changing requirements"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "evolutionary-database",
@@ -523,7 +570,8 @@
 				"Better adaptability to change",
 				"Reduced downtime during migrations",
 				"Safer deployments"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "exploratory-testing",
@@ -544,7 +592,8 @@
 				"Complements automated testing",
 				"Provides creative feedback on features",
 				"Finds issues automation misses"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "feature-flags",
@@ -565,7 +614,8 @@
 				"Fast feature rollback",
 				"Gradual rollouts"
 			],
-			"quickStartGuide": "https://minimumcd.org/recommendations/feature-flags/"
+			"quickStartGuide": "https://minimumcd.org/recommendations/feature-flags/",
+			"maturityLevel": 2
 		},
 		{
 			"id": "functional-testing",
@@ -586,7 +636,8 @@
 				"Documents expected behavior",
 				"Builds stakeholder confidence",
 				"Executable specifications"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "immutable-artifact",
@@ -607,7 +658,8 @@
 				"Faster deployments",
 				"Simplified rollback"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/immutable/",
+			"maturityLevel": 0
 		},
 		{
 			"id": "infrastructure-automation",
@@ -627,7 +679,8 @@
 				"Fast environment creation",
 				"Disaster recovery",
 				"Documentation through code"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "integration-testing",
@@ -648,7 +701,8 @@
 				"Verifies end-to-end behavior",
 				"Reduces integration risks in production",
 				"Tests with real dependencies"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "logging-infrastructure",
@@ -668,7 +722,8 @@
 				"Compliance",
 				"Performance analysis",
 				"Security monitoring"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "modular-system",
@@ -689,7 +744,8 @@
 				"Easier maintenance and evolution",
 				"Team autonomy and ownership",
 				"Parallel development capability"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "telemetry-observability",
@@ -710,7 +766,8 @@
 				"Faster troubleshooting",
 				"Performance insights",
 				"Informed decision making"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "monitoring-and-alerting",
@@ -731,7 +788,8 @@
 				"Better system understanding and insights",
 				"Data-driven operational decisions",
 				"Proactive issue resolution"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "on-demand-rollback",
@@ -752,7 +810,8 @@
 				"Increased deployment confidence",
 				"Lower MTTR (Mean Time To Recovery)"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/rollback/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/rollback/",
+			"maturityLevel": 2
 		},
 		{
 			"id": "performance-testing",
@@ -773,7 +832,8 @@
 				"Validates scalability requirements",
 				"Optimizes resource usage and costs",
 				"Ensures SLA compliance"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "pipeline-visibility",
@@ -793,7 +853,8 @@
 				"Team accountability",
 				"Transparency",
 				"Improved collaboration"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "prioritized-features",
@@ -812,7 +873,8 @@
 				"Clearer team focus and alignment",
 				"Stakeholder satisfaction",
 				"Data-driven decision making"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "product-goals",
@@ -837,7 +899,31 @@
 				"Measurable progress tracking",
 				"Reduced waste on low-value features",
 				"Strategic product direction"
-			]
+			],
+			"maturityLevel": 3
+		},
+		{
+			"id": "quality-gates",
+			"name": "Quality Gates & Thresholds",
+			"type": "practice",
+			"category": "behavior-enabled-automation",
+			"description": "Automated quality thresholds enforced in the CI/CD pipeline that must be met before code can progress to the next stage, ensuring consistent quality standards.",
+			"requirements": [
+				"Defined quality thresholds (code coverage, complexity, vulnerabilities)",
+				"Automated enforcement in pipeline",
+				"Clear pass/fail criteria",
+				"Blocking mechanism for failed gates",
+				"Visibility of gate status to team",
+				"Configurable thresholds per project/environment"
+			],
+			"benefits": [
+				"Prevents low-quality code from reaching production",
+				"Enforces consistent quality standards",
+				"Makes quality expectations explicit",
+				"Provides fast feedback on quality issues",
+				"Reduces technical debt accumulation"
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "test-environment",
@@ -858,7 +944,8 @@
 				"Accurate performance testing",
 				"Confident deployments"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/production-like-test-environment/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/production-like-test-environment/",
+			"maturityLevel": 1
 		},
 		{
 			"id": "resilience-testing",
@@ -879,7 +966,8 @@
 				"Builds confidence in disaster recovery",
 				"Identifies architectural weak points",
 				"Reduces MTTR in production incidents"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "secret-management",
@@ -899,7 +987,8 @@
 				"Compliance",
 				"Centralized management",
 				"Reduced secret sprawl"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "security-testing",
@@ -920,7 +1009,8 @@
 				"Compliance with security standards",
 				"Prevents vulnerable code in production",
 				"Continuous security validation"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "smoke-testing",
@@ -941,7 +1031,8 @@
 				"Prevents broken deployments from persisting",
 				"Builds confidence in deployments",
 				"Early warning system for production issues"
-			]
+			],
+			"maturityLevel": 1
 		},
 		{
 			"id": "static-analysis",
@@ -962,7 +1053,8 @@
 				"Improves security posture",
 				"Reduces technical debt",
 				"Faster code reviews"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "stop-the-line",
@@ -983,7 +1075,8 @@
 				"Enforces quality discipline",
 				"Reduces time to fix integration issues",
 				"Builds team ownership of quality"
-			]
+			],
+			"maturityLevel": 2
 		},
 		{
 			"id": "test-data-management",
@@ -1003,7 +1096,8 @@
 				"Faster test execution",
 				"Compliance with regulations",
 				"Easier debugging"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "trunk-based-development",
@@ -1024,7 +1118,8 @@
 				"Simplified branching model",
 				"Encourages small, frequent commits"
 			],
-			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/"
+			"quickStartGuide": "https://minimumcd.org/minimumcd/trunk-based-development/",
+			"maturityLevel": 2
 		},
 		{
 			"id": "unified-team-backlog",
@@ -1044,7 +1139,8 @@
 				"Reduced silos and handoffs",
 				"Shared understanding of priorities",
 				"Faster decision making"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "usability-testing",
@@ -1065,13 +1161,15 @@
 				"Identifies UX issues early",
 				"Reduces support and training costs",
 				"Informs design decisions with data"
-			]
+			],
+			"maturityLevel": 3
 		},
 		{
 			"id": "version-control",
 			"name": "Version Control",
 			"type": "practice",
 			"category": "automation",
+			"maturityLevel": 0,
 			"description": "All code, configuration, and infrastructure definitions stored in version control system.",
 			"requirements": [
 				"Single source of truth",
@@ -1105,7 +1203,8 @@
 				"Clear change history and audit trail",
 				"Simplified rollbacks and recovery",
 				"Environment parity"
-			]
+			],
+			"maturityLevel": 0
 		},
 		{
 			"id": "atdd",
@@ -1129,7 +1228,8 @@
 				"Early validation of architectural decisions",
 				"Executable specification of system behavior"
 			],
-			"type": "practice"
+			"type": "practice",
+			"maturityLevel": 3
 		},
 		{
 			"id": "cross-functional-product-team",
@@ -1156,7 +1256,8 @@
 				"Better alignment between business needs and technical implementation",
 				"Stronger accountability and ownership of outcomes",
 				"More effective feedback loops with stakeholders"
-			]
+			],
+			"maturityLevel": 3
 		}
 	],
 	"dependencies": [
@@ -1175,6 +1276,10 @@
 		{
 			"practice_id": "application-pipeline",
 			"depends_on_id": "deployment-automation"
+		},
+		{
+			"practice_id": "application-pipeline",
+			"depends_on_id": "quality-gates"
 		},
 		{
 			"practice_id": "automated-artifact-versioning",
@@ -1289,6 +1394,30 @@
 			"depends_on_id": "test-environment"
 		},
 		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "cross-functional-product-team"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "developer-driven-support"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "evolutionary-coding"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "prioritized-features"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "monitoring-and-alerting"
+		},
+		{
+			"practice_id": "continuous-delivery",
+			"depends_on_id": "atdd"
+		},
+		{
 			"practice_id": "continuous-integration",
 			"depends_on_id": "automated-testing"
 		},
@@ -1315,6 +1444,22 @@
 		{
 			"practice_id": "continuous-testing",
 			"depends_on_id": "integration-testing"
+		},
+		{
+			"practice_id": "cycle-time-tracking",
+			"depends_on_id": "continuous-integration"
+		},
+		{
+			"practice_id": "cycle-time-tracking",
+			"depends_on_id": "version-control"
+		},
+		{
+			"practice_id": "cycle-time-tracking",
+			"depends_on_id": "deployment-automation"
+		},
+		{
+			"practice_id": "cycle-time-tracking",
+			"depends_on_id": "automated-testing"
 		},
 		{
 			"practice_id": "database-migration-strategy",
@@ -1421,6 +1566,10 @@
 			"depends_on_id": "telemetry-observability"
 		},
 		{
+			"practice_id": "monitoring-and-alerting",
+			"depends_on_id": "cycle-time-tracking"
+		},
+		{
 			"practice_id": "performance-testing",
 			"depends_on_id": "automated-testing"
 		},
@@ -1447,6 +1596,14 @@
 		{
 			"practice_id": "prioritized-features",
 			"depends_on_id": "unified-team-backlog"
+		},
+		{
+			"practice_id": "quality-gates",
+			"depends_on_id": "static-analysis"
+		},
+		{
+			"practice_id": "quality-gates",
+			"depends_on_id": "automated-testing"
 		},
 		{
 			"practice_id": "continuous-testing",
@@ -1602,10 +1759,10 @@
 		}
 	],
 	"metadata": {
-		"changelog": "Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
+		"changelog": "Added maturityLevel field to all practices. Added quality-gates and cycle-time-tracking practices. Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
 		"source": "MinimumCD.org",
 		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"version": "1.10.0",
-		"lastUpdated": "2025-10-28"
+		"version": "1.11.0",
+		"lastUpdated": "2025-10-29"
 	}
 }

@@ -40,14 +40,15 @@ test.describe('Collapsible Sidebar Menu', () => {
 		test('hamburger button should collapse menu to hide labels', async ({ page }) => {
 			// Find and click hamburger button (menu starts expanded on desktop)
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
+
 			await hamburger.click()
 
 			// Menu should still be visible but now collapsed
-			const menu = page.getByTestId('menu-content')
 			await expect(menu).toBeVisible()
 
 			// Menu should be collapsed (64px width)
-			await page.waitForTimeout(400) // Wait for transition
+			await page.waitForTimeout(350)
 			const menuBox = await menu.boundingBox()
 			expect(menuBox?.width).toBe(64) // w-16 = 4rem = 64px
 
@@ -65,8 +66,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 		test.skip('content area should adjust when menu collapses', async ({ page }) => {
 			// Click hamburger to collapse (menu starts expanded on desktop)
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400) // Wait for transition
+			await page.waitForTimeout(350)
 
 			// Check main content area margin after collapse
 			const mainContent = page.getByRole('main')
@@ -76,17 +78,17 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 		test('clicking hamburger again should expand menu back', async ({ page }) => {
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 
 			// Collapse (menu starts expanded on desktop)
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Expand again
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Menu should be expanded again
-			const menu = page.getByTestId('menu-content')
 			const menuBox = await menu.boundingBox()
 			expect(menuBox?.width).toBe(256)
 
@@ -161,11 +163,11 @@ test.describe('Collapsible Sidebar Menu', () => {
 		test.skip('hamburger button should expand menu to show labels', async ({ page }) => {
 			// Find and click hamburger button
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400) // Wait for transition
+			await page.waitForTimeout(350)
 
 			// Menu should be expanded
-			const menu = page.getByTestId('menu-content')
 			const menuBox = await menu.boundingBox()
 			expect(menuBox?.width).toBe(256) // w-64 = 16rem = 256px
 
@@ -179,8 +181,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 		test.skip('content area should adjust when menu expands', async ({ page }) => {
 			// Click hamburger to expand
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400) // Wait for transition
+			await page.waitForTimeout(350)
 
 			// Check main content area margin after expansion
 			const mainContent = page.getByRole('main')
@@ -190,17 +193,17 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 		test('clicking hamburger again should collapse menu back', async ({ page }) => {
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 
 			// Expand
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Collapse again
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Menu should be collapsed again
-			const menu = page.getByTestId('menu-content')
 			const menuBox = await menu.boundingBox()
 			expect(menuBox?.width).toBe(64)
 
@@ -236,8 +239,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Collapse menu (starts expanded on desktop)
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Check menu items
 			const menuItems = await page.locator('[data-testid^="menu-item-"]').all()
@@ -291,8 +295,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Collapse menu
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Hover over home icon
 			const homeItem = page.getByTestId('menu-item-home')
@@ -324,8 +329,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Expand menu
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Test in expanded state
 			await page.getByTestId('menu-item-help').click()
@@ -353,7 +359,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 			// Collapse menu and check again
 			const hamburger = page.getByLabel(/menu/i)
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			const menuBoxCollapsed = await menu.boundingBox()
 			const contentBoxCollapsed = await content.boundingBox()
@@ -395,8 +401,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Toggle menu and check again
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			const hasHorizontalScrollAfterToggle = await page.evaluate(() => {
 				return document.documentElement.scrollWidth > window.innerWidth
@@ -420,8 +427,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 			await expect(hamburger).toHaveAttribute('aria-expanded', 'false')
 
 			await hamburger.click()
-			await page.waitForTimeout(200)
-			await expect(hamburger).toHaveAttribute('aria-expanded', 'true')
+			await expect(hamburger).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 })
 		})
 
 		test('menu items should have aria-labels', async ({ page }) => {
@@ -455,8 +461,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Collapse menu
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Keyboard navigation should still work in collapsed state
 			await page.keyboard.press('Tab')
@@ -479,7 +486,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Toggle to collapsed and check new state
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await expect(hamburger).toHaveAttribute('aria-label', /Expand/, { timeout: 1000 })
 
 			const collapsedLabel = await hamburger.getAttribute('aria-label')
 			expect(collapsedLabel).toContain('Expand')
@@ -502,8 +509,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Collapse and test again
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			await helpItem.focus()
 			const hasCollapsedFocusRing = await helpItem.evaluate(el => {
@@ -523,15 +531,14 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Collapse menu
 			const hamburger = page.getByLabel(/menu/i)
+			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Resize to larger desktop
 			await page.setViewportSize({ width: 1920, height: 1080 })
-			await page.waitForTimeout(100)
 
 			// Menu should still be collapsed
-			const menu = page.getByTestId('menu-content')
 			const menuBox = await menu.boundingBox()
 			expect(menuBox?.width).toBe(64)
 		})
@@ -550,7 +557,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Resize to desktop
 			await page.setViewportSize({ width: 1440, height: 900 })
-			await page.waitForTimeout(400)
+			await page.waitForTimeout(350)
 
 			// Menu should stay collapsed (no responsive default change)
 			menuBox = await menu.boundingBox()
@@ -571,8 +578,8 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Resize to mobile
 			await page.setViewportSize({ width: 375, height: 667 })
-			// Wait for menu transition to complete (300ms duration + buffer)
-			await page.waitForTimeout(800)
+			// Wait for menu transition to complete
+			await page.waitForTimeout(350)
 
 			// Menu should stay expanded (no responsive default change)
 			menuBox = await menu.boundingBox()

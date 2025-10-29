@@ -92,6 +92,12 @@
 					"pattern": "^https?://",
 					"minLength": 10,
 					"maxLength": 500
+				},
+				"maturityLevel": {
+					"type": "integer",
+					"description": "CD maturity level (0=Foundation, 1=Core Automation, 2=Advanced, 3=CD Enablement)",
+					"minimum": 0,
+					"maximum": 3
 				}
 			}
 		},

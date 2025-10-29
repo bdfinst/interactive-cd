@@ -92,8 +92,10 @@ test.describe('Practice Navigation', () => {
 				const expandButton = unselectedNode.locator('button[aria-label*="View details"]')
 				await expandButton.click()
 
-				// Wait for navigation to complete
-				await page.waitForTimeout(500)
+				// Wait for count to actually increase
+				await expect(page.locator('[data-testid="graph-node"]')).not.toHaveCount(initialCount, {
+					timeout: 2000
+				})
 
 				// Verify more practice nodes are visible (dependencies auto-expanded)
 				const finalCount = await page.locator('[data-testid="graph-node"]').count()
@@ -117,7 +119,12 @@ test.describe('Practice Navigation', () => {
 
 			// Click expand
 			await expandTreeButton.click()
-			await page.waitForTimeout(500)
+
+			// Wait for button text to change
+			await expect(collapseTreeButton).toBeVisible({ timeout: 2000 })
+
+			// Wait for nodes to be added to DOM
+			await page.waitForTimeout(300)
 
 			// Should show more nodes
 			const expandedCount = await page.locator('[data-testid="graph-node"]').count()
@@ -125,27 +132,19 @@ test.describe('Practice Navigation', () => {
 		} else if (await collapseTreeButton.isVisible()) {
 			// Already expanded, test collapse
 			await collapseTreeButton.click()
-			await page.waitForTimeout(500)
 
 			// Verify collapse button changed to expand
-			await expect(page.locator('button:has-text("Expand")')).toBeVisible()
+			await expect(expandTreeButton).toBeVisible({ timeout: 2000 })
 		}
 	})
 
 	test('displays loading state while fetching practice data', async ({ page }) => {
 		// This test verifies the loading UI appears
-		// We need to intercept the network to slow it down for testing
-		await page.route('**/api/practices/cards**', async route => {
-			await page.waitForTimeout(100)
-			await route.continue()
-		})
-
+		// Note: Loading may be very fast in development, so we just verify the page loads successfully
 		await page.goto('/')
 
-		// Look for loading indicator
-		const loadingText = page.locator('text=Loading dependencies')
-		// Loading might be very fast, so we just check it doesn't error
-		// In a real scenario with slow network, this would be visible
+		// Verify the page loaded successfully and practice nodes are present
+		await expect(page.locator('[data-testid="graph-node"]').first()).toBeVisible()
 	})
 
 	test('shows "No dependencies" message for leaf practices', async ({ page }) => {
@@ -164,7 +163,8 @@ test.describe('Practice Navigation', () => {
 				// Click the expand button to navigate
 				const expandButton = nodeWithDeps.locator('button[aria-label*="View details"]')
 				await expandButton.click()
-				await page.waitForTimeout(500)
+				// Wait for selection to update
+				await expect(nodeWithDeps).toHaveAttribute('data-selected', 'true', { timeout: 2000 })
 			}
 		}
 
@@ -198,10 +198,11 @@ test.describe('Practice Selection', () => {
 				// Click the expand/details button within the practice card
 				const expandButton = unselectedNode.locator('button[aria-label*="View details"]')
 				await expandButton.click()
-				await page.waitForTimeout(500)
 
-				// Re-query to get updated state
+				// Wait for selection state to update
 				const clickedNode = page.locator(`[data-practice-id="${practiceId}"]`)
+				await expect(clickedNode).toHaveAttribute('data-selected', 'true', { timeout: 2000 })
+
 				const isSelected = await clickedNode.getAttribute('data-selected')
 				expect(isSelected).toBe('true')
 			}
@@ -218,10 +219,11 @@ test.describe('Practice Selection', () => {
 			// Click the close button within the selected practice card
 			const closeButton = selectedNode.locator('button[aria-label*="Close details"]')
 			await closeButton.click()
-			await page.waitForTimeout(200)
 
-			// Verify it's deselected
+			// Wait for deselection
 			const nodeAfterClick = page.locator(`[data-practice-id="${practiceId}"]`)
+			await expect(nodeAfterClick).toHaveAttribute('data-selected', 'false', { timeout: 1000 })
+
 			const isSelectedAfter = await nodeAfterClick.getAttribute('data-selected')
 			expect(isSelectedAfter).toBe('false')
 		}
@@ -246,10 +248,10 @@ test.describe('Practice Selection', () => {
 		// When I click the details button on the dependency practice
 		const detailsButton = dependencyNode.locator('button[aria-label*="View details"]')
 		await detailsButton.click()
-		await page.waitForTimeout(500)
 
 		// Then "Continuous Integration" becomes the current practice (selected and shown with full details)
 		const selectedNode = page.locator('[data-practice-id="continuous-integration"]')
+		await expect(selectedNode).toHaveAttribute('data-selected', 'true', { timeout: 2000 })
 		const isSelected = await selectedNode.getAttribute('data-selected')
 		expect(isSelected).toBe('true')
 
@@ -373,11 +375,15 @@ test.describe('Visual Elements', () => {
 
 		// Click the expand button
 		await expandButton.click()
-		await page.waitForTimeout(500)
 
 		// Verify button text changed
+		const expectedNewText = initialText === 'Expand' ? 'Collapse' : 'Expand'
+		await expect(expandButton).toHaveText(expectedNewText, { timeout: 2000 })
 		const newText = await expandButton.textContent()
 		expect(newText).not.toBe(initialText)
+
+		// Wait for nodes to be added/removed from DOM
+		await page.waitForTimeout(300)
 
 		// Verify node count changed (expanded should show more, collapsed should show fewer)
 		const newNodeCount = await page.locator('[data-testid="graph-node"]').count()
@@ -393,7 +399,10 @@ test.describe('Visual Elements', () => {
 
 		// Toggle back and verify it returns to original state
 		await expandButton.click()
-		await page.waitForTimeout(500)
+		await expect(expandButton).toHaveText(initialText, { timeout: 2000 })
+
+		// Wait for nodes to update
+		await page.waitForTimeout(300)
 
 		const finalText = await expandButton.textContent()
 		const finalNodeCount = await page.locator('[data-testid="graph-node"]').count()
@@ -416,10 +425,10 @@ test.describe('Visual Elements', () => {
 			// Click the expand button to select and expand dependencies
 			const expandButton = nodeWithDeps.locator('button[aria-label*="View details"]')
 			await expandButton.click()
-			await page.waitForTimeout(500)
 
 			// Verify SVG with connections exists
 			const svg = page.locator('svg[aria-hidden="true"]')
+			await expect(svg).toBeVisible({ timeout: 2000 })
 			if (await svg.isVisible()) {
 				await expect(svg).toBeVisible()
 
