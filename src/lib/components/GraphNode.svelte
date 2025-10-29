@@ -99,7 +99,7 @@
 			</div>
 		{:else}
 			<!-- Spacer to maintain layout when no badge -->
-			<div class="z-10 flex items-center justify-center min-w-[24px]"></div>
+			<div class="z-10 flex items-center justify-center min-w-6"></div>
 		{/if}
 
 		<!-- Adoption Checkbox in top-right corner -->
@@ -219,9 +219,9 @@
 				</div>
 			{/if}
 
-			<!-- Quick-Start Guide Link (unselected view) -->
+			<!-- Quick-Start Guide Link (unselected view) - Absolutely positioned 10px from bottom left -->
 			{#if practice.quickStartGuide}
-				<div class="flex justify-start">
+				<div class="absolute bottom-2.5 left-2.5">
 					<a
 						href={practice.quickStartGuide}
 						target="_blank"
