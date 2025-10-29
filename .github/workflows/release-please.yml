@@ -2,23 +2,45 @@ name: Release Please
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ['CI Flow']
-    types:
-      - completed
+  push:
     branches:
       - main
 
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # Add this for creating releases
 
 jobs:
+  # Check if CI passed before running release-please
+  check-ci:
+    name: Check CI Status
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if should run release-please
+        id: check
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          # Skip if this is already a release commit (prevent loops)
+          if echo "$COMMIT_MSG" | grep -q "^chore(main): release"; then
+            echo "Release commit detected, skipping release-please"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "Normal commit, checking CI status"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
   release-please:
     runs-on: ubuntu-latest
-    # Only run if tests passed
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    needs: check-ci
+    if: needs.check-ci.outputs.should_run == 'true'
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
