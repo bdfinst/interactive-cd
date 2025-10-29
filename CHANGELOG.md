@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.0...interactive-cd-v1.6.1) (2025-10-29)
+
+
+### Bug Fixes
+
+* correct button locations ([0bd5ba2](https://github.com/bdfinst/interactive-cd/commit/0bd5ba22e7eda1fbd037e7b754b96860438c8dea))
+* correct quickguide button position ([8dc1594](https://github.com/bdfinst/interactive-cd/commit/8dc159474cdd4135974fda573937e741fea2a60f))
+* wait for ci before release ([fdbd6b0](https://github.com/bdfinst/interactive-cd/commit/fdbd6b0c552bfbfe1ecb1a8a51c58d3143893f51))
+
 ## [1.6.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.2...interactive-cd-v1.6.0) (2025-10-29)
 
 
