@@ -11,7 +11,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  # Check if CI passed before running release-please
   check-ci:
     name: Check CI Status
     runs-on: ubuntu-latest
@@ -28,7 +27,6 @@ jobs:
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
 
-          # Skip if this is already a release commit (prevent loops)
           if echo "$COMMIT_MSG" | grep -q "^chore(main): release"; then
             echo "Release commit detected, skipping release-please"
             echo "should_run=false" >> $GITHUB_OUTPUT
@@ -45,17 +43,16 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }} # Changed from GITHUB_TOKEN
 
-      # Checkout repository when a release is created (PR merged)
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }} # Use PAT for checkout too
 
-      # Update release branch when Release PR is merged
       - name: Update release branch
         if: ${{ steps.release.outputs.release_created }}
         run: |
