@@ -51,7 +51,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }} # Use PAT for checkout too
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Update release branch
         if: ${{ steps.release.outputs.release_created }}
