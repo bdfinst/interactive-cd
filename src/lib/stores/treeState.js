@@ -1,23 +1,18 @@
-import { writable } from 'svelte/store'
+import { writable, get } from 'svelte/store'
 
 /**
  * Creates an encapsulated store for tree expansion state
  * @returns {Object} Store with controlled API
  */
 function createTreeState() {
-	const { subscribe, set } = writable(false)
+	const store = writable(false)
+	const { subscribe, set } = store
 
 	return {
 		subscribe,
 		expand: () => set(true),
 		collapse: () => set(false),
-		toggle: () => {
-			let currentValue
-			subscribe(value => {
-				currentValue = value
-			})()
-			set(!currentValue)
-		}
+		toggle: () => set(!get(store))
 	}
 }
 

@@ -141,7 +141,8 @@ export const createGetPracticeTreeService = practiceRepository => {
 			benefitCount: node.benefits?.length || 0,
 			practicePrerequisites: [],
 			capabilityPrerequisites: [],
-			dependencies: enrichedDependencies
+			dependencies: enrichedDependencies,
+			quickStartGuide: node.quickStartGuide // Explicitly preserve quickStartGuide
 		}
 
 		return enriched

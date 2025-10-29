@@ -1,0 +1,14 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "src/lib/data/cd-practices.json"
+      ],
+      "url": "./src/lib/schemas/cd-practices.schema.json"
+    }
+  ],
+  "json.validate.enable": true,
+  "cSpell.words": [
+    "onExpand"
+  ]
+}

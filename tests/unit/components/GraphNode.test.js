@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, fireEvent } from '@testing-library/svelte'
 import GraphNode from '$lib/components/GraphNode.svelte'
-import { buildPractice, buildMinimalPractice } from '../../utils/builders.js'
+import { fireEvent, render } from '@testing-library/svelte'
+import { describe, expect, it, vi } from 'vitest'
+
+import { buildMinimalPractice, buildPractice } from '../../utils/builders.js'
 
 describe('GraphNode', () => {
 	describe('rendering', () => {
@@ -12,20 +13,20 @@ describe('GraphNode', () => {
 			expect(getByText('Continuous Integration')).toBeInTheDocument()
 		})
 
-		it('renders category indicators', () => {
-			const practice = buildPractice({ categories: ['behavior', 'tooling'] })
-			const { container } = render(GraphNode, { props: { practice } })
+		it('applies background color class based on category', () => {
+			const practice = buildPractice({ category: 'automation' })
+			const { getByTestId } = render(GraphNode, { props: { practice } })
 
-			const categoryDots = container.querySelectorAll('.w-3\\.5')
-			expect(categoryDots.length).toBe(2)
+			const node = getByTestId('graph-node')
+			expect(node.classList.contains('bg-category-automation')).toBe(true)
 		})
 
-		it('renders as a button element', () => {
+		it('renders as a div element', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, { props: { practice } })
 
 			const node = getByTestId('graph-node')
-			expect(node.tagName).toBe('BUTTON')
+			expect(node.tagName).toBe('DIV')
 		})
 
 		it('includes practice id in data attribute', () => {
@@ -34,6 +35,20 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-practice-id')).toBe('test-practice-id')
+		})
+
+		it('renders maximize button when not selected', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: false } })
+
+			expect(getByLabelText(`View details for ${practice.name}`)).toBeInTheDocument()
+		})
+
+		it('renders close button when selected', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: true } })
+
+			expect(getByLabelText(`Close details for ${practice.name}`)).toBeInTheDocument()
 		})
 	})
 
@@ -79,7 +94,7 @@ describe('GraphNode', () => {
 			expect(queryByText('Faster delivery')).not.toBeInTheDocument()
 		})
 
-		it('applies selected visual style', () => {
+		it('applies selected data attribute', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, {
 				props: { practice, isSelected: true }
@@ -87,11 +102,9 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-selected')).toBe('true')
-			expect(node.className).toContain('border-4')
-			expect(node.className).toContain('border-blue-600')
 		})
 
-		it('applies unselected visual style', () => {
+		it('applies unselected data attribute', () => {
 			const practice = buildPractice()
 			const { getByTestId } = render(GraphNode, {
 				props: { practice, isSelected: false }
@@ -99,126 +112,154 @@ describe('GraphNode', () => {
 
 			const node = getByTestId('graph-node')
 			expect(node.getAttribute('data-selected')).toBe('false')
-			expect(node.className).toContain('border-2')
 		})
 	})
 
-	describe('expand functionality', () => {
-		it('shows expand button when selected and has dependencies', () => {
+	describe('dependency display', () => {
+		it('shows dependency count when not selected and has dependencies', () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const { getByText } = render(GraphNode, {
+				props: { practice, isSelected: false }
+			})
+
+			expect(getByText('3 dependencies')).toBeInTheDocument()
+		})
+
+		it('shows singular form when has one dependency', () => {
+			const practice = buildPractice({ dependencyCount: 1 })
+			const { getByText } = render(GraphNode, {
+				props: { practice, isSelected: false }
+			})
+
+			expect(getByText('1 dependency')).toBeInTheDocument()
+		})
+
+		it('hides dependency count when selected', () => {
+			const practice = buildPractice({ dependencyCount: 3 })
+			const { queryByText } = render(GraphNode, {
 				props: { practice, isSelected: true }
 			})
 
-			expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
+			expect(queryByText('3 dependencies')).not.toBeInTheDocument()
 		})
 
-		it('hides expand button when not selected', () => {
-			const practice = buildPractice({ dependencyCount: 3 })
+		it('hides dependency count when has no dependencies', () => {
+			const practice = buildMinimalPractice()
 			const { queryByText } = render(GraphNode, {
 				props: { practice, isSelected: false }
 			})
 
-			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
-		})
-
-		it('hides expand button when has no dependencies', () => {
-			const practice = buildMinimalPractice()
-			const { queryByText } = render(GraphNode, {
-				props: { practice, isSelected: true }
-			})
-
-			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
-		})
-
-		it('hides expand button when isRoot is true', () => {
-			const practice = buildPractice({ dependencyCount: 3 })
-			const { queryByText } = render(GraphNode, {
-				props: { practice, isSelected: true, isRoot: true }
-			})
-
-			expect(queryByText(/Expand Dependencies/)).not.toBeInTheDocument()
-		})
-
-		it('shows correct button text when expanded', () => {
-			const practice = buildPractice({ dependencyCount: 3 })
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, isExpanded: true }
-			})
-
-			expect(getByText(/Collapse Dependencies/)).toBeInTheDocument()
-		})
-
-		it('shows dependency count in button text', () => {
-			const practice = buildPractice({ dependencyCount: 5 })
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true }
-			})
-
-			expect(getByText('Expand Dependencies (5)')).toBeInTheDocument()
+			expect(queryByText(/dependency|dependencies/)).not.toBeInTheDocument()
 		})
 	})
 
 	describe('user interactions', () => {
-		it('calls onclick callback when clicked', async () => {
+		it('calls onclick callback when maximize button is clicked', async () => {
 			const practice = buildPractice()
 			const handleClick = vi.fn()
-			const { getByTestId } = render(GraphNode, {
-				props: { practice, onclick: handleClick }
+			const { getByLabelText } = render(GraphNode, {
+				props: { practice, onclick: handleClick, isSelected: false }
 			})
 
-			await fireEvent.click(getByTestId('graph-node'))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
 			expect(handleClick).toHaveBeenCalledOnce()
-			expect(handleClick).toHaveBeenCalledWith({ practiceId: practice.id })
+			expect(handleClick).toHaveBeenCalledWith()
 		})
 
-		it('calls onexpand callback when expand button is clicked', async () => {
-			const practice = buildPractice({ dependencyCount: 3 })
-			const handleExpand = vi.fn()
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onexpand: handleExpand }
+		it('calls onclick callback when close button is clicked', async () => {
+			const practice = buildPractice()
+			const handleClick = vi.fn()
+			const { getByLabelText } = render(GraphNode, {
+				props: { practice, onclick: handleClick, isSelected: true }
 			})
 
-			await fireEvent.click(getByText(/Expand Dependencies/))
+			await fireEvent.click(getByLabelText(`Close details for ${practice.name}`))
 
-			expect(handleExpand).toHaveBeenCalledOnce()
-			expect(handleExpand).toHaveBeenCalledWith({ practiceId: practice.id })
+			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleClick).toHaveBeenCalledWith()
 		})
 
-		it('prevents event propagation when expand button is clicked', async () => {
+		it('calls onclick when maximize button clicked (auto-expand removed)', async () => {
 			const practice = buildPractice({ dependencyCount: 3 })
 			const handleClick = vi.fn()
 			const handleExpand = vi.fn()
-			const { getByText } = render(GraphNode, {
-				props: { practice, isSelected: true, onclick: handleClick, onexpand: handleExpand }
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: false,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
 			})
 
-			await fireEvent.click(getByText(/Expand Dependencies/))
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
 
-			expect(handleExpand).toHaveBeenCalledOnce()
-			// onclick callback should not be called when expand button is clicked
-			expect(handleClick).not.toHaveBeenCalled()
+			// Auto-expand behavior was intentionally removed
+			// Now only onclick is called, navigation logic is in PracticeGraph
+			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleExpand).not.toHaveBeenCalled()
+		})
+
+		it('does not auto-expand when practice is root', async () => {
+			const practice = buildPractice({ dependencyCount: 3 })
+			const handleClick = vi.fn()
+			const handleExpand = vi.fn()
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: true,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
+			})
+
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
+
+			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleExpand).not.toHaveBeenCalled()
+		})
+
+		it('does not auto-expand when practice has no dependencies', async () => {
+			const practice = buildMinimalPractice()
+			const handleClick = vi.fn()
+			const handleExpand = vi.fn()
+			const { getByLabelText } = render(GraphNode, {
+				props: {
+					practice,
+					isRoot: false,
+					isSelected: false,
+					onclick: handleClick,
+					onExpand: handleExpand
+				}
+			})
+
+			await fireEvent.click(getByLabelText(`View details for ${practice.name}`))
+
+			expect(handleClick).toHaveBeenCalledOnce()
+			expect(handleExpand).not.toHaveBeenCalled()
 		})
 	})
 
 	describe('accessibility', () => {
-		it('includes category information in aria-label', () => {
-			const practice = buildPractice({ categories: ['behavior', 'tooling'] })
-			const { container } = render(GraphNode, { props: { practice } })
+		it('maximize button is keyboard accessible', () => {
+			const practice = buildPractice()
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: false } })
 
-			const categoryContainer = container.querySelector('[role="img"]')
-			expect(categoryContainer?.getAttribute('aria-label')).toContain('behavior')
-			expect(categoryContainer?.getAttribute('aria-label')).toContain('tooling')
+			const maximizeButton = getByLabelText(`View details for ${practice.name}`)
+			expect(maximizeButton).toBeInTheDocument()
+			expect(maximizeButton.tagName).toBe('BUTTON')
 		})
 
-		it('includes focus styles for keyboard navigation', () => {
+		it('close button is keyboard accessible when selected', () => {
 			const practice = buildPractice()
-			const { getByTestId } = render(GraphNode, { props: { practice } })
+			const { getByLabelText } = render(GraphNode, { props: { practice, isSelected: true } })
 
-			const node = getByTestId('graph-node')
-			expect(node.className).toContain('focus:outline-none')
-			expect(node.className).toContain('focus:ring-2')
+			const closeButton = getByLabelText(`Close details for ${practice.name}`)
+			expect(closeButton).toBeInTheDocument()
+			expect(closeButton.tagName).toBe('BUTTON')
 		})
 	})
 
@@ -232,31 +273,533 @@ describe('GraphNode', () => {
 			expect(queryByText('Benefits')).not.toBeInTheDocument()
 		})
 
-		it('handles practice with single category', () => {
-			const practice = buildPractice({ categories: ['behavior'] })
-			const { container } = render(GraphNode, { props: { practice } })
-
-			const categoryDots = container.querySelectorAll('.w-3\\.5')
-			expect(categoryDots.length).toBe(1)
-		})
-
-		it('handles practice with fallback category from category field', () => {
-			const practice = { ...buildPractice(), categories: undefined, category: 'tooling' }
-			const { container } = render(GraphNode, { props: { practice } })
-
-			// Should still render category dot
-			const categoryDots = container.querySelectorAll('.w-3\\.5')
-			expect(categoryDots.length).toBeGreaterThan(0)
-		})
-
-		it('shows expand button even without event listener', () => {
-			const practice = buildPractice({ dependencyCount: 3 })
-			const { getByText } = render(GraphNode, {
+		it('handles practice with no requirements', () => {
+			const practice = buildPractice({ requirements: [] })
+			const { queryByText } = render(GraphNode, {
 				props: { practice, isSelected: true }
 			})
 
-			// Expand button should show if there are dependencies, regardless of event listeners
-			expect(getByText(/Expand Dependencies/)).toBeInTheDocument()
+			expect(queryByText('Requirements')).not.toBeInTheDocument()
+		})
+	})
+
+	describe('node sizing', () => {
+		it('applies tiny size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'tiny' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('tiny')
+		})
+
+		it('applies compact size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'compact' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('compact')
+		})
+
+		it('applies standard size variant data attribute by default', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('standard')
+		})
+
+		it('applies expanded size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'expanded' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('expanded')
+		})
+
+		it('applies selected-dependency size variant data attribute', () => {
+			const practice = buildPractice()
+			const { getByTestId } = render(GraphNode, {
+				props: { practice, nodeSize: 'selected-dependency' }
+			})
+
+			const node = getByTestId('graph-node')
+			expect(node.getAttribute('data-node-size')).toBe('selected-dependency')
+		})
+
+		it('tiny size uses compact display mode', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { container } = render(GraphNode, {
+				props: { practice, nodeSize: 'tiny', isSelected: true }
+			})
+
+			const description = container.querySelector('p.text-xs')
+			expect(description).toBeInTheDocument()
+		})
+
+		it('compact size uses compact display mode', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { container } = render(GraphNode, {
+				props: { practice, nodeSize: 'compact', isSelected: true }
+			})
+
+			const description = container.querySelector('p.text-xs')
+			expect(description).toBeInTheDocument()
+		})
+
+		it('standard size uses normal display mode', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { container } = render(GraphNode, {
+				props: { practice, nodeSize: 'standard', isSelected: true }
+			})
+
+			const description = container.querySelector('p.text-sm')
+			expect(description).toBeInTheDocument()
+		})
+
+		it('expanded size uses normal display mode', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { container } = render(GraphNode, {
+				props: { practice, nodeSize: 'expanded', isSelected: true }
+			})
+
+			const description = container.querySelector('p.text-sm')
+			expect(description).toBeInTheDocument()
+		})
+
+		it('selected-dependency size uses normal display mode', () => {
+			const practice = buildPractice({ description: 'Test description' })
+			const { container } = render(GraphNode, {
+				props: { practice, nodeSize: 'selected-dependency', isSelected: true }
+			})
+
+			const description = container.querySelector('p.text-sm')
+			expect(description).toBeInTheDocument()
+		})
+	})
+
+	describe('quick-start guide links', () => {
+		describe('when selected', () => {
+			it('displays quick-start guide link when quickStartGuide is provided', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toBeInTheDocument()
+			})
+
+			it('guide link has correct href attribute', () => {
+				const url = 'https://minimumcd.org/minimumcd/trunk-based-development/'
+				const practice = buildPractice({ quickStartGuide: url })
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toHaveAttribute('href', url)
+			})
+
+			it('guide link opens in new tab', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toHaveAttribute('target', '_blank')
+			})
+
+			it('guide link has security attributes', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toHaveAttribute('rel', 'noopener noreferrer')
+			})
+
+			it('guide link has descriptive aria-label', () => {
+				const practice = buildPractice({
+					name: 'Continuous Integration',
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toHaveAttribute(
+					'aria-label',
+					'Quick-start guide for Continuous Integration'
+				)
+			})
+
+			it('does not display guide link when quickStartGuide is null', () => {
+				const practice = buildPractice({ quickStartGuide: null })
+				const { queryByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				expect(queryByTestId('quick-start-guide-link')).not.toBeInTheDocument()
+			})
+
+			it('does not display guide link when quickStartGuide is undefined', () => {
+				const practice = buildPractice()
+				const { queryByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				expect(queryByTestId('quick-start-guide-link')).not.toBeInTheDocument()
+			})
+
+			it('guide link displays external link icon', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				const icon = guideLink.querySelector('svg')
+				expect(icon).toBeInTheDocument()
+			})
+		})
+
+		describe('when not selected', () => {
+			it('displays quick-start guide link when quickStartGuide is provided', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: false }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toBeInTheDocument()
+			})
+
+			it('guide link has correct href attribute', () => {
+				const url = 'https://minimumcd.org/minimumcd/configuration-management/'
+				const practice = buildPractice({ quickStartGuide: url })
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: false }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				expect(guideLink).toHaveAttribute('href', url)
+			})
+
+			it('does not display guide link when quickStartGuide is null', () => {
+				const practice = buildPractice({ quickStartGuide: null })
+				const { queryByTestId } = render(GraphNode, {
+					props: { practice, isSelected: false }
+				})
+
+				expect(queryByTestId('quick-start-guide-link')).not.toBeInTheDocument()
+			})
+
+			it('does not display guide link when quickStartGuide is undefined', () => {
+				const practice = buildPractice()
+				const { queryByTestId } = render(GraphNode, {
+					props: { practice, isSelected: false }
+				})
+
+				expect(queryByTestId('quick-start-guide-link')).not.toBeInTheDocument()
+			})
+
+			it('guide link displays external link icon', () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: false }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				const icon = guideLink.querySelector('svg')
+				expect(icon).toBeInTheDocument()
+			})
+		})
+
+		describe('event handling', () => {
+			it('guide link click does not trigger onclick callback', async () => {
+				const practice = buildPractice({
+					quickStartGuide: 'https://minimumcd.org/minimumcd/continuous-integration/'
+				})
+				const handleClick = vi.fn()
+				const { getByTestId } = render(GraphNode, {
+					props: { practice, isSelected: true, onclick: handleClick }
+				})
+
+				const guideLink = getByTestId('quick-start-guide-link')
+				await fireEvent.click(guideLink)
+
+				expect(handleClick).not.toHaveBeenCalled()
+			})
+		})
+	})
+
+	describe('dependency counts', () => {
+		describe('collapsed view (not tree expanded)', () => {
+			it('shows direct and total dependency counts when not selected', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { getByText } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false }
+				})
+
+				expect(getByText(/2 direct/)).toBeInTheDocument()
+				expect(getByText(/5 total/)).toBeInTheDocument()
+			})
+
+			it('shows singular form for 1 direct dependency', () => {
+				const practice = buildPractice({
+					dependencyCount: 1,
+					directDependencyCount: 1,
+					totalDependencyCount: 1
+				})
+				const { getByText } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false }
+				})
+
+				expect(getByText(/1 direct/)).toBeInTheDocument()
+				expect(getByText(/1 total/)).toBeInTheDocument()
+			})
+
+			it('falls back to dependencyCount when direct/total not available', () => {
+				const practice = buildPractice({ dependencyCount: 3 })
+				const { getByText } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false }
+				})
+
+				expect(getByText('3 dependencies')).toBeInTheDocument()
+			})
+
+			it('direct count text is bold', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { container } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false }
+				})
+
+				const directSpan = container.querySelector('.font-semibold')
+				expect(directSpan).toBeInTheDocument()
+				expect(directSpan.textContent).toContain('2 direct')
+			})
+
+			it('does not show counts when practice has no dependencies', () => {
+				const practice = buildMinimalPractice()
+				const { queryByText } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false }
+				})
+
+				expect(queryByText(/direct/)).not.toBeInTheDocument()
+				expect(queryByText(/total/)).not.toBeInTheDocument()
+				expect(queryByText(/dependency|dependencies/)).not.toBeInTheDocument()
+			})
+		})
+
+		describe('expanded tree view', () => {
+			it('does not show dependency counts when tree is expanded', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { queryByText } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: true }
+				})
+
+				expect(queryByText(/direct/)).not.toBeInTheDocument()
+				expect(queryByText(/total/)).not.toBeInTheDocument()
+				expect(queryByText(/dependencies/)).not.toBeInTheDocument()
+			})
+		})
+
+		describe('selected view', () => {
+			it('does not show dependency counts when selected', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { queryByText } = render(GraphNode, {
+					props: { practice, isSelected: true, isTreeExpanded: false }
+				})
+
+				expect(queryByText(/direct/)).not.toBeInTheDocument()
+				expect(queryByText(/total/)).not.toBeInTheDocument()
+			})
+		})
+
+		describe('font sizes in different modes', () => {
+			it('uses text-xs for counts in compact mode', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { container } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false, nodeSize: 'compact' }
+				})
+
+				const countDiv = container.querySelector('.dependency-count')
+				expect(countDiv.classList.contains('text-xs')).toBe(true)
+			})
+
+			it('uses text-sm for counts in standard mode', () => {
+				const practice = buildPractice({
+					dependencyCount: 5,
+					directDependencyCount: 2,
+					totalDependencyCount: 5
+				})
+				const { container } = render(GraphNode, {
+					props: { practice, isSelected: false, isTreeExpanded: false, nodeSize: 'standard' }
+				})
+
+				const countDiv = container.querySelector('.dependency-count')
+				expect(countDiv.classList.contains('text-sm')).toBe(true)
+			})
+		})
+	})
+
+	describe('adoption percentage', () => {
+		describe('when selected', () => {
+			it('shows adoption percentage when has dependencies', () => {
+				const practice = buildPractice({ name: 'Test Practice' })
+				const { getByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: true,
+						isAdopted: true,
+						adoptedDependencyCount: 2,
+						totalDependencyCount: 5
+					}
+				})
+
+				expect(getByText(/% adoption/)).toBeInTheDocument()
+			})
+
+			it('calculates adoption percentage correctly when adopted', () => {
+				const practice = buildPractice()
+				const { getByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: true,
+						isAdopted: true,
+						adoptedDependencyCount: 2,
+						totalDependencyCount: 5
+					}
+				})
+
+				// (2 adopted deps + 1 adopted parent) / (5 total deps + 1 parent) = 3/6 = 50%
+				expect(getByText('50% adoption')).toBeInTheDocument()
+			})
+
+			it('calculates adoption percentage correctly when not adopted', () => {
+				const practice = buildPractice()
+				const { getByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: true,
+						isAdopted: false,
+						adoptedDependencyCount: 2,
+						totalDependencyCount: 5
+					}
+				})
+
+				// (2 adopted deps + 0 for parent) / (5 total deps + 1 parent) = 2/6 = 33%
+				expect(getByText('33% adoption')).toBeInTheDocument()
+			})
+
+			it('does not show adoption percentage when no dependencies', () => {
+				const practice = buildMinimalPractice()
+				const { queryByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: true,
+						isAdopted: false,
+						adoptedDependencyCount: 0,
+						totalDependencyCount: 0
+					}
+				})
+
+				expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			})
+		})
+
+		describe('when not selected', () => {
+			it('shows adoption percentage in collapsed view when has dependencies', () => {
+				const practice = buildPractice()
+				const { getByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: false,
+						isTreeExpanded: false,
+						isAdopted: true,
+						adoptedDependencyCount: 3,
+						totalDependencyCount: 5
+					}
+				})
+
+				// (3 adopted deps + 1 adopted parent) / (5 total deps + 1 parent) = 4/6 = 66%
+				expect(getByText('66% adoption')).toBeInTheDocument()
+			})
+
+			it('does not show adoption percentage in expanded tree view', () => {
+				const practice = buildPractice()
+				const { queryByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: false,
+						isTreeExpanded: true,
+						isAdopted: true,
+						adoptedDependencyCount: 3,
+						totalDependencyCount: 5
+					}
+				})
+
+				expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			})
+
+			it('does not show adoption percentage when no dependencies', () => {
+				const practice = buildMinimalPractice()
+				const { queryByText } = render(GraphNode, {
+					props: {
+						practice,
+						isSelected: false,
+						isTreeExpanded: false,
+						isAdopted: false,
+						adoptedDependencyCount: 0,
+						totalDependencyCount: 0
+					}
+				})
+
+				expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			})
 		})
 	})
 })

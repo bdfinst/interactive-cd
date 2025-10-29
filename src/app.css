@@ -11,6 +11,78 @@
 	--text-title-sm: 2.1rem;
 	--text-title-md: 2.4rem;
 	--text-title-lg: 2.7rem;
+
+	/* Practice category colors - for bg-category-{name} utilities */
+	/* Pale yellow with 30% white mixed in = RGB(255, 255, 219) */
+	--color-category-automation: rgba(255, 255, 219, 1);
+
+	/* Light cyan blue with 50% white mixed in = RGB(114, 219, 253) - 20% lighter */
+	--color-category-behavior: rgba(114, 219, 253, 1);
+
+	/* Light turquoise with 30% white mixed in = RGB(166, 255, 233) */
+	--color-category-behavior-enabled: rgba(166, 255, 233, 1);
+
+	/* Very light gray with 30% white mixed in = RGB(248, 248, 248) */
+	--color-category-core: rgba(248, 248, 248, 1);
+}
+
+/* Graph Node Sizing System - CSS Custom Properties */
+:root {
+	/* Node Width Variants */
+	--node-width-tiny: 150px;
+	/* Unselected nodes in tree view */
+	--node-width-compact: 250px;
+	/* Unselected dependencies in normal view */
+	--node-width-standard: 400px;
+	/* Ancestor and current practice nodes */
+	--node-width-expanded: 482px;
+	/* Selected nodes in tree view */
+
+	/* Node Height Variants */
+	--node-height-tiny: 80px;
+	/* Unselected nodes in tree view */
+	--node-height-compact: 162px;
+	/* Unselected dependencies in normal view */
+	--node-height-standard: auto;
+	/* Ancestor and current practice (content-driven) */
+	--node-height-expanded: 300px;
+	/* Selected nodes in tree view (minimum) */
+
+	/* Node Padding Variants */
+	--node-padding-tiny: 0.75rem;
+	/* Compact padding for tiny nodes */
+	--node-padding-standard: 1rem;
+	/* Standard padding for most nodes */
+
+	/* Border Width Variants */
+	--node-border-normal: 1px;
+	/* Unselected compact nodes */
+	--node-border-normal-thick: 2px;
+	/* Unselected standard nodes */
+	--node-border-selected: 2px;
+	/* Selected compact nodes */
+	--node-border-selected-thick: 4px;
+	/* Selected standard nodes */
+
+	/* Typography Variants */
+	--node-title-tiny: 1rem;
+	/* 16px - tiny node titles */
+	--node-title-standard: 1.125rem;
+	/* 18px - standard node titles */
+	--node-text-tiny: 0.75rem;
+	/* 12px - tiny node text */
+	--node-text-small: 0.875rem;
+	/* 14px - small node text */
+	--node-text-standard: 1rem;
+	/* 16px - standard node text */
+
+	/* Spacing Variants */
+	--node-spacing-tiny: 0.25rem;
+	/* 4px - spacing in tiny nodes */
+	--node-spacing-small: 0.5rem;
+	/* 8px - spacing in compact nodes */
+	--node-spacing-standard: 0.75rem;
+	/* 12px - spacing in standard nodes */
 }
 
 @layer base {
@@ -20,17 +92,170 @@
 		line-height: 1.6;
 	}
 
+	html {
+		overflow-x: hidden;
+		max-width: 100vw;
+	}
+
 	body {
-		@apply m-0 p-0 bg-gray-800 text-gray-300;
+		@apply m-0 p-0 bg-black text-gray-300;
+		overflow-x: hidden;
+		max-width: 100vw;
+		box-sizing: border-box;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
 	}
 }
 
 @layer components {
-	/* Add reusable component patterns here if needed */
-	/* Example: .btn-primary, .card, etc. */
+	/* Graph Node Size Variants */
+	/* Use data-node-size attribute to control node dimensions */
+
+	/* Tiny nodes - unselected in tree view */
+	[data-node-size='tiny'] {
+		width: 100%;
+		min-width: 120px;
+		max-width: var(--node-width-tiny);
+		min-height: var(--node-height-tiny);
+		padding: var(--node-padding-tiny);
+	}
+
+	/* Compact nodes - unselected dependencies */
+	[data-node-size='compact'] {
+		width: 100%;
+		max-width: var(--node-width-compact);
+		max-height: var(--node-height-compact);
+		padding: var(--node-padding-standard);
+		overflow: hidden;
+	}
+
+	/* Standard nodes - ancestors and current practice */
+	[data-node-size='standard'] {
+		width: 100%;
+		max-width: var(--node-width-standard);
+		min-height: var(--node-height-standard);
+		padding: var(--node-padding-standard);
+	}
+
+	/* Expanded nodes - selected in tree view */
+	[data-node-size='expanded'] {
+		width: 100%;
+		max-width: var(--node-width-expanded);
+		min-height: var(--node-height-expanded);
+		padding: var(--node-padding-standard);
+	}
+
+	/* Selected dependency nodes - responsive width */
+	[data-node-size='selected-dependency'] {
+		width: 100%;
+		padding: var(--node-padding-standard);
+
+		@media (min-width: 768px) {
+			width: 66.666667%;
+			/* 2/3 */
+		}
+
+		@media (min-width: 1024px) {
+			width: 50%;
+			/* 1/2 */
+		}
+	}
+
+	/* Border variants based on selection and compact state */
+	[data-node-size='tiny'][data-selected='false'],
+	[data-node-size='compact'][data-selected='false'] {
+		border-width: var(--node-border-normal);
+		border-color: black;
+	}
+
+	[data-node-size='standard'][data-selected='false'],
+	[data-node-size='expanded'][data-selected='false'],
+	[data-node-size='selected-dependency'][data-selected='false'] {
+		border-width: var(--node-border-normal-thick);
+		border-color: black;
+	}
+
+	[data-node-size='tiny'][data-selected='true'],
+	[data-node-size='compact'][data-selected='true'] {
+		border-width: var(--node-border-selected);
+		border-color: #2563eb;
+		/* blue-600 */
+	}
+
+	[data-node-size='standard'][data-selected='true'],
+	[data-node-size='expanded'][data-selected='true'],
+	[data-node-size='selected-dependency'][data-selected='true'] {
+		border-width: var(--node-border-selected-thick);
+		border-color: #2563eb;
+		/* blue-600 */
+		max-width: 400px;
+		/* Limit selected card width */
+	}
+
+	/* Typography scaling based on node size */
+	[data-node-size='tiny'] h3 {
+		font-size: var(--node-title-tiny);
+		margin-bottom: var(--node-spacing-tiny);
+	}
+
+	[data-node-size='tiny'] p,
+	[data-node-size='tiny'] li {
+		font-size: var(--node-text-tiny);
+	}
+
+	[data-node-size='tiny'] .adoption-percentage,
+	[data-node-size='tiny'] .dependency-count {
+		font-size: var(--node-text-tiny);
+	}
+
+	[data-node-size='compact'] .adoption-percentage,
+	[data-node-size='compact'] .dependency-count {
+		font-size: var(--node-text-tiny);
+	}
+
+	/* Spacing adjustments for tiny nodes */
+	[data-node-size='tiny'] .node-section {
+		margin-bottom: var(--node-spacing-tiny);
+	}
+
+	[data-node-size='compact'] .node-section {
+		margin-bottom: var(--node-spacing-small);
+	}
+
+	[data-node-size='standard'] .node-section,
+	[data-node-size='expanded'] .node-section,
+	[data-node-size='selected-dependency'] .node-section {
+		margin-bottom: var(--node-spacing-standard);
+	}
 }
 
 @layer utilities {
-	/* Add custom utility classes here if needed */
-	/* Example: .text-shadow, etc. */
+	/* Screen reader only utility - visually hidden but accessible */
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	/* Undo sr-only on focus (for skip links) */
+	.focus\:not-sr-only:focus {
+		position: static;
+		width: auto;
+		height: auto;
+		padding: inherit;
+		margin: inherit;
+		overflow: visible;
+		clip: auto;
+		white-space: normal;
+	}
 }

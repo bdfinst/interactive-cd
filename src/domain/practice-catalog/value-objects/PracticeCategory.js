@@ -1,33 +1,22 @@
 /**
  * PracticeCategory - Value Object (Functional Enum)
  *
- * Represents the category of a CD practice.
- * Practices are behaviors and processes teams adopt.
- *
- * - PRACTICE: Core CD practices (e.g., Continuous Integration)
- * - BEHAVIOR: Team behaviors (e.g., Trunk-based Development)
- * - CULTURE: Organizational culture (e.g., Blameless Culture)
- * - TOOLING: Tools and platforms (e.g., Version Control, CI/CD Pipeline)
- *
- * Note: TOOLING will be moved to CapabilityCategory (platform capabilities) in future iterations
+ * Represents the category of a CD practice based on the 2015 CD dependency model.
  *
  * Usage:
  *   const category = PracticeCategory.BEHAVIOR
  *   const fromString = PracticeCategory.from('behavior')
  *   console.log(category.name)  // 'behavior'
- *   console.log(category.icon)  // '👥'
  */
 
 /**
  * Create an immutable category object
  * @param {string} name
- * @param {string} icon
  * @returns {Object} Frozen category object
  */
-const createCategory = (name, icon) =>
+const createCategory = name =>
 	Object.freeze({
 		name,
-		icon,
 		toString: () => name,
 		equals: other => {
 			if (!other || other._type !== 'PracticeCategory') {
@@ -39,22 +28,22 @@ const createCategory = (name, icon) =>
 	})
 
 // Predefined category instances (frozen)
-const PRACTICE = createCategory('practice', '🔄')
-const BEHAVIOR = createCategory('behavior', '👥')
-const CULTURE = createCategory('culture', '🌟')
-const TOOLING = createCategory('tooling', '🛠️')
+const AUTOMATION = createCategory('automation')
+const BEHAVIOR = createCategory('behavior')
+const BEHAVIOR_ENABLED_AUTOMATION = createCategory('behavior-enabled-automation')
+const CORE = createCategory('core')
 
 // Category lookup map
 const CATEGORIES = Object.freeze({
-	practice: PRACTICE,
+	automation: AUTOMATION,
 	behavior: BEHAVIOR,
-	culture: CULTURE,
-	tooling: TOOLING
+	'behavior-enabled-automation': BEHAVIOR_ENABLED_AUTOMATION,
+	core: CORE
 })
 
 /**
  * Get category from string value
- * @param {string} value - Category name ('practice', 'behavior', 'culture', 'tooling')
+ * @param {string} value - Category name ('automation', 'behavior', 'behavior-enabled-automation', 'core')
  * @returns {Object} Category object
  * @throws {Error} if invalid category
  */
@@ -63,7 +52,7 @@ const fromString = value => {
 
 	if (!category) {
 		throw new Error(
-			`Invalid practice category: "${value}". Must be one of: practice, behavior, culture, tooling`
+			`Invalid practice category: "${value}". Must be one of: automation, behavior, behavior-enabled-automation, core`
 		)
 	}
 
@@ -82,10 +71,10 @@ const isCategory = obj => obj && obj._type === 'PracticeCategory'
  */
 export const PracticeCategory = Object.freeze({
 	// Static category instances
-	PRACTICE,
+	AUTOMATION,
 	BEHAVIOR,
-	CULTURE,
-	TOOLING,
+	BEHAVIOR_ENABLED_AUTOMATION,
+	CORE,
 
 	// Factory method
 	from: fromString,

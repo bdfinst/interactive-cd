@@ -5,6 +5,7 @@
 
 /**
  * Recursively collects all practice occurrences with their levels
+ * Pure function - creates new Map instead of mutating
  * @param {Object} node - Tree node with dependencies
  * @param {number} level - Current depth level
  * @param {Map} occurrences - Map of practice ID to array of occurrences
@@ -13,23 +14,68 @@
 const collectOccurrences = (node, level = 0, occurrences = new Map()) => {
 	if (!node) return occurrences
 
-	// Add this occurrence to the map
-	if (!occurrences.has(node.id)) {
-		occurrences.set(node.id, [])
-	}
-	occurrences.get(node.id).push({
-		...node,
-		level
-	})
+	// Create new Map with this occurrence added (immutable)
+	const existing = occurrences.get(node.id) || []
+	const newOccurrences = new Map(occurrences)
+	newOccurrences.set(node.id, [...existing, { ...node, level }])
 
 	// Recursively collect dependencies
 	if (node.dependencies?.length > 0) {
-		node.dependencies.forEach(dep => {
-			collectOccurrences(dep, level + 1, occurrences)
-		})
+		return node.dependencies.reduce(
+			(acc, dep) => collectOccurrences(dep, level + 1, acc),
+			newOccurrences
+		)
 	}
 
-	return occurrences
+	return newOccurrences
+}
+
+/**
+ * Count total number of unique dependencies recursively (direct + indirect)
+ * @param {Object} node - Tree node with dependencies
+ * @param {Set} visited - Set of already visited practice IDs (to avoid cycles)
+ * @returns {number} Total count of unique dependencies
+ */
+const countTotalDependencies = (node, visited = new Set()) => {
+	if (!node || !node.dependencies) return 0
+
+	let total = 0
+	node.dependencies.forEach(dep => {
+		// Only count if not already visited (avoids duplicates)
+		if (!visited.has(dep.id)) {
+			visited.add(dep.id)
+			total += 1 // Count this dependency
+			total += countTotalDependencies(dep, visited) // Count its dependencies
+		}
+	})
+
+	return total
+}
+
+/**
+ * Enriches each node with dependency count information
+ * @param {Object} node - Tree node with dependencies
+ * @returns {Object} Node with added directDependencyCount and totalDependencyCount
+ */
+export const enrichWithDependencyCounts = node => {
+	if (!node) return null
+
+	const directCount = node.dependencies?.length || 0
+	const totalCount = countTotalDependencies(node)
+
+	const enriched = {
+		...node,
+		directDependencyCount: directCount,
+		totalDependencyCount: totalCount,
+		dependencyCount: directCount // Keep for backward compatibility
+	}
+
+	// Recursively enrich dependencies
+	if (node.dependencies && node.dependencies.length > 0) {
+		enriched.dependencies = node.dependencies.map(dep => enrichWithDependencyCounts(dep))
+	}
+
+	return enriched
 }
 
 /**

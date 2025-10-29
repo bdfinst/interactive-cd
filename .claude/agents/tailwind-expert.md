@@ -100,7 +100,7 @@ You are an expert in Tailwind CSS with deep knowledge of utility-first CSS, resp
 <!-- Absolute positioning within relative parent -->
 <div class="relative">
 	<img src="image.jpg" alt="Base" class="w-full" />
-	<div class="absolute top-2 right-2 bg-white rounded px-2 py-1">Badge</div>
+	<div class="absolute top-3 right-3 bg-white rounded px-2 py-1">Badge</div>
 </div>
 ```
 

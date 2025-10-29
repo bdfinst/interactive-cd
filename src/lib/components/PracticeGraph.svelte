@@ -4,16 +4,32 @@
 	 *
 	 * Displays practices as a navigable graph with drill-down capability
 	 */
-	import { onMount, tick } from 'svelte'
-	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
-	import GraphNode from './GraphNode.svelte'
+	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
+	import { filterTreeBySelection } from '$lib/domain/practice-graph/filter.js'
+	import { optimizeLayerOrdering } from '$lib/domain/practice-graph/layout.js'
 	import {
 		expandPractice as expandPracticeLogic,
-		navigateToAncestor as navigateToAncestorLogic,
-		isPracticeExpanded as isPracticeExpandedLogic
+		isPracticeExpanded as isPracticeExpandedLogic,
+		navigateToAncestor as navigateToAncestorLogic
 	} from '$lib/domain/practice-graph/navigation.js'
-	import { flattenTree } from '$lib/domain/practice-graph/tree.js'
-	import { createCurvePath } from '$lib/domain/practice-graph/connections.js'
+	import { enrichWithDependencyCounts, flattenTree } from '$lib/domain/practice-graph/tree.js'
+	import { adoptionStore } from '$lib/stores/adoptionStore.js'
+	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
+	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { calculateAdoptedDependencies } from '$lib/utils/adoption.js'
+	import { debounce } from '$lib/utils/debounce.js'
+	import { onMount, tick } from 'svelte'
+	import GraphNode from './GraphNode.svelte'
+	import LoadingSpinner from './LoadingSpinner.svelte'
+
+	// Accept initial server data
+	const { initialData = null } = $props()
+
+	// Subscribe to adoption store
+	let adoptedPractices = $state(new Set())
+	adoptionStore.subscribe(value => {
+		adoptedPractices = value
+	})
 
 	let containerRef = $state()
 	const ancestorRefs = $state([])
@@ -32,12 +48,109 @@
 	// Full tree data
 	let fullTreeData = $state(null)
 
+	// Practice map for transitive dependency calculations
+	let practiceMap = $state(new Map())
+
+	/**
+	 * Build a map of practice ID to practice object from tree data
+	 * @param {Object} node - Tree node (practice with nested dependencies)
+	 * @param {Map} map - Map to populate
+	 */
+	function buildPracticeMap(node, map) {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- Building map from tree data, not reactive state
+		if (!map) map = new Map()
+		if (!node) return map
+
+		map.set(node.id, node)
+
+		if (node.dependencies && Array.isArray(node.dependencies)) {
+			node.dependencies.forEach(dep => buildPracticeMap(dep, map))
+		}
+
+		return map
+	}
+
+	/**
+	 * Find the path from root to a practice in the tree
+	 * @param {Object} tree - Root tree node
+	 * @param {string} practiceId - Target practice ID
+	 * @param {string[]} currentPath - Current path being built
+	 * @returns {string[]|null} Path from root to practice, or null if not found
+	 */
+	function _findPathToPractice(tree, practiceId, currentPath = []) {
+		if (!tree) return null
+
+		const newPath = [...currentPath, tree.id]
+
+		if (tree.id === practiceId) {
+			return newPath
+		}
+
+		if (tree.dependencies && Array.isArray(tree.dependencies)) {
+			for (const dep of tree.dependencies) {
+				const found = _findPathToPractice(dep, practiceId, newPath)
+				if (found) return found
+			}
+		}
+
+		return null
+	}
+
 	// Initialize with provided practices
 	onMount(async () => {
-		await loadCurrentView()
+		// Initialize adoption store with all valid practice IDs
+		// Load full tree to get all practice IDs
+		const treeResponse = await fetch('/api/practices/tree?root=continuous-delivery')
+		const treeResult = await treeResponse.json()
+
+		if (treeResult.success) {
+			// Build practice map for transitive dependency calculations
+			practiceMap = buildPracticeMap(treeResult.data)
+
+			// Extract all practice IDs from the tree
+			// eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary Set, not reactive state
+			const allPracticeIds = new Set()
+			const extractIds = node => {
+				allPracticeIds.add(node.id)
+				if (node.dependencies) {
+					node.dependencies.forEach(extractIds)
+				}
+			}
+			extractIds(treeResult.data)
+
+			// Initialize adoption store with valid practice IDs
+			adoptionStore.initialize(allPracticeIds)
+		}
+
+		// Use server data if available, otherwise fetch
+		if (initialData?.initialPractices) {
+			const practices = initialData.initialPractices
+			currentPractice = practices[0] // First is always the root/current
+			dependencies = practices.slice(1) // Rest are dependencies
+			selectedNodeId = currentPractice.id // Auto-select the root practice
+		} else {
+			await loadCurrentView()
+		}
 		recalculateAllConnections()
-		window.addEventListener('resize', recalculateAllConnections)
-		return () => window.removeEventListener('resize', recalculateAllConnections)
+		// Debounce resize handler to prevent layout thrashing on mobile
+		const debouncedResize = debounce(recalculateAllConnections, 150)
+		window.addEventListener('resize', debouncedResize, { passive: true })
+		return () => window.removeEventListener('resize', debouncedResize)
+	})
+
+	// Set expand button renderer on mount, clear on unmount
+	$effect(() => {
+		const expanded = $isFullTreeExpanded // Track reactively
+
+		expandButtonRenderer.set({
+			type: 'expand-button',
+			toggleFullTree,
+			isExpanded: expanded
+		})
+
+		return () => {
+			expandButtonRenderer.set(null)
+		}
 	})
 
 	// React to expand/collapse changes from store
@@ -76,8 +189,7 @@
 				currentPractice = result.data[0] // First is always the root/current
 				dependencies = result.data.slice(1) // Rest are dependencies
 
-				// Auto-select the current practice (root should always be selected)
-				selectedNodeId = currentPractice.id
+				selectedNodeId = currentPractice.id // Auto-select the current practice
 
 				// Load ALL ancestors if not at root
 				ancestorPractices = []
@@ -118,9 +230,45 @@
 
 	async function selectNode(practiceId) {
 		if (selectedNodeId === practiceId) {
+			// Deselect if clicking the same practice again
 			selectedNodeId = null
 		} else {
-			selectedNodeId = practiceId
+			if ($isFullTreeExpanded) {
+				// In full tree view, exit full tree mode and navigate to the selected practice
+				// This will show ancestors above and all dependencies below
+
+				// Manually collapse the tree without triggering the effect
+				fullTreeData = null
+
+				// Reset to root before navigating to the selected practice
+				// This ensures we build the correct navigation path
+				navigationPath = ['continuous-delivery']
+
+				// Navigate to the selected practice
+				if (practiceId !== 'continuous-delivery') {
+					await expandPractice(practiceId)
+				} else {
+					// If selecting the root, just load the root view
+					selectedNodeId = null
+					await loadCurrentView()
+				}
+
+				// Update the store to reflect collapsed state
+				// Set this after navigation completes to avoid race conditions
+				await tick()
+				isFullTreeExpanded.set(false)
+			} else {
+				// In collapsed view:
+				// - If clicking the current practice, just select it
+				// - If clicking a dependency or ancestor, navigate to it
+				if (practiceId === currentPractice.id) {
+					selectedNodeId = practiceId
+				} else {
+					// Navigate to the selected practice
+					// This will make it the current practice and show its parents and direct dependencies
+					await expandPractice(practiceId)
+				}
+			}
 		}
 		await tick()
 		recalculateAllConnections()
@@ -133,7 +281,8 @@
 			const result = await response.json()
 
 			if (result.success) {
-				fullTreeData = result.data
+				// Enrich tree with dependency counts
+				fullTreeData = enrichWithDependencyCounts(result.data)
 				// Flatten the tree for easier rendering
 				flattenedTree = flattenTree(fullTreeData)
 			}
@@ -148,52 +297,79 @@
 	const treeNodeRefs = $state({})
 	let treeConnections = $state([])
 
+	// Filter the tree based on selected practice in expanded view
+	const filteredTree = $derived.by(() => {
+		if ($isFullTreeExpanded && selectedNodeId) {
+			return filterTreeBySelection(flattenedTree, selectedNodeId)
+		}
+		return flattenedTree
+	})
+
 	// Group practices by hierarchy level for horizontal display
-	const groupedByLevel = $derived(
-		flattenedTree.reduce((acc, practice) => {
+	const groupedByLevel = $derived.by(() => {
+		const grouped = filteredTree.reduce((acc, practice) => {
 			if (!acc[practice.level]) {
 				acc[practice.level] = []
 			}
 			acc[practice.level].push(practice)
 			return acc
 		}, {})
-	)
+
+		// Optimize ordering to minimize connection line lengths
+		return optimizeLayerOrdering(grouped, 3)
+	})
 
 	function calculateTreeConnections() {
-		if (!containerRef || flattenedTree.length === 0) return
+		if (!containerRef || filteredTree.length === 0) return
 
+		// PHASE 1: Batch all DOM reads to prevent layout thrashing
 		const containerRect = containerRef.getBoundingClientRect()
-		treeConnections = []
+		const rectCache = {}
 
-		// Draw connections from each practice to its dependencies
-		flattenedTree.forEach(practice => {
+		// Read all rects in one pass
+		filteredTree.forEach(practice => {
+			const ref = treeNodeRefs[practice.id]
+			if (ref) {
+				rectCache[practice.id] = ref.getBoundingClientRect()
+			}
+		})
+
+		// PHASE 2: Calculate connections from cached data (no forced layouts)
+		const newConnections = []
+
+		filteredTree.forEach(practice => {
 			if (!practice.dependencies || practice.dependencies.length === 0) return
 
-			const parentRef = treeNodeRefs[practice.id]
-			if (!parentRef) return
+			const parentRect = rectCache[practice.id]
+			if (!parentRect) return
 
-			const parentRect = parentRef.getBoundingClientRect()
 			const parentX = parentRect.left - containerRect.left + parentRect.width / 2
 			const parentY = parentRect.bottom - containerRect.top
 
+			// Check if this practice is selected
+			const isSelected = selectedNodeId === practice.id
+
 			practice.dependencies.forEach(dep => {
 				// Dependencies are full objects, not just IDs
-				const childRef = treeNodeRefs[dep.id]
-				if (!childRef) return
+				const childRect = rectCache[dep.id]
+				if (!childRect) return
 
-				const childRect = childRef.getBoundingClientRect()
 				const childX = childRect.left - containerRect.left + childRect.width / 2
 				const childY = childRect.top - containerRect.top
 
-				treeConnections.push({
+				newConnections.push({
 					x1: parentX,
 					y1: parentY,
 					x2: childX,
 					y2: childY,
-					type: 'tree'
+					type: 'tree',
+					highlighted: isSelected
 				})
 			})
 		})
+
+		// PHASE 3: Single write operation
+		treeConnections = newConnections
 	}
 
 	function calculateConnections() {
@@ -300,39 +476,44 @@
 			recalculateAllConnections()
 		})
 	})
+
+	function toggleFullTree() {
+		isFullTreeExpanded.toggle()
+	}
 </script>
 
-<div
-	class="relative w-full min-h-screen p-8"
-	bind:this={containerRef}
-	role="main"
-	aria-label="Practice dependency graph"
->
+<div class="relative w-full p-8" bind:this={containerRef} aria-label="Practice dependency graph">
 	{#if loading}
-		<div class="flex items-center justify-center py-12" role="status" aria-live="polite">
-			<div class="text-center">
-				<div
-					class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"
-					aria-hidden="true"
-				/>
-				<p class="text-gray-300">Loading dependencies...</p>
-			</div>
-		</div>
+		<LoadingSpinner />
 	{:else if $isFullTreeExpanded}
 		<!-- SVG Layer for Tree Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each treeConnections as conn}
+				{@const strokeColor = conn.highlighted ? '#eab308' : '#93c5fd'}
+				{@const fillColor = conn.highlighted ? '#eab308' : '#93c5fd'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#93c5fd"
-					stroke-width="2"
-					opacity="0.7"
+					stroke={strokeColor}
+					stroke-width={conn.highlighted ? '3' : '2'}
+					opacity={conn.highlighted ? '1' : '0.7'}
 					fill="none"
 				/>
 				<!-- Start point (parent) -->
-				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x1}
+					cy={conn.y1}
+					r={conn.highlighted ? '7' : '6'}
+					fill={fillColor}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 				<!-- End point (child) -->
-				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle
+					cx={conn.x2}
+					cy={conn.y2}
+					r={conn.highlighted ? '7' : '6'}
+					fill={fillColor}
+					opacity={conn.highlighted ? '1' : '0.8'}
+				/>
 			{/each}
 		</svg>
 
@@ -341,27 +522,64 @@
 			{#if flattenedTree.length > 0}
 				{#each Object.keys(groupedByLevel).sort((a, b) => Number(a) - Number(b)) as level (level)}
 					<div class="space-y-4">
-						<!-- Cards at this level in horizontal grid -->
-						<div class="grid gap-x-4 gap-y-4 max-w-screen-xl mx-auto grid-cols-12">
-							{#each groupedByLevel[level] as practice (practice.id)}
-								{@const isSelected = selectedNodeId === practice.id}
-								<div
-									bind:this={treeNodeRefs[practice.id]}
-									class="col-span-6 {isSelected
-										? 'sm:col-span-6 md:col-span-4 lg:col-span-3'
-										: 'sm:col-span-4 md:col-span-3 lg:col-span-2'}"
-								>
-									<GraphNode
-										{practice}
-										isRoot={practice.level === 0}
-										{isSelected}
-										onclick={() => selectNode(practice.id)}
-										onexpand={null}
-										compact={true}
-									/>
+						<!-- Selected card on its own centered row -->
+						{#each groupedByLevel[level] as practice (practice.id)}
+							{@const isSelected = selectedNodeId === practice.id}
+							{#if isSelected}
+								{@const adoptionCounts = calculateAdoptedDependencies(
+									practice,
+									adoptedPractices,
+									practiceMap
+								)}
+								<div class="flex justify-center">
+									<div bind:this={treeNodeRefs[practice.id]} class="max-w-[400px]">
+										<GraphNode
+											{practice}
+											isRoot={practice.level === 0}
+											{isSelected}
+											nodeSize="expanded"
+											isTreeExpanded={$isFullTreeExpanded}
+											isAdopted={adoptedPractices.has(practice.id)}
+											adoptedDependencyCount={adoptionCounts.adoptedCount}
+											totalDependencyCount={adoptionCounts.totalCount}
+											onclick={() => selectNode(practice.id)}
+											onExpand={null}
+											onToggleAdoption={() => adoptionStore.toggle(practice.id)}
+										/>
+									</div>
 								</div>
-							{/each}
-						</div>
+							{/if}
+						{/each}
+
+						<!-- Unselected cards in horizontal grid -->
+						{#each [groupedByLevel[level].filter(p => selectedNodeId !== p.id)] as unselectedPractices}
+							{#if unselectedPractices.length > 0}
+								<div class="flex flex-wrap justify-center gap-x-4 gap-y-4 max-w-screen-xl">
+									{#each unselectedPractices as practice (practice.id)}
+										{@const adoptionCounts = calculateAdoptedDependencies(
+											practice,
+											adoptedPractices,
+											practiceMap
+										)}
+										<div bind:this={treeNodeRefs[practice.id]}>
+											<GraphNode
+												{practice}
+												isRoot={practice.level === 0}
+												isSelected={false}
+												nodeSize="tiny"
+												isTreeExpanded={$isFullTreeExpanded}
+												isAdopted={adoptedPractices.has(practice.id)}
+												adoptedDependencyCount={adoptionCounts.adoptedCount}
+												totalDependencyCount={adoptionCounts.totalCount}
+												onclick={() => selectNode(practice.id)}
+												onExpand={null}
+												onToggleAdoption={() => adoptionStore.toggle(practice.id)}
+											/>
+										</div>
+									{/each}
+								</div>
+							{/if}
+						{/each}
 					</div>
 				{/each}
 			{/if}
@@ -391,13 +609,19 @@
 			{#if ancestorPractices.length > 0}
 				{#each ancestorPractices as ancestor, i (ancestor.id)}
 					<div class="flex justify-center mb-16">
-						<div bind:this={ancestorRefs[i]} class="max-w-[400px] w-full">
+						<div
+							bind:this={ancestorRefs[i]}
+							data-testid="ancestor-node"
+							data-practice-id={ancestor.id}
+						>
 							<GraphNode
 								practice={ancestor}
 								isRoot={i === 0}
 								isSelected={false}
+								nodeSize="standard"
+								isTreeExpanded={false}
 								onclick={() => navigateToAncestor(i)}
-								onexpand={() => navigateToAncestor(i)}
+								onExpand={() => navigateToAncestor(i)}
 							/>
 						</div>
 					</div>
@@ -406,15 +630,26 @@
 
 			<!-- Current Practice -->
 			{#if currentPractice}
+				{@const adoptionCounts = calculateAdoptedDependencies(
+					currentPractice,
+					adoptedPractices,
+					practiceMap
+				)}
 				<div class="flex justify-center mb-16">
-					<div bind:this={currentRef} class="max-w-[400px] w-full">
+					<div bind:this={currentRef}>
 						<GraphNode
 							practice={currentPractice}
 							isRoot={navigationPath.length === 1}
 							isSelected={selectedNodeId === currentPractice.id}
+							nodeSize="standard"
 							isExpanded={isPracticeExpanded(currentPractice.id)}
+							isTreeExpanded={false}
+							isAdopted={adoptedPractices.has(currentPractice.id)}
+							adoptedDependencyCount={adoptionCounts.adoptedCount}
+							totalDependencyCount={adoptionCounts.totalCount}
 							onclick={() => selectNode(currentPractice.id)}
-							onexpand={() => expandPractice(currentPractice.id)}
+							onExpand={() => expandPractice(currentPractice.id)}
+							onToggleAdoption={() => adoptionStore.toggle(currentPractice.id)}
 						/>
 					</div>
 				</div>
@@ -423,25 +658,30 @@
 			<!-- Dependencies -->
 			{#if dependencies.length > 0}
 				<section
-					class="grid gap-x-8 gap-y-12 max-w-screen-xl mx-auto grid-cols-12"
-					role="region"
+					class="flex flex-wrap justify-center gap-8 max-w-screen-xl mx-auto"
 					aria-label="Practice dependencies"
 				>
 					{#each dependencies as dependency, i (dependency.id)}
 						{@const isSelected = selectedNodeId === dependency.id}
-						<div
-							bind:this={dependencyRefs[i]}
-							class="col-span-12 {isSelected
-								? 'md:col-span-8 lg:col-span-6'
-								: 'md:col-span-6 lg:col-span-4'}"
-						>
+						{@const depAdoptionCounts = calculateAdoptedDependencies(
+							dependency,
+							adoptedPractices,
+							practiceMap
+						)}
+						<div bind:this={dependencyRefs[i]}>
 							<GraphNode
 								practice={dependency}
 								isRoot={false}
 								{isSelected}
+								nodeSize={isSelected ? 'selected-dependency' : 'compact'}
 								isExpanded={isPracticeExpanded(dependency.id)}
+								isTreeExpanded={false}
+								isAdopted={adoptedPractices.has(dependency.id)}
+								adoptedDependencyCount={depAdoptionCounts.adoptedCount}
+								totalDependencyCount={depAdoptionCounts.totalCount}
 								onclick={() => selectNode(dependency.id)}
-								onexpand={() => expandPractice(dependency.id)}
+								onExpand={() => expandPractice(dependency.id)}
+								onToggleAdoption={() => adoptionStore.toggle(dependency.id)}
 							/>
 						</div>
 					{/each}

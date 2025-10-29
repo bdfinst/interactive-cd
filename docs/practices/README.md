@@ -96,11 +96,10 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 
 - GitHub Actions for CI
 - Automated testing on every push
-- Netlify deployment on main branch
-- Environment variable validation
-- Database migrations automated
+- Static site deployment via Netlify
+- File-based data architecture (no database required)
 
-**Quick Start**: See [DEPLOYMENT.md](/docs/DEPLOYMENT.md) for deployment process.
+**Quick Start**: See [RELEASE-WORKFLOW.md](/docs/RELEASE-WORKFLOW.md) for release process.
 
 ---
 
@@ -111,12 +110,12 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 **Key Practices**:
 
 - Input validation using value objects
-- Parameterized database queries (no SQL injection)
-- Environment variables for secrets
+- File-based data architecture (no SQL injection vectors)
+- Secure handling of user input
 - npm audit in CI pipeline
 - OWASP Top 10 awareness
 
-**Quick Start**: Review database security in [DATABASE.md](/docs/DATABASE.md)
+**Quick Start**: Review data validation in [FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md)
 
 ---
 
@@ -147,7 +146,7 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 - Code splitting by route (automatic with SvelteKit)
 - Lazy loading components with dynamic imports
 - Bundle size monitoring
-- Database query optimization (indexed foreign keys)
+- Static site generation for optimal performance
 - Core Web Vitals tracking
 
 **Quick Start**: Use Vite's bundle analyzer to identify large dependencies.
@@ -180,11 +179,11 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 
 - Hexagonal architecture (Domain, Application, Infrastructure)
 - Domain-Driven Design with value objects and entities
-- Repository pattern for data access
+- Repository pattern for data access (file-based)
 - Functional core, imperative shell
 - No framework dependencies in domain layer
 
-**Quick Start**: Review [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md) and [DATABASE.md](/docs/DATABASE.md).
+**Quick Start**: Review [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md) and [FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md).
 
 **Related Agents**: [DDD Expert](/.claude/agents/ddd-expert.md)
 
@@ -195,9 +194,9 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ### For New Contributors
 
 1. Read [CLAUDE.md](/CLAUDE.md) for complete development workflow
-2. Review [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for Git practices
+2. Review [CONTRIBUTING.md](/docs/CONTRIBUTING.md) and [COMMIT-CONVENTIONS.md](/docs/COMMIT-CONVENTIONS.md) for Git practices
 3. Study [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md) for testing approach
-4. Set up local environment with Docker (see [DATABASE-QUICKSTART.md](/docs/DATABASE-QUICKSTART.md))
+4. Set up local environment with `npm install` and `npm run dev`
 
 ### For Existing Contributors
 
@@ -254,7 +253,7 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 ├─────────────────────────────────────────────────────────────┤
 │ 1. Implement UI components (Svelte)                        │
 │ 2. Implement application services                          │
-│ 3. Implement infrastructure (database repositories)        │
+│ 3. Implement infrastructure (file repositories)             │
 │ 4. → RUN TAILWIND EXPERT AGENT for styling                │
 │ 5. Optimize performance and accessibility                  │
 └─────────────────────────────────────────────────────────────┘
@@ -275,18 +274,18 @@ Trunk-based Development → Deterministic Tests → (Behavior + Tooling) → Tes
 
 ## Quick Reference
 
-| When you need...               | Consult...                                                              |
-| ------------------------------ | ----------------------------------------------------------------------- |
-| To understand BDD → ATDD → TDD | [CLAUDE.md](/CLAUDE.md)                                                 |
-| To write tests                 | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)                              |
-| To make a commit               | [CONTRIBUTING.md](/docs/CONTRIBUTING.md)                                |
-| To deploy                      | [DEPLOYMENT.md](/docs/DEPLOYMENT.md)                                    |
-| To understand database schema  | [DATABASE.md](/docs/DATABASE.md)                                        |
-| To understand domain model     | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)                            |
-| To review feature files        | [BDD Expert Agent](/.claude/agents/bdd-expert.md)                       |
-| To review tests                | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
-| To model domain                | [DDD Expert Agent](/.claude/agents/ddd-expert.md)                       |
-| To style components            | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md)             |
+| When you need...                   | Consult...                                                              |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| To understand development workflow | [CLAUDE.md](/CLAUDE.md)                                                 |
+| To write tests                     | [TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)                              |
+| To make a commit                   | [CONTRIBUTING.md](/docs/CONTRIBUTING.md)                                |
+| To understand release process      | [RELEASE-WORKFLOW.md](/docs/RELEASE-WORKFLOW.md)                        |
+| To understand data architecture    | [FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md)                          |
+| To understand domain model         | [DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)                            |
+| To review feature files            | [BDD Expert Agent](/.claude/agents/bdd-expert.md)                       |
+| To review tests                    | [Test Quality Reviewer Agent](/.claude/agents/test-quality-reviewer.md) |
+| To model domain                    | [DDD Expert Agent](/.claude/agents/ddd-expert.md)                       |
+| To style components                | [Tailwind Expert Agent](/.claude/agents/tailwind-expert.md)             |
 
 ---
 
@@ -309,9 +308,8 @@ Based on comprehensive project analysis, here are the **priority improvements** 
 
 ### LOW PRIORITY (Next 6 months)
 
-8. **Release Management** - Implement semantic versioning and CHANGELOG.md
-9. **Developer Experience** - Add VS Code workspace settings and .nvmrc
-10. **Database Management** - Document migration rollback and backup procedures
+8. **Developer Experience** - Add VS Code workspace settings and .nvmrc
+9. **Data Management** - Document data file update procedures and validation
 
 **Full Gap Analysis**: See `/docs/research/project-gap-analysis.md` (if created by analyst agent)
 
@@ -366,10 +364,10 @@ Found a better practice? Want to improve documentation?
 - **[CLAUDE.md](/CLAUDE.md)** - Main development guide with BDD/ATDD/TDD workflow
 - **[TESTING-GUIDE.md](/docs/TESTING-GUIDE.md)** - Comprehensive testing practices
 - **[CONTRIBUTING.md](/docs/CONTRIBUTING.md)** - Contributor guidelines and Git workflow
-- **[DATABASE.md](/docs/DATABASE.md)** - Database schema and design patterns
+- **[FILE-BASED-DATA.md](/docs/FILE-BASED-DATA.md)** - File-based data architecture
 - **[DATA-STRUCTURE.md](/docs/DATA-STRUCTURE.md)** - Domain model and data structures
-- **[DEPLOYMENT.md](/docs/DEPLOYMENT.md)** - Deployment process and environment setup
-- **[DATABASE-QUICKSTART.md](/docs/DATABASE-QUICKSTART.md)** - Quick database setup
+- **[RELEASE-WORKFLOW.md](/docs/RELEASE-WORKFLOW.md)** - Release process and automation
+- **[COMMIT-CONVENTIONS.md](/docs/COMMIT-CONVENTIONS.md)** - Commit message format
 - **[Expert Agents](/.claude/agents/)** - AI-powered code review agents
 
 ---

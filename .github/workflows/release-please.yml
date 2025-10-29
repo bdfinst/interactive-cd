@@ -1,9 +1,13 @@
 name: Release Please
 
 on:
-  push:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['CI Flow']
+    types:
+      - completed
     branches:
-      - release
+      - main
 
 permissions:
   contents: write
@@ -12,41 +16,33 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    # Only run if tests passed
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          # All configuration is in release-please-config.json
-          # Only need to specify the token
           token: ${{ secrets.GITHUB_TOKEN }}
+          # No target-branch: creates Release PR on main
 
-      # Tag the release
-      - name: Tag Release
+      # Checkout repository for subsequent steps
+      - name: Checkout
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches
+
+      # Update release branch when Release PR is merged
+      - name: Update release branch
         if: ${{ steps.release.outputs.release_created }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a ${{ steps.release.outputs.tag_name }} -m "Release ${{ steps.release.outputs.tag_name }}"
-          git push origin ${{ steps.release.outputs.tag_name }}
 
-      # Build and deploy on release (optional - configure for your deployment target)
-      - name: Checkout
-        if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v4
+          # Fetch latest
+          git fetch origin main
+          git fetch origin release || true
 
-      - name: Setup Node.js
-        if: ${{ steps.release.outputs.release_created }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        if: ${{ steps.release.outputs.release_created }}
-        run: npm ci
-
-      - name: Build
-        if: ${{ steps.release.outputs.release_created }}
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run build
+          # Force update release branch to match main
+          git checkout -B release origin/main
+          git push origin release --force

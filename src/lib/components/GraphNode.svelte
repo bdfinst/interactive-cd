@@ -1,194 +1,229 @@
 <script>
+	import AdoptionCheckbox from '$lib/components/AdoptionCheckbox.svelte'
+	import IconButton from '$lib/components/IconButton.svelte'
+	import ListWithIcons from '$lib/components/ListWithIcons.svelte'
+	import { faExternalLinkAlt, faRightToBracket, faTimes } from '@fortawesome/free-solid-svg-icons'
+	import Fa from 'svelte-fa'
+
 	/**
 	 * GraphNode Component
 	 *
 	 * Displays a practice as a node in the dependency graph
 	 */
-	import { CATEGORIES } from '$lib/constants/categories.js'
-	import { categorizeRequirement } from '$lib/utils/categorizeRequirement.js'
-
 	const {
 		practice,
-		isRoot = false,
+		isRoot: _isRoot = false,
 		isSelected = false,
-		isExpanded = false,
-		compact = false,
+		nodeSize = 'standard', // NEW: size variant (tiny, compact, standard, expanded, selected-dependency)
+		isTreeExpanded = false,
+		isAdopted = false,
+		adoptedDependencyCount = 0,
+		totalDependencyCount = 0,
 		onclick = () => {},
-		onexpand = () => {}
+		onExpand: _onExpand = () => {},
+		onToggleAdoption = () => {}
 	} = $props()
 
-	let hoveredCategory = $state(null)
-
-	const categories = $derived(
-		practice.categories && practice.categories.length > 0
-			? practice.categories
-			: Array.isArray(practice.category)
-				? practice.category
-				: [practice.category]
-	)
-
-	const borderClass = $derived(
-		isSelected
-			? compact
-				? 'border-2 border-blue-600'
-				: 'border-4 border-blue-600'
-			: compact
-				? 'border border-black hover:border-gray-600'
-				: 'border-2 border-black hover:border-gray-600'
-	)
-
-	function handleClick() {
-		onclick({ practiceId: practice.id })
-	}
-
-	function handleExpand(event) {
-		event.stopPropagation()
-		onexpand({ practiceId: practice.id })
-	}
-
-	function handleExpandKeydown(event) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault()
-			handleExpand(event)
+	// Determine background color class based on category
+	// Colors defined in app.css @theme directive
+	const bgClass = $derived.by(() => {
+		switch (practice.category) {
+			case 'automation':
+				return 'bg-category-automation'
+			case 'behavior':
+				return 'bg-category-behavior'
+			case 'behavior-enabled-automation':
+				return 'bg-category-behavior-enabled'
+			case 'core':
+				return 'bg-category-core'
+			default:
+				return 'bg-white'
 		}
+	})
+
+	// Adoption percentage calculation (DRY)
+	const adoptionData = $derived.by(() => {
+		if (totalDependencyCount === 0) {
+			return null
+		}
+
+		const totalWithParent = totalDependencyCount + 1
+		const adoptedWithParent = isAdopted ? adoptedDependencyCount + 1 : adoptedDependencyCount
+		const percentage = Math.floor((adoptedWithParent / totalWithParent) * 100)
+
+		return {
+			totalWithParent,
+			adoptedWithParent,
+			percentage
+		}
+	})
+
+	// Determine when to show adoption percentage
+	const shouldShowAdoptionPercentage = $derived(
+		adoptionData !== null && (isSelected || !isTreeExpanded)
+	)
+
+	// Determine if node is in compact display mode (affects content shown)
+	const isCompactDisplay = $derived(nodeSize === 'tiny' || nodeSize === 'compact')
+
+	function handleDetailsClick() {
+		onclick()
 	}
 </script>
 
-<button
-	class="block w-full bg-white text-gray-800 rounded-[20px] shadow-md text-left cursor-pointer transition-all duration-200 {borderClass} hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {compact
-		? 'p-1.5'
-		: 'p-4'}"
+<div
+	class="relative block w-full h-full text-gray-800 rounded-[10px] shadow-md text-left transition-all duration-200 {bgClass}"
 	data-testid="graph-node"
 	data-practice-id={practice.id}
+	data-node-size={nodeSize}
 	data-selected={isSelected}
-	onclick={handleClick}
 >
-	<!-- Title Section -->
-	<div class="{compact ? 'mb-0.5' : 'mb-2'} text-center">
-		<h3 class="{compact ? 'mb-0.5 text-xs' : 'mb-2 text-lg'} font-bold leading-tight text-gray-900">
-			{practice.name}
-		</h3>
-		<div
-			class="flex items-center justify-center {compact ? 'gap-0.5' : 'gap-1'}"
-			role="img"
-			aria-label="Category: {categories.join(', ')}"
-		>
-			{#each categories as category, index (category)}
-				<div class="relative inline-flex">
-					<span
-						class="{compact ? 'w-1.5 h-1.5' : 'w-3.5 h-3.5'} rounded-full flex-shrink-0 cursor-help"
-						class:bg-[#10b981]={category === 'behavior'}
-						class:bg-[#f59e0b]={category === 'culture'}
-						class:bg-[#8b5cf6]={category === 'tooling'}
-						class:bg-gray-500={!CATEGORIES[category]}
-						onmouseenter={() => (hoveredCategory = index)}
-						onmouseleave={() => (hoveredCategory = null)}
-						role="tooltip"
-						aria-label={CATEGORIES[category]?.label || category}
-					></span>
-					{#if hoveredCategory === index && CATEGORIES[category]}
-						<div
-							class="absolute top-[calc(100%+0.25rem)] left-1/2 -translate-x-1/2 bg-black/90 text-white px-2 py-1 rounded-md text-xs whitespace-nowrap pointer-events-none z-[2000] before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-[4px] before:border-transparent before:border-b-black/90"
-						>
-							{CATEGORIES[category].label}
-						</div>
-					{/if}
-				</div>
-			{/each}
+	<div class="flex justify-between items-center -mt-4">
+		<!-- Details/Close button in top-left corner -->
+		<div class="z-10">
+			<IconButton
+				onclick={handleDetailsClick}
+				ariaLabel={isSelected
+					? `Close details for ${practice.name}`
+					: `View details for ${practice.name}`}
+			>
+				<Fa icon={isSelected ? faTimes : faRightToBracket} size="md" />
+			</IconButton>
+		</div>
+
+		<!-- Adoption Checkbox in top-right corner -->
+		<div class="z-10" onclick={e => e.stopPropagation()} role="presentation">
+			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
 		</div>
 	</div>
 
+	<!-- Title Section -->
+	<div class="text-center node-section">
+		<h3 class="font-bold leading-tight text-gray-900">
+			{practice.name}
+		</h3>
+	</div>
+
 	{#if isSelected}
+		<!-- Adoption percentage (when has dependencies) -->
+		{#if shouldShowAdoptionPercentage}
+			<div class="adoption-percentage text-center font-bold text-blue-700 node-section">
+				{adoptionData.percentage}% adoption
+			</div>
+		{/if}
+
+		<!-- Quick-Start Guide Link (selected view) -->
+		{#if practice.quickStartGuide}
+			<div class="flex justify-start node-section">
+				<a
+					href={practice.quickStartGuide}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+					data-testid="quick-start-guide-link"
+					onclick={e => e.stopPropagation()}
+					aria-label="Quick-start guide for {practice.name}"
+				>
+					<Fa icon={faExternalLinkAlt} size="md" />
+				</a>
+			</div>
+		{/if}
+
 		<!-- Description -->
-		<p class="{compact ? 'mb-1 text-[0.5rem]' : 'mb-3 text-sm'} text-gray-600">
+		<p
+			class="text-gray-600 node-section"
+			class:text-xs={isCompactDisplay}
+			class:text-sm={!isCompactDisplay}
+		>
 			{practice.description}
 		</p>
 
-		<!-- Requirements (Culture, Behavior, Tooling) -->
+		<!-- Requirements -->
 		{#if practice.requirements && practice.requirements.length > 0}
-			<div class={compact ? 'mb-1' : 'mb-3'}>
-				<h4 class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-blue-700">
+			<div class="node-section">
+				<h4
+					class="font-semibold text-blue-700"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
+				>
 					Requirements
 				</h4>
-				<ul
-					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
-						? 'text-[0.45rem]'
-						: 'text-xs'} text-gray-700 list-none"
-				>
-					{#each practice.requirements as requirement (requirement)}
-						{@const categories = categorizeRequirement(requirement)}
-						<li class="flex items-start {compact ? 'gap-1' : 'gap-2'}">
-							<span class="flex-shrink-0 text-gray-400">•</span>
-							<div class="flex items-center {compact ? 'gap-1' : 'gap-1.5'} flex-1">
-								<div class="flex items-center {compact ? 'gap-0.5' : 'gap-1'}">
-									{#each categories as category (category)}
-										<span
-											class="{compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} rounded-full flex-shrink-0"
-											class:bg-[#10b981]={category === 'behavior'}
-											class:bg-[#f59e0b]={category === 'culture'}
-											class:bg-[#8b5cf6]={category === 'tooling'}
-											title={category}
-										></span>
-									{/each}
-								</div>
-								<span class="flex-1">{requirement}</span>
-							</div>
-						</li>
-					{/each}
-				</ul>
+				<ListWithIcons
+					items={practice.requirements}
+					icon="•"
+					iconColor="text-gray-400"
+					compact={isCompactDisplay}
+					textSize={isCompactDisplay ? 'text-xs' : 'text-sm'}
+				/>
 			</div>
 		{/if}
 
 		<!-- Benefits -->
 		{#if practice.benefits && practice.benefits.length > 0}
-			<div class={compact ? 'mb-1' : 'mb-3'}>
+			<div class="node-section">
 				<h4
-					class="{compact ? 'mb-0.5 text-[0.5rem]' : 'mb-2 text-sm'} font-semibold text-green-700"
+					class="font-semibold text-green-700"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
 				>
 					Benefits
 				</h4>
-				<ul
-					class="pl-0 {compact ? 'space-y-0' : 'space-y-1'} {compact
-						? 'text-[0.45rem]'
-						: 'text-xs'} text-gray-700 list-none"
-				>
-					{#each practice.benefits as benefit (benefit)}
-						<li class="flex items-start {compact ? 'gap-0.5' : 'gap-2'}">
-							<span class="flex-shrink-0 text-green-600">→</span>
-							<span>{benefit}</span>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/if}
-
-		<!-- Expand Button -->
-		{#if practice.dependencyCount > 0 && !isRoot}
-			<div
-				role="button"
-				tabindex="0"
-				onclick={handleExpand}
-				onkeydown={handleExpandKeydown}
-				class="w-full {compact
-					? 'px-1 py-0.5 text-[0.5rem]'
-					: 'px-3 py-2 text-sm'} rounded-md font-semibold border-none cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 {isExpanded
-					? 'bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-400'
-					: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'}"
-			>
-				{isExpanded ? 'Collapse' : 'Expand'} Dependencies ({practice.dependencyCount})
+				<ListWithIcons
+					items={practice.benefits}
+					icon="→"
+					iconColor="text-green-600"
+					compact={isCompactDisplay}
+					textSize={isCompactDisplay ? 'text-xs' : 'text-sm'}
+				/>
 			</div>
 		{/if}
 	{:else}
-		<!-- Show dependency count when not selected -->
-		{#if practice.dependencyCount > 0}
-			<div
-				class="text-center {compact
-					? 'mt-1 pt-1 text-[0.45rem]'
-					: 'mt-3 pt-3 text-xs'} border-t border-gray-200 text-gray-500"
-			>
-				{practice.dependencyCount}
-				{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
-			</div>
-		{/if}
+		<!-- Unselected view -->
+		<div class="flex flex-col gap-2">
+			<!-- Show dependency count only in collapsed view -->
+			{#if !isTreeExpanded && practice.dependencyCount > 0}
+				<div
+					class="dependency-count text-center text-gray-500"
+					class:text-xs={isCompactDisplay}
+					class:text-sm={!isCompactDisplay}
+				>
+					{#if practice.directDependencyCount !== undefined && practice.totalDependencyCount !== undefined}
+						<!-- Collapsed view: show both direct and total -->
+						<div class={isCompactDisplay ? 'mt-1 pt-1' : 'pt-3'}>
+							<span class="font-semibold">{practice.directDependencyCount} direct</span>
+							<span> - {practice.totalDependencyCount} total</span>
+						</div>
+					{:else}
+						<!-- Fallback: show only dependency count -->
+						{practice.dependencyCount}
+						{practice.dependencyCount === 1 ? 'dependency' : 'dependencies'}
+					{/if}
+				</div>
+			{/if}
+
+			<!-- Adoption percentage (when has dependencies and NOT in tree expanded view) -->
+			{#if shouldShowAdoptionPercentage}
+				<div class="adoption-percentage text-center font-bold text-blue-700">
+					{adoptionData.percentage}% adoption
+				</div>
+			{/if}
+
+			<!-- Quick-Start Guide Link (unselected view) -->
+			{#if practice.quickStartGuide}
+				<div class="flex justify-start">
+					<a
+						href={practice.quickStartGuide}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+						data-testid="quick-start-guide-link"
+						onclick={e => e.stopPropagation()}
+						aria-label="Quick-start guide for {practice.name}"
+					>
+						<Fa icon={faExternalLinkAlt} size="md" />
+					</a>
+				</div>
+			{/if}
+		</div>
 	{/if}
-</button>
+</div>
