@@ -316,7 +316,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Test in collapsed state (default)
 			await page.getByTestId('menu-item-help').click()
-			await expect(page).toHaveURL('/help')
+			await expect(page).toHaveURL('/about')
 
 			// Go back
 			await page.goto('/')
@@ -329,7 +329,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 			// Test in expanded state
 			await page.getByTestId('menu-item-help').click()
-			await expect(page).toHaveURL('/help')
+			await expect(page).toHaveURL('/about')
 		})
 	})
 

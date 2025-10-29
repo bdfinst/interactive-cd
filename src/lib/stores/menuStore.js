@@ -38,7 +38,7 @@ export const getMenuItems = () => [
 	{
 		id: 'help',
 		label: 'About',
-		href: '/help',
+		href: '/about',
 		icon: 'circle-info',
 		external: false
 	},

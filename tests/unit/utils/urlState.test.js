@@ -275,7 +275,7 @@ describe('urlState', () => {
 		})
 
 		it('preserves pathname', () => {
-			window.location.pathname = '/help'
+			window.location.pathname = '/about'
 			window.location.search = ''
 			const practiceIds = new Set(['version-control'])
 
@@ -286,7 +286,7 @@ describe('urlState', () => {
 
 			updateURLWithAdoptionState(practiceIds)
 
-			expect(capturedURL).toContain('/help')
+			expect(capturedURL).toContain('/about')
 		})
 
 		it('handles empty set by removing parameter completely', () => {

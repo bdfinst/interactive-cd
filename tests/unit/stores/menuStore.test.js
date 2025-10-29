@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { get } from 'svelte/store'
 import { createMenuStore } from '$lib/stores/menuStore.js'
+import { get } from 'svelte/store'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('Menu Store', () => {
 	let menuStore
@@ -161,7 +161,7 @@ describe('Menu Data Utils', () => {
 
 			expect(helpItem).toBeDefined()
 			expect(helpItem.label).toBe('About')
-			expect(helpItem.href).toBe('/help')
+			expect(helpItem.href).toBe('/about')
 		})
 
 		it('includes export menu item', async () => {
@@ -212,7 +212,6 @@ describe('Menu Data Utils', () => {
 			const { isExternalLink } = await import('$lib/stores/menuStore.js')
 
 			expect(isExternalLink('/')).toBe(false)
-			expect(isExternalLink('/help')).toBe(false)
 			expect(isExternalLink('/about')).toBe(false)
 		})
 	})

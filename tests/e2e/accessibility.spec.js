@@ -19,8 +19,8 @@ test.describe('Accessibility Tests', () => {
 			expect(violations).toBeUndefined()
 		})
 
-		test('should have no accessibility violations on help page', async ({ page }) => {
-			await page.goto('/help')
+		test('should have no accessibility violations on about page', async ({ page }) => {
+			await page.goto('/about')
 			await injectAxe(page)
 
 			const violations = await checkA11y(page, null, {
@@ -158,8 +158,8 @@ test.describe('Accessibility Tests', () => {
 			// Press Enter to activate
 			await page.keyboard.press('Enter')
 
-			// Should navigate to help page
-			await expect(page).toHaveURL('/help')
+			// Should navigate to about page
+			await expect(page).toHaveURL('/about')
 		})
 
 		test.skip('should activate buttons with Space key', async ({ page }) => {

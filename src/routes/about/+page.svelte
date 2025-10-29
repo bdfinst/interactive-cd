@@ -60,9 +60,9 @@
 </script>
 
 <SEO
-	title="Help & Capabilities - Interactive CD"
+	title="About - Interactive CD"
 	description="Learn about the capabilities and features of Interactive CD, and see what's coming next."
-	path="/help"
+	path="/about"
 />
 
 <div class="min-h-screen bg-gray-900">
