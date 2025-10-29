@@ -17,20 +17,20 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     # Only run if tests passed
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # No target-branch: creates Release PR on main
 
-      # Checkout repository for subsequent steps
+      # Checkout repository when a release is created (PR merged)
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches
+          ref: main
+          fetch-depth: 0
 
       # Update release branch when Release PR is merged
       - name: Update release branch
@@ -39,10 +39,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Fetch latest
-          git fetch origin main
-          git fetch origin release || true
+          # Delete remote release branch if it exists
+          git push origin --delete release || echo "No existing release branch to delete"
 
-          # Force update release branch to match main
-          git checkout -B release origin/main
-          git push origin release --force
+          # Create and push new release branch from current main
+          git checkout -b release
+          git push origin release
+
+          echo "Release branch updated to $(git rev-parse HEAD)"
+
+      - name: Output release info
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          echo "Release created: ${{ steps.release.outputs.tag_name }}"
+          echo "Release branch updated for Netlify deployment"
