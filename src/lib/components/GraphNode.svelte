@@ -92,20 +92,25 @@
 			</IconButton>
 		</div>
 
-		<!-- Maturity Badge in center (only show if maturityLevel is defined) -->
-		{#if practice.maturityLevel !== undefined}
+		<!-- Maturity Badge in center (only show if maturityLevel is defined and not root) -->
+		{#if !_isRoot}
 			<div class="z-10 flex items-center justify-center">
 				<MaturityBadge maturityLevel={practice.maturityLevel} />
 			</div>
 		{:else}
-			<!-- Spacer to maintain layout when no badge -->
+			<!-- Spacer to maintain layout when no badge for root -->
 			<div class="z-10 flex items-center justify-center min-w-6"></div>
 		{/if}
 
-		<!-- Adoption Checkbox in top-right corner -->
-		<div class="z-10" onclick={e => e.stopPropagation()} role="presentation">
-			<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
-		</div>
+		<!-- Adoption Checkbox in top-right corner (not shown for root) -->
+		{#if !_isRoot}
+			<div class="z-10" onclick={e => e.stopPropagation()} role="presentation">
+				<AdoptionCheckbox practiceId={practice.id} {isAdopted} ontoggle={onToggleAdoption} />
+			</div>
+		{:else}
+			<!-- Spacer to maintain layout when no checkbox for root -->
+			<div class="z-10 min-w-[44px]"></div>
+		{/if}
 	</div>
 
 	<!-- Title Section -->

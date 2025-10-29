@@ -142,7 +142,7 @@
 		},
 		{
 			"depends_on_id": "evolutionary-coding",
-			"practice_id": "continuous-delivery"
+			"practice_id": "continuous-integration"
 		},
 		{
 			"depends_on_id": "prioritized-features",

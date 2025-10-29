@@ -41,7 +41,7 @@
 </script>
 
 <div
-	class="relative inline-flex items-center justify-center"
+	class="relative inline-flex items-center justify-center cursor-help"
 	role="img"
 	aria-label={ariaLabel}
 	onmouseenter={() => (showTooltip = true)}

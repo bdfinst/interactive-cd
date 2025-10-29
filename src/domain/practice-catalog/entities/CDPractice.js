@@ -56,7 +56,8 @@ export const createCDPractice = (id, name, category, description, options = {}) 
 		capabilityPrerequisites: Object.freeze([...(options.capabilityPrerequisites || [])]),
 		requirements: Object.freeze([...(options.requirements || [])]),
 		benefits: Object.freeze([...(options.benefits || [])]),
-		quickStartGuide: options.quickStartGuide
+		quickStartGuide: options.quickStartGuide,
+		maturityLevel: options.maturityLevel
 	})
 }
 

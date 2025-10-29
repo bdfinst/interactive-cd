@@ -28,7 +28,8 @@ const toDomainModel = practiceData => {
 		{
 			requirements: practiceData.requirements || [],
 			benefits: practiceData.benefits || [],
-			quickStartGuide: practiceData.quickStartGuide
+			quickStartGuide: practiceData.quickStartGuide,
+			maturityLevel: practiceData.maturityLevel
 		}
 	)
 

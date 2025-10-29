@@ -1,11 +1,11 @@
+import { json } from '@sveltejs/kit'
 /**
  * GET /api/practices/cards
  *
  * Returns Continuous Delivery practice and its direct dependencies as a flat array
  */
-import { json } from '@sveltejs/kit'
-import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { PracticeId } from '$domain/practice-catalog/value-objects/PracticeId.js'
+import { createFilePracticeRepository } from '$infrastructure/persistence/FilePracticeRepository.js'
 import { generateETag, getCacheControl, isCacheFresh } from '$lib/server/etag.js'
 
 /* global Response */
@@ -48,7 +48,8 @@ export async function GET({ url, request }) {
 			dependencyCount: rootDirectCount,
 			directDependencyCount: rootDirectCount,
 			totalDependencyCount: rootTotalCount,
-			quickStartGuide: rootPractice.quickStartGuide
+			quickStartGuide: rootPractice.quickStartGuide,
+			maturityLevel: rootPractice.maturityLevel
 		}
 
 		// Format dependency practices for card display
@@ -76,7 +77,8 @@ export async function GET({ url, request }) {
 					dependencyCount: directCount,
 					directDependencyCount: directCount,
 					totalDependencyCount: totalCount,
-					quickStartGuide: practice.quickStartGuide
+					quickStartGuide: practice.quickStartGuide,
+					maturityLevel: practice.maturityLevel
 				}
 			})
 		)
