@@ -1,4 +1,4 @@
-name: Release Please
+name: Release Please (with PAT)
 
 on:
   workflow_dispatch:
@@ -6,10 +6,8 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+# No top-level permissions needed when using PAT
+# The PAT's permissions override these
 
 jobs:
   release-please:
@@ -18,7 +16,8 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Use PAT instead of GITHUB_TOKEN
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           # No target-branch: creates Release PR on main
 
       # Checkout repository for subsequent steps
@@ -27,6 +26,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for all branches
+          # Use PAT for checkout to allow pushing to protected branches
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       # Update release branch when Release PR is merged
       - name: Update release branch
