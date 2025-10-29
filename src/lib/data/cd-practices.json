@@ -438,18 +438,17 @@
 			"name": "Deterministic Tests",
 			"type": "practice",
 			"category": "behavior-enabled-automation",
-			"description": "Tests that produce the same result every time they run, eliminating flakiness and enabling reliable trunk-based development.",
+			"description": "Ensuring all tests produce the same result every time they run, eliminating flakiness and reliably reporting the status of the system. Unreliable tests are corrected or removed from the primary pipeline flow to maintain trust in the pipeline's decisions.",
 			"requirements": [
-				"Same input produces same output every time",
+				"Tests reliably indicate actual system status",
+				"Process for identifying unreliable tests",
+				"Unreliable tests corrected immediately",
+				"Tests that cannot be fixed are removed from primary pipeline",
 				"Control all inputs (time, randomness, external services)",
 				"Isolate test execution (no shared state)",
-				"Mock external dependencies (APIs, databases)",
-				"Use test data builders for predictable data",
+				"Mock external dependencies appropriately",
 				"Clean up test data after each test",
-				"Await all async operations properly",
-				"Tests can run in parallel",
-				"Tests pass 100% of the time",
-				"Fix flaky tests immediately"
+				"Tests can run in parallel without interference"
 			],
 			"benefits": [
 				"Enables trunk-based development",
@@ -459,7 +458,7 @@
 				"Supports frequent integration",
 				"Fast, confident merging to trunk",
 				"Reduces investigation time",
-				"Enables parallel test execution"
+				"Teams act on test failures immediately"
 			],
 			"quickStartGuide": "https://minimumcd.org/minimumcd/deterministic/"
 		},
@@ -489,19 +488,19 @@
 			"name": "Evolutionary Coding",
 			"type": "practice",
 			"category": "behavior",
-			"description": "Code evolves incrementally through continuous refactoring, improvement, and responding to change.",
+			"description": "Code evolves incrementally through backward-compatible changes that allow existing behaviors and consumers to continue working until they are ready to be replaced.",
 			"requirements": [
 				"Comprehensive test coverage for safety",
-				"Refactoring skills and practices",
+				"Backward compatibility practices",
 				"Code review process and culture",
-				"Technical debt tracking and prioritization",
+				"Feature flag capabilities",
 				"Small, incremental changes"
 			],
 			"benefits": [
-				"Better code quality over time",
-				"Reduced technical debt accumulation",
-				"Easier maintenance and modification",
-				"Continuous improvement mindset",
+				"Zero-downtime deployments",
+				"Safe evolution without breaking consumers",
+				"Reduced risk of introducing breaking changes",
+				"Parallel operation of old and new code",
 				"Adaptable to changing requirements"
 			]
 		},
@@ -1299,14 +1298,6 @@
 		},
 		{
 			"practice_id": "continuous-integration",
-			"depends_on_id": "component-ownership"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "prioritized-features"
-		},
-		{
-			"practice_id": "continuous-integration",
 			"depends_on_id": "trunk-based-development"
 		},
 		{
@@ -1350,24 +1341,12 @@
 			"depends_on_id": "deterministic-tests"
 		},
 		{
-			"practice_id": "deterministic-tests",
-			"depends_on_id": "behavior-driven-development"
-		},
-		{
-			"practice_id": "unified-team-backlog",
-			"depends_on_id": "developer-driven-support"
-		},
-		{
 			"practice_id": "developer-driven-support",
 			"depends_on_id": "telemetry-observability"
 		},
 		{
 			"practice_id": "developer-driven-support",
 			"depends_on_id": "monitoring-and-alerting"
-		},
-		{
-			"practice_id": "continuous-integration",
-			"depends_on_id": "evolutionary-coding"
 		},
 		{
 			"practice_id": "evolutionary-database",
@@ -1422,14 +1401,6 @@
 			"depends_on_id": "behavior-driven-development"
 		},
 		{
-			"practice_id": "behavior-driven-development",
-			"depends_on_id": "prioritized-features"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "test-data-management"
-		},
-		{
 			"practice_id": "integration-testing",
 			"depends_on_id": "test-environment"
 		},
@@ -1456,10 +1427,6 @@
 		{
 			"practice_id": "performance-testing",
 			"depends_on_id": "telemetry-observability"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "test-data-management"
 		},
 		{
 			"practice_id": "performance-testing",
@@ -1578,15 +1545,7 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "functional-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
 			"practice_id": "continuous-integration",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "compliance-testing",
 			"depends_on_id": "build-automation"
 		},
 		{
@@ -1598,28 +1557,8 @@
 			"depends_on_id": "build-automation"
 		},
 		{
-			"practice_id": "deterministic-tests",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "integration-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
 			"practice_id": "integration-testing",
 			"depends_on_id": "contract-testing"
-		},
-		{
-			"practice_id": "performance-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "resilience-testing",
-			"depends_on_id": "build-automation"
-		},
-		{
-			"practice_id": "security-testing",
-			"depends_on_id": "build-automation"
 		},
 		{
 			"practice_id": "smoke-testing",
@@ -1642,8 +1581,8 @@
 			"depends_on_id": "deterministic-tests"
 		},
 		{
-			"practice_id": "deterministic-tests",
-			"depends_on_id": "atdd"
+			"practice_id": "atdd",
+			"depends_on_id": "deterministic-tests"
 		},
 		{
 			"practice_id": "functional-testing",
@@ -1663,10 +1602,10 @@
 		}
 	],
 	"metadata": {
-		"changelog": "Refactored category system to match 2015 CD model: automation (red), behavior (blue), behavior-enabled-automation (green), core (yellow). Categories now drive background colors instead of icon dots.",
+		"changelog": "Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
 		"source": "MinimumCD.org",
 		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"version": "1.7.0",
-		"lastUpdated": "2025-10-21"
+		"version": "1.10.0",
+		"lastUpdated": "2025-10-28"
 	}
 }

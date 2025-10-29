@@ -49,18 +49,18 @@ All commits to the `release` branch must follow [Conventional Commits](https://w
 
 #### Commit Types
 
-| Type | Version Bump | Description | Example |
-|------|--------------|-------------|---------|
-| `feat` | **Minor** (0.x.0) | New feature | `feat: add dark mode toggle` |
-| `fix` | **Patch** (0.0.x) | Bug fix | `fix: correct navigation bug` |
-| `perf` | **Patch** | Performance improvement | `perf: optimize database queries` |
-| `refactor` | **Patch** | Code refactoring | `refactor: extract validation logic` |
-| `docs` | **None** | Documentation only | `docs: update API guide` |
-| `test` | **None** | Test changes only | `test: add E2E tests for login` |
-| `chore` | **None** | Maintenance tasks | `chore: update dependencies` |
-| `ci` | **None** | CI/CD changes | `ci: add release workflow` |
-| `build` | **None** | Build system changes | `build: configure webpack` |
-| `style` | **None** | Code style changes | `style: fix linting errors` |
+| Type       | Version Bump      | Description             | Example                              |
+| ---------- | ----------------- | ----------------------- | ------------------------------------ |
+| `feat`     | **Minor** (0.x.0) | New feature             | `feat: add dark mode toggle`         |
+| `fix`      | **Patch** (0.0.x) | Bug fix                 | `fix: correct navigation bug`        |
+| `perf`     | **Patch**         | Performance improvement | `perf: optimize database queries`    |
+| `refactor` | **Patch**         | Code refactoring        | `refactor: extract validation logic` |
+| `docs`     | **None**          | Documentation only      | `docs: update API guide`             |
+| `test`     | **None**          | Test changes only       | `test: add E2E tests for login`      |
+| `chore`    | **None**          | Maintenance tasks       | `chore: update dependencies`         |
+| `ci`       | **None**          | CI/CD changes           | `ci: add release workflow`           |
+| `build`    | **None**          | Build system changes    | `build: configure webpack`           |
+| `style`    | **None**          | Code style changes      | `style: fix linting errors`          |
 
 #### Breaking Changes
 
@@ -109,6 +109,7 @@ git push origin release
 ```
 
 Or via GitHub UI:
+
 1. Go to **Pull Requests** → **New Pull Request**
 2. Base: `release` ← Compare: `main`
 3. Title: `chore: prepare release vX.Y.Z`
@@ -152,11 +153,11 @@ MAJOR.MINOR.PATCH
 
 ### Version Alignment
 
-| Component | Version | Notes |
-|-----------|---------|-------|
-| **Package.json** | 1.3.1 | Application version |
-| **Database** | 1.3.1 | Schema version in metadata table |
-| **Git Tag** | v1.3.1 | Release tag created by release-please |
+| Component        | Version | Notes                                 |
+| ---------------- | ------- | ------------------------------------- |
+| **Package.json** | 1.3.1   | Application version                   |
+| **Database**     | 1.3.1   | Schema version in metadata table      |
+| **Git Tag**      | v1.3.1  | Release tag created by release-please |
 
 ### Version History
 
@@ -215,6 +216,7 @@ The `CHANGELOG.md` is **automatically generated** by release-please based on con
 - ✅ **Tests** - `test:` commits
 
 Hidden from changelog (but tracked):
+
 - 🔧 Build System - `build:` commits
 - 👷 CI/CD - `ci:` commits
 - 🎨 Styles - `style:` commits
@@ -377,6 +379,7 @@ GitHub Action workflow that runs release-please on push to `release` branch.
 ### `release-please-config.json`
 
 Configuration for release-please:
+
 - Release type: `node`
 - Changelog sections
 - Version bump strategy
@@ -385,9 +388,10 @@ Configuration for release-please:
 ### `.release-please-manifest.json`
 
 Current version manifest:
+
 ```json
 {
-  ".": "1.3.1"
+	".": "1.3.1"
 }
 ```
 
@@ -404,6 +408,7 @@ Version field updated automatically by release-please.
 **Problem:** Pushed to release branch but no Release PR appeared.
 
 **Solutions:**
+
 1. Check conventional commit format
 2. Ensure commits have user-facing changes (`feat`, `fix`, etc.)
 3. Check GitHub Actions logs for errors
@@ -414,6 +419,7 @@ Version field updated automatically by release-please.
 **Problem:** Expected minor bump, got patch.
 
 **Solutions:**
+
 1. Use `feat:` prefix for features (minor bump)
 2. Use `fix:` prefix for bug fixes (patch bump)
 3. Add `BREAKING CHANGE:` footer for major bump
@@ -424,6 +430,7 @@ Version field updated automatically by release-please.
 **Problem:** Commits not appearing in changelog.
 
 **Solutions:**
+
 1. Use conventional commit format
 2. Ensure commit type is not hidden (check `release-please-config.json`)
 3. Squash commits may combine changelog entries
