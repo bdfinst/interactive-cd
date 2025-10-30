@@ -1,8 +1,12 @@
 <script>
-	import { onMount } from 'svelte'
-	import { menuStore, getMenuItems } from '$lib/stores/menuStore.js'
+	import { browser } from '$app/environment'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
+	import { getMenuItems, menuStore } from '$lib/stores/menuStore.js'
 	import { importAdoptionState } from '$lib/utils/exportImport.js'
+	import { faXmark } from '@fortawesome/free-solid-svg-icons'
+	import { onMount } from 'svelte'
+	import Fa from 'svelte-fa'
+	import { fade } from 'svelte/transition'
 	import MenuItem from './MenuItem.svelte'
 	import MenuToggle from './MenuToggle.svelte'
 
@@ -29,6 +33,42 @@
 	 * Subscribe to menu store for reactive updates
 	 */
 	const isExpanded = $derived($menuStore.isExpanded)
+	const isOpen = $derived($menuStore.isOpen)
+
+	/**
+	 * On mobile, always show labels when menu is open
+	 * On tablet+, respect isExpanded state
+	 * This ensures labels always show on mobile overlay
+	 */
+	const shouldShowLabels = $derived(isOpen || isExpanded)
+
+	/**
+	 * Body scroll lock effect - locks scroll when mobile menu is open
+	 */
+	$effect(() => {
+		if (browser && isOpen) {
+			document.body.style.overflow = 'hidden'
+			return () => {
+				document.body.style.overflow = ''
+			}
+		}
+	})
+
+	/**
+	 * Handle Escape key to close mobile menu
+	 */
+	const handleKeydown = event => {
+		if (event.key === 'Escape' && isOpen) {
+			menuStore.closeMobile()
+		}
+	}
+
+	/**
+	 * Handle backdrop click to close mobile menu
+	 */
+	const handleBackdropClick = () => {
+		menuStore.closeMobile()
+	}
 
 	/**
 	 * Import functionality state
@@ -130,6 +170,9 @@
 	}
 </script>
 
+<!-- Escape key handler -->
+<svelte:window onkeydown={handleKeydown} />
+
 <!-- Hidden file input for import -->
 <input
 	type="file"
@@ -142,18 +185,32 @@
 	data-testid="import-file-input"
 />
 
+<!-- Backdrop - Only visible on mobile when menu is open -->
+{#if isOpen}
+	<div
+		transition:fade={{ duration: 200 }}
+		onclick={handleBackdropClick}
+		class="fixed inset-0 bg-black/50 z-[1099] md:hidden"
+		data-testid="menu-backdrop"
+		role="presentation"
+		aria-hidden="true"
+	></div>
+{/if}
+
 <!-- Navigation -->
-<!-- Menu Sidebar - Always visible, toggles width -->
+<!-- Responsive: Mobile overlay (<768px), Tablet/Desktop sidebar (≥768px) -->
 <nav
 	data-testid="menu-content"
+	id="menu-content"
 	aria-label="Main navigation"
-	class="fixed top-0 left-0 h-full bg-slate-200 shadow-lg z-[1100] transition-all duration-300 ease-in-out {isExpanded
-		? 'w-64'
-		: 'w-16'} overflow-y-auto flex flex-col"
+	class="fixed top-0 left-0 h-full bg-slate-200 shadow-lg z-[1100] transition-all duration-300 ease-in-out overflow-y-auto flex flex-col
+		{isOpen ? 'translate-x-0' : '-translate-x-full'}
+		md:translate-x-0
+		{isExpanded ? 'md:w-[200px]' : 'md:w-16'}"
 >
 	<!-- Logo at top -->
 	<div
-		class="flex items-center justify-center {isExpanded
+		class="flex items-center justify-center {shouldShowLabels
 			? 'p-4'
 			: 'p-2'} border-b border-slate-300 order-1"
 	>
@@ -167,7 +224,7 @@
 				<img
 					src="/images/logo.png"
 					alt="Logo"
-					class="{isExpanded ? 'h-12' : 'h-10'} w-auto transition-all duration-300"
+					class="{shouldShowLabels ? 'h-12' : 'h-10'} w-auto transition-all duration-300"
 					loading="lazy"
 					decoding="async"
 				/>
@@ -176,42 +233,54 @@
 	</div>
 
 	<!-- Menu Items Container - Centers both sections together -->
-	<div class="flex-1 flex flex-col items-center order-3">
-		<div class="flex flex-col w-fit gap-2 py-2">
+	<div class="flex flex-col items-center flex-1 order-3">
+		<div class="flex flex-col gap-2 py-2 w-fit">
 			<!-- Main Menu Items List -->
 			<ul class="flex flex-col items-center gap-2">
 				{#each mainItems as item (item.id)}
 					<li>
 						{#if item.action === 'export'}
-							<MenuItem {item} {isExpanded} onclick={handleExportClick} />
+							<MenuItem {item} isExpanded={shouldShowLabels} onclick={handleExportClick} />
 						{:else}
-							<MenuItem {item} {isExpanded} />
+							<MenuItem {item} isExpanded={shouldShowLabels} />
 						{/if}
 					</li>
 				{/each}
 			</ul>
 
 			<!-- Separator -->
-			<div class="border-t border-slate-300 my-2"></div>
+			<div class="my-2 border-t border-slate-300"></div>
 
 			<!-- Bottom Menu Items (GitHub, MinimumCD, Support) -->
 			<ul class="flex flex-col items-start gap-2">
 				{#each bottomItems as item (item.id)}
 					<li>
-						<MenuItem {item} {isExpanded} />
+						<MenuItem {item} isExpanded={shouldShowLabels} />
 					</li>
 				{/each}
 			</ul>
 		</div>
 	</div>
 
-	<!-- Toggle button -->
+	<!-- Toggle button - Hidden on mobile, visible on tablet+ -->
 	<div
-		class="flex items-center {isExpanded
+		class="hidden md:flex items-center {isExpanded
 			? 'justify-end'
 			: 'justify-center'} p-2 border-b border-slate-300 order-2"
 	>
 		<MenuToggle {isExpanded} onclick={handleToggle} />
+	</div>
+
+	<!-- Close button for mobile -->
+	<div class="flex items-center justify-end order-2 p-2 border-b md:hidden border-slate-300">
+		<button
+			onclick={() => menuStore.closeMobile()}
+			class="flex items-center justify-center p-2 text-gray-800 transition-colors rounded-md hover:bg-black/10 active:bg-black/20"
+			aria-label="Close menu"
+			data-testid="mobile-close-button"
+		>
+			<Fa icon={faXmark} size="lg" />
+		</button>
 	</div>
 </nav>
 

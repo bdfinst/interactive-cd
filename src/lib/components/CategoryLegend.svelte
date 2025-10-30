@@ -99,9 +99,9 @@
 
 <div
 	bind:this={legendElement}
-	class="fixed right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2 transition-all duration-300 {isExpanded
-		? 'left-64'
-		: 'left-16'}"
+	class="fixed right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2 transition-all duration-300
+	left-0
+	{isExpanded ? 'md:left-64' : 'md:left-16'}"
 	style="top: {$headerHeight}px;"
 	data-testid="category-legend"
 >

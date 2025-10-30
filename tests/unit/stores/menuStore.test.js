@@ -86,6 +86,70 @@ describe('Menu Store', () => {
 		})
 	})
 
+	describe('mobile overlay state', () => {
+		it('initializes with mobile menu closed', () => {
+			const state = get(menuStore)
+			expect(state.isOpen).toBe(false)
+		})
+
+		it('opens mobile menu when openMobile is called', () => {
+			menuStore.openMobile()
+			const state = get(menuStore)
+			expect(state.isOpen).toBe(true)
+		})
+
+		it('closes mobile menu when closeMobile is called', () => {
+			menuStore.openMobile()
+			menuStore.closeMobile()
+			const state = get(menuStore)
+			expect(state.isOpen).toBe(false)
+		})
+
+		it('toggles mobile menu open and closed', () => {
+			// Initially closed
+			let state = get(menuStore)
+			expect(state.isOpen).toBe(false)
+
+			// Toggle open
+			menuStore.toggleMobile()
+			state = get(menuStore)
+			expect(state.isOpen).toBe(true)
+
+			// Toggle closed
+			menuStore.toggleMobile()
+			state = get(menuStore)
+			expect(state.isOpen).toBe(false)
+		})
+
+		it('maintains isExpanded state independently from isOpen', () => {
+			// Expand the sidebar
+			menuStore.expand()
+			let state = get(menuStore)
+			expect(state.isExpanded).toBe(true)
+			expect(state.isOpen).toBe(false)
+
+			// Open mobile overlay
+			menuStore.openMobile()
+			state = get(menuStore)
+			expect(state.isExpanded).toBe(true) // Should remain expanded
+			expect(state.isOpen).toBe(true)
+
+			// Close mobile overlay
+			menuStore.closeMobile()
+			state = get(menuStore)
+			expect(state.isExpanded).toBe(true) // Should still be expanded
+			expect(state.isOpen).toBe(false)
+		})
+
+		it('allows multiple open/close cycles', () => {
+			menuStore.openMobile()
+			menuStore.closeMobile()
+			menuStore.openMobile()
+			const state = get(menuStore)
+			expect(state.isOpen).toBe(true)
+		})
+	})
+
 	describe('reactivity', () => {
 		it('notifies subscribers when state changes', () => {
 			let notificationCount = 0

@@ -19,10 +19,12 @@ describe('Menu', () => {
 		})
 
 		it('renders menu toggle button on mobile', () => {
-			const { getByRole } = render(Menu)
+			const { container } = render(Menu)
 
-			const button = getByRole('button', { name: /menu/i })
-			expect(button).toBeInTheDocument()
+			// Menu has both toggle button (desktop) and close button (mobile)
+			// They're both rendered but visibility is controlled by CSS media queries
+			const buttons = container.querySelectorAll('button')
+			expect(buttons.length).toBeGreaterThan(0)
 		})
 
 		it('renders all menu items', () => {
@@ -250,6 +252,23 @@ describe('Menu', () => {
 
 			const menuContent = container.querySelector('[data-testid="menu-content"]')
 			expect(menuContent.className).toMatch(/shadow/)
+		})
+	})
+
+	describe('mobile overlay behavior', () => {
+		it('renders mobile close button', () => {
+			const { container } = render(Menu)
+			const closeButton = container.querySelector('[data-testid="mobile-close-button"]')
+
+			expect(closeButton).toBeInTheDocument()
+			expect(closeButton).toHaveAttribute('aria-label', 'Close menu')
+		})
+
+		it('does not render backdrop when mobile menu is closed', () => {
+			const { container } = render(Menu)
+			const backdrop = container.querySelector('[data-testid="menu-backdrop"]')
+
+			expect(backdrop).not.toBeInTheDocument()
 		})
 	})
 

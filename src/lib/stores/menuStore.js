@@ -93,16 +93,47 @@ export const createMenuStore = (initialExpanded = false) => {
 		set: _set,
 		update
 	} = writable({
-		isExpanded: initialExpanded
+		isExpanded: initialExpanded,
+		isOpen: false // Mobile overlay open/closed state
 	})
 
 	/**
-	 * Toggle the menu expanded/collapsed state
+	 * Toggle the menu expanded/collapsed state (desktop sidebar)
 	 */
 	const toggle = () => {
 		update(state => ({
 			...state,
 			isExpanded: !state.isExpanded
+		}))
+	}
+
+	/**
+	 * Toggle mobile menu open/closed state
+	 */
+	const toggleMobile = () => {
+		update(state => ({
+			...state,
+			isOpen: !state.isOpen
+		}))
+	}
+
+	/**
+	 * Open mobile menu (overlay)
+	 */
+	const openMobile = () => {
+		update(state => ({
+			...state,
+			isOpen: true
+		}))
+	}
+
+	/**
+	 * Close mobile menu (overlay)
+	 */
+	const closeMobile = () => {
+		update(state => ({
+			...state,
+			isOpen: false
 		}))
 	}
 
@@ -138,6 +169,9 @@ export const createMenuStore = (initialExpanded = false) => {
 	return {
 		subscribe,
 		toggle,
+		toggleMobile,
+		openMobile,
+		closeMobile,
 		expand,
 		collapse,
 		isExpanded

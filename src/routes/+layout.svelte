@@ -93,7 +93,12 @@
 <CategoryLegend />
 <LegendSpacer />
 
-<!-- Main content area with dynamic sidebar spacing -->
-<main class="min-h-screen transition-all duration-300 {isExpanded ? 'ml-64' : 'ml-16'}">
+<!-- Main content area with responsive sidebar spacing -->
+<!-- Mobile: no left margin (full width), Tablet+: dynamic margin based on sidebar state -->
+<main
+	class="min-h-screen transition-all duration-300
+	ml-0
+	{isExpanded ? 'md:ml-64' : 'md:ml-16'}"
+>
 	{@render children()}
 </main>
