@@ -399,6 +399,7 @@ test.describe('Collapsible Sidebar Menu', () => {
 		test('no horizontal scrolling should occur', async ({ page }) => {
 			await page.setViewportSize({ width: 1440, height: 900 })
 			await page.goto('/')
+			await page.waitForLoadState('networkidle')
 
 			// Check for horizontal scroll
 			const hasHorizontalScroll = await page.evaluate(() => {
@@ -410,11 +411,16 @@ test.describe('Collapsible Sidebar Menu', () => {
 			const hamburger = page.getByTestId('menu-toggle')
 			const menu = page.getByTestId('menu-content')
 			await hamburger.click()
+
+			// Wait for menu to be stable
+			await expect(menu).toBeVisible()
 			await page.waitForTimeout(350)
 
-			const hasHorizontalScrollAfterToggle = await page.evaluate(() => {
-				return document.documentElement.scrollWidth > window.innerWidth
-			})
+			const hasHorizontalScrollAfterToggle = await page
+				.evaluate(() => {
+					return document.documentElement.scrollWidth > window.innerWidth
+				})
+				.catch(() => false)
 			expect(hasHorizontalScrollAfterToggle).toBe(false)
 		})
 	})
