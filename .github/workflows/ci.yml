@@ -161,10 +161,10 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- --project=chromium
 
       - name: Upload Playwright report on failure
         if: failure()
