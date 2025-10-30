@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.1...interactive-cd-v1.6.2) (2025-10-30)
+
+
+### Bug Fixes
+
+* correct the menu bar for mobile ([3b03c9c](https://github.com/bdfinst/interactive-cd/commit/3b03c9c9dc979d24dc731e9f71c6ebd23e93c83a))
+* e2e test ([646300b](https://github.com/bdfinst/interactive-cd/commit/646300b1225c76a315a832cc27f74a78492e68d8))
+* e2e test ([5ca8d62](https://github.com/bdfinst/interactive-cd/commit/5ca8d62ce0b8e9e4495fc6b131a2bf6c804c902c))
+
 ## [1.6.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.0...interactive-cd-v1.6.1) (2025-10-29)
 
 ### Bug Fixes
