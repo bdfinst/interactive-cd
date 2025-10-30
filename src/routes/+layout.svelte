@@ -6,6 +6,7 @@
 	import CategoryLegend from '$lib/components/CategoryLegend.svelte'
 	import LegendSpacer from '$lib/components/LegendSpacer.svelte'
 	import SEO from '$lib/components/SEO.svelte'
+	import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte'
 	import Menu from '$lib/components/Menu.svelte'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 	import { menuStore } from '$lib/stores/menuStore.js'
@@ -84,6 +85,7 @@
 </script>
 
 <SEO />
+<GoogleAnalytics />
 
 <!-- Menu Sidebar (now handles import internally) -->
 <Menu onExport={handleExport} />

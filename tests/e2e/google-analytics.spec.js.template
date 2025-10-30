@@ -1,0 +1,423 @@
+/**
+ * Google Analytics E2E Tests
+ *
+ * TEMPLATE FILE - To be implemented after GA implementation is complete
+ *
+ * This file provides E2E test templates for verifying Google Analytics
+ * integration in real browser environments using Playwright.
+ *
+ * Following: BDD → ATDD → TDD workflow
+ * Based on: /tests/GA_TESTING_STRATEGY.md
+ */
+
+import { test, expect } from '@playwright/test'
+
+/**
+ * Test Configuration
+ *
+ * These tests should run in multiple scenarios:
+ * 1. With GA enabled (VITE_GA_MEASUREMENT_ID set)
+ * 2. Without GA (VITE_GA_MEASUREMENT_ID unset)
+ *
+ * Configure in playwright.config.js or use environment variables
+ */
+
+test.describe('Google Analytics Integration - GA Enabled', () => {
+	/**
+	 * These tests assume VITE_GA_MEASUREMENT_ID is set
+	 * Skip if running in environment without GA
+	 */
+
+	test.beforeEach(async ({ page }) => {
+		// Optional: Set up GA request tracking
+		// Store GA requests for verification
+		page.gaRequests = []
+		page.on('request', request => {
+			if (request.url().includes('google-analytics.com/g/collect')) {
+				page.gaRequests.push({
+					url: request.url(),
+					timestamp: Date.now()
+				})
+			}
+		})
+	})
+
+	test('should inject GA script when measurement ID is configured', async ({ page }) => {
+		// Given: User navigates to the application
+		await page.goto('/')
+
+		// When: Page loads
+		// (implicit in goto)
+
+		// Then: GA script should be present in DOM
+		const gaScript = page.locator('script[src*="googletagmanager.com/gtag"]')
+
+		// TODO: Uncomment once implementation is complete
+		// await expect(gaScript).toBeAttached()
+
+		// And: Script should contain measurement ID
+		// const scriptSrc = await gaScript.getAttribute('src')
+		// expect(scriptSrc).toContain('id=G-')
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should initialize dataLayer on page load', async ({ page }) => {
+		// Given: User navigates to the application
+		await page.goto('/')
+
+		// When: Page loads completely
+		await page.waitForLoadState('networkidle')
+
+		// Then: dataLayer should be initialized as an array
+		const dataLayerExists = await page.evaluate(() => {
+			// TODO: Uncomment once implementation is complete
+			// return typeof window.dataLayer !== 'undefined' && Array.isArray(window.dataLayer)
+			return true // Placeholder
+		})
+
+		expect(dataLayerExists).toBe(true)
+
+		// And: gtag function should be available
+		const gtagExists = await page.evaluate(() => {
+			// TODO: Uncomment once implementation is complete
+			// return typeof window.gtag === 'function'
+			return true // Placeholder
+		})
+
+		expect(gtagExists).toBe(true)
+	})
+
+	test('should send page view event on initial load', async ({ page }) => {
+		// Given: GA request tracking is enabled
+		// (set up in beforeEach)
+
+		// When: User loads the homepage
+		await page.goto('/')
+		await page.waitForTimeout(2000) // Wait for GA to send event
+
+		// Then: At least one GA request should be sent
+		// TODO: Uncomment once implementation is complete
+		// expect(page.gaRequests.length).toBeGreaterThan(0)
+
+		// And: Request should contain page_view event
+		// const hasPageView = page.gaRequests.some(req => req.url.includes('en=page_view'))
+		// expect(hasPageView).toBe(true)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should track SPA navigation (route changes)', async ({ page }) => {
+		// Given: User is on the homepage
+		await page.goto('/')
+		await page.waitForTimeout(1000)
+
+		// TODO: Uncomment once implementation is complete
+		// const initialRequestCount = page.gaRequests.length
+
+		// When: User navigates to About page
+		await page.click('a[href="/about"]')
+		await page.waitForURL('/about')
+		await page.waitForTimeout(1500) // Wait for GA to send event
+
+		// Then: New page view event should be sent
+		// TODO: Uncomment once implementation is complete
+		// expect(page.gaRequests.length).toBeGreaterThan(initialRequestCount)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should send correct page metadata', async ({ page }) => {
+		// Given: User navigates to About page
+		await page.goto('/about')
+		await page.waitForTimeout(2000)
+
+		// Then: GA request should contain correct page path
+		// TODO: Uncomment once implementation is complete
+		// const aboutPageRequests = page.gaRequests.filter(req =>
+		//   req.url.includes('dl=') && req.url.includes('/about')
+		// )
+		// expect(aboutPageRequests.length).toBeGreaterThan(0)
+
+		// And: Should contain page title
+		// const hasPageTitle = page.gaRequests.some(req =>
+		//   req.url.includes('dt=') // dt = document title
+		// )
+		// expect(hasPageTitle).toBe(true)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should handle multiple rapid page changes', async ({ page }) => {
+		// Given: User is on homepage
+		await page.goto('/')
+		await page.waitForTimeout(1000)
+
+		// When: User rapidly navigates between pages
+		await page.click('a[href="/about"]')
+		await page.waitForURL('/about')
+
+		await page.click('a[href="/"]')
+		await page.waitForURL('/')
+
+		await page.waitForTimeout(2000)
+
+		// Then: All page views should be tracked
+		// TODO: Uncomment once implementation is complete
+		// expect(page.gaRequests.length).toBeGreaterThan(2)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+})
+
+test.describe('Google Analytics Integration - GA Disabled', () => {
+	/**
+	 * These tests verify graceful degradation when GA is not configured
+	 * Set VITE_GA_MEASUREMENT_ID to empty string or undefined
+	 */
+
+	test('should not inject GA script when measurement ID is missing', async ({ page }) => {
+		// Given: GA is not configured (no measurement ID)
+		// (Set in environment before running)
+
+		// When: User navigates to the application
+		await page.goto('/')
+
+		// Then: GA script should NOT be present
+		const gaScript = page.locator('script[src*="googletagmanager.com/gtag"]')
+
+		// TODO: Uncomment once implementation is complete
+		// await expect(gaScript).not.toBeAttached()
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should not initialize dataLayer when GA is disabled', async ({ page }) => {
+		// Given: User navigates to the application
+		await page.goto('/')
+
+		// When: Page loads
+		await page.waitForLoadState('networkidle')
+
+		// Then: dataLayer should not be initialized
+		const dataLayerExists = await page.evaluate(() => {
+			// TODO: Uncomment once implementation is complete
+			// return typeof window.dataLayer !== 'undefined'
+			return false // Placeholder - expecting false when GA disabled
+		})
+
+		// expect(dataLayerExists).toBe(false)
+		expect(true).toBe(true) // Placeholder
+	})
+
+	test('should not send any GA requests when disabled', async ({ page }) => {
+		// Set up request tracking
+		const gaRequests = []
+		page.on('request', request => {
+			if (
+				request.url().includes('google-analytics.com') ||
+				request.url().includes('googletagmanager.com')
+			) {
+				gaRequests.push(request)
+			}
+		})
+
+		// When: User navigates and uses the application
+		await page.goto('/')
+		await page.click('a[href="/about"]')
+		await page.waitForURL('/about')
+		await page.waitForTimeout(2000)
+
+		// Then: No GA requests should be made
+		// TODO: Uncomment once implementation is complete
+		// expect(gaRequests.length).toBe(0)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should have no console errors related to GA', async ({ page }) => {
+		// Track console errors
+		const consoleErrors = []
+		page.on('console', msg => {
+			if (msg.type() === 'error') {
+				consoleErrors.push(msg.text())
+			}
+		})
+
+		// When: User navigates through the application
+		await page.goto('/')
+		await page.goto('/about')
+		await page.goto('/')
+
+		// Then: No errors mentioning GA or analytics
+		const gaErrors = consoleErrors.filter(
+			error =>
+				error.includes('gtag') ||
+				error.includes('analytics') ||
+				error.includes('dataLayer') ||
+				error.includes('googletagmanager')
+		)
+
+		expect(gaErrors).toHaveLength(0)
+	})
+})
+
+test.describe('Google Analytics - Error Handling', () => {
+	test('should handle GA script load failure gracefully', async ({ context }) => {
+		// Given: GA script is blocked (simulating network error or ad blocker)
+		await context.route('**/googletagmanager.com/**', route => route.abort())
+
+		const page = await context.newPage()
+
+		// Track errors
+		const jsErrors = []
+		page.on('pageerror', error => jsErrors.push(error.message))
+
+		// When: User navigates to the application
+		await page.goto('/')
+
+		// Then: Application should still load successfully
+		await expect(page.locator('main')).toBeVisible()
+
+		// And: No JavaScript errors should occur
+		// TODO: Determine if warnings are acceptable
+		// expect(jsErrors).toHaveLength(0)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should work with ad blockers enabled', async ({ context }) => {
+		// Given: Ad blocker blocks GA requests
+		await context.route('**/google-analytics.com/**', route => route.abort())
+		await context.route('**/googletagmanager.com/**', route => route.abort())
+
+		const page = await context.newPage()
+
+		// When: User navigates through the application
+		await page.goto('/')
+		await page.click('a[href="/about"]')
+
+		// Then: Application should function normally
+		await expect(page).toHaveURL('/about')
+		await expect(page.locator('main')).toBeVisible()
+
+		// And: No errors should occur
+		const errors = []
+		page.on('pageerror', error => errors.push(error))
+		await page.waitForTimeout(1000)
+
+		// TODO: Verify no errors (or only expected warnings)
+		// expect(errors).toHaveLength(0)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should handle slow network conditions', async ({ page, context }) => {
+		// Given: Slow network (simulating slow 3G)
+		// TODO: Configure network throttling if Playwright supports it
+
+		// When: User loads the page
+		await page.goto('/')
+
+		// Then: Page should render before GA loads
+		await expect(page.locator('h1')).toBeVisible({ timeout: 3000 })
+
+		// And: GA should load asynchronously without blocking
+		// TODO: Verify GA loads but doesn't block critical rendering
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+})
+
+test.describe('Google Analytics - Cross-browser Compatibility', () => {
+	/**
+	 * These tests should run on multiple browser projects
+	 * configured in playwright.config.js:
+	 * - chromium (Desktop Chrome)
+	 * - firefox
+	 * - webkit (Safari)
+	 * - mobile-chrome
+	 * - mobile-safari
+	 */
+
+	test('should work consistently across browsers', async ({ page, browserName }) => {
+		// Given: Test runs on different browser
+		console.log(`Testing on: ${browserName}`)
+
+		// When: User loads the application
+		await page.goto('/')
+		await page.waitForLoadState('networkidle')
+
+		// Then: GA should work the same way
+		// TODO: Verify GA script loads (if enabled)
+		// TODO: Verify dataLayer initialization
+		// TODO: Verify no browser-specific errors
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+})
+
+test.describe('Google Analytics - Performance Impact', () => {
+	test('should not significantly delay page load', async ({ page }) => {
+		// When: User loads the page
+		const startTime = Date.now()
+		await page.goto('/')
+		await page.waitForLoadState('load')
+		const loadTime = Date.now() - startTime
+
+		// Then: Page should load in reasonable time
+		// TODO: Define acceptable threshold (e.g., < 3000ms)
+		// expect(loadTime).toBeLessThan(3000)
+
+		console.log(`Page load time: ${loadTime}ms`)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+
+	test('should not cause layout shifts', async ({ page }) => {
+		// Given: User loads the page
+		await page.goto('/')
+
+		// When: Page fully loads
+		await page.waitForLoadState('networkidle')
+
+		// Then: Calculate Cumulative Layout Shift
+		const cls = await page.evaluate(() => {
+			// TODO: Implement CLS measurement if needed
+			// Use PerformanceObserver to track layout shifts
+			return 0 // Placeholder
+		})
+
+		// CLS should be minimal (< 0.1 is good)
+		// expect(cls).toBeLessThan(0.1)
+
+		// Placeholder assertion
+		expect(true).toBe(true)
+	})
+})
+
+/**
+ * NEXT STEPS:
+ *
+ * 1. Wait for coder agent to complete GA implementation
+ * 2. Remove .template extension from this file
+ * 3. Uncomment TODO sections with actual assertions
+ * 4. Configure playwright.config.js with GA test environments:
+ *    - One with VITE_GA_MEASUREMENT_ID set (test ID)
+ *    - One without (to test graceful degradation)
+ * 5. Run tests: npm run test:e2e -- google-analytics.spec.js
+ * 6. Verify all tests pass in CI/CD
+ * 7. Document any GA-specific test configuration needed
+ */

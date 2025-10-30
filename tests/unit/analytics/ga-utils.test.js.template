@@ -1,0 +1,265 @@
+/**
+ * Google Analytics Utility Functions Tests
+ *
+ * TEMPLATE FILE - To be implemented after GA utility functions are created
+ *
+ * This file provides test templates for GA utility functions.
+ * Update this file once the actual implementation is complete.
+ *
+ * Following: BDD → ATDD → TDD workflow
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+
+/**
+ * TODO: Import actual GA utility functions once implemented
+ *
+ * Expected functions to test:
+ * - isValidGAMeasurementId(id: string): boolean
+ * - shouldInitializeGA(measurementId?: string): boolean
+ * - buildGAScriptUrl(measurementId: string): string
+ * - getEnvironmentConfig(): { measurementId?: string }
+ */
+
+describe('GA Utility Functions', () => {
+	describe('isValidGAMeasurementId', () => {
+		it('should return true for valid GA4 measurement ID format', () => {
+			// Arrange
+			const validIds = ['G-XXXXXXXXXX', 'G-ABC123DEF4', 'G-1234567890']
+
+			// Act & Assert
+			validIds.forEach(id => {
+				// TODO: Replace with actual function once implemented
+				// const result = isValidGAMeasurementId(id)
+				// expect(result).toBe(true)
+				expect(true).toBe(true) // Placeholder
+			})
+		})
+
+		it('should return false for Universal Analytics format', () => {
+			// Arrange
+			const uaIds = ['UA-12345-1', 'UA-123456-12']
+
+			// Act & Assert
+			uaIds.forEach(id => {
+				// TODO: Replace with actual function once implemented
+				// const result = isValidGAMeasurementId(id)
+				// expect(result).toBe(false)
+				expect(true).toBe(true) // Placeholder
+			})
+		})
+
+		it('should return false for invalid formats', () => {
+			// Arrange
+			const invalidIds = ['', 'invalid', 'G-', 'G-ABC', null, undefined, 123]
+
+			// Act & Assert
+			invalidIds.forEach(id => {
+				// TODO: Replace with actual function once implemented
+				// const result = isValidGAMeasurementId(id)
+				// expect(result).toBe(false)
+				expect(true).toBe(true) // Placeholder
+			})
+		})
+
+		it('should handle edge cases', () => {
+			// Arrange
+			const edgeCases = [
+				'G-XXXXXXXXXX-extra', // Extra characters
+				'g-xxxxxxxxxx', // Lowercase
+				' G-XXXXXXXXXX ', // Whitespace
+				'G-XXXXXXXXXX\n' // Newline
+			]
+
+			// Act & Assert
+			edgeCases.forEach(id => {
+				// TODO: Determine expected behavior for edge cases
+				// const result = isValidGAMeasurementId(id)
+				// expect(result).toBe(expected)
+				expect(true).toBe(true) // Placeholder
+			})
+		})
+	})
+
+	describe('shouldInitializeGA', () => {
+		it('should return true when valid measurement ID is provided', () => {
+			// Arrange
+			const measurementId = 'G-XXXXXXXXXX'
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = shouldInitializeGA(measurementId)
+
+			// Assert
+			// expect(result).toBe(true)
+			expect(true).toBe(true) // Placeholder
+		})
+
+		it('should return false when measurement ID is undefined', () => {
+			// Arrange
+			const measurementId = undefined
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = shouldInitializeGA(measurementId)
+
+			// Assert
+			// expect(result).toBe(false)
+			expect(true).toBe(true) // Placeholder
+		})
+
+		it('should return false when measurement ID is empty string', () => {
+			// Arrange
+			const measurementId = ''
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = shouldInitializeGA(measurementId)
+
+			// Assert
+			// expect(result).toBe(false)
+			expect(true).toBe(true) // Placeholder
+		})
+
+		it('should return false when measurement ID is invalid format', () => {
+			// Arrange
+			const invalidId = 'invalid-format'
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = shouldInitializeGA(invalidId)
+
+			// Assert
+			// expect(result).toBe(false)
+			expect(true).toBe(true) // Placeholder
+		})
+	})
+
+	describe('buildGAScriptUrl', () => {
+		it('should build correct GA script URL with measurement ID', () => {
+			// Arrange
+			const measurementId = 'G-TEST123'
+			const expectedUrl = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = buildGAScriptUrl(measurementId)
+
+			// Assert
+			// expect(result).toBe(expectedUrl)
+			expect(true).toBe(true) // Placeholder
+		})
+
+		it('should handle special characters in measurement ID', () => {
+			// Arrange
+			const measurementId = 'G-ABC123-DEF'
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const result = buildGAScriptUrl(measurementId)
+
+			// Assert
+			// Should properly encode special characters
+			// expect(result).toContain(encodeURIComponent(measurementId))
+			expect(true).toBe(true) // Placeholder
+		})
+	})
+
+	describe('getEnvironmentConfig', () => {
+		beforeEach(() => {
+			// Reset environment before each test
+			vi.resetModules()
+		})
+
+		it('should return measurement ID from environment variable', () => {
+			// Arrange
+			// TODO: Mock import.meta.env or process.env
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const config = getEnvironmentConfig()
+
+			// Assert
+			// expect(config.measurementId).toBe('G-XXXXXXXXXX')
+			expect(true).toBe(true) // Placeholder
+		})
+
+		it('should return undefined when environment variable is not set', () => {
+			// Arrange
+			// TODO: Mock import.meta.env with no GA measurement ID
+
+			// Act
+			// TODO: Replace with actual function once implemented
+			// const config = getEnvironmentConfig()
+
+			// Assert
+			// expect(config.measurementId).toBeUndefined()
+			expect(true).toBe(true) // Placeholder
+		})
+	})
+})
+
+describe('GA Initialization Logic', () => {
+	it('should initialize dataLayer as array', () => {
+		// Arrange
+		// TODO: Call initialization function
+
+		// Act
+		// TODO: Initialize GA
+
+		// Assert
+		// expect(window.dataLayer).toBeDefined()
+		// expect(Array.isArray(window.dataLayer)).toBe(true)
+		expect(true).toBe(true) // Placeholder
+	})
+
+	it('should not initialize dataLayer when measurement ID is missing', () => {
+		// Arrange
+		const measurementId = undefined
+
+		// Act
+		// TODO: Call initialization with no measurement ID
+
+		// Assert
+		// expect(window.dataLayer).toBeUndefined()
+		expect(true).toBe(true) // Placeholder
+	})
+
+	it('should handle initialization errors gracefully', () => {
+		// Arrange
+		const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+		// Act
+		// TODO: Trigger initialization error
+
+		// Assert
+		// Should log error but not throw
+		// expect(consoleErrorSpy).toHaveBeenCalled()
+
+		consoleErrorSpy.mockRestore()
+		expect(true).toBe(true) // Placeholder
+	})
+})
+
+describe('GA Event Tracking (Future Enhancement)', () => {
+	it('should track custom events', () => {
+		// TODO: Implement once event tracking is added
+		expect(true).toBe(true) // Placeholder
+	})
+
+	it('should batch events for performance', () => {
+		// TODO: Implement if event batching is needed
+		expect(true).toBe(true) // Placeholder
+	})
+})
+
+/**
+ * NEXT STEPS:
+ *
+ * 1. Wait for coder agent to implement GA utility functions
+ * 2. Import actual functions at top of file
+ * 3. Replace placeholder tests with real assertions
+ * 4. Run tests: npm test -- ga-utils
+ * 5. Follow Red → Green → Refactor cycle
+ * 6. Ensure 100% coverage of GA utilities
+ */
