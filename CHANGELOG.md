@@ -2,41 +2,37 @@
 
 ## [1.6.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.0...interactive-cd-v1.6.1) (2025-10-29)
 
-
 ### Bug Fixes
 
-* correct button locations ([0bd5ba2](https://github.com/bdfinst/interactive-cd/commit/0bd5ba22e7eda1fbd037e7b754b96860438c8dea))
-* correct quickguide button position ([8dc1594](https://github.com/bdfinst/interactive-cd/commit/8dc159474cdd4135974fda573937e741fea2a60f))
-* wait for ci before release ([fdbd6b0](https://github.com/bdfinst/interactive-cd/commit/fdbd6b0c552bfbfe1ecb1a8a51c58d3143893f51))
+- correct button locations ([0bd5ba2](https://github.com/bdfinst/interactive-cd/commit/0bd5ba22e7eda1fbd037e7b754b96860438c8dea))
+- correct quickguide button position ([8dc1594](https://github.com/bdfinst/interactive-cd/commit/8dc159474cdd4135974fda573937e741fea2a60f))
+- wait for ci before release ([fdbd6b0](https://github.com/bdfinst/interactive-cd/commit/fdbd6b0c552bfbfe1ecb1a8a51c58d3143893f51))
 
 ## [1.6.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.2...interactive-cd-v1.6.0) (2025-10-29)
 
-
 ### Features
 
-* add maturity indicator ([ebaa6ea](https://github.com/bdfinst/interactive-cd/commit/ebaa6ea1936caeff97b4adc9bcab9b6678ca5c37))
-* update practices to use maturity level for tree layout ([8fd2a2a](https://github.com/bdfinst/interactive-cd/commit/8fd2a2a482b9e59fcc1ff263399d71d01a7ee0e3))
-
+- add maturity indicator ([ebaa6ea](https://github.com/bdfinst/interactive-cd/commit/ebaa6ea1936caeff97b4adc9bcab9b6678ca5c37))
+- update practices to use maturity level for tree layout ([8fd2a2a](https://github.com/bdfinst/interactive-cd/commit/8fd2a2a482b9e59fcc1ff263399d71d01a7ee0e3))
 
 ### Bug Fixes
 
-* cache busting ([4609279](https://github.com/bdfinst/interactive-cd/commit/46092798ea65172a498e65c3b02ef26848d6184c))
-* correct ci flow ([fb76915](https://github.com/bdfinst/interactive-cd/commit/fb76915ce6f8abd6fe761b170c48ec759e2bcae0))
-* correct ci flow ([75b386e](https://github.com/bdfinst/interactive-cd/commit/75b386e580612eeb6dea0badb982c80f14a7cd4d))
-* correct ci flow ([550e074](https://github.com/bdfinst/interactive-cd/commit/550e074f774f67d5197095cdc16a718ac04ef523))
-* correct release flow ([67d4d58](https://github.com/bdfinst/interactive-cd/commit/67d4d58d4bd9f45aa3d4f22b63e68b5a615000c0))
-* correct release flow ([dfa67fb](https://github.com/bdfinst/interactive-cd/commit/dfa67fb8c20d21bab63ffd4ef4883af5c149cda8))
-* correct release flow ([77f68c4](https://github.com/bdfinst/interactive-cd/commit/77f68c4efab3ce1800188b888221351a303f2918))
-* correct release-please ([8cdc5d0](https://github.com/bdfinst/interactive-cd/commit/8cdc5d008accbb55b5bac890f0b2cb1626015e11))
-* trigger build ([0c5a7ca](https://github.com/bdfinst/interactive-cd/commit/0c5a7ca47b81103f758f6d7cad80dd9f755d7f9e))
+- cache busting ([4609279](https://github.com/bdfinst/interactive-cd/commit/46092798ea65172a498e65c3b02ef26848d6184c))
+- correct ci flow ([fb76915](https://github.com/bdfinst/interactive-cd/commit/fb76915ce6f8abd6fe761b170c48ec759e2bcae0))
+- correct ci flow ([75b386e](https://github.com/bdfinst/interactive-cd/commit/75b386e580612eeb6dea0badb982c80f14a7cd4d))
+- correct ci flow ([550e074](https://github.com/bdfinst/interactive-cd/commit/550e074f774f67d5197095cdc16a718ac04ef523))
+- correct release flow ([67d4d58](https://github.com/bdfinst/interactive-cd/commit/67d4d58d4bd9f45aa3d4f22b63e68b5a615000c0))
+- correct release flow ([dfa67fb](https://github.com/bdfinst/interactive-cd/commit/dfa67fb8c20d21bab63ffd4ef4883af5c149cda8))
+- correct release flow ([77f68c4](https://github.com/bdfinst/interactive-cd/commit/77f68c4efab3ce1800188b888221351a303f2918))
+- correct release-please ([8cdc5d0](https://github.com/bdfinst/interactive-cd/commit/8cdc5d008accbb55b5bac890f0b2cb1626015e11))
+- trigger build ([0c5a7ca](https://github.com/bdfinst/interactive-cd/commit/0c5a7ca47b81103f758f6d7cad80dd9f755d7f9e))
 
 ## [1.5.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.1...interactive-cd-v1.5.2) (2025-10-29)
 
-
 ### Bug Fixes
 
-* correct tree info defects ([0bd50cc](https://github.com/bdfinst/interactive-cd/commit/0bd50cc9410be035d71ff7464c117b9036f09f0a))
-* don't run the CI flow if the merge is from release-please ([e053e8c](https://github.com/bdfinst/interactive-cd/commit/e053e8cebd7248c1522b419f98bb3cd010cf1f51))
+- correct tree info defects ([0bd50cc](https://github.com/bdfinst/interactive-cd/commit/0bd50cc9410be035d71ff7464c117b9036f09f0a))
+- don't run the CI flow if the merge is from release-please ([e053e8c](https://github.com/bdfinst/interactive-cd/commit/e053e8cebd7248c1522b419f98bb3cd010cf1f51))
 
 ## [1.5.1](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.5.0...interactive-cd-v1.5.1) (2025-10-29)
 

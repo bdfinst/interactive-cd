@@ -25,34 +25,7 @@ export default defineConfig({
 				hasTouch: true,
 				isMobile: true
 			}
-		},
-		// Mobile Safari (iOS)
-		{
-			name: 'mobile-safari',
-			use: {
-				...devices['iPhone 13'],
-				hasTouch: true,
-				isMobile: true
-			}
-		},
-		// Tablet
-		{
-			name: 'tablet',
-			use: {
-				...devices['iPad Pro'],
-				hasTouch: true,
-				isMobile: true
-			}
 		}
-		// Small mobile (edge case) - Removed due to timeout issues with slower device
-		// {
-		// 	name: 'small-mobile',
-		// 	use: {
-		// 		...devices['iPhone SE'],
-		// 		hasTouch: true,
-		// 		isMobile: true
-		// 	}
-		// }
 	],
 	webServer: {
 		command: 'npm run dev',

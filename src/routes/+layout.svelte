@@ -98,7 +98,7 @@
 <main
 	class="min-h-screen transition-all duration-300
 	ml-0
-	{isExpanded ? 'md:ml-64' : 'md:ml-16'}"
+	{isExpanded ? 'md:ml-[200px]' : 'md:ml-16'}"
 >
 	{@render children()}
 </main>
