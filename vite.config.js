@@ -66,6 +66,12 @@ export default defineConfig({
 			deps: {
 				inline: ['svelte']
 			}
+		},
+		// Suppress expected jsdom warnings
+		environmentOptions: {
+			jsdom: {
+				resources: 'usable'
+			}
 		}
 	}
 })

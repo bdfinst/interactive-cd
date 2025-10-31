@@ -85,11 +85,16 @@ describe('adoptionPersistence', () => {
 		})
 
 		it('handles localStorage errors gracefully', () => {
+			// Suppress expected warning from localStorage quota exceeded
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			localStorage.setItem.mockImplementation(() => {
 				throw new Error('QuotaExceededError')
 			})
 
 			expect(() => saveAdoptionState(new Set(['version-control']))).not.toThrow()
+
+			warnSpy.mockRestore()
 		})
 	})
 
@@ -130,19 +135,29 @@ describe('adoptionPersistence', () => {
 		})
 
 		it('handles malformed JSON gracefully', () => {
+			// Suppress expected warning from malformed JSON
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			localStorage.getItem.mockReturnValue('not-valid-json')
 
 			const result = loadAdoptionState()
 
 			expect(result).toBeNull()
+
+			warnSpy.mockRestore()
 		})
 
 		it('handles non-array JSON gracefully', () => {
+			// Suppress expected warning from non-array format
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			localStorage.getItem.mockReturnValue('{"key": "value"}')
 
 			const result = loadAdoptionState()
 
 			expect(result).toBeNull()
+
+			warnSpy.mockRestore()
 		})
 
 		it('handles array with non-string values', () => {
@@ -155,6 +170,9 @@ describe('adoptionPersistence', () => {
 		})
 
 		it('handles localStorage errors gracefully', () => {
+			// Suppress expected warning from localStorage security error
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			localStorage.getItem.mockImplementation(() => {
 				throw new Error('SecurityError')
 			})
@@ -162,6 +180,8 @@ describe('adoptionPersistence', () => {
 			const result = loadAdoptionState()
 
 			expect(result).toBeNull()
+
+			warnSpy.mockRestore()
 		})
 
 		it('filters out empty strings', () => {
@@ -189,11 +209,16 @@ describe('adoptionPersistence', () => {
 		})
 
 		it('does not throw when localStorage fails', () => {
+			// Suppress expected warning from localStorage security error
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			localStorage.removeItem.mockImplementation(() => {
 				throw new Error('SecurityError')
 			})
 
 			expect(() => clearAdoptionState()).not.toThrow()
+
+			warnSpy.mockRestore()
 		})
 	})
 

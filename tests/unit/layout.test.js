@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import {
 	optimizeLayerOrdering,
 	calculateTotalConnectionLength,
@@ -8,6 +8,9 @@ import {
 describe('Graph Layout Optimization', () => {
 	describe('optimizeLayerOrdering', () => {
 		it('preserves single nodes per level', () => {
+			// Suppress expected warnings from test data missing maturityLevel
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			const input = {
 				0: [{ id: 'root', dependencies: [{ id: 'a' }] }],
 				1: [{ id: 'a', dependencies: [] }]
@@ -19,9 +22,14 @@ describe('Graph Layout Optimization', () => {
 			expect(result[1]).toHaveLength(1)
 			expect(result[0][0].id).toBe('root')
 			expect(result[1][0].id).toBe('a')
+
+			warnSpy.mockRestore()
 		})
 
 		it('optimizes simple two-level graph', () => {
+			// Suppress expected warnings from test data missing maturityLevel
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			// Parent in middle connects to children on sides
 			const input = {
 				0: [{ id: 'root', dependencies: [{ id: 'left' }, { id: 'right' }] }],
@@ -48,6 +56,8 @@ describe('Graph Layout Optimization', () => {
 
 			// Distance should be small (ideally 1, but 2 is also reasonable)
 			expect(distance).toBeLessThanOrEqual(2)
+
+			warnSpy.mockRestore()
 		})
 
 		it('handles empty input', () => {
@@ -68,6 +78,9 @@ describe('Graph Layout Optimization', () => {
 		})
 
 		it('preserves all practices', () => {
+			// Suppress expected warnings from test data missing maturityLevel
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			const input = {
 				0: [{ id: 'root', dependencies: [{ id: 'a' }, { id: 'b' }] }],
 				1: [
@@ -83,9 +96,14 @@ describe('Graph Layout Optimization', () => {
 			const outputCount = Object.values(result).flat().length
 
 			expect(outputCount).toBe(inputCount)
+
+			warnSpy.mockRestore()
 		})
 
 		it('optimizes diamond pattern', () => {
+			// Suppress expected warnings from test data missing maturityLevel
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			// Classic diamond: root -> a,b -> leaf
 			const input = {
 				0: [
@@ -114,6 +132,8 @@ describe('Graph Layout Optimization', () => {
 			const level1Ids = result[1].map(p => p.id)
 			expect(level1Ids).toContain('a')
 			expect(level1Ids).toContain('b')
+
+			warnSpy.mockRestore()
 		})
 	})
 

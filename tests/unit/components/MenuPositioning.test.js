@@ -10,7 +10,7 @@
  * - Responsive behavior
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, fireEvent, waitFor } from '@testing-library/svelte'
 import { get } from 'svelte/store'
 import Menu from '$lib/components/Menu.svelte'
@@ -20,7 +20,20 @@ describe('Menu Positioning and Z-Index', () => {
 	beforeEach(() => {
 		// Reset menu store before each test
 		menuStore.collapse()
-		// Reset any mocked window properties
+
+		// Mock fetch to prevent "Failed to load practice data" errors
+		// Menu component tries to fetch practice data on mount
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			json: async () => ({ success: false })
+		})
+
+		// Suppress console.error for expected fetch failures
+		vi.spyOn(console, 'error').mockImplementation(() => {})
+	})
+
+	afterEach(() => {
+		// Restore all mocks after each test
 		vi.restoreAllMocks()
 	})
 
@@ -319,6 +332,22 @@ describe('Menu Positioning and Z-Index', () => {
 })
 
 describe('Menu Scroll Behavior Validation', () => {
+	beforeEach(() => {
+		// Mock fetch to prevent "Failed to load practice data" errors
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			json: async () => ({ success: false })
+		})
+
+		// Suppress console.error for expected fetch failures
+		vi.spyOn(console, 'error').mockImplementation(() => {})
+	})
+
+	afterEach(() => {
+		// Restore all mocks after each test
+		vi.restoreAllMocks()
+	})
+
 	it('menu maintains fixed position during page scroll', () => {
 		const { container } = render(Menu)
 		const menuContent = container.querySelector('[data-testid="menu-content"]')

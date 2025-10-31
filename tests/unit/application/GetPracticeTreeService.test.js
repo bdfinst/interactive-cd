@@ -195,6 +195,9 @@ describe('GetPracticeTreeService', () => {
 		})
 
 		it('returns error for non-existent practice', async () => {
+			// Suppress expected error from practice not found
+			const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
 			const mockRepository = {
 				getPracticeTree: vi.fn().mockResolvedValue(null)
 			}
@@ -204,6 +207,8 @@ describe('GetPracticeTreeService', () => {
 
 			expect(result.success).toBe(false)
 			expect(result.error).toBeDefined()
+
+			errorSpy.mockRestore()
 		})
 
 		it('preserves quickStartGuide alongside maturityLevel', async () => {

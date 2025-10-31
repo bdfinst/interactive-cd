@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import {
 	encodeAdoptionState,
 	decodeAdoptionState,
@@ -99,8 +99,13 @@ describe('urlState', () => {
 		})
 
 		it('handles invalid base64 gracefully', () => {
+			// Suppress expected warning from invalid base64
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			const result = decodeAdoptionState('not-valid-base64!')
 			expect(result).toEqual(new Set())
+
+			warnSpy.mockRestore()
 		})
 
 		it('trims whitespace from decoded IDs', () => {
@@ -162,10 +167,15 @@ describe('urlState', () => {
 		})
 
 		it('returns empty set for malformed adopted parameter', () => {
+			// Suppress expected warning from malformed adopted parameter
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			window.location.search = '?adopted=invalid-base64!'
 			const result = getAdoptionStateFromURL()
 
 			expect(result).toEqual(new Set())
+
+			warnSpy.mockRestore()
 		})
 
 		it('handles URL-encoded adopted parameter', () => {

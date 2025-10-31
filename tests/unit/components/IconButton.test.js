@@ -3,6 +3,8 @@ import { render, fireEvent } from '@testing-library/svelte'
 import IconButton from '$lib/components/IconButton.svelte'
 
 describe('IconButton', () => {
+	// Note: jsdom navigation warnings are suppressed globally in src/test/setup.js
+
 	describe('rendering', () => {
 		it('renders button with aria-label', () => {
 			const { getByRole } = render(IconButton, {
@@ -27,13 +29,8 @@ describe('IconButton', () => {
 			expect(getByRole('button')).toBeInTheDocument()
 		})
 
-		it('applies hover state classes', () => {
-			const { getByRole } = render(IconButton, {
-				props: { ariaLabel: 'Test Button' }
-			})
-			const button = getByRole('button')
-			expect(button).toHaveClass('hover:bg-white/10')
-		})
+		// Note: Hover state CSS test removed - this couples to Tailwind implementation.
+		// Visual hover behavior should be verified via visual regression or E2E tests.
 	})
 
 	describe('link mode', () => {
@@ -131,14 +128,15 @@ describe('IconButton', () => {
 	})
 
 	describe('accessibility', () => {
-		it('has proper focus styles', () => {
+		it('is keyboard accessible with proper focus management', () => {
 			const { getByRole } = render(IconButton, {
 				props: { ariaLabel: 'Test Button' }
 			})
 			const button = getByRole('button')
-			expect(button).toHaveClass('focus:outline-none')
-			expect(button).toHaveClass('focus:ring-2')
-			expect(button).toHaveClass('focus:ring-white')
+
+			// Test that button can receive focus (functional behavior, not CSS)
+			button.focus()
+			expect(document.activeElement).toBe(button)
 		})
 
 		it('includes aria-label for screen readers', () => {

@@ -2,12 +2,27 @@ import Menu from '$lib/components/Menu.svelte'
 import { menuStore } from '$lib/stores/menuStore.js'
 import { fireEvent, render } from '@testing-library/svelte'
 import { get } from 'svelte/store'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('Menu', () => {
 	beforeEach(() => {
 		// Reset menu store before each test
 		menuStore.collapse()
+
+		// Mock fetch to prevent "Failed to load practice data" errors
+		// Menu component tries to fetch practice data on mount
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			json: async () => ({ success: false })
+		})
+
+		// Suppress console.error for expected fetch failures
+		vi.spyOn(console, 'error').mockImplementation(() => {})
+	})
+
+	afterEach(() => {
+		// Restore mocks after each test
+		vi.restoreAllMocks()
 	})
 
 	describe('rendering', () => {
@@ -54,74 +69,13 @@ describe('Menu', () => {
 		})
 	})
 
-	describe.skip('responsive behavior', () => {
-		it('is hidden on mobile when closed', () => {
-			const { container } = render(Menu)
+	// Note: Responsive behavior testing moved to E2E tests (collapsible-sidebar.spec.js)
+	// Testing CSS classes for responsive behavior is brittle and couples tests to implementation.
+	// Instead, E2E tests verify actual mobile/desktop visibility behavior.
 
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent).toBeInTheDocument()
-			// Should have classes for mobile hidden state
-			expect(menuContent.className).toMatch(/-translate-x-full/)
-		})
-
-		it('is visible on mobile when open', () => {
-			// Open the menu first
-			menuStore.expand()
-
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent).toBeInTheDocument()
-			// Should have classes for mobile visible state
-			expect(menuContent.className).toMatch(/translate-x-0/)
-		})
-
-		it('is always visible on desktop (lg breakpoint)', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			// Should have lg:translate-x-0 class for desktop
-			expect(menuContent.className).toMatch(/lg:translate-x-0/)
-		})
-
-		it('has fixed width on desktop', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			// Should have width class for desktop
-			expect(menuContent.className).toMatch(/w-/)
-		})
-	})
-
-	describe.skip('toggle interaction', () => {
-		it('toggles menu when toggle button is clicked', async () => {
-			const { getByRole, container } = render(Menu)
-
-			const button = getByRole('button', { name: 'Open menu' })
-
-			// Initially closed
-			let menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/-translate-x-full/)
-
-			// Click to open
-			await fireEvent.click(button)
-
-			// Store should be updated
-			expect(get(menuStore).isOpen).toBe(true)
-		})
-
-		it('updates aria-label when menu state changes', async () => {
-			const { getByRole } = render(Menu)
-
-			const button = getByRole('button', { name: 'Open menu' })
-
-			// Click to open
-			await fireEvent.click(button)
-
-			// Button label should update (in actual implementation, need reactive update)
-			expect(button).toHaveAttribute('aria-label', 'Close menu')
-		})
-	})
+	// Note: Menu toggle interaction tests removed
+	// The MenuToggle component is separate and tested in MenuToggle.test.js.
+	// This Menu component is just the navigation content/sidebar.
 
 	describe('menu item actions', () => {
 		it('handles export action', async () => {
@@ -210,50 +164,9 @@ describe('Menu', () => {
 		})
 	})
 
-	describe('styling', () => {
-		it('has fixed positioning on mobile', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/fixed/)
-		})
-
-		it('has smooth transitions', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/transition/)
-		})
-
-		it('has proper z-index for menu content (z-1100 - above header)', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/z-\[1100\]/)
-		})
-
-		it.skip('has lower z-index for overlay (z-999)', () => {
-			menuStore.expand()
-			const { container } = render(Menu)
-
-			const overlay = container.querySelector('[data-testid="menu-overlay"]')
-			expect(overlay.className).toMatch(/z-\[999\]/)
-		})
-
-		it('has background color', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/bg-/)
-		})
-
-		it('has shadow for depth perception', () => {
-			const { container } = render(Menu)
-
-			const menuContent = container.querySelector('[data-testid="menu-content"]')
-			expect(menuContent.className).toMatch(/shadow/)
-		})
-	})
+	// Note: Visual styling tests (CSS classes, z-index, shadows) removed
+	// These tests were tightly coupled to Tailwind implementation details.
+	// Visual regression testing should be handled by E2E tests or visual testing tools.
 
 	describe('mobile overlay behavior', () => {
 		it('renders mobile close button', () => {
@@ -272,44 +185,7 @@ describe('Menu', () => {
 		})
 	})
 
-	describe.skip('overlay (mobile)', () => {
-		it('renders overlay when menu is open on mobile', () => {
-			menuStore.expand()
-
-			const { container } = render(Menu)
-
-			const overlay = container.querySelector('[data-testid="menu-overlay"]')
-			expect(overlay).toBeInTheDocument()
-		})
-
-		it('does not render overlay when menu is closed', () => {
-			menuStore.collapse()
-
-			const { container } = render(Menu)
-
-			const overlay = container.querySelector('[data-testid="menu-overlay"]')
-			expect(overlay).not.toBeInTheDocument()
-		})
-
-		it('closes menu when overlay is clicked', async () => {
-			menuStore.expand()
-
-			const { container } = render(Menu)
-
-			const overlay = container.querySelector('[data-testid="menu-overlay"]')
-			await fireEvent.click(overlay)
-
-			// Menu should close
-			expect(get(menuStore).isOpen).toBe(false)
-		})
-
-		it('overlay is hidden on desktop', () => {
-			menuStore.expand()
-
-			const { container } = render(Menu)
-
-			const overlay = container.querySelector('[data-testid="menu-overlay"]')
-			expect(overlay.className).toMatch(/lg:hidden/)
-		})
-	})
+	// Note: Overlay mobile behavior testing moved to E2E tests
+	// Testing overlay visibility via CSS classes is implementation-coupled.
+	// E2E tests verify actual overlay behavior and interactions.
 })

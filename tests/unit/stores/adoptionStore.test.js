@@ -324,6 +324,9 @@ describe('adoptionStore', () => {
 
 	describe('Edge Cases', () => {
 		it('should handle corrupted localStorage gracefully', () => {
+			// Suppress expected warning from malformed JSON
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			mockLocalStorage.setItem('cd-practices-adoption', 'invalid-json{')
 
 			// Should not throw, should initialize empty
@@ -332,9 +335,14 @@ describe('adoptionStore', () => {
 			}).not.toThrow()
 
 			expect(get(adoptionStore).size).toBe(0)
+
+			warnSpy.mockRestore()
 		})
 
 		it('should handle invalid base64 in URL gracefully', () => {
+			// Suppress expected warning from invalid base64
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			mockLocation.search = '?adopted=invalid!!!base64'
 			mockLocation.href = 'http://localhost:5173/?adopted=invalid!!!base64'
 
@@ -343,9 +351,14 @@ describe('adoptionStore', () => {
 			}).not.toThrow()
 
 			expect(get(adoptionStore).size).toBe(0)
+
+			warnSpy.mockRestore()
 		})
 
 		it('should handle localStorage with non-array format (object)', () => {
+			// Suppress expected warning from non-array format
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
 			// Object instead of array - should be ignored
 			const storageState = {
 				version: 999,
@@ -358,6 +371,8 @@ describe('adoptionStore', () => {
 
 			// Should ignore non-array format
 			expect(get(adoptionStore).size).toBe(0)
+
+			warnSpy.mockRestore()
 		})
 
 		it('should handle empty practice IDs list during initialization', () => {
