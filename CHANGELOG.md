@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.2...interactive-cd-v1.6.3) (2025-10-31)
+
+
+### Performance Improvements
+
+* optimize e2e test execution in CI ([0534e8d](https://github.com/bdfinst/interactive-cd/commit/0534e8d6e277251339922b1dffa30f6103d7c930))
+
 ## [1.6.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.1...interactive-cd-v1.6.2) (2025-10-30)
 
 
