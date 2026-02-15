@@ -507,6 +507,18 @@
 		{
 			"depends_on_id": "cross-functional-product-team",
 			"practice_id": "behavior-driven-development"
+		},
+		{
+			"depends_on_id": "automated-testing",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "monitoring-and-alerting",
+			"practice_id": "on-demand-rollback"
 		}
 	],
 	"metadata": {
@@ -537,7 +549,18 @@
 				"Security controls (authentication, authorization)",
 				"Versioning strategy (semantic versioning)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Tightly Coupled Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/tightly-coupled-monolith/"
+				},
+				{
+					"name": "Distributed Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/distributed-monolith/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/architecture-decoupling/"
 		},
 		{
 			"benefits": [
@@ -559,7 +582,18 @@
 				"Only path to production",
 				"Visible to entire team"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				},
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/single-path-to-production/"
 		},
 		{
 			"benefits": [
@@ -580,7 +614,18 @@
 				"Secure storage",
 				"Version all artifacts"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				},
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/immutable-artifacts/"
 		},
 		{
 			"benefits": [
@@ -605,7 +650,18 @@
 				"Fast feedback from acceptance test runs",
 				"Tests focus on user-visible behavior, not implementation details"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Inverted Test Pyramid",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/inverted-test-pyramid/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -618,7 +674,7 @@
 			"category": "automation",
 			"description": "Automatically generating and managing semantic version numbers for build artifacts based on commits.",
 			"id": "automated-artifact-versioning",
-			"maturityLevel": 1,
+			"maturityLevel": 0,
 			"name": "Automated Artifact Versioning",
 			"requirements": [
 				"Artifact repository with version support",
@@ -627,7 +683,14 @@
 				"Version tagging in VCS (git tags)",
 				"Versioning scheme (semantic versioning)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/immutable-artifacts/"
 		},
 		{
 			"benefits": [
@@ -649,7 +712,14 @@
 				"Rollback procedures for each migration",
 				"Version control for schema changes"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
 		},
 		{
 			"benefits": [
@@ -671,7 +741,18 @@
 				"Environment templates and blueprints",
 				"Infrastructure as Code tools (Terraform, Pulumi)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				},
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
 		},
 		{
 			"benefits": [
@@ -693,7 +774,22 @@
 				"Run on every commit",
 				"Tests must pass before merge"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Manual Regression Testing Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-regression-testing-gates/"
+				},
+				{
+					"name": "Inverted Test Pyramid",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/inverted-test-pyramid/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -720,38 +816,49 @@
 				"Scenarios relate to a single feature",
 				"Use specific, testable acceptance criteria"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Missing Product Ownership",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/missing-product-ownership/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
-				"Build reproducibility and traceability",
-				"Consistency across all builds",
 				"Consistency across builds",
-				"Easy onboarding",
 				"Easy onboarding for new team members",
-				"Fast feedback",
 				"Fast feedback to developers",
-				"Reduced human error",
-				"Reduced human error in build process"
+				"Reduced human error in build process",
+				"Build reproducibility and traceability"
 			],
 			"category": "automation",
 			"description": "Comprehensive automated build process in CI/CD pipeline that compiles, packages, tests, and validates code without manual intervention.",
 			"id": "build-automation",
-			"maturityLevel": 1,
+			"maturityLevel": 0,
 			"name": "Build Automation",
 			"requirements": [
 				"CI/CD build pipeline configuration",
-				"Fail fast on errors",
 				"Fail fast on errors with clear messages",
-				"Fast execution",
 				"Fast execution with caching strategies",
 				"One-command build from any commit",
 				"Parallel build stages where possible",
-				"Repeatable builds",
 				"Repeatable builds with same inputs",
 				"Runs in CI environment"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/build-automation/"
 		},
 		{
 			"benefits": [
@@ -773,7 +880,14 @@
 				"Protected trunk branch requiring passing builds",
 				"VCS webhooks for triggering builds"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Integration Deferred",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/integration-deferred/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/trunk-based-development/"
 		},
 		{
 			"benefits": [
@@ -795,7 +909,14 @@
 				"Documentation of compliance requirements",
 				"Regular compliance audits"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Change Advisory Board Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/cab-gates/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/deterministic-pipeline/"
 		},
 		{
 			"benefits": [
@@ -817,7 +938,18 @@
 				"Ownership registry and documentation",
 				"Team structure aligned with components"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Knowledge Silos",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/knowledge-silos/"
+				},
+				{
+					"name": "Thin-Spread Teams",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/thin-spread-teams/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/working-agreements/"
 		},
 		{
 			"benefits": [
@@ -839,7 +971,14 @@
 				"Environment-specific values externalized",
 				"No secrets in source code"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/application-configuration/"
 		},
 		{
 			"benefits": [
@@ -864,7 +1003,22 @@
 				"Stop feature work when pipeline fails",
 				"Use Continuous Integration"
 			],
-			"type": "root"
+			"type": "root",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				},
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				},
+				{
+					"name": "Integration Deferred",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/integration-deferred/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/continuous-deployment/"
 		},
 		{
 			"benefits": [
@@ -876,7 +1030,7 @@
 			"category": "behavior",
 			"description": "Integrate code changes frequently to detect integration issues early and maintain a working mainline.",
 			"id": "continuous-integration",
-			"maturityLevel": 1,
+			"maturityLevel": 0,
 			"name": "Continuous Integration",
 			"quickStartGuide": "https://minimumcd.org/minimumcd/continuous-integration/",
 			"requirements": [
@@ -887,7 +1041,18 @@
 				"Stop feature work when build fails",
 				"Use Trunk-based Development"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Long-Lived Feature Branches",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/long-lived-feature-branches/"
+				},
+				{
+					"name": "Integration Deferred",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/integration-deferred/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/trunk-based-development/"
 		},
 		{
 			"benefits": [
@@ -909,7 +1074,18 @@
 				"Test data management strategy",
 				"Test environment infrastructure"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Manual Regression Testing Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-regression-testing-gates/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -930,7 +1106,14 @@
 				"Contract versioning strategy",
 				"Machine readable service contract definitions (OpenAPI, RAML, GraphQL, AsyncApi, etc.)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Distributed Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/distributed-monolith/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -946,7 +1129,7 @@
 			"category": "behavior",
 			"description": "Highly cohesive, autonomous teams with all skills necessary to deliver business capabilities end-to-end, owning a subset of the product and working together continuously.",
 			"id": "cross-functional-product-team",
-			"maturityLevel": 3,
+			"maturityLevel": 1,
 			"name": "Cross-Functional Product Team",
 			"requirements": [
 				"Clear boundaries of team responsibility and autonomy",
@@ -958,7 +1141,22 @@
 				"Team owns a clear subset of business capabilities or product features",
 				"Team works together in the same space (physical or virtual)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Knowledge Silos",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/knowledge-silos/"
+				},
+				{
+					"name": "Thin-Spread Teams",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/thin-spread-teams/"
+				},
+				{
+					"name": "Missing Product Ownership",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/missing-product-ownership/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/working-agreements/"
 		},
 		{
 			"benefits": [
@@ -982,7 +1180,18 @@
 				"Mean time to recovery (MTTR) tracking",
 				"Visualization dashboards for team review"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Velocity as Individual Metric",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/velocity-as-individual-metric/"
+				},
+				{
+					"name": "Unbounded WIP",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/unbounded-wip/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/metrics-driven-improvement/"
 		},
 		{
 			"benefits": [
@@ -1003,7 +1212,14 @@
 				"Testable migrations",
 				"Versioned with code"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
 		},
 		{
 			"benefits": [
@@ -1024,7 +1240,18 @@
 				"Regular updates",
 				"Vulnerability scanning"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Tightly Coupled Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/tightly-coupled-monolith/"
+				},
+				{
+					"name": "Distributed Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/distributed-monolith/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/architecture-decoupling/"
 		},
 		{
 			"benefits": [
@@ -1045,7 +1272,18 @@
 				"No manual deployment steps",
 				"Push-button deployment"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				},
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/single-path-to-production/"
 		},
 		{
 			"benefits": [
@@ -1075,7 +1313,14 @@
 				"Tests that cannot be fixed are removed from primary pipeline",
 				"Unreliable tests corrected immediately"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/deterministic-pipeline/"
 		},
 		{
 			"benefits": [
@@ -1097,7 +1342,18 @@
 				"Post-incident review process",
 				"Runbook documentation for services"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Blind Operations",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/monitoring-observability/blind-operations/"
+				},
+				{
+					"name": "Knowledge Silos",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/knowledge-silos/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/working-agreements/"
 		},
 		{
 			"benefits": [
@@ -1110,7 +1366,7 @@
 			"category": "behavior",
 			"description": "Code evolves incrementally through backward-compatible changes that allow existing behaviors and consumers to continue working until they are ready to be replaced.",
 			"id": "evolutionary-coding",
-			"maturityLevel": 3,
+			"maturityLevel": 1,
 			"name": "Evolutionary Coding",
 			"requirements": [
 				"Backward compatibility practices",
@@ -1119,7 +1375,18 @@
 				"Feature flag capabilities",
 				"Small, incremental changes"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Tightly Coupled Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/tightly-coupled-monolith/"
+				},
+				{
+					"name": "Premature Microservices",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/premature-microservices/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/architecture-decoupling/"
 		},
 		{
 			"benefits": [
@@ -1141,7 +1408,14 @@
 				"Parallel change pattern",
 				"Refactoring support tooling"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
 		},
 		{
 			"benefits": [
@@ -1163,7 +1437,14 @@
 				"Versioned infrastructure configuration",
 				"Versioned test data management"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
 		},
 		{
 			"benefits": [
@@ -1185,7 +1466,14 @@
 				"Test charter templates",
 				"Time-boxed testing sessions"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Regression Testing Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-regression-testing-gates/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1207,7 +1495,14 @@
 				"Toggle features at runtime",
 				"User/group targeting"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Long-Lived Feature Branches",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/long-lived-feature-branches/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/feature-flags/"
 		},
 		{
 			"benefits": [
@@ -1229,7 +1524,18 @@
 				"Test data management",
 				"Test environments"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Inverted Test Pyramid",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/inverted-test-pyramid/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1251,7 +1557,14 @@
 				"Same artifact across all environments",
 				"Versioned and traceable"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/immutable-artifacts/"
 		},
 		{
 			"benefits": [
@@ -1272,7 +1585,18 @@
 				"Tested like application code",
 				"Version controlled"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				},
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
 		},
 		{
 			"benefits": [
@@ -1294,7 +1618,18 @@
 				"Test data setup and teardown",
 				"Test doubles/mocks for external dependencies"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				},
+				{
+					"name": "Inverted Test Pyramid",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/inverted-test-pyramid/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1315,7 +1650,14 @@
 				"Searchable logs",
 				"Structured logging"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Blind Operations",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/monitoring-observability/blind-operations/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/metrics-driven-improvement/"
 		},
 		{
 			"benefits": [
@@ -1337,7 +1679,18 @@
 				"Service contracts and APIs",
 				"Well-defined contracts between modules"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Tightly Coupled Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/tightly-coupled-monolith/"
+				},
+				{
+					"name": "Distributed Monolith",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/architecture/distributed-monolith/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/architecture-decoupling/"
 		},
 		{
 			"benefits": [
@@ -1359,7 +1712,14 @@
 				"Metrics collection infrastructure (Prometheus, DataDog)",
 				"Real-time dashboards and visualization"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Blind Operations",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/monitoring-observability/blind-operations/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/metrics-driven-improvement/"
 		},
 		{
 			"benefits": [
@@ -1381,7 +1741,14 @@
 				"Rollback mechanism in place",
 				"Tested regularly"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/rollback/"
 		},
 		{
 			"benefits": [
@@ -1403,7 +1770,14 @@
 				"Performance monitoring and profiling",
 				"Realistic test scenarios and data volumes"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1424,7 +1798,14 @@
 				"Real-time status display",
 				"Visible to all team members"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Deployment Pipeline",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/missing-deployment-pipeline/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/pipeline-architecture/"
 		},
 		{
 			"benefits": [
@@ -1444,7 +1825,18 @@
 				"Stakeholder collaboration process",
 				"Value metrics and success criteria"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Product Ownership",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/missing-product-ownership/"
+				},
+				{
+					"name": "Unbounded WIP",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/unbounded-wip/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/work-decomposition/"
 		},
 		{
 			"benefits": [
@@ -1459,7 +1851,7 @@
 			"category": "behavior",
 			"description": "Clearly defined, measurable product goals that align team effort and provide direction for feature prioritization.",
 			"id": "product-goals",
-			"maturityLevel": 3,
+			"maturityLevel": 1,
 			"name": "Product Goals",
 			"requirements": [
 				"Clear product vision and mission",
@@ -1470,7 +1862,14 @@
 				"Success metrics defined",
 				"Time-bound goal setting"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Missing Product Ownership",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/missing-product-ownership/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/working-agreements/"
 		},
 		{
 			"benefits": [
@@ -1493,7 +1892,18 @@
 				"Defined quality thresholds (code coverage, complexity, vulnerabilities)",
 				"Visibility of gate status to team"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Regression Testing Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-regression-testing-gates/"
+				},
+				{
+					"name": "Change Advisory Board Gates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/cab-gates/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/deterministic-pipeline/"
 		},
 		{
 			"benefits": [
@@ -1515,7 +1925,14 @@
 				"Production-like test environments",
 				"Recovery validation procedures"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1536,7 +1953,14 @@
 				"No secrets in source code",
 				"Rotation capability"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/application-configuration/"
 		},
 		{
 			"benefits": [
@@ -1558,7 +1982,14 @@
 				"Security testing in pipeline",
 				"Static Application Security Testing (SAST)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1580,7 +2011,14 @@
 				"Tests critical user journeys",
 				"Tests run immediately after deployment"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/deployable-definition/"
 		},
 		{
 			"benefits": [
@@ -1602,7 +2040,14 @@
 				"Security vulnerability scanning",
 				"Static analysis tools (ESLint, SonarQube)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Code Coverage Mandates",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/code-coverage-mandates/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/code-review/"
 		},
 		{
 			"benefits": [
@@ -1624,7 +2069,18 @@
 				"Fast build feedback (< 10 minutes)",
 				"Team commitment to stop feature work on build failure"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Pressure to Skip Testing",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/pressure-to-skip-testing/"
+				},
+				{
+					"name": "Deadline-Driven Development",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organizational-cultural/deadline-driven-development/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/working-agreements/"
 		},
 		{
 			"benefits": [
@@ -1646,7 +2102,14 @@
 				"Log aggregation",
 				"Real-time dashboards"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Blind Operations",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/monitoring-observability/blind-operations/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/metrics-driven-improvement/"
 		},
 		{
 			"benefits": [
@@ -1667,7 +2130,14 @@
 				"Representative data sets",
 				"Version controlled fixtures"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1689,7 +2159,14 @@
 				"Same OS and versions as production",
 				"Similar data volumes"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
 		},
 		{
 			"benefits": [
@@ -1711,7 +2188,18 @@
 				"Branches removed after merge",
 				"Short-lived branches (hours to days)"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Long-Lived Feature Branches",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/long-lived-feature-branches/"
+				},
+				{
+					"name": "Integration Deferred",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/integration-deferred/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/trunk-based-development/"
 		},
 		{
 			"benefits": [
@@ -1732,7 +2220,18 @@
 				"Team access and visibility",
 				"Team ownership and accountability"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Push-Based Work Assignment",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/push-based-work-assignment/"
+				},
+				{
+					"name": "Unbounded WIP",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/team-workflow/unbounded-wip/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/optimize/limiting-work-in-progress/"
 		},
 		{
 			"benefits": [
@@ -1754,7 +2253,14 @@
 				"Testing protocol and scripts",
 				"User recruitment process"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Testing Only",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/testing/manual-testing-only/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
 		},
 		{
 			"benefits": [
@@ -1774,7 +2280,14 @@
 				"Meaningful commit messages",
 				"Single source of truth"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Long-Lived Feature Branches",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/branching-integration/long-lived-feature-branches/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/trunk-based-development/"
 		},
 		{
 			"benefits": [
@@ -1796,7 +2309,14 @@
 				"Schema documentation",
 				"Version control system for schema"
 			],
-			"type": "practice"
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Manual Deployments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/manual-deployments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
 		}
 	]
 }
