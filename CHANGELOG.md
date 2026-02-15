@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.7.0](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.2...interactive-cd-v1.7.0) (2026-02-15)
+
+
+### Features
+
+* add onboarding, guided walkthrough, strategic patterns, and practice data expansion ([d8f98bc](https://github.com/bdfinst/interactive-cd/commit/d8f98bc91fb24368c0ee9f9dedfd3534393e024e))
+
+
+### Bug Fixes
+
+* resolve CD dependency graph issues (P0 & P1) ([e6e6f96](https://github.com/bdfinst/interactive-cd/commit/e6e6f969cd07177a5b8ae371430fb935f72115d3))
+
+
+### Performance Improvements
+
+* optimize e2e test execution in CI ([0534e8d](https://github.com/bdfinst/interactive-cd/commit/0534e8d6e277251339922b1dffa30f6103d7c930))
+
+
+### Documentation
+
+* add commit message convention to CLAUDE.md ([922c829](https://github.com/bdfinst/interactive-cd/commit/922c8297ab15997a8ecdd8f8fd7d5c76b6072082))
+
 ## [1.6.2](https://github.com/bdfinst/interactive-cd/compare/interactive-cd-v1.6.1...interactive-cd-v1.6.2) (2025-10-30)
 
 
