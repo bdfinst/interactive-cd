@@ -98,6 +98,39 @@
 					"description": "CD maturity level (0=Foundation, 1=Core Automation, 2=Advanced, 3=CD Enablement)",
 					"minimum": 0,
 					"maximum": 3
+				},
+				"antiPatterns": {
+					"type": "array",
+					"description": "List of anti-patterns associated with this practice",
+					"items": {
+						"type": "object",
+						"required": ["name", "url"],
+						"additionalProperties": false,
+						"properties": {
+							"name": {
+								"type": "string",
+								"description": "Display name of the anti-pattern",
+								"minLength": 2,
+								"maxLength": 200
+							},
+							"url": {
+								"type": "string",
+								"description": "URL to the anti-pattern page on migration.minimumcd.org",
+								"format": "uri",
+								"pattern": "^https?://",
+								"minLength": 10,
+								"maxLength": 500
+							}
+						}
+					}
+				},
+				"migrationGuideUrl": {
+					"type": "string",
+					"description": "URL to the migration guide for this practice on migration.minimumcd.org",
+					"format": "uri",
+					"pattern": "^https?://",
+					"minLength": 10,
+					"maxLength": 500
 				}
 			}
 		},

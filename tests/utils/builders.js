@@ -21,6 +21,8 @@ export const buildPractice = (overrides = {}) => ({
 	dependencies: [],
 	dependencyCount: 0,
 	benefitCount: 2,
+	antiPatterns: [],
+	migrationGuideUrl: null,
 	...overrides
 })
 

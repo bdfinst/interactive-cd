@@ -99,7 +99,7 @@
 
 <div
 	bind:this={legendElement}
-	class="fixed right-0 bg-black border-b border-gray-700 shadow-md z-[999] py-2 transition-all duration-300
+	class="fixed right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/40 shadow-md z-[999] py-2 transition-all duration-300
 	left-0
 	{isExpanded ? 'md:left-64' : 'md:left-16'}"
 	style="top: {$headerHeight}px;"

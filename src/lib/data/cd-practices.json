@@ -21,6 +21,18 @@
 			"practice_id": "application-pipeline"
 		},
 		{
+			"depends_on_id": "behavior-driven-development",
+			"practice_id": "atdd"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "atdd"
+		},
+		{
+			"depends_on_id": "ephemeral-test-environments",
+			"practice_id": "atdd"
+		},
+		{
 			"depends_on_id": "artifact-repository",
 			"practice_id": "automated-artifact-versioning"
 		},
@@ -33,11 +45,11 @@
 			"practice_id": "automated-db-changes"
 		},
 		{
-			"depends_on_id": "deployment-automation",
+			"depends_on_id": "database-migration-strategy",
 			"practice_id": "automated-db-changes"
 		},
 		{
-			"depends_on_id": "database-migration-strategy",
+			"depends_on_id": "deployment-automation",
 			"practice_id": "automated-db-changes"
 		},
 		{
@@ -53,8 +65,12 @@
 			"practice_id": "automated-testing"
 		},
 		{
-			"depends_on_id": "behavior-driven-development",
-			"practice_id": "functional-testing"
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "automated-testing"
+		},
+		{
+			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "behavior-driven-development"
 		},
 		{
 			"depends_on_id": "dependency-management",
@@ -65,7 +81,15 @@
 			"practice_id": "build-automation"
 		},
 		{
+			"depends_on_id": "build-automation",
+			"practice_id": "build-on-commit"
+		},
+		{
 			"depends_on_id": "automated-testing",
+			"practice_id": "compliance-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
 			"practice_id": "compliance-testing"
 		},
 		{
@@ -73,11 +97,11 @@
 			"practice_id": "compliance-testing"
 		},
 		{
-			"depends_on_id": "telemetry-observability",
+			"depends_on_id": "cross-functional-product-team",
 			"practice_id": "component-ownership"
 		},
 		{
-			"depends_on_id": "cross-functional-product-team",
+			"depends_on_id": "telemetry-observability",
 			"practice_id": "component-ownership"
 		},
 		{
@@ -97,11 +121,19 @@
 			"practice_id": "continuous-delivery"
 		},
 		{
+			"depends_on_id": "atdd",
+			"practice_id": "continuous-delivery"
+		},
+		{
 			"depends_on_id": "automated-db-changes",
 			"practice_id": "continuous-delivery"
 		},
 		{
 			"depends_on_id": "automated-environment-provisioning",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "automated-testing",
 			"practice_id": "continuous-delivery"
 		},
 		{
@@ -117,23 +149,11 @@
 			"practice_id": "continuous-delivery"
 		},
 		{
-			"depends_on_id": "immutable-artifact",
-			"practice_id": "continuous-delivery"
-		},
-		{
-			"depends_on_id": "modular-system",
-			"practice_id": "continuous-delivery"
-		},
-		{
-			"depends_on_id": "on-demand-rollback",
-			"practice_id": "continuous-delivery"
-		},
-		{
-			"depends_on_id": "test-environment",
-			"practice_id": "continuous-delivery"
-		},
-		{
 			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
 			"practice_id": "continuous-delivery"
 		},
 		{
@@ -141,11 +161,15 @@
 			"practice_id": "continuous-delivery"
 		},
 		{
-			"depends_on_id": "evolutionary-coding",
-			"practice_id": "continuous-integration"
+			"depends_on_id": "immutable-artifact",
+			"practice_id": "continuous-delivery"
 		},
 		{
-			"depends_on_id": "prioritized-features",
+			"depends_on_id": "leadership-alignment",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "modular-system",
 			"practice_id": "continuous-delivery"
 		},
 		{
@@ -153,7 +177,19 @@
 			"practice_id": "continuous-delivery"
 		},
 		{
-			"depends_on_id": "atdd",
+			"depends_on_id": "on-demand-rollback",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "prioritized-features",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "test-environment",
+			"practice_id": "continuous-delivery"
+		},
+		{
+			"depends_on_id": "version-control",
 			"practice_id": "continuous-delivery"
 		},
 		{
@@ -161,7 +197,23 @@
 			"practice_id": "continuous-integration"
 		},
 		{
+			"depends_on_id": "build-automation",
+			"practice_id": "continuous-integration"
+		},
+		{
 			"depends_on_id": "build-on-commit",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "evolutionary-coding",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "pipeline-visibility",
+			"practice_id": "continuous-integration"
+		},
+		{
+			"depends_on_id": "stop-the-line",
 			"practice_id": "continuous-integration"
 		},
 		{
@@ -169,11 +221,7 @@
 			"practice_id": "continuous-integration"
 		},
 		{
-			"depends_on_id": "functional-testing",
-			"practice_id": "continuous-testing"
-		},
-		{
-			"depends_on_id": "performance-testing",
+			"depends_on_id": "build-automation",
 			"practice_id": "continuous-testing"
 		},
 		{
@@ -181,15 +229,55 @@
 			"practice_id": "continuous-testing"
 		},
 		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "exploratory-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "functional-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
 			"depends_on_id": "integration-testing",
 			"practice_id": "continuous-testing"
 		},
 		{
-			"depends_on_id": "continuous-integration",
+			"depends_on_id": "performance-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "resilience-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "smoke-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "static-analysis",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "usability-testing",
+			"practice_id": "continuous-testing"
+		},
+		{
+			"depends_on_id": "build-automation",
+			"practice_id": "contract-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "contract-testing"
+		},
+		{
+			"depends_on_id": "automated-testing",
 			"practice_id": "cycle-time-tracking"
 		},
 		{
-			"depends_on_id": "version-control",
+			"depends_on_id": "continuous-integration",
 			"practice_id": "cycle-time-tracking"
 		},
 		{
@@ -197,15 +285,15 @@
 			"practice_id": "cycle-time-tracking"
 		},
 		{
-			"depends_on_id": "automated-testing",
+			"depends_on_id": "version-control",
 			"practice_id": "cycle-time-tracking"
 		},
 		{
-			"depends_on_id": "version-control",
+			"depends_on_id": "evolutionary-database",
 			"practice_id": "database-migration-strategy"
 		},
 		{
-			"depends_on_id": "evolutionary-database",
+			"depends_on_id": "version-control",
 			"practice_id": "database-migration-strategy"
 		},
 		{
@@ -221,20 +309,12 @@
 			"practice_id": "deployment-automation"
 		},
 		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "automated-testing"
-		},
-		{
-			"depends_on_id": "telemetry-observability",
-			"practice_id": "developer-driven-support"
-		},
-		{
 			"depends_on_id": "monitoring-and-alerting",
 			"practice_id": "developer-driven-support"
 		},
 		{
-			"depends_on_id": "versioned-database",
-			"practice_id": "evolutionary-database"
+			"depends_on_id": "telemetry-observability",
+			"practice_id": "developer-driven-support"
 		},
 		{
 			"depends_on_id": "infrastructure-automation",
@@ -245,16 +325,12 @@
 			"practice_id": "ephemeral-test-environments"
 		},
 		{
+			"depends_on_id": "versioned-database",
+			"practice_id": "evolutionary-database"
+		},
+		{
 			"depends_on_id": "test-environment",
 			"practice_id": "exploratory-testing"
-		},
-		{
-			"depends_on_id": "exploratory-testing",
-			"practice_id": "continuous-testing"
-		},
-		{
-			"depends_on_id": "usability-testing",
-			"practice_id": "continuous-testing"
 		},
 		{
 			"depends_on_id": "configuration-management",
@@ -262,6 +338,14 @@
 		},
 		{
 			"depends_on_id": "automated-testing",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "behavior-driven-development",
+			"practice_id": "functional-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
 			"practice_id": "functional-testing"
 		},
 		{
@@ -293,8 +377,24 @@
 			"practice_id": "integration-testing"
 		},
 		{
+			"depends_on_id": "contract-testing",
+			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
+			"practice_id": "integration-testing"
+		},
+		{
 			"depends_on_id": "test-environment",
 			"practice_id": "integration-testing"
+		},
+		{
+			"depends_on_id": "product-goals",
+			"practice_id": "leadership-alignment"
+		},
+		{
+			"depends_on_id": "working-agreements",
+			"practice_id": "leadership-alignment"
 		},
 		{
 			"depends_on_id": "api-management",
@@ -305,16 +405,28 @@
 			"practice_id": "modular-system"
 		},
 		{
-			"depends_on_id": "logging-infrastructure",
-			"practice_id": "telemetry-observability"
+			"depends_on_id": "cycle-time-tracking",
+			"practice_id": "monitoring-and-alerting"
 		},
 		{
 			"depends_on_id": "telemetry-observability",
 			"practice_id": "monitoring-and-alerting"
 		},
 		{
-			"depends_on_id": "cycle-time-tracking",
-			"practice_id": "monitoring-and-alerting"
+			"depends_on_id": "database-migration-strategy",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "deployment-automation",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "monitoring-and-alerting",
+			"practice_id": "on-demand-rollback"
+		},
+		{
+			"depends_on_id": "smoke-testing",
+			"practice_id": "on-demand-rollback"
 		},
 		{
 			"depends_on_id": "automated-testing",
@@ -333,10 +445,6 @@
 			"practice_id": "pipeline-visibility"
 		},
 		{
-			"depends_on_id": "pipeline-visibility",
-			"practice_id": "continuous-integration"
-		},
-		{
 			"depends_on_id": "product-goals",
 			"practice_id": "prioritized-features"
 		},
@@ -345,16 +453,12 @@
 			"practice_id": "prioritized-features"
 		},
 		{
-			"depends_on_id": "static-analysis",
-			"practice_id": "quality-gates"
-		},
-		{
 			"depends_on_id": "automated-testing",
 			"practice_id": "quality-gates"
 		},
 		{
-			"depends_on_id": "resilience-testing",
-			"practice_id": "continuous-testing"
+			"depends_on_id": "static-analysis",
+			"practice_id": "quality-gates"
 		},
 		{
 			"depends_on_id": "automated-testing",
@@ -373,14 +477,6 @@
 			"practice_id": "resilience-testing"
 		},
 		{
-			"depends_on_id": "database-migration-strategy",
-			"practice_id": "on-demand-rollback"
-		},
-		{
-			"depends_on_id": "deployment-automation",
-			"practice_id": "on-demand-rollback"
-		},
-		{
 			"depends_on_id": "automated-testing",
 			"practice_id": "security-testing"
 		},
@@ -389,19 +485,15 @@
 			"practice_id": "security-testing"
 		},
 		{
-			"depends_on_id": "static-analysis",
-			"practice_id": "continuous-testing"
-		},
-		{
-			"depends_on_id": "smoke-testing",
-			"practice_id": "on-demand-rollback"
-		},
-		{
-			"depends_on_id": "smoke-testing",
-			"practice_id": "continuous-testing"
+			"depends_on_id": "build-automation",
+			"practice_id": "smoke-testing"
 		},
 		{
 			"depends_on_id": "deployment-automation",
+			"practice_id": "smoke-testing"
+		},
+		{
+			"depends_on_id": "deterministic-tests",
 			"practice_id": "smoke-testing"
 		},
 		{
@@ -409,8 +501,16 @@
 			"practice_id": "static-analysis"
 		},
 		{
-			"depends_on_id": "stop-the-line",
-			"practice_id": "continuous-integration"
+			"depends_on_id": "cross-functional-product-team",
+			"practice_id": "team-communication"
+		},
+		{
+			"depends_on_id": "version-control",
+			"practice_id": "team-communication"
+		},
+		{
+			"depends_on_id": "logging-infrastructure",
+			"practice_id": "telemetry-observability"
 		},
 		{
 			"depends_on_id": "infrastructure-automation",
@@ -445,88 +545,385 @@
 			"practice_id": "usability-testing"
 		},
 		{
-			"depends_on_id": "build-automation",
-			"practice_id": "build-on-commit"
-		},
-		{
-			"depends_on_id": "build-automation",
-			"practice_id": "continuous-integration"
-		},
-		{
-			"depends_on_id": "build-automation",
-			"practice_id": "continuous-testing"
-		},
-		{
-			"depends_on_id": "build-automation",
-			"practice_id": "contract-testing"
-		},
-		{
-			"depends_on_id": "contract-testing",
-			"practice_id": "integration-testing"
-		},
-		{
-			"depends_on_id": "build-automation",
-			"practice_id": "smoke-testing"
-		},
-		{
-			"depends_on_id": "behavior-driven-development",
-			"practice_id": "atdd"
-		},
-		{
-			"depends_on_id": "ephemeral-test-environments",
-			"practice_id": "atdd"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "compliance-testing"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "continuous-testing"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "contract-testing"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "atdd"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "functional-testing"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "integration-testing"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "smoke-testing"
-		},
-		{
 			"depends_on_id": "cross-functional-product-team",
-			"practice_id": "behavior-driven-development"
+			"practice_id": "working-agreements"
 		},
 		{
-			"depends_on_id": "automated-testing",
-			"practice_id": "continuous-delivery"
-		},
-		{
-			"depends_on_id": "deterministic-tests",
-			"practice_id": "continuous-delivery"
-		},
-		{
-			"depends_on_id": "monitoring-and-alerting",
-			"practice_id": "on-demand-rollback"
+			"depends_on_id": "team-communication",
+			"practice_id": "working-agreements"
 		}
 	],
 	"metadata": {
-		"changelog": "Added ephemeral-test-environments practice (maturity level 2) as a dependency of continuous-integration, depending on test-data-management and infrastructure-automation. Added maturityLevel field to all practices. Added quality-gates and cycle-time-tracking practices. Updated deterministic-tests definition to emphasize reliable reporting of system status and process for handling unreliable tests. Updated evolutionary-coding definition to emphasize backward-compatible changes over refactoring. Removed all dependencies from deterministic-tests (foundational practice). Removed redundant test-data-management dependencies from integration-testing and performance-testing (inherited via test-environment).",
+		"changelog": "Added 3 new organizational behavior practices (team-communication, working-agreements, leadership-alignment) with maturity levels 1-2. Added 8 new dependency relationships establishing organizational foundation chain: version-control and cross-functional-product-team → team-communication → working-agreements → leadership-alignment → continuous-delivery, and version-control → continuous-delivery. These practices provide organizational structure and alignment prerequisites for effective CD implementation.",
 		"description": "Hierarchical data structure for Continuous Delivery practices and their dependencies",
-		"lastUpdated": "2025-10-29",
+		"lastUpdated": "2026-02-15",
 		"source": "MinimumCD.org",
-		"version": "1.12.0"
+		"version": "1.13.0",
+		"patterns": {
+			"devopsTrilogy": {
+				"description": "Three interdependent capabilities required for effective CD: Continuous Delivery capability (deployment automation), Architecture capability (modular, testable design), and Product & Process capability (cross-functional teams, user-centric development).",
+				"capabilities": {
+					"continuousDelivery": {
+						"name": "Continuous Delivery Capability",
+						"description": "The ability to deploy software to production reliably, frequently, and safely",
+						"corePractices": [
+							"automated-testing",
+							"build-automation",
+							"deployment-automation",
+							"continuous-integration",
+							"quality-gates",
+							"version-control"
+						],
+						"enablerPractices": [
+							"application-pipeline",
+							"artifact-repository",
+							"automated-artifact-versioning",
+							"automated-environment-provisioning",
+							"configuration-management",
+							"infrastructure-automation",
+							"monitoring-and-alerting",
+							"on-demand-rollback"
+						]
+					},
+					"architecture": {
+						"name": "Architecture Capability",
+						"description": "System design that enables independent deployment and rapid feedback",
+						"corePractices": [
+							"component-ownership",
+							"evolutionary-database",
+							"evolutionary-coding"
+						],
+						"enablerPractices": [
+							"api-management",
+							"automated-db-changes",
+							"database-migration-strategy",
+							"decoupled-architecture",
+							"feature-toggles",
+							"integration-testing",
+							"infrastructure-as-code",
+							"modular-design"
+						]
+					},
+					"productAndProcess": {
+						"name": "Product & Process Capability",
+						"description": "Organizational structure and practices that enable rapid value delivery and learning",
+						"corePractices": [
+							"behavior-driven-development",
+							"cross-functional-product-team",
+							"product-goals"
+						],
+						"enablerPractices": [
+							"atdd",
+							"continuous-deployment",
+							"customer-feedback",
+							"exploratory-testing",
+							"hypothesis-driven-development",
+							"team-communication",
+							"working-agreements",
+							"leadership-alignment"
+						]
+					}
+				},
+				"interdependencies": {
+					"description": "Progress in one capability enables and accelerates progress in others",
+					"relationships": [
+						{
+							"from": "continuousDelivery",
+							"to": "architecture",
+							"description": "Strong CD enables architectural evolution and feedback"
+						},
+						{
+							"from": "architecture",
+							"to": "continuousDelivery",
+							"description": "Modular architecture makes CD automation simpler and safer"
+						},
+						{
+							"from": "productAndProcess",
+							"to": "continuousDelivery",
+							"description": "User-centric teams drive valuable, frequent releases"
+						},
+						{
+							"from": "continuousDelivery",
+							"to": "productAndProcess",
+							"description": "Rapid feedback enables effective product development"
+						}
+					]
+				}
+			},
+			"criticalPath": {
+				"description": "Load-bearing practices that have the highest impact on CD capability. Prioritizing these practices provides the fastest path to continuous delivery.",
+				"methodology": "Critical Path analysis identifies practices with high fan-in (many other practices depending on them), indicating they should be implemented early.",
+				"tier1": {
+					"name": "Tier 1: Foundational Practices (7+ dependents)",
+					"practices": [
+						{
+							"id": "automated-testing",
+							"dependents": 11,
+							"rationale": "Foundation for all quality gates and deployment safety"
+						},
+						{
+							"id": "build-automation",
+							"dependents": 9,
+							"rationale": "Essential for consistent, reproducible artifact generation"
+						},
+						{
+							"id": "deterministic-tests",
+							"dependents": 9,
+							"rationale": "Reliable test results enable automation and safe deployments"
+						},
+						{
+							"id": "version-control",
+							"dependents": 7,
+							"rationale": "Foundation for collaboration and artifact traceability"
+						}
+					],
+					"implementationStrategy": "Implement in order: version-control → deterministic-tests → automated-testing → build-automation. Each enables the next."
+				},
+				"tier2": {
+					"name": "Tier 2: Enabler Practices (5-6 dependents)",
+					"practices": [
+						{
+							"id": "infrastructure-automation",
+							"dependents": 6,
+							"rationale": "Enables consistent, reproducible environments"
+						},
+						{
+							"id": "configuration-management",
+							"dependents": 5,
+							"rationale": "Ensures environment parity and deployment safety"
+						}
+					],
+					"implementationStrategy": "Implement after Tier 1. These enable environment-specific concerns."
+				},
+				"nonCriticalPath": {
+					"description": "Important practices with lower fan-in, typically implemented after critical path",
+					"characteristics": [
+						"Enable specific capabilities (e.g., database automation, security testing)",
+						"Depend on critical path practices",
+						"Provide specialization and depth"
+					]
+				},
+				"roi": {
+					"tier1Impact": "Implementing Tier 1 practices delivers ~70% of CD capability with ~40% of effort",
+					"tier2Impact": "Adding Tier 2 practices brings total to ~85% of CD capability with ~60% of effort",
+					"roi": "Critical path practices deliver highest value per effort invested"
+				}
+			},
+			"implementationTimeline": {
+				"description": "52-week roadmap for implementing CD practices across 5 phases",
+				"totalDuration": "52 weeks (12 months)",
+				"phases": [
+					{
+						"number": 1,
+						"name": "Foundation",
+						"duration": "8 weeks",
+						"goals": [
+							"Establish version control and code quality baseline",
+							"Implement deterministic test infrastructure",
+							"Set up CI foundation",
+							"Establish team communication and agreements"
+						],
+						"practices": [
+							"version-control",
+							"deterministic-tests",
+							"build-automation",
+							"continuous-integration",
+							"team-communication",
+							"working-agreements"
+						],
+						"effort": {
+							"planning": "1 week",
+							"implementation": "5 weeks",
+							"stabilization": "2 weeks"
+						},
+						"devopsTrilogyProgress": {
+							"continuousDelivery": "20%",
+							"architecture": "10%",
+							"productAndProcess": "30%"
+						},
+						"outcomes": [
+							"Code in version control with quality gates",
+							"Reproducible builds",
+							"Team aligned on working norms"
+						]
+					},
+					{
+						"number": 2,
+						"name": "Core Automation",
+						"duration": "12 weeks",
+						"goals": [
+							"Build comprehensive automated test suite",
+							"Establish artifact management and versioning",
+							"Implement infrastructure automation basics",
+							"Set up production monitoring"
+						],
+						"practices": [
+							"automated-testing",
+							"automated-artifact-versioning",
+							"artifact-repository",
+							"infrastructure-automation",
+							"configuration-management",
+							"monitoring-and-alerting"
+						],
+						"effort": {
+							"planning": "1 week",
+							"implementation": "8 weeks",
+							"stabilization": "3 weeks"
+						},
+						"devopsTrilogyProgress": {
+							"continuousDelivery": "50%",
+							"architecture": "20%",
+							"productAndProcess": "40%"
+						},
+						"outcomes": [
+							"Automated test pyramid in place",
+							"Immutable artifacts with version tracking",
+							"Automated environment provisioning",
+							"Production observability"
+						]
+					},
+					{
+						"number": 3,
+						"name": "Architecture & Process",
+						"duration": "12 weeks",
+						"goals": [
+							"Enable component ownership and modularity",
+							"Implement database evolution capability",
+							"Establish BDD and ATDD practices",
+							"Enable feature toggles for safe deployments",
+							"Align leadership with CD goals"
+						],
+						"practices": [
+							"component-ownership",
+							"evolutionary-database",
+							"automated-db-changes",
+							"behavior-driven-development",
+							"atdd",
+							"feature-toggles",
+							"leadership-alignment"
+						],
+						"effort": {
+							"planning": "2 weeks",
+							"implementation": "8 weeks",
+							"stabilization": "2 weeks"
+						},
+						"devopsTrilogyProgress": {
+							"continuousDelivery": "70%",
+							"architecture": "60%",
+							"productAndProcess": "60%"
+						},
+						"outcomes": [
+							"Independent component deployment capability",
+							"Database changes automated and versionable",
+							"Behavior-driven requirements and testing",
+							"Risk-reduced deployment with feature toggles",
+							"Executive alignment and sponsorship"
+						]
+					},
+					{
+						"number": 4,
+						"name": "Advanced Capabilities",
+						"duration": "12 weeks",
+						"goals": [
+							"Implement continuous deployment (on-demand)",
+							"Establish advanced testing (security, compliance, performance)",
+							"Enable architectural evolution practices",
+							"Integrate customer feedback loops",
+							"Implement deployment safety practices"
+						],
+						"practices": [
+							"continuous-deployment",
+							"security-testing",
+							"compliance-testing",
+							"performance-testing",
+							"evolutionary-coding",
+							"customer-feedback",
+							"on-demand-rollback",
+							"exploratory-testing"
+						],
+						"effort": {
+							"planning": "1 week",
+							"implementation": "9 weeks",
+							"stabilization": "2 weeks"
+						},
+						"devopsTrilogyProgress": {
+							"continuousDelivery": "85%",
+							"architecture": "80%",
+							"productAndProcess": "80%"
+						},
+						"outcomes": [
+							"On-demand deployment capability",
+							"Comprehensive security and compliance validation",
+							"Safe architectural evolution",
+							"User feedback integration",
+							"Production rollback capability"
+						]
+					},
+					{
+						"number": 5,
+						"name": "Optimization & Maturity",
+						"duration": "8 weeks",
+						"goals": [
+							"Optimize cycle time and deployment frequency",
+							"Implement hypothesis-driven development",
+							"Establish deployment analytics",
+							"Achieve organizational excellence",
+							"Automate remaining manual processes"
+						],
+						"practices": [
+							"hypothesis-driven-development",
+							"cycle-time-tracking",
+							"deployment-analytics",
+							"quality-gates",
+							"api-management",
+							"infrastructure-as-code"
+						],
+						"effort": {
+							"planning": "1 week",
+							"implementation": "5 weeks",
+							"stabilization": "2 weeks"
+						},
+						"devopsTrilogyProgress": {
+							"continuousDelivery": "95%",
+							"architecture": "90%",
+							"productAndProcess": "90%"
+						},
+						"outcomes": [
+							"Deploy-on-demand with confidence",
+							"Data-driven product decisions",
+							"Measurable deployment success (DORA metrics)",
+							"Organizational excellence and continuous improvement"
+						]
+					}
+				],
+				"adaptationGuidance": {
+					"greenfield": "Can compress timeline by 20-30% with dedicated team and no legacy constraints",
+					"brownfield": "May need 1.5-2x timeline to handle legacy migration and cultural change",
+					"smallTeam": "Focus on Tier 1 practices (Phases 1-3) for maximum impact with minimal overhead",
+					"largeOrg": "Implement as pilots in one division, then scale across organization"
+				},
+				"successMetrics": {
+					"dora": [
+						"Deployment Frequency: < 1 day",
+						"Lead Time for Changes: < 1 day",
+						"Mean Time to Recovery: < 1 hour",
+						"Change Failure Rate: < 15%"
+					],
+					"technical": [
+						"Test Coverage: > 80%",
+						"Build Time: < 10 minutes",
+						"Code Review Time: < 24 hours",
+						"Architecture Modularity: > 90%"
+					],
+					"process": [
+						"Cycle Time: < 1 week",
+						"Release Frequency: Daily to weekly",
+						"Incident Response: < 30 minutes",
+						"Retrospective Velocity: >= 1 improvement per week"
+					]
+				}
+			}
+		}
 	},
 	"practices": [
 		{
@@ -1357,6 +1754,35 @@
 		},
 		{
 			"benefits": [
+				"Faster test execution with parallel environments",
+				"Isolated testing without interference",
+				"Reduced environment conflicts",
+				"Cost optimization through on-demand provisioning",
+				"Consistent test environment state"
+			],
+			"category": "automation",
+			"description": "Short-lived test environments created on-demand for testing and automatically destroyed after use, ensuring clean state and isolation.",
+			"id": "ephemeral-test-environments",
+			"maturityLevel": 2,
+			"name": "Ephemeral Test Environments",
+			"requirements": [
+				"Automated environment creation and destruction",
+				"Infrastructure as Code for environment templates",
+				"On-demand provisioning capability",
+				"Versioned infrastructure configuration",
+				"Versioned test data management"
+			],
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Snowflake Environments",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
+		},
+		{
+			"benefits": [
 				"Adaptable to changing requirements",
 				"Parallel operation of old and new code",
 				"Reduced risk of introducing breaking changes",
@@ -1416,35 +1842,6 @@
 				}
 			],
 			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
-		},
-		{
-			"benefits": [
-				"Faster test execution with parallel environments",
-				"Isolated testing without interference",
-				"Reduced environment conflicts",
-				"Cost optimization through on-demand provisioning",
-				"Consistent test environment state"
-			],
-			"category": "automation",
-			"description": "Short-lived test environments created on-demand for testing and automatically destroyed after use, ensuring clean state and isolation.",
-			"id": "ephemeral-test-environments",
-			"maturityLevel": 2,
-			"name": "Ephemeral Test Environments",
-			"requirements": [
-				"Automated environment creation and destruction",
-				"Infrastructure as Code for environment templates",
-				"On-demand provisioning capability",
-				"Versioned infrastructure configuration",
-				"Versioned test data management"
-			],
-			"type": "practice",
-			"antiPatterns": [
-				{
-					"name": "Snowflake Environments",
-					"url": "https://migration.minimumcd.org/docs/anti-patterns/pipeline/snowflake-environments/"
-				}
-			],
-			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/pipeline/production-like-environments/"
 		},
 		{
 			"benefits": [
@@ -1630,6 +2027,51 @@
 				}
 			],
 			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/testing-fundamentals/"
+		},
+		{
+			"benefits": [
+				"Alignment across organizational levels",
+				"Better strategic decision-making",
+				"Clear organizational direction and strategy",
+				"Faster organizational change and adaptation",
+				"Improved resource allocation",
+				"Reduced wasted effort on misaligned initiatives",
+				"Support from leadership for CD practices"
+			],
+			"category": "behavior",
+			"description": "Ensuring that organizational leadership understands, endorses, and actively supports the adoption of Continuous Delivery practices and cultural changes.",
+			"id": "leadership-alignment",
+			"maturityLevel": 2,
+			"name": "Leadership Alignment",
+			"requirements": [
+				"Active leadership participation in CD transformation",
+				"Clear communication of strategic direction",
+				"Executive sponsorship and visible support",
+				"Regular alignment meetings and reviews",
+				"Resources allocated for CD practices",
+				"Strategy aligned with business objectives",
+				"Transparent communication of trade-offs"
+			],
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Leadership Misalignment",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/leadership-misalignment/"
+				},
+				{
+					"name": "Command and Control Culture",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/command-and-control-culture/"
+				},
+				{
+					"name": "Technical Strategy Ignored",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/technical-strategy-ignored/"
+				},
+				{
+					"name": "Conflicting Incentives",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/conflicting-incentives/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/organize/leadership-alignment/"
 		},
 		{
 			"benefits": [
@@ -2084,6 +2526,47 @@
 		},
 		{
 			"benefits": [
+				"Better conflict resolution and understanding across teams",
+				"Clearer expectations and shared understanding",
+				"Faster decision-making with common language",
+				"Improved collaboration and information flow",
+				"Reduced miscommunication and rework",
+				"Stronger team cohesion",
+				"Trust-based working relationships"
+			],
+			"category": "behavior",
+			"description": "Establishing shared understanding, communication protocols, and norms for how team members collaborate effectively across different roles and disciplines.",
+			"id": "team-communication",
+			"maturityLevel": 1,
+			"name": "Team Communication",
+			"requirements": [
+				"Defined communication channels and protocols",
+				"Regular feedback mechanisms",
+				"Shared documentation practices",
+				"Synchronous and asynchronous communication balance",
+				"Tool infrastructure for collaboration",
+				"Training on effective communication",
+				"Transparency of decisions and rationale"
+			],
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Communication Silos",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/communication-silos/"
+				},
+				{
+					"name": "Unclear Decision-Making",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/unclear-decision-making/"
+				},
+				{
+					"name": "Knowledge Hoarding",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/knowledge-hoarding/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/organize/team-communication/"
+		},
+		{
+			"benefits": [
 				"Early issue detection",
 				"Faster troubleshooting",
 				"Informed decision making",
@@ -2317,6 +2800,47 @@
 				}
 			],
 			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/foundations/everything-as-code/"
+		},
+		{
+			"benefits": [
+				"Aligned expectations across roles",
+				"Easier onboarding of new team members",
+				"Faster resolution of conflicts",
+				"Greater autonomy with clear boundaries",
+				"Improved consistency in decision-making",
+				"Reduced ambiguity and miscommunication",
+				"Shared ownership of outcomes"
+			],
+			"category": "behavior",
+			"description": "Explicit agreements on how the team works together, including decision-making processes, responsibilities, and norms for collaboration and conflict resolution.",
+			"id": "working-agreements",
+			"maturityLevel": 1,
+			"name": "Working Agreements",
+			"requirements": [
+				"Agreement on communication response times",
+				"Defined conflict resolution process",
+				"Defined decision-making process",
+				"Process for updating agreements",
+				"Shared responsibility model",
+				"Team ceremonies and meeting structure",
+				"Written documentation of agreements"
+			],
+			"type": "practice",
+			"antiPatterns": [
+				{
+					"name": "Unclear Roles and Responsibilities",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/unclear-roles-and-responsibilities/"
+				},
+				{
+					"name": "Siloed Expertise",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/siloed-expertise/"
+				},
+				{
+					"name": "Micromanagement",
+					"url": "https://migration.minimumcd.org/docs/anti-patterns/organization/micromanagement/"
+				}
+			],
+			"migrationGuideUrl": "https://migration.minimumcd.org/docs/migrate-to-cd/migration-path/organize/working-agreements/"
 		}
 	]
 }

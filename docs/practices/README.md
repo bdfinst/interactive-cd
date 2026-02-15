@@ -18,6 +18,43 @@ Emphasizing:
 
 ---
 
+## Strategic Patterns
+
+Before diving into individual practices, understand how they work together through strategic patterns:
+
+### [DevOps Trilogy Pattern](../patterns/devops-trilogy.md)
+
+Three interdependent capabilities required for CD excellence:
+
+- **Continuous Delivery** - Deploy software safely and frequently
+- **Architecture** - Design that enables independent deployment
+- **Product & Process** - Organizational structure for rapid value delivery
+
+### [Critical Path Pattern](../patterns/critical-path.md)
+
+Implement these 6 foundational practices first for maximum impact:
+
+1. Version Control (7 dependents)
+2. Deterministic Tests (9 dependents)
+3. Automated Testing (11 dependents)
+4. Build Automation (9 dependents)
+5. Infrastructure Automation (6 dependents)
+6. Configuration Management (5 dependents)
+
+**Key insight**: These deliver ~70% of CD capability with only ~40% of effort.
+
+### [Implementation Roadmap](../patterns/implementation-roadmap.md)
+
+52-week timeline across 5 phases:
+
+1. **Foundation** (Week 0-8) - Version control, testing, CI basics, team alignment
+2. **Core Automation** (Week 8-20) - Comprehensive testing, artifacts, infrastructure
+3. **Architecture & Process** (Week 20-32) - Modularity, BDD, deployment safety
+4. **Advanced Capabilities** (Week 32-44) - On-demand deployment, advanced testing
+5. **Optimization** (Week 44-52) - Data-driven development, analytics, excellence
+
+---
+
 ## Practice Categories
 
 ### 01. Code Quality

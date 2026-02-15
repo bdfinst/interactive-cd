@@ -2,7 +2,11 @@ import GraphNode from '$lib/components/GraphNode.svelte'
 import { fireEvent, render } from '@testing-library/svelte'
 import { describe, expect, it, vi } from 'vitest'
 
-import { buildMinimalPractice, buildPractice } from '../../utils/builders.js'
+import {
+	buildMinimalPractice,
+	buildPractice,
+	buildPracticeForCategory
+} from '../../utils/builders.js'
 
 describe('GraphNode - Quick-Start Guide Links', () => {
 	describe('when selected', () => {
@@ -293,7 +297,7 @@ describe('GraphNode - Adoption Percentage', () => {
 				}
 			})
 
-			expect(getByText(/% adoption/)).toBeInTheDocument()
+			expect(getByText(/%/)).toBeInTheDocument()
 		})
 
 		it('calculates adoption percentage correctly when adopted', () => {
@@ -309,7 +313,7 @@ describe('GraphNode - Adoption Percentage', () => {
 			})
 
 			// (2 adopted deps + 1 adopted parent) / (5 total deps + 1 parent) = 3/6 = 50%
-			expect(getByText('50% adoption')).toBeInTheDocument()
+			expect(getByText('50%')).toBeInTheDocument()
 		})
 
 		it('calculates adoption percentage correctly when not adopted', () => {
@@ -325,7 +329,7 @@ describe('GraphNode - Adoption Percentage', () => {
 			})
 
 			// (2 adopted deps + 0 for parent) / (5 total deps + 1 parent) = 2/6 = 33%
-			expect(getByText('33% adoption')).toBeInTheDocument()
+			expect(getByText('33%')).toBeInTheDocument()
 		})
 
 		it('does not show adoption percentage when no dependencies', () => {
@@ -340,7 +344,7 @@ describe('GraphNode - Adoption Percentage', () => {
 				}
 			})
 
-			expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			expect(queryByText(/%/)).not.toBeInTheDocument()
 		})
 	})
 
@@ -359,7 +363,7 @@ describe('GraphNode - Adoption Percentage', () => {
 			})
 
 			// (3 adopted deps + 1 adopted parent) / (5 total deps + 1 parent) = 4/6 = 66%
-			expect(getByText('66% adoption')).toBeInTheDocument()
+			expect(getByText('66%')).toBeInTheDocument()
 		})
 
 		it('does not show adoption percentage in expanded tree view', () => {
@@ -375,7 +379,7 @@ describe('GraphNode - Adoption Percentage', () => {
 				}
 			})
 
-			expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			expect(queryByText(/%/)).not.toBeInTheDocument()
 		})
 
 		it('does not show adoption percentage when no dependencies', () => {
@@ -391,7 +395,172 @@ describe('GraphNode - Adoption Percentage', () => {
 				}
 			})
 
-			expect(queryByText(/% adoption/)).not.toBeInTheDocument()
+			expect(queryByText(/%/)).not.toBeInTheDocument()
 		})
+	})
+})
+
+describe('GraphNode - Category Label', () => {
+	it('renders "Automation" for automation category', () => {
+		const practice = buildPracticeForCategory('automation')
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false }
+		})
+
+		expect(getByTestId('category-label').textContent.trim()).toBe('Automation')
+	})
+
+	it('renders "Behavior" for behavior category', () => {
+		const practice = buildPracticeForCategory('behavior')
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false }
+		})
+
+		expect(getByTestId('category-label').textContent.trim()).toBe('Behavior')
+	})
+
+	it('renders "Automation & Behavior" for behavior-enabled-automation category', () => {
+		const practice = buildPracticeForCategory('behavior-enabled-automation')
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false }
+		})
+
+		expect(getByTestId('category-label').textContent.trim()).toBe('Automation & Behavior')
+	})
+
+	it('renders "Core" for core category', () => {
+		const practice = buildPracticeForCategory('core')
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false }
+		})
+
+		expect(getByTestId('category-label').textContent.trim()).toBe('Core')
+	})
+
+	it('shows category label when selected', () => {
+		const practice = buildPracticeForCategory('automation')
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: true }
+		})
+
+		expect(getByTestId('category-label')).toBeInTheDocument()
+	})
+})
+
+describe('GraphNode - Progress Bar', () => {
+	it('renders progress bar when has dependencies', () => {
+		const practice = buildPractice()
+		const { getByTestId } = render(GraphNode, {
+			props: {
+				practice,
+				isSelected: true,
+				isAdopted: true,
+				adoptedDependencyCount: 2,
+				totalDependencyCount: 5
+			}
+		})
+
+		expect(getByTestId('adoption-progress-bar')).toBeInTheDocument()
+	})
+
+	it('renders progress bar in unselected view', () => {
+		const practice = buildPractice()
+		const { getByTestId } = render(GraphNode, {
+			props: {
+				practice,
+				isSelected: false,
+				isTreeExpanded: false,
+				isAdopted: true,
+				adoptedDependencyCount: 3,
+				totalDependencyCount: 5
+			}
+		})
+
+		expect(getByTestId('adoption-progress-bar')).toBeInTheDocument()
+	})
+})
+
+describe('GraphNode - Collapsible Sections', () => {
+	it('shows requirements expanded by default when selected', () => {
+		const practice = buildPractice({ requirements: ['Req 1', 'Req 2'] })
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true }
+		})
+
+		expect(getByText('Req 1')).toBeInTheDocument()
+	})
+
+	it('hides benefits by default when selected', () => {
+		const practice = buildPractice({ benefits: ['Benefit 1'] })
+		const { getByText, queryByText } = render(GraphNode, {
+			props: { practice, isSelected: true }
+		})
+
+		expect(getByText('Benefits')).toBeInTheDocument()
+		expect(queryByText('Benefit 1')).not.toBeInTheDocument()
+	})
+
+	it('toggles benefits on click', async () => {
+		const practice = buildPractice({ benefits: ['Benefit 1'] })
+		const { getByText, queryByText } = render(GraphNode, {
+			props: { practice, isSelected: true }
+		})
+
+		expect(queryByText('Benefit 1')).not.toBeInTheDocument()
+		await fireEvent.click(getByText('Benefits'))
+		expect(getByText('Benefit 1')).toBeInTheDocument()
+	})
+})
+
+describe('GraphNode - Explore Affordance', () => {
+	it('shows explore affordance when has dependencies and not selected', () => {
+		const practice = buildPractice({ dependencyCount: 3 })
+		const { getByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false, isTreeExpanded: false }
+		})
+
+		expect(getByTestId('explore-affordance')).toBeInTheDocument()
+	})
+
+	it('hides explore affordance when tree is expanded', () => {
+		const practice = buildPractice({ dependencyCount: 3 })
+		const { queryByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false, isTreeExpanded: true }
+		})
+
+		expect(queryByTestId('explore-affordance')).not.toBeInTheDocument()
+	})
+
+	it('hides explore affordance when no dependencies', () => {
+		const practice = buildMinimalPractice()
+		const { queryByTestId } = render(GraphNode, {
+			props: { practice, isSelected: false, isTreeExpanded: false }
+		})
+
+		expect(queryByTestId('explore-affordance')).not.toBeInTheDocument()
+	})
+})
+
+describe('GraphNode - Quick-Start Label', () => {
+	it('shows labeled text in selected view', () => {
+		const practice = buildPractice({
+			quickStartGuide: 'https://minimumcd.org/minimumcd/ci/'
+		})
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: true }
+		})
+
+		expect(getByText(/Quick-start Guide/)).toBeInTheDocument()
+	})
+
+	it('shows labeled text in unselected view', () => {
+		const practice = buildPractice({
+			quickStartGuide: 'https://minimumcd.org/minimumcd/ci/'
+		})
+		const { getByText } = render(GraphNode, {
+			props: { practice, isSelected: false }
+		})
+
+		expect(getByText(/Quick-start/)).toBeInTheDocument()
 	})
 })

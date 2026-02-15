@@ -32,7 +32,7 @@
 
 <header
 	bind:this={headerElement}
-	class="fixed top-0 right-0 bg-slate-200 text-gray-800 z-[1000] shadow-md transition-all duration-300
+	class="fixed top-0 right-0 bg-slate-900 text-slate-100 z-[1000] shadow-lg border-b border-slate-700/50 transition-all duration-300
 		left-0
 		{isExpanded ? 'md:left-64' : 'md:left-16'}"
 >
@@ -41,7 +41,7 @@
 			<!-- Hamburger button - Only visible on mobile -->
 			<button
 				onclick={handleMobileMenuToggle}
-				class="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px] p-2 rounded-md text-gray-800 hover:bg-black/10 active:bg-black/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+				class="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px] p-2 rounded-md text-slate-200 hover:bg-white/10 active:bg-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
 				aria-label={isOpen ? 'Close menu' : 'Open menu'}
 				aria-expanded={isOpen}
 				aria-controls="menu-content"
@@ -52,7 +52,7 @@
 
 			<!-- Title - Centered on mobile, left-aligned on tablet+ -->
 			<h1
-				class="text-lg lg:text-xl font-bold m-0 text-center whitespace-nowrap flex-1 md:flex-none"
+				class="text-lg lg:text-xl font-bold m-0 text-center whitespace-nowrap flex-1 md:flex-none tracking-tight"
 			>
 				CD Dependency Tree
 			</h1>

@@ -1,8 +1,18 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Collapsible Sidebar Menu', () => {
+	// Dismiss onboarding overlay for all tests in this suite
+	test.beforeEach(async ({ page }) => {
+		await page.addInitScript(() => {
+			localStorage.setItem('cd-practices-onboarding-seen', 'true')
+		})
+	})
+
 	test.describe('Desktop View (≥1024px)', () => {
 		test.beforeEach(async ({ page }) => {
+			await page.addInitScript(() => {
+				localStorage.setItem('cd-practices-onboarding-seen', 'true')
+			})
 			await page.setViewportSize({ width: 1440, height: 900 })
 			await page.goto('/')
 			await page.waitForLoadState('networkidle')
@@ -127,6 +137,9 @@ test.describe('Collapsible Sidebar Menu', () => {
 
 	test.describe('Mobile View (<1024px)', () => {
 		test.beforeEach(async ({ page }) => {
+			await page.addInitScript(() => {
+				localStorage.setItem('cd-practices-onboarding-seen', 'true')
+			})
 			await page.setViewportSize({ width: 375, height: 667 })
 			await page.goto('/')
 			await page.waitForLoadState('networkidle')

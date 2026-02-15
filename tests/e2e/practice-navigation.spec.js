@@ -2,6 +2,10 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Practice Navigation', () => {
 	test.beforeEach(async ({ page }) => {
+		// Dismiss onboarding overlay before page load to prevent blocking interactions
+		await page.addInitScript(() => {
+			localStorage.setItem('cd-practices-onboarding-seen', 'true')
+		})
 		await page.goto('/')
 	})
 
@@ -178,6 +182,9 @@ test.describe('Practice Navigation', () => {
 
 test.describe('Practice Selection', () => {
 	test.beforeEach(async ({ page }) => {
+		await page.addInitScript(() => {
+			localStorage.setItem('cd-practices-onboarding-seen', 'true')
+		})
 		await page.goto('/')
 		await page.waitForSelector('[data-testid="graph-node"]')
 	})
@@ -326,6 +333,12 @@ test.describe('Practice Selection', () => {
 })
 
 test.describe('Visual Elements', () => {
+	test.beforeEach(async ({ page }) => {
+		await page.addInitScript(() => {
+			localStorage.setItem('cd-practices-onboarding-seen', 'true')
+		})
+	})
+
 	test('displays category legend', async ({ page }) => {
 		await page.goto('/')
 		await page.waitForSelector('[data-testid="graph-node"]')

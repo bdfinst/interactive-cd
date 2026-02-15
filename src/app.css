@@ -12,18 +12,29 @@
 	--text-title-md: 2.4rem;
 	--text-title-lg: 2.7rem;
 
-	/* Practice category colors - for bg-category-{name} utilities */
-	/* Pale yellow with 30% white mixed in = RGB(255, 255, 219) */
-	--color-category-automation: rgba(255, 255, 219, 1);
+	/* Practice category colors - deeper, more saturated tones */
+	--color-category-automation: #fef9c3;
+	--color-category-behavior: #bae6fd;
+	--color-category-behavior-enabled: #a7f3d0;
+	--color-category-core: #e2e8f0;
 
-	/* Light cyan blue with 50% white mixed in = RGB(114, 219, 253) - 20% lighter */
-	--color-category-behavior: rgba(114, 219, 253, 1);
+	/* Accent category border colors */
+	--color-category-automation-accent: #ca8a04;
+	--color-category-behavior-accent: #0284c7;
+	--color-category-behavior-enabled-accent: #059669;
+	--color-category-core-accent: #64748b;
 
-	/* Light turquoise with 30% white mixed in = RGB(166, 255, 233) */
-	--color-category-behavior-enabled: rgba(166, 255, 233, 1);
+	/* Category pill background colors (accent at low opacity equivalent) */
+	--color-category-automation-pill: #fef08a;
+	--color-category-behavior-pill: #7dd3fc;
+	--color-category-behavior-enabled-pill: #6ee7b7;
+	--color-category-core-pill: #cbd5e1;
 
-	/* Very light gray with 30% white mixed in = RGB(248, 248, 248) */
-	--color-category-core: rgba(248, 248, 248, 1);
+	/* Category progress bar fill colors */
+	--color-category-automation-bar: #eab308;
+	--color-category-behavior-bar: #0ea5e9;
+	--color-category-behavior-enabled-bar: #10b981;
+	--color-category-core-bar: #64748b;
 }
 
 /* Graph Node Sizing System - CSS Custom Properties */
@@ -48,11 +59,11 @@
 	--node-height-expanded: 300px;
 	/* Selected nodes in tree view (minimum) */
 
-	/* Node Padding Variants */
-	--node-padding-tiny: 0.75rem;
+	/* Node Padding Variants - asymmetric: less horizontal, tighter bottom */
+	--node-padding-tiny: 0.5rem 0.625rem;
 	/* Compact padding for tiny nodes */
-	--node-padding-standard: 1rem;
-	/* Standard padding for most nodes */
+	--node-padding-standard: 0.625rem 0.75rem 0.5rem;
+	/* Asymmetric: less horizontal, tighter bottom */
 
 	/* Border Width Variants */
 	--node-border-normal: 1px;
@@ -61,7 +72,7 @@
 	/* Unselected standard nodes */
 	--node-border-selected: 2px;
 	/* Selected compact nodes */
-	--node-border-selected-thick: 4px;
+	--node-border-selected-thick: 3px;
 	/* Selected standard nodes */
 
 	/* Typography Variants */
@@ -76,19 +87,23 @@
 	--node-text-standard: 1rem;
 	/* 16px - standard node text */
 
-	/* Spacing Variants */
-	--node-spacing-tiny: 0.25rem;
-	/* 4px - spacing in tiny nodes */
-	--node-spacing-small: 0.5rem;
-	/* 8px - spacing in compact nodes */
-	--node-spacing-standard: 0.75rem;
-	/* 12px - spacing in standard nodes */
+	/* Spacing Variants - tighter vertical rhythm */
+	--node-spacing-tiny: 0.125rem;
+	/* 2px - spacing in tiny nodes */
+	--node-spacing-small: 0.25rem;
+	/* 4px - spacing in compact nodes */
+	--node-spacing-standard: 0.5rem;
+	/* 8px - spacing in standard nodes (was 12px) */
 }
 
 @layer base {
 	:root {
 		font-family:
-			-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+			'DM Sans',
+			-apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			sans-serif;
 		line-height: 1.6;
 	}
 
@@ -98,7 +113,8 @@
 	}
 
 	body {
-		@apply m-0 p-0 bg-black text-gray-300;
+		@apply m-0 p-0 text-gray-300;
+		background-color: #0f172a;
 		overflow-x: hidden;
 		max-width: 100vw;
 		box-sizing: border-box;
@@ -112,6 +128,16 @@
 }
 
 @layer components {
+	/* Subtle dot grid background for depth */
+	.bg-grid-pattern {
+		background-image: radial-gradient(
+			circle at 1px 1px,
+			rgba(148, 163, 184, 0.08) 1px,
+			transparent 0
+		);
+		background-size: 24px 24px;
+	}
+
 	/* Graph Node Size Variants */
 	/* Use data-node-size attribute to control node dimensions */
 
@@ -165,18 +191,46 @@
 		}
 	}
 
+	/* Accent left border on ALL cards for instant category recognition */
+	[data-node-size].bg-category-automation {
+		border-left: 3px solid var(--color-category-automation-accent);
+	}
+	[data-node-size].bg-category-behavior {
+		border-left: 3px solid var(--color-category-behavior-accent);
+	}
+	[data-node-size].bg-category-behavior-enabled {
+		border-left: 3px solid var(--color-category-behavior-enabled-accent);
+	}
+	[data-node-size].bg-category-core {
+		border-left: 3px solid var(--color-category-core-accent);
+	}
+
 	/* Border variants based on selection and compact state */
 	[data-node-size='tiny'][data-selected='false'],
 	[data-node-size='compact'][data-selected='false'] {
 		border-width: var(--node-border-normal);
-		border-color: black;
+		border-color: rgba(0, 0, 0, 0.15);
 	}
 
 	[data-node-size='standard'][data-selected='false'],
 	[data-node-size='expanded'][data-selected='false'],
 	[data-node-size='selected-dependency'][data-selected='false'] {
 		border-width: var(--node-border-normal-thick);
-		border-color: black;
+		border-color: rgba(0, 0, 0, 0.12);
+	}
+
+	/* Re-apply accent left border on unselected (overrides border-width reset) */
+	[data-node-size][data-selected='false'].bg-category-automation {
+		border-left: 3px solid var(--color-category-automation-accent);
+	}
+	[data-node-size][data-selected='false'].bg-category-behavior {
+		border-left: 3px solid var(--color-category-behavior-accent);
+	}
+	[data-node-size][data-selected='false'].bg-category-behavior-enabled {
+		border-left: 3px solid var(--color-category-behavior-enabled-accent);
+	}
+	[data-node-size][data-selected='false'].bg-category-core {
+		border-left: 3px solid var(--color-category-core-accent);
 	}
 
 	[data-node-size='tiny'][data-selected='true'],
@@ -194,6 +248,28 @@
 		/* blue-600 */
 		max-width: 400px;
 		/* Limit selected card width */
+		box-shadow:
+			0 0 0 1px rgba(37, 99, 235, 0.2),
+			0 4px 20px rgba(37, 99, 235, 0.15),
+			0 8px 32px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Category accent top bar on selected cards (in addition to left border) */
+	[data-selected='true'].bg-category-automation {
+		border-top: 3px solid var(--color-category-automation-accent);
+		border-left: 3px solid var(--color-category-automation-accent);
+	}
+	[data-selected='true'].bg-category-behavior {
+		border-top: 3px solid var(--color-category-behavior-accent);
+		border-left: 3px solid var(--color-category-behavior-accent);
+	}
+	[data-selected='true'].bg-category-behavior-enabled {
+		border-top: 3px solid var(--color-category-behavior-enabled-accent);
+		border-left: 3px solid var(--color-category-behavior-enabled-accent);
+	}
+	[data-selected='true'].bg-category-core {
+		border-top: 3px solid var(--color-category-core-accent);
+		border-left: 3px solid var(--color-category-core-accent);
 	}
 
 	/* Typography scaling based on node size */
@@ -217,7 +293,7 @@
 		font-size: var(--node-text-tiny);
 	}
 
-	/* Spacing adjustments for tiny nodes */
+	/* Spacing adjustments based on node size */
 	[data-node-size='tiny'] .node-section {
 		margin-bottom: var(--node-spacing-tiny);
 	}
@@ -230,6 +306,48 @@
 	[data-node-size='expanded'] .node-section,
 	[data-node-size='selected-dependency'] .node-section {
 		margin-bottom: var(--node-spacing-standard);
+	}
+
+	/* Card hover states for unselected nodes - category-aware */
+	[data-node-size][data-selected='false'] {
+		cursor: pointer;
+		transition:
+			transform 0.15s ease,
+			box-shadow 0.15s ease,
+			border-color 0.15s ease;
+	}
+	[data-node-size][data-selected='false'].bg-category-automation:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(202, 138, 4, 0.2);
+		border-color: rgba(202, 138, 4, 0.5);
+	}
+	[data-node-size][data-selected='false'].bg-category-behavior:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(2, 132, 199, 0.2);
+		border-color: rgba(2, 132, 199, 0.5);
+	}
+	[data-node-size][data-selected='false'].bg-category-behavior-enabled:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(5, 150, 105, 0.2);
+		border-color: rgba(5, 150, 105, 0.5);
+	}
+	[data-node-size][data-selected='false'].bg-category-core:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(100, 116, 139, 0.2);
+		border-color: rgba(100, 116, 139, 0.5);
+	}
+	/* Fallback hover for cards without category class */
+	[data-node-size][data-selected='false']:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+	}
+
+	/* Anti-pattern links section styling */
+	.node-links-section {
+		background: rgba(0, 0, 0, 0.03);
+		border-radius: 6px;
+		padding: 0.375rem 0.5rem;
+		margin-top: 0.125rem;
 	}
 }
 

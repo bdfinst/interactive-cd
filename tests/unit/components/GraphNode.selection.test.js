@@ -1,5 +1,5 @@
 import GraphNode from '$lib/components/GraphNode.svelte'
-import { render } from '@testing-library/svelte'
+import { fireEvent, render } from '@testing-library/svelte'
 import { describe, expect, it } from 'vitest'
 
 import { buildMinimalPractice, buildPractice } from '../../utils/builders.js'
@@ -25,13 +25,15 @@ describe('GraphNode - Selection State', () => {
 		expect(queryByText('Test description for practice')).not.toBeInTheDocument()
 	})
 
-	it('shows benefits when selected', () => {
+	it('shows benefits when selected and toggle is clicked', async () => {
 		const practice = buildPractice({ benefits: ['Faster delivery', 'Better quality'] })
 		const { getByText } = render(GraphNode, {
 			props: { practice, isSelected: true }
 		})
 
+		// Benefits section starts collapsed, click to expand
 		expect(getByText('Benefits')).toBeInTheDocument()
+		await fireEvent.click(getByText('Benefits'))
 		expect(getByText('Faster delivery')).toBeInTheDocument()
 		expect(getByText('Better quality')).toBeInTheDocument()
 	})

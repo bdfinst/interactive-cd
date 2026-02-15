@@ -16,8 +16,10 @@
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 	import { expandButtonRenderer } from '$lib/stores/expandButton.js'
 	import { isFullTreeExpanded } from '$lib/stores/treeState.js'
+	import { practiceMapStore } from '$lib/stores/walkthroughStore.js'
 	import { calculateAdoptedDependencies } from '$lib/utils/adoption.js'
 	import { debounce } from '$lib/utils/debounce.js'
+	import { getPracticeFromURL, updatePracticeInURL } from '$lib/utils/navigation.js'
 	import { onMount, tick } from 'svelte'
 	import GraphNode from './GraphNode.svelte'
 	import LoadingSpinner from './LoadingSpinner.svelte'
@@ -107,6 +109,9 @@
 			// Build practice map for transitive dependency calculations
 			practiceMap = buildPracticeMap(treeResult.data)
 
+			// Populate walkthrough store with practice map for recommendations
+			practiceMapStore.set(practiceMap)
+
 			// Extract all practice IDs from the tree
 			// eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary Set, not reactive state
 			const allPracticeIds = new Set()
@@ -122,8 +127,20 @@
 			adoptionStore.initialize(allPracticeIds)
 		}
 
-		// Use server data if available, otherwise fetch
-		if (initialData?.initialPractices) {
+		// Check for URL practice parameter (from guided walkthrough navigation)
+		const targetPracticeId = getPracticeFromURL()
+
+		if (targetPracticeId && treeResult.success) {
+			const path = _findPathToPractice(treeResult.data, targetPracticeId)
+			if (path && path.length > 1) {
+				navigationPath = path
+				await loadCurrentView()
+				updatePracticeInURL(null) // Clear param after navigation
+			} else {
+				await loadCurrentView()
+			}
+		} else if (initialData?.initialPractices) {
+			// Use server data if available, otherwise fetch
 			const practices = initialData.initialPractices
 			currentPractice = practices[0] // First is always the root/current
 			dependencies = practices.slice(1) // Rest are dependencies
@@ -489,8 +506,8 @@
 		<!-- SVG Layer for Tree Connections -->
 		<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0" aria-hidden="true">
 			{#each treeConnections as conn}
-				{@const strokeColor = conn.highlighted ? '#eab308' : '#93c5fd'}
-				{@const fillColor = conn.highlighted ? '#eab308' : '#93c5fd'}
+				{@const strokeColor = conn.highlighted ? '#facc15' : '#60a5fa'}
+				{@const fillColor = conn.highlighted ? '#facc15' : '#60a5fa'}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
 					stroke={strokeColor}
@@ -590,21 +607,40 @@
 			{#each connections as conn}
 				<path
 					d={createCurvePath(conn.x1, conn.y1, conn.x2, conn.y2)}
-					stroke="#93c5fd"
+					stroke="#60a5fa"
 					stroke-width="2"
 					stroke-dasharray={conn.type === 'ancestor' || conn.type === 'selected' ? '0' : '5,5'}
-					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '0.9' : '0.7'}
+					opacity={conn.type === 'ancestor' || conn.type === 'selected' ? '0.9' : '0.5'}
 					fill="none"
 				/>
 				<!-- Start point (parent) -->
-				<circle cx={conn.x1} cy={conn.y1} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle cx={conn.x1} cy={conn.y1} r="5" fill="#60a5fa" opacity="0.8" />
 				<!-- End point (child) -->
-				<circle cx={conn.x2} cy={conn.y2} r="6" fill="#93c5fd" opacity="0.8" />
+				<circle cx={conn.x2} cy={conn.y2} r="5" fill="#60a5fa" opacity="0.8" />
 			{/each}
 		</svg>
 
 		<!-- Content Layer -->
 		<div class="relative z-10" role="region" aria-label="Practice navigation view">
+			<!-- Breadcrumb Trail -->
+			{#if ancestorPractices.length > 0}
+				<nav
+					class="flex flex-wrap items-center justify-center gap-1 text-xs text-slate-500 mb-6"
+					aria-label="Breadcrumb"
+				>
+					{#each ancestorPractices as ancestor, i}
+						<button
+							class="hover:text-blue-400 transition-colors"
+							onclick={() => navigateToAncestor(i)}
+						>
+							{ancestor.name}
+						</button>
+						<span class="text-slate-600">/</span>
+					{/each}
+					<span class="text-slate-200 font-medium">{currentPractice?.name}</span>
+				</nav>
+			{/if}
+
 			<!-- Ancestor Practices (all ancestors in the path) -->
 			{#if ancestorPractices.length > 0}
 				{#each ancestorPractices as ancestor, i (ancestor.id)}

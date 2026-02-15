@@ -1,12 +1,15 @@
 <script>
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
+	import { goto } from '$app/navigation'
 	import Header from '$lib/components/Header.svelte'
 	import HeaderSpacer from '$lib/components/HeaderSpacer.svelte'
 	import CategoryLegend from '$lib/components/CategoryLegend.svelte'
 	import LegendSpacer from '$lib/components/LegendSpacer.svelte'
 	import SEO from '$lib/components/SEO.svelte'
 	import Menu from '$lib/components/Menu.svelte'
+	import OnboardingOverlay from '$lib/components/OnboardingOverlay.svelte'
+	import GuidedWalkthrough from '$lib/components/GuidedWalkthrough.svelte'
 	import { adoptionStore } from '$lib/stores/adoptionStore.js'
 	import { menuStore } from '$lib/stores/menuStore.js'
 	import { exportAdoptionState } from '$lib/utils/exportImport.js'
@@ -81,12 +84,19 @@
 		const adoptedPractices = get(adoptionStore)
 		exportAdoptionState(adoptedPractices, totalPracticesCount, version)
 	}
+
+	function handleNavigateToPractice(practiceId) {
+		goto(`/?practice=${practiceId}`)
+	}
 </script>
 
 <SEO />
 
 <!-- Menu Sidebar (now handles import internally) -->
 <Menu onExport={handleExport} />
+
+<!-- Onboarding Tutorial (shows once on first visit) -->
+<OnboardingOverlay />
 
 <Header />
 <HeaderSpacer />
@@ -96,9 +106,12 @@
 <!-- Main content area with responsive sidebar spacing -->
 <!-- Mobile: no left margin (full width), Tablet+: dynamic margin based on sidebar state -->
 <main
-	class="min-h-screen transition-all duration-300
+	class="min-h-screen transition-all duration-300 bg-grid-pattern
 	ml-0
 	{isExpanded ? 'md:ml-[200px]' : 'md:ml-16'}"
 >
 	{@render children()}
 </main>
+
+<!-- Guided Walkthrough Panel -->
+<GuidedWalkthrough onNavigateToPractice={handleNavigateToPractice} />
